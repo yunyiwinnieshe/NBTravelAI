@@ -1,1 +1,48 @@
-# travelAI
+# Travel AI
+
+Travel AI is a portfolio-focused Applied AI project by Winnie and Ivy. It
+helps two people who live in different places choose a fair destination for a
+shared trip, balancing cost, travel time, and preferences.
+
+The first version returns three eligible destinations with transparent score
+breakdowns and tradeoffs. A later version will generate and verify a detailed
+itinerary for a destination the travelers select.
+
+## Project documents
+
+- [Project proposal](docs/project-proposal.md) - product scope, architecture,
+  ranking approach, ownership, and evaluation strategy.
+- [Project timeline](docs/project-timeline.md) - completed kickoff work,
+  week-by-week deliverables, and acceptance criteria.
+- [LLM selection](docs/llm-selection.md) - structured-preference-extraction
+  options, selection, benchmark gate, and logging requirements.
+
+## Current direction
+
+- Exactly two travelers; 3-7 day leisure trips; an initial U.S. city pool.
+- Python, FastAPI, Pydantic, pytest, Ruff, Docker, and GitHub Actions.
+- Versioned JSON fixtures first, followed by provider interfaces and one live
+  provider with a fixture fallback.
+- LLMs handle language understanding and grounded explanations only;
+  deterministic code handles facts, constraints, calculations, and ranking.
+
+## Run the API locally
+
+Use Python 3.11 or later:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -e ".[dev]"
+uvicorn travel_ai.main:app --reload
+```
+
+Open `http://127.0.0.1:8000/docs` to try the generated API documentation.
+
+Run quality checks with:
+
+```bash
+python -m ruff format --check .
+python -m ruff check .
+python -m pytest
+```
