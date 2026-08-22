@@ -73,3 +73,13 @@ def test_recommendations_rejects_an_invalid_trip_length() -> None:
     response = client.post("/recommendations", json=request)
 
     assert response.status_code == 422
+
+
+def test_trip_session_routes_are_explicitly_not_implemented() -> None:
+    """Conversation routes are documented before session storage is introduced."""
+    response = client.post("/trip-sessions", json={"initial_message": "Help us plan."})
+
+    assert response.status_code == 501
+    assert response.json() == {
+        "detail": "Trip sessions will be implemented with the LLM workflow in Week 4."
+    }

@@ -16,6 +16,8 @@ itinerary for a destination the travelers select.
   week-by-week deliverables, and acceptance criteria.
 - [LLM selection](docs/llm-selection.md) - structured-preference-extraction
   options, selection, benchmark gate, and logging requirements.
+- [API outline](docs/api-outline.md) - implemented endpoints, planned
+  conversation flow, and internal service boundaries.
 
 ## Current direction
 

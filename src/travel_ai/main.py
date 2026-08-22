@@ -2,7 +2,7 @@
 
 from fastapi import FastAPI
 
-from travel_ai.schemas import HealthResponse, RecommendationResponse, TripRequest
+from travel_ai.routers import health, recommendations, trip_sessions
 
 
 def create_app() -> FastAPI:
@@ -13,26 +13,9 @@ def create_app() -> FastAPI:
         description="An explainable service for fair two-traveler destination choices.",
     )
 
-    @app.get("/health", response_model=HealthResponse, tags=["system"])
-    def health_check() -> HealthResponse:
-        """Return a simple liveness response for local use and deployment checks."""
-        return HealthResponse(status="ok")
-
-    @app.post(
-        "/recommendations",
-        response_model=RecommendationResponse,
-        tags=["recommendations"],
-    )
-    def create_recommendations(_trip_request: TripRequest) -> RecommendationResponse:
-        """Validate a trip request until the deterministic ranking engine is ready."""
-        return RecommendationResponse(
-            status="not_implemented",
-            recommendations=[],
-            message=(
-                "Trip request is valid. Deterministic destination ranking "
-                "will be added in Week 2."
-            ),
-        )
+    app.include_router(health.router)
+    app.include_router(recommendations.router)
+    app.include_router(trip_sessions.router)
 
     return app
 

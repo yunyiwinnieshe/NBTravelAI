@@ -1,4 +1,4 @@
-"""Typed HTTP contracts for Travel AI."""
+"""Canonical trip-request contracts."""
 
 from datetime import date
 from enum import StrEnum
@@ -65,7 +65,7 @@ class TripPreferences(BaseModel):
 
 
 class TripRequest(BaseModel):
-    """Canonical request used by the recommendation pipeline."""
+    """Canonical request used by the deterministic recommendation pipeline."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -81,31 +81,3 @@ class TripRequest(BaseModel):
         if not 3 <= trip_days <= 7:
             raise ValueError("Travel AI v1 supports trips lasting from 3 to 7 days")
         return self
-
-
-class HealthResponse(BaseModel):
-    """Response returned by the liveness endpoint."""
-
-    status: str
-
-
-class RecommendationStatus(StrEnum):
-    """States supported by the recommendation endpoint during early development."""
-
-    NOT_IMPLEMENTED = "not_implemented"
-
-
-class DestinationRecommendation(BaseModel):
-    """Reserved response contract for a ranked destination in the next milestone."""
-
-    destination_id: str
-    destination_name: str
-    score: float = Field(ge=0, le=1)
-
-
-class RecommendationResponse(BaseModel):
-    """Stable outer response contract for recommendation requests."""
-
-    status: RecommendationStatus
-    recommendations: list[DestinationRecommendation]
-    message: str
