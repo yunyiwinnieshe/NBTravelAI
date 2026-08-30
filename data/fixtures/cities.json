@@ -1,0 +1,169 @@
+[
+    {
+        "city_id":  "san_diego_ca",
+        "name":  "San Diego",
+        "state_code":  "CA",
+        "country_code":  "US",
+        "metro_airport_codes":  [
+                                    "SAN"
+                                ],
+        "interest_tags":  [
+                              "beach",
+                              "food",
+                              "nature",
+                              "outdoor_activities"
+                          ],
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_york_ny",
+        "name":  "New York City",
+        "state_code":  "NY",
+        "country_code":  "US",
+        "metro_airport_codes":  [
+                                    "JFK",
+                                    "LGA",
+                                    "EWR"
+                                ],
+        "interest_tags":  [
+                              "food",
+                              "museums",
+                              "nightlife",
+                              "shopping"
+                          ],
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "seattle_wa",
+        "name":  "Seattle",
+        "state_code":  "WA",
+        "country_code":  "US",
+        "metro_airport_codes":  [
+                                    "SEA"
+                                ],
+        "interest_tags":  [
+                              "food",
+                              "museums",
+                              "mountain",
+                              "nature",
+                              "outdoor_activities"
+                          ],
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "denver_co",
+        "name":  "Denver",
+        "state_code":  "CO",
+        "country_code":  "US",
+        "metro_airport_codes":  [
+                                    "DEN"
+                                ],
+        "interest_tags":  [
+                              "food",
+                              "mountain",
+                              "nature",
+                              "outdoor_activities"
+                          ],
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "chicago_il",
+        "name":  "Chicago",
+        "state_code":  "IL",
+        "country_code":  "US",
+        "metro_airport_codes":  [
+                                    "ORD",
+                                    "MDW"
+                                ],
+        "interest_tags":  [
+                              "food",
+                              "museums",
+                              "nightlife",
+                              "shopping"
+                          ],
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "miami_fl",
+        "name":  "Miami",
+        "state_code":  "FL",
+        "country_code":  "US",
+        "metro_airport_codes":  [
+                                    "MIA",
+                                    "FLL"
+                                ],
+        "interest_tags":  [
+                              "beach",
+                              "food",
+                              "nightlife",
+                              "outdoor_activities",
+                              "shopping"
+                          ],
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_orleans_la",
+        "name":  "New Orleans",
+        "state_code":  "LA",
+        "country_code":  "US",
+        "metro_airport_codes":  [
+                                    "MSY"
+                                ],
+        "interest_tags":  [
+                              "food",
+                              "museums",
+                              "nightlife"
+                          ],
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "nashville_tn",
+        "name":  "Nashville",
+        "state_code":  "TN",
+        "country_code":  "US",
+        "metro_airport_codes":  [
+                                    "BNA"
+                                ],
+        "interest_tags":  [
+                              "food",
+                              "museums",
+                              "nightlife"
+                          ],
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "las_vegas_nv",
+        "name":  "Las Vegas",
+        "state_code":  "NV",
+        "country_code":  "US",
+        "metro_airport_codes":  [
+                                    "LAS"
+                                ],
+        "interest_tags":  [
+                              "food",
+                              "nature",
+                              "nightlife",
+                              "outdoor_activities",
+                              "shopping"
+                          ],
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "washington_dc",
+        "name":  "Washington",
+        "state_code":  "DC",
+        "country_code":  "US",
+        "metro_airport_codes":  [
+                                    "DCA",
+                                    "IAD",
+                                    "BWI"
+                                ],
+        "interest_tags":  [
+                              "food",
+                              "museums",
+                              "nature",
+                              "shopping"
+                          ],
+        "data_version":  "v1"
+    }
+]
