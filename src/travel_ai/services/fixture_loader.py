@@ -10,9 +10,9 @@ from pydantic import BaseModel, ValidationError
 
 from travel_ai.schemas.destinations import City, MonthlyClimate
 
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
-DEFAULT_CITIES_PATH = PROJECT_ROOT / "data" / "fixtures" / "cities.json"
-DEFAULT_CLIMATE_PATH = PROJECT_ROOT / "data" / "fixtures" / "monthly_climate.json"
+FIXTURE_DIR = Path(__file__).resolve().parents[1] / "fixtures"
+DEFAULT_CITIES_PATH = FIXTURE_DIR / "cities.json"
+DEFAULT_CLIMATE_PATH = FIXTURE_DIR / "monthly_climate.json"
 
 ModelT = TypeVar("ModelT", bound=BaseModel)
 
