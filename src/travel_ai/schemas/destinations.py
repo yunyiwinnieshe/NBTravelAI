@@ -25,8 +25,7 @@ class City(BaseModel):
     def validate_airport_codes(cls, codes: list[str]) -> list[str]:
         """Require unique three-letter uppercase IATA airport codes."""
         invalid = any(
-            len(code) != 3 or not code.isascii() or not code.isalpha()
-            for code in codes
+            len(code) != 3 or not code.isascii() or not code.isalpha() for code in codes
         )
         if invalid:
             raise ValueError("airport codes must contain exactly three ASCII letters")

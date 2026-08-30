@@ -12,9 +12,7 @@ from travel_ai.schemas.destinations import City, MonthlyClimate
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_CITIES_PATH = PROJECT_ROOT / "data" / "fixtures" / "cities.json"
-DEFAULT_CLIMATE_PATH = (
-    PROJECT_ROOT / "data" / "fixtures" / "monthly_climate.json"
-)
+DEFAULT_CLIMATE_PATH = PROJECT_ROOT / "data" / "fixtures" / "monthly_climate.json"
 
 ModelT = TypeVar("ModelT", bound=BaseModel)
 
@@ -38,7 +36,9 @@ def _load_records(path: Path, model: type[ModelT]) -> tuple[ModelT, ...]:
     except FileNotFoundError as error:
         raise FixtureValidationError(f"fixture file not found: {path}") from error
     except json.JSONDecodeError as error:
-        raise FixtureValidationError(f"fixture file contains invalid JSON: {path}") from error
+        raise FixtureValidationError(
+            f"fixture file contains invalid JSON: {path}"
+        ) from error
 
     if not isinstance(raw_data, list):
         raise FixtureValidationError(f"fixture file must contain a JSON array: {path}")
@@ -46,7 +46,9 @@ def _load_records(path: Path, model: type[ModelT]) -> tuple[ModelT, ...]:
     try:
         return tuple(model.model_validate(record) for record in raw_data)
     except ValidationError as error:
-        raise FixtureValidationError(f"invalid record in fixture file: {path}") from error
+        raise FixtureValidationError(
+            f"invalid record in fixture file: {path}"
+        ) from error
 
 
 def _duplicates(values: list[object]) -> set[object]:
@@ -87,9 +89,7 @@ def _validate_relationships(
     expected_months = set(range(1, 13))
     for city in cities:
         actual_months = {
-            record.month
-            for record in climate_records
-            if record.city_id == city.city_id
+            record.month for record in climate_records if record.city_id == city.city_id
         }
         if actual_months != expected_months:
             missing_months = sorted(expected_months - actual_months)
