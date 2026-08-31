@@ -47,6 +47,48 @@ deterministic top three destinations. It is currently a validated placeholder.
 }
 ```
 
+### Recommendation processing and result contract
+
+`POST /recommendations` ranks **cities**, not fixed flight-and-hotel bundles.
+After data is fetched or loaded from fixtures, the service validates and
+normalizes it, filters invalid offers, forms eligible combinations, and selects
+the lowest-total-cost eligible combination as each city's reference package.
+Only the reference package is used for the initial city score.
+
+The result returns independent choices for the travelers to mix and match:
+
+- up to three flights for Traveler A;
+- up to three flights for Traveler B; and
+- up to three shared lodging options.
+
+The reference package's component offers must be present in those lists and
+identified by `reference_offer_ids`. The client can then calculate the totals
+for any selected flight-flight-lodging combination. It must show a warning if
+the selected combination exceeds either person's budget; it must not imply
+that every possible cross-combination is affordable.
+
+Illustrative result shape:
+
+```json
+{
+  "destination_id": "chicago_il",
+  "score": 0.84,
+  "reference_offer_ids": {
+    "traveler_a_flight": "flight_a_01",
+    "traveler_b_flight": "flight_b_02",
+    "lodging": "lodging_03"
+  },
+  "flight_options": {
+    "traveler_a": ["flight_a_01", "flight_a_02", "flight_a_03"],
+    "traveler_b": ["flight_b_01", "flight_b_02", "flight_b_03"]
+  },
+  "lodging_options": ["lodging_01", "lodging_02", "lodging_03"]
+}
+```
+
+The full response will include the normalized offer details, score components,
+quote freshness, and source metadata rather than only these IDs.
+
 ## Planned conversation endpoints
 
 ### `POST /trip-sessions`
@@ -109,8 +151,8 @@ calls directly:
 ```text
 PreferenceExtractionService → LlmClient
 RecommendationService → DestinationCatalogProvider
-RecommendationService → RouteProvider
-RecommendationService → TripCostProvider
+RecommendationService → FlightOfferProvider
+RecommendationService → LodgingOfferProvider
 RecommendationService → ClimateProvider
 RecommendationService → ConstraintEngine → Ranker
 ```

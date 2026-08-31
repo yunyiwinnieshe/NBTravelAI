@@ -18,6 +18,9 @@ itinerary for a destination the travelers select.
   options, selection, benchmark gate, and logging requirements.
 - [API outline](docs/api-outline.md) - implemented endpoints, planned
   conversation flow, and internal service boundaries.
+- [Offer-selection and provider research](docs/offer-selection-and-provider-research.md)
+  - provider response mapping, fixture contracts, and deterministic rules for
+  scoring and returning flight and lodging choices.
 
 ## Current direction
 

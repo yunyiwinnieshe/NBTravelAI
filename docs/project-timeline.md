@@ -52,20 +52,51 @@ submit a valid request, receive a useful validation error for an invalid one,
 and see CI pass. The documented v1 decisions and LLM selection are reviewed
 and approved by both contributors.
 
-## Week 2 - Deterministic top-three recommendation flow
+## Week 2 - City recommendation and offer-set design
 
-**Goal:** Ship the first end-to-end vertical slice using fixtures only.
+**Goal:** Make the city-level recommendation contract and its supporting data
+unambiguous before building the deterministic vertical slice.
 
-- Create initial city, weather, route-estimate, and trip-cost fixture data.
-- Load the controlled candidate pool for each request.
-- Filter basic hard-constraint violations.
-- Implement normalized baseline features and deterministic top-three ranking.
-- Return scores, component breakdowns, per-traveler burden, and rejection
-  reasons.
-- Add at least five end-to-end test requests.
+- **Shared — package decision:** document the approved city-level rule: a city
+  qualifies when it has at least one budget-valid flight-A + flight-B + shared
+  lodging combination; its lowest-total-cost eligible combination is the
+  reference package for scoring; the response separately returns up to three
+  flights per traveler and up to three lodging options for the pair. Document
+  fixed option-selection and package tie-breakers, plus recalculation and
+  budget-warning behavior when users mix choices.
+- **Shared — provider-response research:** inspect and save links to official
+  flight-provider responses and a representative lodging-provider response
+  shape. Map needed fields into the internal `FlightOffer` and `LodgingOffer`
+  contracts; do not expose raw provider JSON to the ranker. Duffel flight data
+  can inform fixtures; lodging remains fixture-backed until provider access is
+  approved. Record the findings in [the offer-selection and provider research
+  note](offer-selection-and-provider-research.md).
+- **Ivy primary — candidate data:** create the initial 10-city candidate pool,
+  including controlled city tags and monthly climate data. Identify the gap
+  between the current preference vocabulary and Ivy's revised proposal.
+- **Winnie primary — preference contract:** reconcile Ivy's approved
+  preference schema with `TripRequest` and the controlled vocabulary. Record
+  which fields are hard constraints, which are soft preferences, which need a
+  clarification question, and which are deferred. Update the Pydantic schema
+  only after both contributors approve the contract.
+- **Winnie primary — LLM preference feedback experiment:** prepare 10-15
+  natural-language preference examples, use the selected LLM to map them to
+  proposed controlled tags, and review the results with potential users. Log
+  unknown, ambiguous, and unwanted tags; this is research only, not production
+  LLM integration.
+- **Shared — fixture contracts:** define the four Pydantic fixture schemas:
+  `City`, `MonthlyClimate`, `FlightOffer`, and `LodgingOffer`. Include fields
+  required to represent multiple offers per route or city, dates, occupancy,
+  source, freshness, and stable IDs.
+- **If the above decisions finish early:** add small fixture files and provider
+  loaders, then create one request-to-city-offer-set test. Full deterministic
+  ranking remains the next milestone.
 
-**Exit criterion:** The same input always returns the same explained top-three
-results. No LLM, live provider, polished database, or frontend is required.
+**Exit criterion:** The team has an approved city recommendation contract,
+revised preference contract, 10-city catalog plan, provider-field mapping, and
+fixture schemas. One documented example can show exactly what one returned
+city and its selectable offer ranges will look like. No live integration,
+production LLM workflow, polished database, or frontend is required.
 
 ## Week 3 - Constraint engine and explainable ranking
 
@@ -73,15 +104,22 @@ results. No LLM, live provider, polished database, or frontend is required.
 
 - Separate hard filters from soft preferences.
 - Implement budget, travel-time, date, region, and required-data checks.
+- Build eligible city offer sets, select the deterministic reference package,
+  and return independently selectable alternate flight and lodging offers.
+- Implement selected-combination calculations for each person's total,
+  combined total, budget status, and fairness; preserve the original city
+  ranking when users change choices.
 - Return machine-readable reasons for every excluded city.
-- Define normalization, weights, missing-data handling, and deterministic
-  tie-breaking.
+- Implement and test the normalized scoring baseline: 35% affordability, 30%
+  travel fairness, 20% preference match (including climate), and 15% travel
+  time. Define missing-data handling and deterministic tie-breaking.
 - Test impossible requests, one-result cases, tied scores, missing fields, and
   unequal traveler burden.
 
-**Exit criterion:** Every recommendation has an auditable score breakdown;
-every filtered city has a reason; the constraint and ranking suite is
-deterministic and well covered.
+**Exit criterion:** The same input and offer snapshot always return the same
+top three cities, reference-package scores, alternate offer ranges, and
+exclusion reasons. Every filtered city has a reason, and the constraint and
+ranking suite is deterministic and well covered.
 
 ## Week 4 - LLM extraction and clarification
 
@@ -96,20 +134,28 @@ deterministic and well covered.
 **Exit criterion:** Complete, incomplete, and contradictory requests follow
 controlled paths, and the LLM cannot change facts, eligibility, or ranking.
 
-## Week 5 - One live provider with fixture fallback
+## Week 5 - Live flight offers and conditional lodging integration
 
 **Goal:** Add real data without sacrificing predictable development and tests.
 
-- Select and integrate one practical provider (for example, weather, route, or
-  airport data) behind an internal adapter.
+- Confirm flight-provider account access, pricing, rate limits, and permitted
+  use of search results; separately assess lodging-provider access.
+- Integrate a live flight-offer adapter behind `FlightOfferProvider`. Integrate
+  a live lodging adapter behind `LodgingOfferProvider` only if commercial or
+  partner access is approved; otherwise retain the fixture provider.
+- Normalize provider responses into the internal offer schemas rather than
+  exposing provider-specific JSON to the recommendation engine.
 - Add timeouts, limited retries, response validation, error translation,
   caching, rate-limit handling, and freshness timestamps.
-- Record representative provider fixtures for local development and CI.
+- Record representative flight and lodging fixtures for local development and
+  CI.
 - Test success, timeout, malformed responses, no result, rate limiting, and
   cached fallback behavior.
 
-**Exit criterion:** One live provider enriches the system, fixture-only mode
-still works, tests make no live calls, and provider failures are controlled.
+**Exit criterion:** Live flight offers enrich the estimate, fixture-only mode
+still works, tests make no live calls, price freshness is visible, and provider
+failures are controlled. A live lodging adapter is an optional extension,
+not a blocker for the core recommendation engine.
 
 ## Week 6 - Evaluation suite and baseline comparison
 

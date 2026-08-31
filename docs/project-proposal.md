@@ -1,7 +1,7 @@
 # Travel AI - Project Proposal
 
 **Owners:** Winnie and Ivy  
-**Status:** Week 0 complete; beginning Week 1  
+**Status:** Week 1 complete; beginning Week 2
 **Working name:** Travel AI  
 **Goal:** Build a reliable, portfolio-ready Applied AI system that helps two
 people who live in different places choose a fair shared-trip destination.
@@ -14,9 +14,12 @@ inconvenient for the other. Travel AI makes that decision transparent.
 
 Given two travelers' origins, fixed leisure-trip dates, individual budgets,
 maximum travel times, and preferences, the system recommends the **top three
-eligible U.S. destinations**. Each result shows estimated per-traveler cost
-and travel time, a fairness view, a score breakdown, and the relevant
-tradeoffs. It also explains why other destinations were excluded.
+eligible U.S. destinations**. Each city result shows estimated per-traveler
+cost and travel time, a fairness view, a score breakdown, and the relevant
+tradeoffs. It also includes a small, compatible range of flight choices for
+each traveler and lodging choices for the pair, so users can make the final
+flight-and-hotel tradeoff instead of being forced into one itinerary. It also
+explains why other destinations were excluded.
 
 The v2 direction is a structured itinerary for the destination the users
 select. That itinerary will be generated from verified activity data and
@@ -35,7 +38,8 @@ chatbot.
 - Exactly two travelers who live in different places, such as long-distance
   couples or friends.
 - Fixed leisure-trip dates, initially 3-7 days.
-- A controlled pool of 15-25 U.S. cities.
+- An initial controlled pool of 10 U.S. cities, expanded to 15-25 before the
+  portfolio release.
 - Per-person origin, budget, maximum travel time, and preferences.
 - Initial preference vocabulary: temperature range, interests (for example,
   beach, food, museums, nightlife, nature, and shopping), and vibes (lively,
@@ -43,10 +47,18 @@ chatbot.
 
 ### Recommendation output
 
-- Three ranked, eligible destinations whenever at least three qualify.
-- Per-traveler estimated round-trip cost and travel duration.
-- Total trip-cost estimate, fairness indicators, and normalized score
-  components.
+- Three ranked, eligible city recommendations whenever at least three qualify.
+- Up to three compatible flight offers for each traveler and up to three
+  lodging offers for the pair in each returned city; offers are selected and
+  sorted by fixed, documented rules.
+- A city-level reference package used only for comparable cost, fairness, and
+  travel-time scoring. It is not presented as a fixed customer package:
+  travelers can independently choose a flight each and one shared lodging
+  option.
+- Per-traveler estimated round-trip cost and travel duration, with offer
+  freshness and source information.
+- Flight-and-lodging estimate, fairness indicators, and normalized score
+  components for the reference package.
 - Plain-language explanation grounded only in verified result data.
 - Machine-readable rejection reasons when a destination fails a hard
   constraint.
@@ -58,9 +70,10 @@ chatbot.
 Two friends live in different cities and want to take a five-day trip together.
 They provide their origins, dates, individual budgets, maximum travel times,
 and preferences such as warm weather, food, and nature. Travel AI filters out
-ineligible cities and returns the three best options, showing each person's
-estimated travel time and cost, the fairness tradeoff, and the reasons each
-destination ranked where it did.
+ineligible cities and returns the three best city options, showing each
+person's estimated travel time and cost, the fairness tradeoff, compatible
+flight and hotel choices, and the reasons each destination ranked where it
+did.
 
 ### Use case 2 - Turn a natural-language request into a complete trip request
 
@@ -79,13 +92,15 @@ time. Instead of inventing an answer, Travel AI returns no recommendation,
 identifies the constraints that excluded each candidate, and suggests which
 constraint the travelers could relax.
 
-### Use case 4 - Compare tradeoffs between eligible destinations
+### Use case 4 - Compare cities and choose compatible offers
 
 The top option may be cheapest while the second option offers a much more
-balanced journey. Travelers can compare verified cost, travel-time, fairness,
-weather, and preference-match components rather than relying on an opaque
-single score. This supports a shared decision without claiming that one
-preference is universally more important than another.
+balanced journey. Within each city, travelers can compare a small list of
+compatible flight offers for each person and shared lodging offers. Across
+cities, they can compare verified cost, travel-time, fairness, and
+preference-match components rather than relying on an opaque single score.
+This supports a shared decision without claiming that one preference is
+universally more important than another.
 
 ### Use case 5 - Generate a verified itinerary (v2)
 
@@ -104,6 +119,8 @@ The following are explicitly out of scope for v1:
 - Groups larger than two travelers.
 - Fine-tuning, a learned ranker, or a personalization model in the core
   product.
+- Food and local-transport cost estimates; these are deferred to v2 with the
+  itinerary work.
 - A RAG/vector database or multi-agent framework without a demonstrated need.
 - A complex frontend before the API, recommendation engine, and evaluation
   suite are working.
@@ -133,10 +150,10 @@ flowchart TD
     B --> C{Information complete and unambiguous?}
     C -- No --> D[Ask a focused clarification]
     D --> B
-    C -- Yes --> E[Load candidate and route data]
-    E --> F[Filter hard-constraint violations]
-    F --> G[Deterministic scoring and ranking]
-    G --> H[Return top three and exclusion reasons]
+    C -- Yes --> E[Load city, climate, flight, and lodging offers]
+    E --> F[Build eligible city offer sets and filter violations]
+    F --> G[Deterministic city scoring and ranking]
+    G --> H[Return top three cities, offer ranges, and exclusion reasons]
     H --> I[LLM explains only verified results]
     I --> J[Later: itinerary generation and deterministic verifier]
 ```
@@ -155,14 +172,80 @@ introduced.
 
 - `cities.json`: stable city metadata, airport code, interest tags, and vibe
   scores.
-- `weather_profiles.json`: city-specific monthly weather profiles.
-- `route_estimates.json`: origin-to-destination round-trip duration and price
-  estimates.
-- `trip_costs.json`: hotel, food, and local-transport estimates.
+- `monthly_climate.json`: city-specific monthly climate summaries.
+- `flight_offers.json`: multiple origin-to-destination flight offers per
+  traveler route, including price, duration, stops, eligibility details, and
+  quote-freshness information.
+- `lodging_offers.json`: multiple lodging offers per destination, including
+  total stay price, occupancy assumption, stay dates, quality attributes, and
+  quote-freshness information.
 
-Route cost and duration belong to route data rather than a city record because
-they vary by origin and dates. Provider interfaces will later allow one live
-data source while retaining recorded fixtures as a reliable fallback.
+Flight and lodging offers belong to date-aware offer data rather than city
+records because prices vary by origin, dates, occupancy, and availability.
+Provider interfaces will later allow live flight and lodging sources while
+retaining recorded fixtures as a reliable fallback.
+
+### City recommendations with selectable offer ranges
+
+The unit being ranked is a **city**, not an individual flight or hotel. A city
+qualifies only when both travelers have at least one eligible flight offer and
+the pair has at least one eligible lodging offer for the same trip dates and
+occupancy. The response then returns a bounded, sorted subset of those offers
+so users can choose based on their own tradeoffs.
+
+To make city scores comparable, the system also creates a deterministic
+**reference package** for each eligible city. For the MVP, it is the
+lowest-total-cost eligible combination of one flight per traveler and one
+shared lodging offer. Fixed tie-breakers use shorter total travel time, fewer
+stops, and then stable provider offer IDs. The reference package is used for
+ranking only; it does not remove the other compatible choices from the
+response.
+
+### Recommendation flow and customer choice
+
+Travel AI recommends a **city**, not a pre-built flight-and-hotel bundle. The
+following flow keeps the ranking reproducible while allowing the travelers to
+make their own tradeoffs:
+
+1. The LLM converts the conversation into a validated `TripRequest`.
+2. For every city in the candidate pool, Travel AI obtains flight offers for
+   each traveler and lodging offers for the pair. During the MVP, providers
+   load versioned fixture data; a future adapter may obtain live data.
+3. Provider results are validated and normalized into internal `FlightOffer`
+   and `LodgingOffer` records with a source, retrieval time, and freshness
+   information. The ranker never depends on raw provider JSON.
+4. The constraint engine removes individual offers with the wrong dates,
+   destination, occupancy, availability, expired quote, or excessive travel
+   time.
+5. The system forms all remaining combinations of one flight for Traveler A,
+   one flight for Traveler B, and one shared lodging offer. It removes a
+   combination when either person's flight price plus half the lodging price
+   exceeds that person's budget.
+6. A city is eligible when at least one combination remains. Its
+   lowest-total-cost eligible combination becomes the reference package.
+7. The ranker scores eligible cities from their reference packages: 35%
+   affordability, 30% travel fairness, 20% preference match (including
+   climate), and 15% travel time. It returns the three highest-ranked cities.
+8. For every returned city, the API presents independent choices: up to three
+   flights for Traveler A, up to three flights for Traveler B, and up to three
+   shared lodging options. The reference-package components are always
+   included and labeled.
+9. When travelers select different options, the client recalculates each
+   person's total, combined total, budget status, and fairness. A selected
+   combination can be shown with a budget warning; it does not silently alter
+   the city ranking.
+
+Displayed flight choices are selected as lowest price, shortest travel time,
+and fewest stops. Displayed lodging choices are selected as lowest total
+price, best reviewed, and most flexible cancellation, subject to the available
+fixture data. If the same offer wins more than one category, the system uses
+the next deterministic choice instead.
+
+An offer is compatible when it matches the requested dates, destination,
+occupancy assumptions, and the applicable hard constraints. Before building
+fixtures or adapters, the team will document the exact minimum hotel-quality
+rule, number of options returned, budget rule, and treatment of unavailable or
+expired offers.
 
 ### Candidate-pool and preference-normalization approach
 
@@ -209,11 +292,11 @@ is missing or cannot be safely mapped.
 }
 ```
 
-Deterministic code then joins the normalized preferences with the city,
-weather, route, and trip-cost records; filters hard constraints; calculates
-feature scores; and ranks the eligible cities. The LLM never reads through the
-candidate pool to select a winner and never assigns a score. This preserves
-repeatability and makes each recommendation explainable.
+Deterministic code then joins the normalized preferences with the city, climate,
+flight-offer, and lodging-offer records; constructs eligible offer sets;
+calculates feature scores; and ranks the eligible cities. The LLM never reads
+through the candidate pool to select a winner and never assigns a score. This
+preserves repeatability and makes each recommendation explainable.
 
 ## 8. Constraints and explainable ranking
 
@@ -224,24 +307,28 @@ region, valid dates, and required data availability.
 Eligible cities receive an explainable weighted score:
 
 ```text
-score = w_cost * cost_score
-      + w_time * travel_time_score
-      + w_fairness * fairness_score
-      + w_weather * weather_score
-      + w_preference * preference_match_score
+score = 0.35 * affordability_score
+      + 0.30 * travel_fairness_score
+      + 0.20 * preference_match_score
+      + 0.15 * travel_time_score
 ```
 
-All components are normalized before scoring and their definitions, missing
-data behavior, weights, and tie-breaking rules are documented. Fairness is
-reported separately from total burden so an equal but poor journey for both
-travelers is not mistaken for a good outcome. At minimum, the system reports:
+All components are normalized to the same range before scoring and their
+definitions, missing-data behavior, weights, and tie-breaking rules are
+documented. `preference_match_score` includes both controlled city tags and
+the match between the requested temperature range and the city's monthly
+climate summary; climate is not a separate score. Affordability, fairness, and
+travel time are calculated from the reference package. Fairness is reported
+separately from total burden so an equal but poor journey for both travelers is
+not mistaken for a good outcome. At minimum, the system reports:
 
 ```text
 fairness_gap = abs(travel_hours_A - travel_hours_B)
 ```
 
-The ranking may also include the difference in traveler costs. The initial
-weights are a baseline to evaluate, not a claim of universal correctness.
+The ranking may also include the difference in traveler costs. The listed
+weights are the initial baseline to evaluate, not a claim of universal
+correctness.
 
 ## 9. Technical approach
 
