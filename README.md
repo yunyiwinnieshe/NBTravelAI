@@ -18,6 +18,9 @@ itinerary for a destination the travelers select.
   options, selection, benchmark gate, and logging requirements.
 - [API outline](docs/api-outline.md) - implemented endpoints, planned
   conversation flow, and internal service boundaries.
+- [Preference and request contract](docs/preference-and-request-contract.md)
+  - hard constraints, per-traveler preferences, normalization, clarification,
+  and preference-scoring rules.
 
 ## Current direction
 

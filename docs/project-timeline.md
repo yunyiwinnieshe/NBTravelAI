@@ -57,6 +57,9 @@ and approved by both contributors.
 **Goal:** Ship the first end-to-end vertical slice using fixtures only.
 
 - Create initial city, weather, route-estimate, and trip-cost fixture data.
+- Reconcile and approve the per-traveler hard-constraint and preference
+  contract in [preference-and-request-contract.md](preference-and-request-contract.md)
+  before changing Pydantic request schemas.
 - Load the controlled candidate pool for each request.
 - Filter basic hard-constraint violations.
 - Implement normalized baseline features and deterministic top-three ranking.
