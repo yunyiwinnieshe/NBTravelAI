@@ -49,23 +49,22 @@ deterministic top three destinations. It is currently a validated placeholder.
 
 ### Recommendation processing and result contract
 
-`POST /recommendations` ranks **cities**, not fixed flight-and-hotel bundles.
-After data is fetched or loaded from fixtures, the service validates and
-normalizes it, filters invalid offers, forms eligible combinations, and selects
-the lowest-total-cost eligible combination as each city's reference package.
-Only the reference package is used for the initial city score.
+`POST /recommendations` ranks **cities**, not individual flights. After flight
+data is fetched or loaded from fixtures, the service validates and normalizes
+it, filters invalid offers, and selects the lowest-combined-airfare eligible
+flight pair as each city's reference pair. Only the reference pair is used for
+the initial city score. Lodging is outside V1.
 
 The result returns independent choices for the travelers to mix and match:
 
-- up to three flights for Traveler A;
-- up to three flights for Traveler B; and
-- up to three shared lodging options.
+- up to three flights for Traveler A; and
+- up to three flights for Traveler B.
 
-The reference package's component offers must be present in those lists and
-identified by `reference_offer_ids`. The client can then calculate the totals
-for any selected flight-flight-lodging combination. It must show a warning if
-the selected combination exceeds either person's budget; it must not imply
-that every possible cross-combination is affordable.
+The reference pair's offers must be present in those lists and identified by
+`reference_flight_offer_ids`. If a traveler selects an alternate flight, the
+client can recalculate that traveler's airfare and travel burden and show a
+warning when the choice exceeds the original constraints. Alternate choices
+do not change the original city rank.
 
 Illustrative result shape:
 
@@ -73,16 +72,14 @@ Illustrative result shape:
 {
   "destination_id": "chicago_il",
   "score": 0.84,
-  "reference_offer_ids": {
+  "reference_flight_offer_ids": {
     "traveler_a_flight": "flight_a_01",
-    "traveler_b_flight": "flight_b_02",
-    "lodging": "lodging_03"
+    "traveler_b_flight": "flight_b_02"
   },
   "flight_options": {
     "traveler_a": ["flight_a_01", "flight_a_02", "flight_a_03"],
     "traveler_b": ["flight_b_01", "flight_b_02", "flight_b_03"]
-  },
-  "lodging_options": ["lodging_01", "lodging_02", "lodging_03"]
+  }
 }
 ```
 
@@ -152,7 +149,6 @@ calls directly:
 PreferenceExtractionService → LlmClient
 RecommendationService → DestinationCatalogProvider
 RecommendationService → FlightOfferProvider
-RecommendationService → LodgingOfferProvider
 RecommendationService → ClimateProvider
 RecommendationService → ConstraintEngine → Ranker
 ```
