@@ -10,20 +10,13 @@ class InterestTag(StrEnum):
     """Interests supported by the initial controlled vocabulary."""
 
     BEACH = "beach"
+    MOUNTAIN = "mountain"
     FOOD = "food"
     MUSEUMS = "museums"
     NIGHTLIFE = "nightlife"
     NATURE = "nature"
+    OUTDOOR_ACTIVITIES = "outdoor_activities"
     SHOPPING = "shopping"
-
-
-class VibeTag(StrEnum):
-    """Travel styles supported by the initial controlled vocabulary."""
-
-    LIVELY = "lively"
-    RELAXED = "relaxed"
-    OUTDOORS = "outdoors"
-    LUXURY = "luxury"
 
 
 class TemperatureRange(BaseModel):
@@ -44,24 +37,24 @@ class TemperatureRange(BaseModel):
         return self
 
 
+class TripPreferences(BaseModel):
+    """Soft preferences supported for one traveler in v1."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    temperature_range: TemperatureRange | None = None
+    interest_tags: list[InterestTag] = Field(default_factory=list)
+
+
 class TravelerPreferences(BaseModel):
-    """Hard constraints supplied by one traveler."""
+    """Hard constraints and optional soft preferences for one traveler."""
 
     model_config = ConfigDict(extra="forbid")
 
     origin: str = Field(min_length=2, max_length=120)
     budget_usd: float = Field(gt=0, le=100_000)
     max_travel_time_hours: float = Field(gt=0, le=48)
-
-
-class TripPreferences(BaseModel):
-    """Shared soft preferences normalized to the initial catalog vocabulary."""
-
-    model_config = ConfigDict(extra="forbid")
-
-    temperature_range: TemperatureRange | None = None
-    interest_tags: list[InterestTag] = Field(default_factory=list)
-    vibe_tags: list[VibeTag] = Field(default_factory=list)
+    preferences: TripPreferences = Field(default_factory=TripPreferences)
 
 
 class TripRequest(BaseModel):
@@ -72,7 +65,6 @@ class TripRequest(BaseModel):
     travelers: list[TravelerPreferences] = Field(min_length=2, max_length=2)
     start_date: date
     end_date: date
-    preferences: TripPreferences = Field(default_factory=TripPreferences)
 
     @model_validator(mode="after")
     def validate_trip_length(self) -> "TripRequest":

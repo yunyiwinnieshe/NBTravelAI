@@ -15,20 +15,25 @@ def valid_trip_request() -> dict[str, object]:
                 "origin": "Boston, MA",
                 "budget_usd": 2000,
                 "max_travel_time_hours": 8,
+                "preferences": {
+                    "temperature_range": {
+                        "minimum_celsius": 20,
+                        "maximum_celsius": 30,
+                    },
+                    "interest_tags": ["food", "museums"],
+                },
             },
             {
                 "origin": "San Francisco, CA",
                 "budget_usd": 2000,
                 "max_travel_time_hours": 8,
+                "preferences": {
+                    "interest_tags": ["mountain", "outdoor_activities"],
+                },
             },
         ],
         "start_date": "2026-10-09",
         "end_date": "2026-10-13",
-        "preferences": {
-            "temperature_range": {"minimum_celsius": 20, "maximum_celsius": 30},
-            "interest_tags": ["food", "nature"],
-            "vibe_tags": ["outdoors"],
-        },
     }
 
 

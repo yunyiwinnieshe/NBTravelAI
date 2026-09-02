@@ -40,8 +40,11 @@ deterministic top three destinations. It is currently a validated placeholder.
       "budget_usd": 2000,
       "max_travel_time_hours": 8,
       "preferences": {
-        "interest_tags": ["food", "museums"],
-        "vibe_tags": ["lively"]
+        "temperature_range": {
+          "minimum_celsius": 20,
+          "maximum_celsius": 30
+        },
+        "interest_tags": ["food", "museums"]
       }
     },
     {
@@ -49,8 +52,7 @@ deterministic top three destinations. It is currently a validated placeholder.
       "budget_usd": 1800,
       "max_travel_time_hours": 7,
       "preferences": {
-        "interest_tags": ["nature", "outdoor_activities"],
-        "vibe_tags": ["relaxed"]
+        "interest_tags": ["nature", "outdoor_activities"]
       }
     }
   ],

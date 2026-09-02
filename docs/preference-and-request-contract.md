@@ -1,8 +1,7 @@
 # Travel AI Preference and Request Contract
 
 **Owners:** Winnie and Ivy  
-**Status:** Proposed Week 2 contract; approve together before changing the
-Pydantic request schema  
+**Status:** Approved V1 contract and implemented Pydantic request shape
 **Purpose:** Define the canonical trip request, hard constraints, soft
 preferences, clarification behavior, and deterministic preference features.
 
@@ -15,9 +14,9 @@ preferences, clarification behavior, and deterministic preference features.
   three through seven calendar days, inclusive.
 - Preferences belong to each traveler, not the trip as a whole. This lets the
   system show each person's preference satisfaction separately.
-- Food, activities, local transportation, booking, and payment are outside
-  V1. A budget covers round-trip airfare plus that traveler's equal share of
-  lodging.
+- Lodging, food, activities, local transportation, booking, and payment are
+  outside V1. A budget covers only that traveler's estimated round-trip
+  airfare.
 
 ## Canonical request shape
 
@@ -32,9 +31,11 @@ normalizes them into this validated structure before deterministic ranking:
       "budget_usd": 2000,
       "max_travel_time_hours": 8,
       "preferences": {
-        "temperature_range_celsius": {"minimum": 20, "maximum": 30},
-        "interest_tags": ["food", "museums"],
-        "vibe_tags": ["lively"]
+        "temperature_range": {
+          "minimum_celsius": 20,
+          "maximum_celsius": 30
+        },
+        "interest_tags": ["food", "museums"]
       }
     },
     {
@@ -42,9 +43,11 @@ normalizes them into this validated structure before deterministic ranking:
       "budget_usd": 1800,
       "max_travel_time_hours": 7,
       "preferences": {
-        "temperature_range_celsius": {"minimum": 15, "maximum": 23},
-        "interest_tags": ["nature", "outdoor_activities"],
-        "vibe_tags": ["relaxed"]
+        "temperature_range": {
+          "minimum_celsius": 15,
+          "maximum_celsius": 23
+        },
+        "interest_tags": ["nature", "outdoor_activities"]
       }
     }
   ],
@@ -61,7 +64,7 @@ Vancouver, Washington.
 ## Hard constraints
 
 Hard constraints are filters, never score penalties. A city is excluded when
-the request or every possible flight-and-lodging combination violates one.
+the request or every available flight option for either traveler violates one.
 
 ### Origins
 
@@ -77,14 +80,12 @@ the request or every possible flight-and-lodging combination violates one.
 
 ### Per-person budget
 
-- Each budget covers that traveler's round-trip airfare plus half of the
-  shared lodging total.
-- Lodging is split 50/50 in V1.
+- Each budget covers that traveler's estimated round-trip airfare only.
 - Each traveler must independently stay within their budget.
-- Food, activities, and local transportation are excluded from this total.
+- Lodging and all other trip expenses are excluded from this total.
 
 ```text
-traveler_total = selected_flight_total + selected_lodging_total / 2
+traveler_total = selected_round_trip_flight_total
 ```
 
 ### Maximum travel time
@@ -97,8 +98,8 @@ traveler_total = selected_flight_total + selected_lodging_total / 2
 ## Soft preferences
 
 Soft preferences affect the score of an eligible city; they do not reject it.
-Each traveler may provide any combination of temperature, interests, and
-vibes. Tag order does not matter and duplicate tags are removed during
+Each traveler may provide any combination of temperature and interests. Tag
+order does not matter and duplicate tags are removed during
 normalization.
 
 ### Temperature
@@ -118,19 +119,13 @@ the range receives a full temperature match; the score declines gradually as
 the destination moves outside it. If no temperature preference is provided,
 temperature is omitted from that traveler's preference score.
 
-### Interests and vibes
+### Interests
 
 The initial controlled interest vocabulary is:
 
 ```text
 beach, mountain, food, museums, nightlife, nature,
 outdoor_activities, shopping
-```
-
-The initial controlled vibe vocabulary is:
-
-```text
-lively, relaxed, outdoors, luxury
 ```
 
 All selected interests within a traveler's request have equal weight. Cities
@@ -145,8 +140,7 @@ categories that traveler supplied:
 ```text
 traveler_preference_score = average(
   temperature_match, if provided,
-  interest_match, if provided,
-  vibe_match, if provided
+  interest_match, if provided
 )
 ```
 
@@ -187,7 +181,6 @@ scoring.
 
 ## Implementation boundary
 
-This document changes the desired request contract from the current shared
-`preferences` object to preferences inside each traveler. After Winnie and Ivy
-approve it, update `src/travel_ai/schemas/trip.py`, API tests, and the direct
-`POST /recommendations` schema together in one focused implementation change.
+The implemented `TripRequest` stores preferences inside each traveler. V1
+accepts only a confirmed temperature range and controlled interest tags;
+vibes and unsupported free-text preferences never enter deterministic scoring.
