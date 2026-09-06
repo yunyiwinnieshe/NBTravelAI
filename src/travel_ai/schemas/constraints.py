@@ -2,11 +2,11 @@
 
 from enum import StrEnum
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
-class ExclusionReason(StrEnum):
-    """Stable codes explaining why an offer or city cannot continue."""
+class OfferExclusionReason(StrEnum):
+    """Stable codes explaining why a flight offer cannot continue."""
 
     ORIGIN_MISMATCH = "origin_mismatch"
     DESTINATION_MISMATCH = "destination_mismatch"
@@ -16,6 +16,11 @@ class ExclusionReason(StrEnum):
     OFFER_EXPIRED = "offer_expired"
     INVALID_PRICE = "invalid_price"
     UNSUPPORTED_CURRENCY = "unsupported_currency"
+
+
+class CityExclusionReason(StrEnum):
+    """Stable codes explaining why a candidate city cannot continue."""
+
     NO_ELIGIBLE_FLIGHT = "no_eligible_flight"
 
 
@@ -35,26 +40,17 @@ class OfferRejection(BaseModel):
         pattern=r"^[a-z0-9]+(?:_[a-z0-9]+)*$",
     )
     offer_id: str = Field(min_length=1, max_length=200, pattern=r".*\S.*")
-    reason_codes: list[ExclusionReason] = Field(min_length=1)
+    reason_codes: list[OfferExclusionReason] = Field(min_length=1)
 
     @field_validator("reason_codes")
     @classmethod
     def validate_unique_reasons(
-        cls, reasons: list[ExclusionReason]
-    ) -> list[ExclusionReason]:
+        cls, reasons: list[OfferExclusionReason]
+    ) -> list[OfferExclusionReason]:
         """Reject duplicate reasons while preserving the engine's check order."""
         if len(reasons) != len(set(reasons)):
             raise ValueError("reason codes must not contain duplicates")
         return reasons
-
-    @model_validator(mode="after")
-    def validate_offer_reason_scope(self) -> "OfferRejection":
-        """Reserve the aggregate no-flight reason for city-level exclusions."""
-        if ExclusionReason.NO_ELIGIBLE_FLIGHT in self.reason_codes:
-            raise ValueError(
-                "no_eligible_flight is a city-level reason, not an offer reason"
-            )
-        return self
 
 
 class CityExclusion(BaseModel):
@@ -72,12 +68,4 @@ class CityExclusion(BaseModel):
         max_length=100,
         pattern=r"^[a-z0-9]+(?:_[a-z0-9]+)*$",
     )
-    reason_code: ExclusionReason = ExclusionReason.NO_ELIGIBLE_FLIGHT
-
-    @field_validator("reason_code")
-    @classmethod
-    def validate_city_reason(cls, reason: ExclusionReason) -> ExclusionReason:
-        """Allow only aggregate city-level reasons in this initial contract."""
-        if reason is not ExclusionReason.NO_ELIGIBLE_FLIGHT:
-            raise ValueError("city exclusions must use no_eligible_flight")
-        return reason
+    reason_code: CityExclusionReason = CityExclusionReason.NO_ELIGIBLE_FLIGHT

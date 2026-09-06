@@ -5,7 +5,7 @@ from pydantic import ValidationError
 
 from travel_ai.schemas.constraints import (
     CityExclusion,
-    ExclusionReason,
+    OfferExclusionReason,
     OfferRejection,
 )
 
@@ -24,8 +24,8 @@ def test_offer_rejection_accepts_multiple_ordered_reasons() -> None:
     rejection = OfferRejection.model_validate(valid_offer_rejection_data())
 
     assert rejection.reason_codes == [
-        ExclusionReason.MAX_TRAVEL_TIME_EXCEEDED,
-        ExclusionReason.BUDGET_EXCEEDED,
+        OfferExclusionReason.MAX_TRAVEL_TIME_EXCEEDED,
+        OfferExclusionReason.BUDGET_EXCEEDED,
     ]
     assert rejection.model_dump(mode="json") == valid_offer_rejection_data()
 
@@ -76,5 +76,16 @@ def test_city_exclusion_rejects_offer_level_reason() -> None:
         CityExclusion(
             traveler_id="traveler_b",
             city_id="san_diego_ca",
-            reason_code=ExclusionReason.BUDGET_EXCEEDED,
+            reason_code=OfferExclusionReason.BUDGET_EXCEEDED,
         )
+
+
+def test_offer_and_city_json_schemas_advertise_only_valid_reasons() -> None:
+    offer_schema = OfferRejection.model_json_schema()
+    city_schema = CityExclusion.model_json_schema()
+
+    assert (
+        "no_eligible_flight"
+        not in offer_schema["$defs"]["OfferExclusionReason"]["enum"]
+    )
+    assert city_schema["$defs"]["CityExclusionReason"]["enum"] == ["no_eligible_flight"]
