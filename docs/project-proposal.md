@@ -147,6 +147,32 @@ budget, maximum travel time, and preferences. The system asks for clarification
 when a value is missing, ambiguous, or cannot be safely mapped to the
 controlled vocabulary.
 
+### Flight-offer selection policy
+
+After hard constraints remove ineligible flight offers, the system chooses an
+initially highlighted flight option for each traveler. It first finds the
+cheapest eligible round-trip offer. If a round-trip nonstop offer costs no more
+than 50% above that cheapest offer, the system highlights the qualifying
+nonstop offer. Otherwise, it highlights the cheapest offer.
+
+Within the qualifying nonstop offers, ties are resolved by lower price, then
+shorter total round-trip travel time, then stable offer ID. The cheapest-offer
+fallback resolves ties by lower price, shorter travel time, fewer total
+connections, then stable offer ID. A flight counts as round-trip nonstop only
+when both its outbound and return slices have zero connections.
+
+This is a deterministic system selection policy, not a traveler preference or
+hard constraint. V1 does not accept a `nonstop_only` request field, and
+connecting offers remain eligible when they satisfy the supported constraints.
+The 50% threshold is an initial, testable product rule that recognizes the
+additional burden of connecting and multi-layover itineraries. It may be
+revised from evaluation results. It does not replace the
+lowest-combined-airfare reference pair used for comparable city scoring, and
+it does not remove the other customer-facing flight options.
+
+The airport-resolution, synchronized-arrival pairing, and three-option
+selection rules are defined in [Flight search and pairing](flight-search-and-pairing.md).
+
 ## 7. Data strategy
 
 The MVP uses versioned JSON fixtures validated with Pydantic. This keeps local

@@ -21,6 +21,9 @@ itinerary for a destination the travelers select.
 - [Preference and request contract](docs/preference-and-request-contract.md)
   - hard constraints, per-traveler preferences, normalization, clarification,
   and preference-scoring rules.
+- [Flight search and pairing](docs/flight-search-and-pairing.md) - origin and
+  airport resolution, provider-search boundaries, synchronized-arrival pairing,
+  and three-option selection.
 
 ## Current direction
 
