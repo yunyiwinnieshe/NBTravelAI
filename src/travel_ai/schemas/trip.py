@@ -69,6 +69,9 @@ class TripRequest(BaseModel):
     @model_validator(mode="after")
     def validate_trip_length(self) -> "TripRequest":
         """Require the initial v1 leisure-trip range of three through seven days."""
+        if self.start_date < date.today():
+            raise ValueError("start_date must not be in the past")
+
         trip_days = (self.end_date - self.start_date).days + 1
         if not 3 <= trip_days <= 7:
             raise ValueError("Travel AI v1 supports trips lasting from 3 to 7 days")
