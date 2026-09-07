@@ -149,7 +149,6 @@ comparison, freshness, and explanation:
 - outbound and return slice durations, endpoints, and segment lists;
 - segment departure/arrival times, duration, airports, carrier, and flight
   number;
-- baggage information when available; and
 - fare conditions needed to explain refund or change limitations.
 
 Duffel test mode is suitable for adapter behavior but does not guarantee
@@ -191,7 +190,6 @@ test scenarios, not claims about current market prices. See Duffel's official
       "operating_carriers": ["Example Air"]
     }
   ],
-  "baggage_summary": "carry-on included; checked baggage unknown",
   "retrieved_at": "2026-08-29T12:00:00Z",
   "expires_at": "2026-08-29T12:30:00Z",
   "is_fixture": true
