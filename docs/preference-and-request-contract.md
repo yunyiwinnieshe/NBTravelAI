@@ -27,9 +27,10 @@ normalizes them into this validated structure before deterministic ranking:
 {
   "travelers": [
     {
-      "origin": "Boston, MA",
+      "traveler_id": "traveler_a",
+      "origin_id": "boston_ma",
       "budget_usd": 2000,
-      "max_travel_time_hours": 8,
+      "max_one_way_travel_minutes": 480,
       "preferences": {
         "temperature_range": {
           "minimum_celsius": 20,
@@ -39,9 +40,10 @@ normalizes them into this validated structure before deterministic ranking:
       }
     },
     {
-      "origin": "San Francisco, CA",
+      "traveler_id": "traveler_b",
+      "origin_id": "san_francisco_ca",
       "budget_usd": 1800,
-      "max_travel_time_hours": 7,
+      "max_one_way_travel_minutes": 420,
       "preferences": {
         "temperature_range": {
           "minimum_celsius": 15,
@@ -56,10 +58,12 @@ normalizes them into this validated structure before deterministic ranking:
 }
 ```
 
-`origin` is initially free text. Before ranking, the system resolves it to a
-canonical metro-area or airport ID. It asks a clarification question when an
-origin is unresolved or ambiguous, such as Vancouver, British Columbia versus
-Vancouver, Washington.
+The conversation draft may initially store an origin as free text. Before it
+constructs `TripRequest`, the system resolves that text to `origin_id`, a
+canonical metro-area or airport identifier. It asks a clarification question
+when an origin is unresolved or ambiguous, such as Vancouver, British
+Columbia versus Vancouver, Washington. `traveler_id` is stable and unique
+within one request.
 
 ## Hard constraints
 
@@ -68,8 +72,9 @@ the request or every available flight option for either traveler violates one.
 
 ### Origins
 
-- Resolve each free-text origin to a canonical airport or metro-area ID.
-- Require two distinct resolved origins in V1.
+- Resolve each draft's free-text origin to a canonical airport or metro-area
+  ID before constructing `TripRequest`.
+- Require two distinct `origin_id` values in V1.
 - Ask for clarification rather than guessing an ambiguous origin.
 
 ### Dates
@@ -90,6 +95,7 @@ traveler_total = selected_round_trip_flight_total
 
 ### Maximum travel time
 
+- Store the confirmed limit as integer `max_one_way_travel_minutes`.
 - Measure the duration of each traveler's one-way itinerary.
 - Include flight and layover time.
 - Exclude travel to and from airports.
@@ -181,6 +187,9 @@ scoring.
 
 ## Implementation boundary
 
-The implemented `TripRequest` stores preferences inside each traveler. V1
-accepts only a confirmed temperature range and controlled interest tags;
-vibes and unsupported free-text preferences never enter deterministic scoring.
+The implemented `TripRequest` is the confirmed boundary used by deterministic
+recommendation code. It stores a unique `traveler_id`, resolved `origin_id`,
+decimal-safe airfare budget, maximum one-way travel minutes, and preferences
+inside each traveler. V1 accepts only a confirmed temperature range and
+controlled interest tags; vibes and unsupported free-text preferences never
+enter deterministic scoring.

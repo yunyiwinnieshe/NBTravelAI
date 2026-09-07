@@ -17,9 +17,10 @@ def valid_trip_request() -> dict[str, object]:
     return {
         "travelers": [
             {
-                "origin": "Boston, MA",
+                "traveler_id": "traveler_a",
+                "origin_id": "boston_ma",
                 "budget_usd": 2000,
-                "max_travel_time_hours": 8,
+                "max_one_way_travel_minutes": 480,
                 "preferences": {
                     "temperature_range": {
                         "minimum_celsius": 20,
@@ -29,9 +30,10 @@ def valid_trip_request() -> dict[str, object]:
                 },
             },
             {
-                "origin": "San Francisco, CA",
+                "traveler_id": "traveler_b",
+                "origin_id": "san_francisco_ca",
                 "budget_usd": 2000,
-                "max_travel_time_hours": 8,
+                "max_one_way_travel_minutes": 480,
                 "preferences": {
                     "interest_tags": ["mountain", "outdoor_activities"],
                 },
@@ -91,6 +93,26 @@ def test_recommendations_rejects_a_trip_with_a_past_start_date() -> None:
     request = valid_trip_request()
     request["start_date"] = start_date.isoformat()
     request["end_date"] = (start_date + timedelta(days=4)).isoformat()
+
+    response = client.post("/recommendations", json=request)
+
+    assert response.status_code == 422
+
+
+def test_recommendations_rejects_duplicate_traveler_ids() -> None:
+    """Each traveler needs a stable, unique identifier within the request."""
+    request = valid_trip_request()
+    request["travelers"][1]["traveler_id"] = "traveler_a"  # type: ignore[index]
+
+    response = client.post("/recommendations", json=request)
+
+    assert response.status_code == 422
+
+
+def test_recommendations_rejects_the_same_resolved_origin() -> None:
+    """V1 is limited to travelers departing from different resolved origins."""
+    request = valid_trip_request()
+    request["travelers"][1]["origin_id"] = "boston_ma"  # type: ignore[index]
 
     response = client.post("/recommendations", json=request)
 
