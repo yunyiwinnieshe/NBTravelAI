@@ -10,10 +10,12 @@ class InterestTag(StrEnum):
     """Interests supported by the initial controlled vocabulary."""
 
     BEACH = "beach"
+    MOUNTAIN = "mountain"
     FOOD = "food"
     MUSEUMS = "museums"
     NIGHTLIFE = "nightlife"
     NATURE = "nature"
+    OUTDOOR_ACTIVITIES = "outdoor_activities"
     SHOPPING = "shopping"
 
 
