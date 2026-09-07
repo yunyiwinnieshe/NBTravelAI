@@ -54,6 +54,7 @@ def test_city_accepts_multiple_airports_and_controlled_interests() -> None:
         ("state_code", "New York"),
         ("country_code", "CA"),
         ("metro_airport_codes", []),
+        ("metro_airport_codes", ["JFK", "LGA", "EWR", "SWF"]),
         ("metro_airport_codes", ["jfk"]),
         ("metro_airport_codes", ["JFK", "JFK"]),
         ("interest_tags", ["food", "food"]),

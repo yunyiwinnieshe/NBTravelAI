@@ -16,7 +16,7 @@ class City(BaseModel):
     name: str = Field(min_length=1, max_length=120)
     state_code: str = Field(pattern=r"^[A-Z]{2}$")
     country_code: str = Field(default="US", pattern=r"^US$")
-    metro_airport_codes: list[str] = Field(min_length=1)
+    metro_airport_codes: list[str] = Field(min_length=1, max_length=3)
     interest_tags: list[InterestTag] = Field(default_factory=list)
     data_version: str = Field(pattern=r"^v[1-9][0-9]*$")
 
