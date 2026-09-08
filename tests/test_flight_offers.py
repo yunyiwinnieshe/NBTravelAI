@@ -224,7 +224,6 @@ def test_display_offers_are_distinct_and_include_recommended_pair_offer() -> Non
             "total_amount": Decimal("310.00"),
         }
     )
-
     selected = select_display_flight_offers(
         [*offers, extra_offer],
         recommended_offer_id="fixture_a_chicago_extra",

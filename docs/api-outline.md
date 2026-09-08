@@ -1,9 +1,10 @@
 # Travel AI - API Outline
 
-**Status:** `GET /health` and the direct `POST /recommendations` endpoint are
-implemented. The conversation endpoint contracts are implemented as explicit
-`501 Not Implemented` stubs until session storage and the LLM workflow are
-added in Week 4.
+**Status:** `GET /health` is implemented. The request and response contracts
+for `POST /recommendations` are finalized, but recommendation generation still
+returns `501 Not Implemented` until the provider and ranking services are
+connected. The conversation endpoints are also explicit `501` stubs until
+session storage and the LLM workflow are added.
 
 ## Design principle
 
@@ -30,8 +31,9 @@ checks use this endpoint; it is not part of travel planning.
 
 ### `POST /recommendations`
 
-Accepts a complete structured trip request and, in Week 2, will return the
-deterministic top three destinations. It is currently a validated placeholder.
+Accepts a complete structured trip request and will return up to three
+deterministically ranked destinations. It currently validates the request and
+then returns `501 Not Implemented`; it does not return a fake successful result.
 
 ```json
 {
@@ -67,6 +69,9 @@ deterministic top three destinations. It is currently a validated placeholder.
 The canonical hard-constraint and preference rules are in the
 [preference and request contract](preference-and-request-contract.md). This
 example represents the implemented confirmed request contract.
+
+The finalized success/no-match response shape is defined in the
+[recommendation response contract](recommendation-response-contract.md).
 
 ## Planned conversation endpoints
 
@@ -140,6 +145,6 @@ ranking independently testable and replaceable.
 
 ## Next implementation boundaries
 
-The next Week 2 implementation adds fixture-data schemas and providers, then
-the constraint engine and ranker. The session endpoints and LLM integration are
-planned for Week 4 after the deterministic recommendation flow is working.
+The next implementation connects fixture providers, constraints, pair
+selection, and ranking to the finalized response. The session endpoints and
+LLM integration remain later work after the deterministic flow is working.

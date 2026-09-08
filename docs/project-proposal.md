@@ -166,11 +166,12 @@ hard constraint. V1 does not accept a `nonstop_only` request field, and
 connecting offers remain eligible when they satisfy the supported constraints.
 The 50% threshold is an initial, testable product rule that recognizes the
 additional burden of connecting and multi-layover itineraries. It may be
-revised from evaluation results. It does not replace the
-lowest-combined-airfare reference pair used for comparable city scoring, and
-it does not remove the other customer-facing flight options.
+revised from evaluation results. After the two travelers' offers are paired,
+the recommended pair is used for the city score. The cheapest valid pair is
+retained only as the price baseline used to explain the recommended pair's
+premium.
 
-The airport-resolution, synchronized-arrival pairing, and three-option
+The airport-resolution, synchronized-arrival pairing, and four-category
 selection rules are defined in [Flight search and pairing](flight-search-and-pairing.md).
 
 ## 7. Data strategy

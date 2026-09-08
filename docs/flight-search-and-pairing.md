@@ -190,7 +190,7 @@ tolerance to prefer a round-trip nonstop over that traveler's cheapest eligible
 offer. This does not create a `nonstop_only` request field and does not make
 connecting flights ineligible.
 
-## 6. Return three distinct options per traveler
+## 6. Return category-selected options per traveler
 
 After the recommended pair has been chosen, begin each traveler's display list
 with that pair's offer. Then consider eligible offers in this order:
@@ -200,21 +200,29 @@ with that pair's offer. Then consider eligible offers in this order:
 3. fewest total connections.
 
 Deduplicate by stable internal offer ID when the recommended offer or another
-offer wins more than one category. Backfill from the remaining offers ordered
-by price, duration, connections, and offer ID until the list contains three
-offers or no more eligible offers exist. Reserving the first slot for the
-recommended pair ensures that the two synchronized choices are always visible.
+offer wins more than one category. Keep every applicable label on that single
+option and do not backfill with an unrelated alternative. The response therefore
+contains between one and four distinct options, depending on how many category
+winners are different. Reserving the first slot for the recommended pair
+ensures that the two synchronized choices are always visible.
 
-The API returns each `FlightOffer` once and identifies the recommended
-combination using the two stable offer IDs. Travelers may choose a different
-combination from their independent lists; the client or service then
-recalculates combined price, arrival gap, and shared trip time without reranking
-the destination.
+The API returns a smaller public `FlightOption` rather than every internal
+`FlightOffer` field. Each option has one or more labels: `recommended_pair`,
+`lowest_price`, `shortest_travel`, or `fewest_connections`. The recommended
+pair's two offers are always present in their respective lists. Travelers may
+choose a different combination from their independent lists; the client or
+service then recalculates combined price, arrival gap, and shared trip time
+without reranking the destination.
+
+The recommended pair—not the cheapest valid pair—is used for the city's score.
+The cheapest pair remains an internal affordability anchor. The response
+publishes its combined price and the recommended pair's dollar and percentage
+premium, but does not expose a second pair of baseline offer IDs.
 
 ## 7. Implementation order
 
 1. Finish and merge the normalized `FlightOffer` contract, fixture provider,
-   flight-pair selector, and three-option selector.
+   flight-pair selector, and four-category selector.
 2. Reconcile the three-airport constraint from the destination-fixture branch.
 3. Add a `ResolvedLocation` contract and Duffel Places adapter.
 4. Implement individual eligibility filters.

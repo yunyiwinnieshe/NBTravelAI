@@ -158,11 +158,11 @@ def select_recommended_flight_pair(
 def select_display_flight_offers(
     eligible_offers: list[FlightOffer],
     recommended_offer_id: str,
-    maximum_options: int = 3,
+    maximum_options: int = 4,
 ) -> list[FlightOffer]:
     """Return a distinct bounded list containing the recommended offer."""
-    if not 1 <= maximum_options <= 3:
-        raise ValueError("maximum_options must be between 1 and 3")
+    if not 1 <= maximum_options <= 4:
+        raise ValueError("maximum_options must be between 1 and 4")
     if not eligible_offers:
         return []
 
@@ -205,15 +205,6 @@ def select_display_flight_offers(
         lowest_price,
         shortest_travel,
         fewest_connections,
-        *sorted(
-            eligible_offers,
-            key=lambda offer: (
-                offer.total_amount,
-                offer.total_travel_minutes,
-                offer.total_connections,
-                offer.offer_id,
-            ),
-        ),
     ]
     selected: list[FlightOffer] = []
     selected_ids: set[str] = set()
