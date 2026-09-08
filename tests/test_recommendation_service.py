@@ -2,7 +2,7 @@
 
 from datetime import date
 
-from travel_ai.schemas.trip import TravelerPreferences, TripRequest
+from travel_ai.schemas.trip import TravelerPreferences, TripPreferences, TripRequest
 from travel_ai.services.recommendation_service import RecommendationService
 
 
@@ -11,10 +11,18 @@ def test_recommendation_service_returns_placeholder_before_week_two() -> None:
     trip_request = TripRequest(
         travelers=[
             TravelerPreferences(
-                origin="Boston, MA", budget_usd=2000, max_travel_time_hours=8
+                origin="Boston, MA",
+                budget_usd=2000,
+                max_travel_time_hours=8,
+                preferences=TripPreferences(interest_tags=["food", "museums"]),
             ),
             TravelerPreferences(
-                origin="San Francisco, CA", budget_usd=2000, max_travel_time_hours=8
+                origin="San Francisco, CA",
+                budget_usd=2000,
+                max_travel_time_hours=8,
+                preferences=TripPreferences(
+                    interest_tags=["mountain", "outdoor_activities"]
+                ),
             ),
         ],
         start_date=date(2026, 10, 9),

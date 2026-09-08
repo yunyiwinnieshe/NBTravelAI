@@ -1,5 +1,7 @@
 """HTTP contract tests for the FastAPI application."""
 
+from datetime import date, timedelta
+
 from fastapi.testclient import TestClient
 
 from travel_ai.main import app
@@ -9,26 +11,34 @@ client = TestClient(app)
 
 def valid_trip_request() -> dict[str, object]:
     """Return a request that meets the v1 two-traveler trip contract."""
+    start_date = date.today() + timedelta(days=30)
+    end_date = start_date + timedelta(days=4)
+
     return {
         "travelers": [
             {
                 "origin": "Boston, MA",
                 "budget_usd": 2000,
                 "max_travel_time_hours": 8,
+                "preferences": {
+                    "temperature_range": {
+                        "minimum_celsius": 20,
+                        "maximum_celsius": 30,
+                    },
+                    "interest_tags": ["food", "museums"],
+                },
             },
             {
                 "origin": "San Francisco, CA",
                 "budget_usd": 2000,
                 "max_travel_time_hours": 8,
+                "preferences": {
+                    "interest_tags": ["mountain", "outdoor_activities"],
+                },
             },
         ],
-        "start_date": "2026-10-09",
-        "end_date": "2026-10-13",
-        "preferences": {
-            "temperature_range": {"minimum_celsius": 20, "maximum_celsius": 30},
-            "interest_tags": ["food", "nature"],
-            "vibe_tags": ["outdoors"],
-        },
+        "start_date": start_date.isoformat(),
+        "end_date": end_date.isoformat(),
     }
 
 
@@ -69,6 +79,18 @@ def test_recommendations_rejects_an_invalid_trip_length() -> None:
     """The initial scope accepts only trips from three through seven days."""
     request = valid_trip_request()
     request["end_date"] = "2026-10-20"
+
+    response = client.post("/recommendations", json=request)
+
+    assert response.status_code == 422
+
+
+def test_recommendations_rejects_a_trip_with_a_past_start_date() -> None:
+    """Past trips are outside the v1 planning scope."""
+    start_date = date.today() - timedelta(days=7)
+    request = valid_trip_request()
+    request["start_date"] = start_date.isoformat()
+    request["end_date"] = (start_date + timedelta(days=4)).isoformat()
 
     response = client.post("/recommendations", json=request)
 

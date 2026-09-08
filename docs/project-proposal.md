@@ -254,20 +254,39 @@ preferences. For example:
 }
 ```
 
-The LLM reads natural-language input only to produce a validated, canonical
-preference object using the same controlled vocabulary as the catalog. For
-example, “somewhere warm with great food and hiking” becomes structured fields
-such as `temperature_range` and `interest_tags: ["food", "nature"]`. It must
-ask a clarification question when a value is missing or cannot be safely
-mapped.
+The LLM reads natural-language input only to produce validated, **per-traveler**
+preferences using the same controlled vocabulary as the catalog. For example,
+“somewhere warm with great food and hiking” becomes structured fields such as
+a temperature range and `interest_tags: ["food", "outdoor_activities"]` for
+the traveler who expressed them. It must ask a clarification question when a
+value is missing or cannot be safely mapped. The full definitions of hard
+constraints, soft preferences, score behavior, and unsupported-preference
+handling are in the [preference and request
+contract](preference-and-request-contract.md).
 
 ```json
 {
   "travelers": [
-    {"origin": "Boston, MA", "budget_usd": 2000, "max_travel_time_hours": 8,
-     "preferences": {"temperature_range": {"minimum_celsius": 20, "maximum_celsius": 30}, "interest_tags": ["food", "nature"]}},
-    {"origin": "San Francisco, CA", "budget_usd": 2000, "max_travel_time_hours": 8,
-     "preferences": {"interest_tags": ["food", "nature"]}}
+    {
+      "origin": "Boston, MA",
+      "budget_usd": 2000,
+      "max_travel_time_hours": 8,
+      "preferences": {
+        "temperature_range": {
+          "minimum_celsius": 20,
+          "maximum_celsius": 30
+        },
+        "interest_tags": ["food", "outdoor_activities"]
+      }
+    },
+    {
+      "origin": "San Francisco, CA",
+      "budget_usd": 1800,
+      "max_travel_time_hours": 7,
+      "preferences": {
+        "interest_tags": ["nature"]
+      }
+    }
   ],
   "start_date": "2026-10-09",
   "end_date": "2026-10-13"
@@ -283,8 +302,8 @@ preserves repeatability and makes each recommendation explainable.
 ## 8. Constraints and explainable ranking
 
 Hard constraints filter a city out; they are not score penalties. The initial
-hard constraints are per-person budget, maximum travel duration, supported
-region, valid dates, and required data availability.
+hard constraints are distinct resolved origins, per-person budget, maximum
+one-way travel duration, valid future dates, and required data availability.
 
 Eligible cities receive an explainable weighted score:
 

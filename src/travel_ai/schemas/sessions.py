@@ -19,13 +19,14 @@ class ConversationState(StrEnum):
 
 
 class TravelerPreferencesDraft(BaseModel):
-    """A partial set of constraints extracted for one traveler."""
+    """Partial constraints and preferences extracted for one traveler."""
 
     model_config = ConfigDict(extra="forbid")
 
     origin: str | None = Field(default=None, min_length=2, max_length=120)
     budget_usd: float | None = Field(default=None, gt=0, le=100_000)
     max_travel_time_hours: float | None = Field(default=None, gt=0, le=48)
+    preferences: TripPreferences = Field(default_factory=TripPreferences)
 
 
 class TripRequestDraft(BaseModel):
@@ -36,7 +37,6 @@ class TripRequestDraft(BaseModel):
     travelers: list[TravelerPreferencesDraft] = Field(default_factory=list)
     start_date: date | None = None
     end_date: date | None = None
-    preferences: TripPreferences = Field(default_factory=TripPreferences)
 
 
 class CreateTripSessionRequest(BaseModel):

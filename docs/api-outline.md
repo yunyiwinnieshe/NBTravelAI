@@ -35,17 +35,34 @@ deterministic top three destinations. It is currently a validated placeholder.
 ```json
 {
   "travelers": [
-    {"origin": "Boston, MA", "budget_usd": 2000, "max_travel_time_hours": 8},
-    {"origin": "San Francisco, CA", "budget_usd": 2000, "max_travel_time_hours": 8}
+    {
+      "origin": "Boston, MA",
+      "budget_usd": 2000,
+      "max_travel_time_hours": 8,
+      "preferences": {
+        "temperature_range": {
+          "minimum_celsius": 20,
+          "maximum_celsius": 30
+        },
+        "interest_tags": ["food", "museums"]
+      }
+    },
+    {
+      "origin": "San Francisco, CA",
+      "budget_usd": 1800,
+      "max_travel_time_hours": 7,
+      "preferences": {
+        "interest_tags": ["nature", "outdoor_activities"]
+      }
+    }
   ],
   "start_date": "2026-10-09",
-  "end_date": "2026-10-13",
-  "preferences": {
-    "interest_tags": ["food", "nature"],
-    "vibe_tags": ["outdoors"]
-  }
+  "end_date": "2026-10-13"
 }
 ```
+
+The canonical hard-constraint and preference rules are in the
+[preference and request contract](preference-and-request-contract.md).
 
 ### Recommendation processing and result contract
 
