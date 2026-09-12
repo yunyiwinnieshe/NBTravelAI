@@ -205,6 +205,82 @@ class FlightOfferPair(BaseModel):
     destination_id: str = Field(pattern=r"^[a-z0-9_]+$")
     combined_price_usd: Decimal = Field(gt=0)
     arrival_gap_minutes: int = Field(ge=0)
+    return_departure_gap_minutes: int = Field(ge=0)
     shared_trip_minutes: int = Field(gt=0)
     total_connections: int = Field(ge=0)
     combined_travel_minutes: int = Field(gt=0)
+
+
+class PairScoreComponent(BaseModel):
+    """One normalized and weighted flight-pair selection component."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    value: float = Field(ge=0, le=1)
+    weight: float = Field(ge=0, le=1)
+    contribution: float = Field(ge=0, le=1)
+
+    @model_validator(mode="after")
+    def validate_contribution(self) -> "PairScoreComponent":
+        """Keep the contribution consistent with its value and weight."""
+        if abs(self.contribution - (self.value * self.weight)) > 0.000001:
+            raise ValueError("contribution must equal value multiplied by weight")
+        return self
+
+
+class FlightPairScoreBreakdown(BaseModel):
+    """Explain how one valid pair compares with every pair for a city."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    price: PairScoreComponent
+    arrival_alignment: PairScoreComponent
+    travel_time: PairScoreComponent
+    connections: PairScoreComponent
+    shared_trip: PairScoreComponent
+
+    @model_validator(mode="after")
+    def validate_weights(self) -> "FlightPairScoreBreakdown":
+        """Require pair-selection weights to form one complete score."""
+        if abs(
+            sum(
+                component.weight
+                for component in (
+                    self.price,
+                    self.arrival_alignment,
+                    self.travel_time,
+                    self.connections,
+                    self.shared_trip,
+                )
+            )
+            - 1.0
+        ) > 0.000001:
+            raise ValueError("pair score component weights must add up to 1")
+        return self
+
+
+class ScoredFlightOfferPair(BaseModel):
+    """A valid flight pair plus its auditable selection score."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    pair: FlightOfferPair
+    selection_score: float = Field(ge=0, le=1)
+    score_breakdown: FlightPairScoreBreakdown
+
+    @model_validator(mode="after")
+    def validate_selection_score(self) -> "ScoredFlightOfferPair":
+        """Keep the published total equal to the component contributions."""
+        calculated = sum(
+            component.contribution
+            for component in (
+                self.score_breakdown.price,
+                self.score_breakdown.arrival_alignment,
+                self.score_breakdown.travel_time,
+                self.score_breakdown.connections,
+                self.score_breakdown.shared_trip,
+            )
+        )
+        if abs(self.selection_score - calculated) > 0.000001:
+            raise ValueError("selection_score must equal the score contributions")
+        return self

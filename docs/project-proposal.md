@@ -149,30 +149,44 @@ controlled vocabulary.
 
 ### Flight-offer selection policy
 
-After hard constraints remove ineligible flight offers, the system chooses an
-initially highlighted flight option for each traveler. It first finds the
-cheapest eligible round-trip offer. If a round-trip nonstop offer costs no more
-than 50% above that cheapest offer, the system highlights the qualifying
-nonstop offer. Otherwise, it highlights the cheapest offer.
+After hard constraints remove ineligible flight offers, the system builds every
+valid combination of one round-trip offer per traveler for a candidate city.
+Every valid pair receives a separate, auditable selection score based on
+combined price, arrival alignment, combined travel time, connections, and
+shared trip time. Price is penalized continuously relative to the cheapest
+valid pair; the selector does not use a fixed percentage price guardrail.
 
-Within the qualifying nonstop offers, ties are resolved by lower price, then
-shorter total round-trip travel time, then stable offer ID. The cheapest-offer
-fallback resolves ties by lower price, shorter travel time, fewer total
-connections, then stable offer ID. A flight counts as round-trip nonstop only
-when both its outbound and return slices have zero connections.
+The pair score chooses flights within one city. It is distinct from the final
+destination score, which ranks cities using the recommended pair's raw flight
+features plus the travelers' city and climate preferences. The destination
+ranker never treats the pair score itself as a ranking component.
 
-This is a deterministic system selection policy, not a traveler preference or
-hard constraint. V1 does not accept a `nonstop_only` request field, and
-connecting offers remain eligible when they satisfy the supported constraints.
-The 50% threshold is an initial, testable product rule that recognizes the
-additional burden of connecting and multi-layover itineraries. It may be
-revised from evaluation results. After the two travelers' offers are paired,
-the recommended pair is used for the city score. The cheapest valid pair is
-retained only as the price baseline used to explain the recommended pair's
-premium.
+Arrival alignment receives full pair-score credit within two hours, declines
+linearly until six hours, and receives zero credit after six hours. Poor arrival
+alignment alone does not make a city ineligible. Shared trip time accounts for
+the later arrival and earlier return departure, so incompatible return
+schedules also reduce pair quality.
 
-The airport-resolution, synchronized-arrival pairing, and four-category
+Connecting offers remain eligible and receive a continuous connection penalty.
+V1 does not accept a `nonstop_only` request field. Pair-score ties are resolved
+by lower combined cost, shorter combined travel time, smaller arrival gap,
+fewer connections, longer shared trip time, and stable offer IDs.
+
+The customer receives up to four distinct offers per traveler: the recommended
+pair offer plus the lowest-price, shortest-travel, and fewest-connections
+category winners. When one offer wins multiple categories, it is returned once
+with multiple labels; the service does not add an arbitrary backfill option.
+
+The airport-resolution, synchronized-arrival pairing, and four-category option
 selection rules are defined in [Flight search and pairing](flight-search-and-pairing.md).
+
+Origin cities do not need to appear in the destination candidate pool. Duffel
+Place Suggestions resolves a user's confirmed city or airport text into city
+and airport candidates. A versioned airport-reference snapshot then filters for
+scheduled large or medium commercial airports, ranks explicit selections and
+nearby airports deterministically, and returns at most three airport codes. The
+LLM must not invent airport codes, coordinates, commercial-service status, or
+airport priority.
 
 ## 7. Data strategy
 

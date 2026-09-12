@@ -1,52 +1,21 @@
 """Deterministic policies for selecting among eligible round-trip offers."""
 
-from decimal import Decimal
+from travel_ai.schemas.flights import (
+    FlightOffer,
+    FlightOfferPair,
+    FlightPairScoreBreakdown,
+    PairScoreComponent,
+    ScoredFlightOfferPair,
+)
 
-from travel_ai.schemas.flights import FlightOffer, FlightOfferPair
+PAIR_PRICE_WEIGHT = 0.35
+PAIR_ARRIVAL_ALIGNMENT_WEIGHT = 0.25
+PAIR_TRAVEL_TIME_WEIGHT = 0.20
+PAIR_CONNECTIONS_WEIGHT = 0.10
+PAIR_SHARED_TRIP_WEIGHT = 0.10
 
-DEFAULT_NONSTOP_PRICE_TOLERANCE = Decimal("0.50")
-DEFAULT_PAIR_PRICE_TOLERANCE = Decimal("0.50")
-
-
-def select_preferred_flight_offer(
-    eligible_offers: list[FlightOffer],
-    nonstop_price_tolerance: Decimal = DEFAULT_NONSTOP_PRICE_TOLERANCE,
-) -> FlightOffer:
-    """Prefer nonstop travel when it is within the configured price tolerance."""
-    if not eligible_offers:
-        raise ValueError("at least one eligible flight offer is required")
-    if not Decimal("0") <= nonstop_price_tolerance <= Decimal("1"):
-        raise ValueError("nonstop_price_tolerance must be between 0 and 1")
-
-    cheapest = min(
-        eligible_offers,
-        key=lambda offer: (
-            offer.total_amount,
-            offer.total_travel_minutes,
-            offer.total_connections,
-            offer.offer_id,
-        ),
-    )
-    maximum_preferred_nonstop_price = cheapest.total_amount * (
-        Decimal("1") + nonstop_price_tolerance
-    )
-    comparable_nonstop_offers = [
-        offer
-        for offer in eligible_offers
-        if offer.is_round_trip_nonstop
-        and offer.total_amount <= maximum_preferred_nonstop_price
-    ]
-
-    if comparable_nonstop_offers:
-        return min(
-            comparable_nonstop_offers,
-            key=lambda offer: (
-                offer.total_amount,
-                offer.total_travel_minutes,
-                offer.offer_id,
-            ),
-        )
-    return cheapest
+FULL_ARRIVAL_ALIGNMENT_MINUTES = 120
+ZERO_ARRIVAL_ALIGNMENT_MINUTES = 360
 
 
 def build_flight_offer_pairs(
@@ -92,6 +61,9 @@ def build_flight_offer_pairs(
             arrival_gap_minutes = int(
                 abs((arrival_a - arrival_b).total_seconds()) // 60
             )
+            return_departure_gap_minutes = int(
+                abs((return_a - return_b).total_seconds()) // 60
+            )
             pairs.append(
                 FlightOfferPair(
                     traveler_a_id=traveler_a_id,
@@ -101,6 +73,7 @@ def build_flight_offer_pairs(
                     destination_id=destination_id,
                     combined_price_usd=(offer_a.total_amount + offer_b.total_amount),
                     arrival_gap_minutes=arrival_gap_minutes,
+                    return_departure_gap_minutes=return_departure_gap_minutes,
                     shared_trip_minutes=shared_trip_minutes,
                     total_connections=(
                         offer_a.total_connections + offer_b.total_connections
@@ -113,44 +86,104 @@ def build_flight_offer_pairs(
     return pairs
 
 
+def _score_component(value: float, weight: float) -> PairScoreComponent:
+    """Build one consistently rounded pair-score component."""
+    normalized_value = round(value, 6)
+    return PairScoreComponent(
+        value=normalized_value,
+        weight=weight,
+        contribution=round(normalized_value * weight, 6),
+    )
+
+
+def _arrival_alignment_score(arrival_gap_minutes: int) -> float:
+    """Give full credit within two hours and decline to zero at six hours."""
+    if arrival_gap_minutes <= FULL_ARRIVAL_ALIGNMENT_MINUTES:
+        return 1.0
+    if arrival_gap_minutes >= ZERO_ARRIVAL_ALIGNMENT_MINUTES:
+        return 0.0
+    return (ZERO_ARRIVAL_ALIGNMENT_MINUTES - arrival_gap_minutes) / (
+        ZERO_ARRIVAL_ALIGNMENT_MINUTES - FULL_ARRIVAL_ALIGNMENT_MINUTES
+    )
+
+
+def score_flight_offer_pairs(
+    valid_pairs: list[FlightOfferPair],
+) -> list[ScoredFlightOfferPair]:
+    """Score every valid pair without discarding pairs behind a price guardrail."""
+    if not valid_pairs:
+        return []
+
+    lowest_price = min(pair.combined_price_usd for pair in valid_pairs)
+    shortest_travel = min(pair.combined_travel_minutes for pair in valid_pairs)
+    longest_shared_trip = max(pair.shared_trip_minutes for pair in valid_pairs)
+
+    scored_pairs: list[ScoredFlightOfferPair] = []
+    for pair in valid_pairs:
+        price_value = float(lowest_price / pair.combined_price_usd)
+        travel_time_value = shortest_travel / pair.combined_travel_minutes
+        connection_value = 1 / (1 + pair.total_connections)
+        shared_trip_value = pair.shared_trip_minutes / longest_shared_trip
+
+        breakdown = FlightPairScoreBreakdown(
+            price=_score_component(price_value, PAIR_PRICE_WEIGHT),
+            arrival_alignment=_score_component(
+                _arrival_alignment_score(pair.arrival_gap_minutes),
+                PAIR_ARRIVAL_ALIGNMENT_WEIGHT,
+            ),
+            travel_time=_score_component(
+                travel_time_value,
+                PAIR_TRAVEL_TIME_WEIGHT,
+            ),
+            connections=_score_component(
+                connection_value,
+                PAIR_CONNECTIONS_WEIGHT,
+            ),
+            shared_trip=_score_component(
+                shared_trip_value,
+                PAIR_SHARED_TRIP_WEIGHT,
+            ),
+        )
+        selection_score = round(
+            sum(
+                component.contribution
+                for component in (
+                    breakdown.price,
+                    breakdown.arrival_alignment,
+                    breakdown.travel_time,
+                    breakdown.connections,
+                    breakdown.shared_trip,
+                )
+            ),
+            6,
+        )
+        scored_pairs.append(
+            ScoredFlightOfferPair(
+                pair=pair,
+                selection_score=selection_score,
+                score_breakdown=breakdown,
+            )
+        )
+    return scored_pairs
+
+
 def select_recommended_flight_pair(
     valid_pairs: list[FlightOfferPair],
-    pair_price_tolerance: Decimal = DEFAULT_PAIR_PRICE_TOLERANCE,
-) -> FlightOfferPair:
-    """Prefer synchronized arrival within a protected combined-price range."""
+) -> ScoredFlightOfferPair:
+    """Choose the highest-scoring pair, then apply stable business tie-breaks."""
     if not valid_pairs:
         raise ValueError("at least one valid flight pair is required")
-    if not Decimal("0") <= pair_price_tolerance <= Decimal("1"):
-        raise ValueError("pair_price_tolerance must be between 0 and 1")
-
-    cheapest = min(
-        valid_pairs,
-        key=lambda pair: (
-            pair.combined_price_usd,
-            pair.arrival_gap_minutes,
-            pair.total_connections,
-            pair.traveler_a_offer_id,
-            pair.traveler_b_offer_id,
-        ),
-    )
-    maximum_recommended_price = cheapest.combined_price_usd * (
-        Decimal("1") + pair_price_tolerance
-    )
-    price_protected_pairs = [
-        pair
-        for pair in valid_pairs
-        if pair.combined_price_usd <= maximum_recommended_price
-    ]
     return min(
-        price_protected_pairs,
-        key=lambda pair: (
-            pair.arrival_gap_minutes,
-            pair.total_connections,
-            -pair.shared_trip_minutes,
-            pair.combined_travel_minutes,
-            pair.combined_price_usd,
-            pair.traveler_a_offer_id,
-            pair.traveler_b_offer_id,
+        score_flight_offer_pairs(valid_pairs),
+        key=lambda scored: (
+            -scored.selection_score,
+            scored.pair.combined_price_usd,
+            scored.pair.combined_travel_minutes,
+            scored.pair.arrival_gap_minutes,
+            scored.pair.total_connections,
+            -scored.pair.shared_trip_minutes,
+            scored.pair.traveler_a_offer_id,
+            scored.pair.traveler_b_offer_id,
         ),
     )
 
@@ -160,7 +193,7 @@ def select_display_flight_offers(
     recommended_offer_id: str,
     maximum_options: int = 4,
 ) -> list[FlightOffer]:
-    """Return a distinct bounded list containing the recommended offer."""
+    """Return the recommended offer and truthful distinct category winners."""
     if not 1 <= maximum_options <= 4:
         raise ValueError("maximum_options must be between 1 and 4")
     if not eligible_offers:
@@ -194,8 +227,8 @@ def select_display_flight_offers(
         eligible_offers,
         key=lambda offer: (
             offer.total_connections,
-            offer.total_travel_minutes,
             offer.total_amount,
+            offer.total_travel_minutes,
             offer.offer_id,
         ),
     )
