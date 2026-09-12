@@ -11,8 +11,8 @@ from travel_ai.providers.fixtures import FixtureDataError, FixtureFlightOfferPro
 from travel_ai.schemas.flights import FlightOffer, FlightSearchQuery
 from travel_ai.services.flight_offer_selection import (
     build_flight_offer_pairs,
+    score_flight_offer_pairs,
     select_display_flight_offers,
-    select_preferred_flight_offer,
     select_recommended_flight_pair,
 )
 
@@ -109,54 +109,6 @@ def test_round_trip_offer_must_return_to_its_outbound_origin() -> None:
         FlightOffer.model_validate(offer_data)
 
 
-def test_nonstop_is_preferred_when_price_is_within_fifty_percent() -> None:
-    """A small premium buys a nonstop round trip under the initial policy."""
-    provider = FixtureFlightOfferProvider()
-    offers = provider.search(chicago_search_query())
-
-    selected = select_preferred_flight_offer(offers)
-
-    assert selected.offer_id == "fixture_a_chicago_nonstop"
-    assert selected.total_amount == Decimal("324.00")
-
-
-def test_nonstop_is_preferred_at_exactly_fifty_percent() -> None:
-    """The documented 50% nonstop threshold is inclusive."""
-    provider = FixtureFlightOfferProvider()
-    offers = provider.search(
-        chicago_search_query("traveler_b", "new_york_ny", ["JFK", "LGA", "EWR"])
-    )
-    offers = [
-        offer.model_copy(update={"total_amount": Decimal("420.00")})
-        if offer.is_round_trip_nonstop
-        else offer
-        for offer in offers
-    ]
-
-    selected = select_preferred_flight_offer(offers)
-
-    assert selected.offer_id == "fixture_b_chicago_nonstop"
-
-
-def test_cheapest_is_preferred_when_nonstop_premium_exceeds_tolerance() -> None:
-    """The selector does not pay an unlimited premium to avoid connections."""
-    provider = FixtureFlightOfferProvider()
-    offers = provider.search(
-        chicago_search_query("traveler_b", "new_york_ny", ["JFK", "LGA", "EWR"])
-    )
-    offers = [
-        offer.model_copy(update={"total_amount": Decimal("425.00")})
-        if offer.is_round_trip_nonstop
-        else offer
-        for offer in offers
-    ]
-
-    selected = select_preferred_flight_offer(offers)
-
-    assert selected.offer_id == "fixture_b_chicago_connecting"
-    assert selected.total_amount == Decimal("280.00")
-
-
 def test_flight_pairs_derive_arrival_and_shared_time_metrics() -> None:
     """Every A/B combination records the schedule metrics used for selection."""
     provider = FixtureFlightOfferProvider()
@@ -172,11 +124,12 @@ def test_flight_pairs_derive_arrival_and_shared_time_metrics() -> None:
     assert synchronized_pair.traveler_a_offer_id == "fixture_a_chicago_connecting"
     assert synchronized_pair.traveler_b_offer_id == "fixture_b_chicago_nonstop"
     assert synchronized_pair.combined_price_usd == Decimal("615.00")
+    assert synchronized_pair.return_departure_gap_minutes == 120
     assert synchronized_pair.shared_trip_minutes == 5955
 
 
-def test_recommended_pair_prefers_synchronized_arrival_within_price_limit() -> None:
-    """Arrival alignment wins when the pair remains within the 50% price range."""
+def test_every_valid_pair_receives_an_auditable_score() -> None:
+    """Pair selection scores every valid combination without a price cutoff."""
     provider = FixtureFlightOfferProvider()
     pairs = build_flight_offer_pairs(
         provider.search(chicago_search_query()),
@@ -185,15 +138,30 @@ def test_recommended_pair_prefers_synchronized_arrival_within_price_limit() -> N
         ),
     )
 
-    selected = select_recommended_flight_pair(pairs)
+    scored_pairs = score_flight_offer_pairs(pairs)
 
-    assert selected.arrival_gap_minutes == 0
-    assert selected.traveler_a_offer_id == "fixture_a_chicago_connecting"
-    assert selected.traveler_b_offer_id == "fixture_b_chicago_nonstop"
+    assert len(scored_pairs) == len(pairs) == 4
+    assert all(0 <= scored.selection_score <= 1 for scored in scored_pairs)
+    assert all(
+        scored.selection_score
+        == pytest.approx(
+            sum(
+                component.contribution
+                for component in (
+                    scored.score_breakdown.price,
+                    scored.score_breakdown.arrival_alignment,
+                    scored.score_breakdown.travel_time,
+                    scored.score_breakdown.connections,
+                    scored.score_breakdown.shared_trip,
+                )
+            )
+        )
+        for scored in scored_pairs
+    )
 
 
-def test_recommended_pair_rejects_alignment_above_price_limit() -> None:
-    """Arrival alignment cannot justify a premium above the 50% pair limit."""
+def test_recommended_pair_uses_pair_score_without_a_price_guardrail() -> None:
+    """An expensive pair remains eligible and competes through normalized price."""
     provider = FixtureFlightOfferProvider()
     pairs = build_flight_offer_pairs(
         provider.search(chicago_search_query()),
@@ -201,17 +169,48 @@ def test_recommended_pair_rejects_alignment_above_price_limit() -> None:
             chicago_search_query("traveler_b", "new_york_ny", ["JFK", "LGA", "EWR"])
         ),
     )
+    expensive_pair = next(pair for pair in pairs if pair.arrival_gap_minutes == 0)
     pairs = [
         pair.model_copy(update={"combined_price_usd": Decimal("900.00")})
-        if pair.arrival_gap_minutes == 0
+        if pair == expensive_pair
         else pair
         for pair in pairs
     ]
 
     selected = select_recommended_flight_pair(pairs)
 
-    assert selected.arrival_gap_minutes == 45
-    assert selected.combined_price_usd <= Decimal("870.00")
+    assert len(score_flight_offer_pairs(pairs)) == 4
+    assert selected.pair in pairs
+    assert selected.selection_score == max(
+        scored.selection_score for scored in score_flight_offer_pairs(pairs)
+    )
+
+
+def test_arrival_alignment_has_two_hour_preferred_and_six_hour_zero_windows() -> None:
+    """The documented arrival thresholds produce full, partial, and zero credit."""
+    provider = FixtureFlightOfferProvider()
+    base_pair = build_flight_offer_pairs(
+        provider.search(chicago_search_query()),
+        provider.search(
+            chicago_search_query("traveler_b", "new_york_ny", ["JFK", "LGA", "EWR"])
+        ),
+    )[0]
+    pairs = [
+        base_pair.model_copy(
+            update={
+                "traveler_a_offer_id": f"arrival_{gap}",
+                "arrival_gap_minutes": gap,
+            }
+        )
+        for gap in (120, 240, 360)
+    ]
+
+    scores = {
+        scored.pair.arrival_gap_minutes: scored.score_breakdown.arrival_alignment.value
+        for scored in score_flight_offer_pairs(pairs)
+    }
+
+    assert scores == {120: 1.0, 240: 0.5, 360: 0.0}
 
 
 def test_display_offers_are_distinct_and_include_recommended_pair_offer() -> None:
@@ -232,7 +231,7 @@ def test_display_offers_are_distinct_and_include_recommended_pair_offer() -> Non
 
     assert selected[0].offer_id == "fixture_a_chicago_extra"
     assert len(selected) == 3
-    assert len({offer.offer_id for offer in selected}) == 3
+    assert len({offer.offer_id for offer in selected}) == len(selected)
 
 
 def test_fixture_provider_reports_invalid_json(tmp_path: Path) -> None:
@@ -244,7 +243,7 @@ def test_fixture_provider_reports_invalid_json(tmp_path: Path) -> None:
         FixtureFlightOfferProvider(fixture_path)
 
 
-def test_selector_requires_at_least_one_offer() -> None:
-    """An empty eligible set is represented as an explicit selection failure."""
-    with pytest.raises(ValueError, match="at least one eligible flight offer"):
-        select_preferred_flight_offer([])
+def test_pair_selector_requires_at_least_one_pair() -> None:
+    """An empty valid pair set is represented as an explicit selection failure."""
+    with pytest.raises(ValueError, match="at least one valid flight pair"):
+        select_recommended_flight_pair([])
