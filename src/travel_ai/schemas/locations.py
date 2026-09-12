@@ -2,7 +2,7 @@
 
 from enum import StrEnum
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class AirportType(StrEnum):
@@ -30,6 +30,32 @@ class AirportCandidate(BaseModel):
     longitude: float | None = Field(default=None, ge=-180, le=180)
     time_zone: str | None = Field(default=None, max_length=100)
     associated_with_selected_city: bool = False
+
+
+class LocationSearchQuery(BaseModel):
+    """A city/airport text search or a coordinate-radius airport search."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    query: str | None = Field(default=None, min_length=2, max_length=200)
+    latitude: float | None = Field(default=None, ge=-90, le=90)
+    longitude: float | None = Field(default=None, ge=-180, le=180)
+    radius_metres: int | None = Field(default=None, gt=0, le=500_000)
+    country_code: str = Field(default="US", pattern=r"^[A-Z]{2}$")
+
+    @model_validator(mode="after")
+    def validate_search_mode(self) -> "LocationSearchQuery":
+        """Require text or a complete coordinate-radius search."""
+        coordinates = (self.latitude, self.longitude, self.radius_metres)
+        if self.query is None and all(value is None for value in coordinates):
+            raise ValueError("location search requires text or coordinates")
+        if any(value is not None for value in coordinates) and any(
+            value is None for value in coordinates
+        ):
+            raise ValueError(
+                "latitude, longitude, and radius_metres must be provided together"
+            )
+        return self
 
 
 class AirportReference(BaseModel):

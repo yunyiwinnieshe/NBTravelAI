@@ -101,6 +101,52 @@ class DuffelClient:
     def __exit__(self, *_args: object) -> None:
         self.close()
 
+    def _headers(self, *, include_content_type: bool = False) -> dict[str, str]:
+        """Build authenticated headers without exposing the access token."""
+        headers = {
+            "Authorization": f"Bearer {self._settings.access_token}",
+            "Duffel-Version": "v2",
+            "Accept": "application/json",
+            "Accept-Encoding": "gzip",
+        }
+        if include_content_type:
+            headers["Content-Type"] = "application/json"
+        return headers
+
+    def get_place_suggestions(
+        self,
+        *,
+        query: str | None = None,
+        latitude: float | None = None,
+        longitude: float | None = None,
+        radius_metres: int | None = None,
+    ) -> dict[str, Any]:
+        """Find Duffel city and airport suggestions by text or geographic area."""
+        params: dict[str, str] = {}
+        if query is not None:
+            params["query"] = query
+        if latitude is not None:
+            params["lat"] = str(latitude)
+        if longitude is not None:
+            params["lng"] = str(longitude)
+        if radius_metres is not None:
+            params["rad"] = str(radius_metres)
+
+        try:
+            response = self._http_client.get(
+                "/places/suggestions",
+                params=params,
+                headers=self._headers(),
+            )
+        except httpx.TimeoutException as error:
+            raise DuffelApiError("Duffel place search timed out") from error
+        except httpx.RequestError as error:
+            raise DuffelApiError(
+                "Duffel place search could not be completed"
+            ) from error
+
+        return self._parse_response(response)
+
     def create_offer_request(
         self,
         *,
@@ -129,14 +175,6 @@ class DuffelClient:
                 "passengers": [{"type": "adult"}],
             }
         }
-        headers = {
-            "Authorization": f"Bearer {self._settings.access_token}",
-            "Duffel-Version": "v2",
-            "Accept": "application/json",
-            "Accept-Encoding": "gzip",
-            "Content-Type": "application/json",
-        }
-
         try:
             response = self._http_client.post(
                 "/air/offer_requests",
@@ -144,7 +182,7 @@ class DuffelClient:
                     "return_offers": "true",
                     "supplier_timeout": self._settings.supplier_timeout_ms,
                 },
-                headers=headers,
+                headers=self._headers(include_content_type=True),
                 json=payload,
             )
         except httpx.TimeoutException as error:
@@ -154,6 +192,11 @@ class DuffelClient:
                 "Duffel flight search could not be completed"
             ) from error
 
+        return self._parse_response(response)
+
+    @staticmethod
+    def _parse_response(response: httpx.Response) -> dict[str, Any]:
+        """Translate common Duffel failures and require a JSON-object response."""
         request_id = response.headers.get("x-request-id", "unknown")
         if response.status_code in {401, 403}:
             raise DuffelAuthenticationError(

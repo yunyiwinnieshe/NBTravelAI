@@ -11,12 +11,16 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 from travel_ai.clients.duffel import DuffelClient, DuffelResponseError
-from travel_ai.providers.base import FlightOfferProvider
+from travel_ai.providers.base import AirportPlaceProvider, FlightOfferProvider
 from travel_ai.schemas.flights import (
     FlightOffer,
     FlightSearchQuery,
     FlightSegment,
     FlightSlice,
+)
+from travel_ai.schemas.locations import (
+    AirportCandidate,
+    LocationSearchQuery,
 )
 
 ISO_DURATION_PATTERN = re.compile(
@@ -79,6 +83,41 @@ class _DuffelEnvelope(BaseModel):
     data: _DuffelOfferRequestData
 
 
+class _DuffelAirportSuggestion(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
+    id: str = Field(min_length=1, max_length=100)
+    type: str = "airport"
+    iata_code: str = Field(pattern=r"^[A-Z]{3}$")
+    name: str = Field(min_length=1, max_length=200)
+    city_name: str | None = Field(default=None, max_length=120)
+    iata_country_code: str = Field(pattern=r"^[A-Z]{2}$")
+    latitude: float | None = Field(default=None, ge=-90, le=90)
+    longitude: float | None = Field(default=None, ge=-180, le=180)
+    time_zone: str | None = Field(default=None, max_length=100)
+
+
+class _DuffelPlaceSuggestion(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
+    id: str = Field(min_length=1, max_length=100)
+    type: str
+    iata_code: str = Field(pattern=r"^[A-Z]{3}$")
+    name: str = Field(min_length=1, max_length=200)
+    city_name: str | None = Field(default=None, max_length=120)
+    iata_country_code: str = Field(pattern=r"^[A-Z]{2}$")
+    latitude: float | None = Field(default=None, ge=-90, le=90)
+    longitude: float | None = Field(default=None, ge=-180, le=180)
+    time_zone: str | None = Field(default=None, max_length=100)
+    airports: list[_DuffelAirportSuggestion] | None = None
+
+
+class _DuffelPlacesEnvelope(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
+    data: list[_DuffelPlaceSuggestion]
+
+
 def _duration_minutes(duration: str) -> int:
     """Convert an ISO-8601 Duffel duration to whole minutes, rounding up."""
     match = ISO_DURATION_PATTERN.fullmatch(duration)
@@ -114,6 +153,66 @@ def _airport_local_datetime(value: datetime, time_zone: str) -> datetime:
     if value.tzinfo is None:
         return value.replace(tzinfo=airport_time_zone)
     return value.astimezone(airport_time_zone)
+
+
+class DuffelAirportPlaceProvider(AirportPlaceProvider):
+    """Normalize Duffel Place Suggestions into airport candidates."""
+
+    def __init__(self, client: DuffelClient) -> None:
+        self._client = client
+
+    def search_airports(self, query: LocationSearchQuery) -> list[AirportCandidate]:
+        """Expand city results, include airport results, and deduplicate by code."""
+        response = self._client.get_place_suggestions(
+            query=query.query,
+            latitude=query.latitude,
+            longitude=query.longitude,
+            radius_metres=query.radius_metres,
+        )
+        try:
+            places = _DuffelPlacesEnvelope.model_validate(response).data
+        except ValidationError as error:
+            raise DuffelResponseError(
+                "Duffel place response did not match the expected schema"
+            ) from error
+
+        candidates_by_code: dict[str, AirportCandidate] = {}
+        for place in places:
+            raw_airports: list[tuple[_DuffelAirportSuggestion, bool]] = []
+            if place.type == "city":
+                raw_airports.extend(
+                    (airport, True) for airport in (place.airports or [])
+                )
+            elif place.type == "airport":
+                raw_airports.append(
+                    (
+                        _DuffelAirportSuggestion.model_validate(place.model_dump()),
+                        False,
+                    )
+                )
+
+            for airport, associated_with_city in raw_airports:
+                if airport.iata_country_code != query.country_code:
+                    continue
+                candidate = AirportCandidate(
+                    provider_place_id=airport.id,
+                    iata_code=airport.iata_code,
+                    name=airport.name,
+                    city_name=airport.city_name,
+                    country_code=airport.iata_country_code,
+                    latitude=airport.latitude,
+                    longitude=airport.longitude,
+                    time_zone=airport.time_zone,
+                    associated_with_selected_city=associated_with_city,
+                )
+                existing = candidates_by_code.get(candidate.iata_code)
+                if existing is None or (
+                    candidate.associated_with_selected_city
+                    and not existing.associated_with_selected_city
+                ):
+                    candidates_by_code[candidate.iata_code] = candidate
+
+        return sorted(candidates_by_code.values(), key=lambda item: item.iata_code)
 
 
 class DuffelFlightOfferProvider(FlightOfferProvider):

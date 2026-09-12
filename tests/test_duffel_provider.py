@@ -15,8 +15,12 @@ from travel_ai.clients.duffel import (
     DuffelResponseError,
     DuffelSettings,
 )
-from travel_ai.providers.duffel import DuffelFlightOfferProvider
+from travel_ai.providers.duffel import (
+    DuffelAirportPlaceProvider,
+    DuffelFlightOfferProvider,
+)
 from travel_ai.schemas.flights import FlightSearchQuery
+from travel_ai.schemas.locations import LocationSearchQuery
 
 EVALUATED_AT = datetime(2099, 6, 1, 12, tzinfo=UTC)
 
@@ -113,6 +117,108 @@ def provider_with_handler(
         clock=lambda: EVALUATED_AT,
         maximum_offers=maximum_offers,
     )
+
+
+def place_provider_with_handler(
+    handler: httpx.MockTransport,
+) -> DuffelAirportPlaceProvider:
+    """Build a Duffel Places provider around a network-free HTTP transport."""
+    http_client = httpx.Client(
+        base_url="https://api.duffel.com",
+        transport=handler,
+    )
+    client = DuffelClient(
+        DuffelSettings(access_token="duffel_test_not_a_real_token"),
+        http_client=http_client,
+    )
+    return DuffelAirportPlaceProvider(client)
+
+
+def test_place_search_expands_city_airports_and_deduplicates_results() -> None:
+    """The Boston response becomes unique provider-independent candidates."""
+
+    def handle(request: httpx.Request) -> httpx.Response:
+        assert request.method == "GET"
+        assert request.url.path == "/places/suggestions"
+        assert request.url.params["query"] == "Boston"
+        return httpx.Response(
+            200,
+            json={
+                "data": [
+                    {
+                        "id": "cit_bos_us",
+                        "type": "city",
+                        "iata_code": "BOS",
+                        "name": "Boston",
+                        "iata_country_code": "US",
+                        "airports": [
+                            {
+                                "id": "arp_bnh_us",
+                                "iata_code": "BNH",
+                                "name": "Boston Harbor Seaplane Base",
+                                "city_name": "Boston",
+                                "iata_country_code": "US",
+                                "latitude": 42.352509,
+                                "longitude": -71.025732,
+                                "time_zone": "America/New_York",
+                            },
+                            {
+                                "id": "arp_bos_us",
+                                "iata_code": "BOS",
+                                "name": "Logan International Airport",
+                                "city_name": "Boston",
+                                "iata_country_code": "US",
+                                "latitude": 42.364956,
+                                "longitude": -71.007381,
+                                "time_zone": "America/New_York",
+                            },
+                        ],
+                    },
+                    {
+                        "id": "arp_bos_us",
+                        "type": "airport",
+                        "iata_code": "BOS",
+                        "name": "Logan International Airport",
+                        "city_name": "Boston",
+                        "iata_country_code": "US",
+                        "latitude": 42.364956,
+                        "longitude": -71.007381,
+                        "time_zone": "America/New_York",
+                    },
+                ]
+            },
+        )
+
+    provider = place_provider_with_handler(httpx.MockTransport(handle))
+
+    candidates = provider.search_airports(LocationSearchQuery(query="Boston"))
+
+    assert [candidate.iata_code for candidate in candidates] == ["BNH", "BOS"]
+    assert next(
+        candidate for candidate in candidates if candidate.iata_code == "BOS"
+    ).associated_with_selected_city is True
+
+
+def test_place_search_supports_coordinate_radius_parameters() -> None:
+    """A previously geocoded city can request nearby Duffel airports."""
+
+    def handle(request: httpx.Request) -> httpx.Response:
+        assert request.url.params["lat"] == "42.3601"
+        assert request.url.params["lng"] == "-71.0589"
+        assert request.url.params["rad"] == "100000"
+        return httpx.Response(200, json={"data": []})
+
+    provider = place_provider_with_handler(httpx.MockTransport(handle))
+
+    candidates = provider.search_airports(
+        LocationSearchQuery(
+            latitude=42.3601,
+            longitude=-71.0589,
+            radius_metres=100_000,
+        )
+    )
+
+    assert candidates == []
 
 
 def test_search_builds_round_trip_request_and_normalizes_offer() -> None:
