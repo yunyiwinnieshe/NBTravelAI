@@ -21,14 +21,17 @@ work:
    flight search. If the traveler entered an airport code, retain that exact
    airport instead.
 4. Treat returned airports as candidates, not proof that every result is a
-   major commercial airport. Apply the curated V1 airport priority before
-   constructing an explicit airport group.
+   major commercial airport. Join by IATA code to a versioned airport-reference
+   snapshot and keep only records with scheduled service whose type is
+   `large_airport` or `medium_airport`.
 5. If multiple places are plausible, ask the traveler to choose one.
-6. Use no more than three airports. For a known metro area, use its curated
-   airport priority. If more than three airports remain and no priority is
-   available, ask the traveler which airports are acceptable rather than
-   silently choosing.
-7. Cache the resolved result so later turns and repeated candidate searches do
+6. Rank an explicitly entered airport first. Otherwise rank large before medium
+   airports, then shorter geographic distance when reference coordinates are
+   available, city association, and stable IATA code.
+7. Use no more than three airports. If multiple places are plausible before
+   airport ranking, ask the traveler to choose rather than silently resolving
+   the wrong city.
+8. Cache the resolved result so later turns and repeated candidate searches do
    not resolve the same origin again.
 
 Duffel's airport records can supply the name, IATA code, associated IATA city
@@ -72,6 +75,14 @@ airports would not implement the intended product rule. For live Duffel search,
 use the resolved IATA city code when possible and let returned offers identify
 the actual departure airport. For fixture mode or explicit-airport searches,
 use the curated airport group and its maximum of three codes.
+
+Duffel Places supplies search relevance and geographic airport records, but its
+response does not include a major-airport rank, passenger count, or explicit
+scheduled-commercial-service flag. V1 therefore supplements Duffel candidates
+with a versioned reference snapshot derived from OurAirports. The selected
+fields are `iata_code`, `type`, and `scheduled_service`; the data version must be
+recorded because this is external reference data. The application, not the LLM,
+performs the join, filtering, distance calculation, and stable ranking.
 
 If V1 later accepts an address or raw coordinates, a geocoder first converts
 the input to latitude/longitude and Duffel Place Suggestions can then search
@@ -167,30 +178,55 @@ An illustrative internal contract is:
 
 ## 5. Select the recommended pair
 
-First identify the cheapest valid pair. Only pairs whose combined price is no
-more than 50% above that baseline remain candidates for the recommended pair;
-each individual offer must still remain inside its traveler's budget.
+Score every valid pair. Do not discard a pair merely because its combined price
+is a fixed percentage above the cheapest pair. Each individual offer must still
+remain inside its traveler's budget.
 
-Within that protected price range, select deterministically by:
+The V1 pair-selection score is:
 
-1. smaller arrival gap;
-2. fewer combined connections;
-3. longer shared trip time;
-4. shorter combined travel time;
-5. lower combined price; then
+```text
+pair_selection_score = 0.35 * price_score
+                     + 0.25 * arrival_alignment_score
+                     + 0.20 * travel_time_score
+                     + 0.10 * connection_score
+                     + 0.10 * shared_trip_score
+```
+
+The component values are normalized within the valid pairs for one city:
+
+```text
+price_score = cheapest_pair_price / pair_price
+travel_time_score = shortest_pair_travel_minutes / pair_travel_minutes
+connection_score = 1 / (1 + pair_total_connections)
+shared_trip_score = pair_shared_trip_minutes / longest_shared_trip_minutes
+```
+
+Arrival alignment gives full credit when the travelers arrive within two hours,
+declines linearly between two and six hours, and gives zero credit at six hours
+or more. It remains a soft score rather than a hard constraint.
+
+```text
+arrival_alignment_score = 1.0                         when gap <= 120 minutes
+arrival_alignment_score = (360 - gap) / (360 - 120) when 120 < gap < 360
+arrival_alignment_score = 0.0                         when gap >= 360 minutes
+```
+
+The pair with the highest score is recommended. Equal scores are resolved by:
+
+1. lower combined cost;
+2. shorter combined travel time;
+3. smaller arrival-time difference;
+4. fewer combined connections;
+5. longer shared trip time; then
 6. lexicographically smaller stable offer IDs.
 
-This makes arriving together the primary convenience goal without allowing an
-unbounded airfare premium. Arrival alignment is a soft selection rule, not a
-hard constraint, so an otherwise useful city is not excluded solely because
-the travelers arrive several hours apart.
+This scoring step answers which two flights work best together for one city. It
+does not rank destinations. The destination ranker later uses the selected
+pair's raw price, travel-time, arrival, and burden values together with city
+preferences. It does not use `pair_selection_score` as a destination-score
+component.
 
-The independently highlighted offer for one traveler uses the same 50% price
-tolerance to prefer a round-trip nonstop over that traveler's cheapest eligible
-offer. This does not create a `nonstop_only` request field and does not make
-connecting flights ineligible.
-
-## 6. Return three distinct options per traveler
+## 6. Return up to four distinct options per traveler
 
 After the recommended pair has been chosen, begin each traveler's display list
 with that pair's offer. Then consider eligible offers in this order:
@@ -199,11 +235,18 @@ with that pair's offer. Then consider eligible offers in this order:
 2. shortest total round-trip travel time; and
 3. fewest total connections.
 
+Each category uses the other attributes as deterministic tie-breakers:
+
+- lowest price: price, travel time, connections, then offer ID;
+- shortest travel: travel time, price, connections, then offer ID; and
+- fewest connections: connections, price, travel time, then offer ID.
+
 Deduplicate by stable internal offer ID when the recommended offer or another
-offer wins more than one category. Backfill from the remaining offers ordered
-by price, duration, connections, and offer ID until the list contains three
-offers or no more eligible offers exist. Reserving the first slot for the
-recommended pair ensures that the two synchronized choices are always visible.
+offer wins more than one category. Return the offer once with every truthful
+label. Do not backfill an arbitrary alternative merely to reach four options;
+the response may therefore contain fewer than four distinct offers. Reserving
+the first slot for the recommended pair ensures that the synchronized choices
+are always visible.
 
 The API returns each `FlightOffer` once and identifies the recommended
 combination using the two stable offer IDs. Travelers may choose a different
@@ -214,7 +257,7 @@ the destination.
 ## 7. Implementation order
 
 1. Finish and merge the normalized `FlightOffer` contract, fixture provider,
-   flight-pair selector, and three-option selector.
+   scored flight-pair selector, and four-category option selector.
 2. Reconcile the three-airport constraint from the destination-fixture branch.
 3. Add a `ResolvedLocation` contract and Duffel Places adapter.
 4. Implement individual eligibility filters.
