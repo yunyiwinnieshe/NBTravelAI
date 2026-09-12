@@ -15,6 +15,7 @@ RecommendationResponse
 │   ├── recommended_pair
 │   │   ├── one offer reference per traveler
 │   │   ├── combined price and compatibility metrics
+│   │   ├── pair-selection score and component breakdown
 │   │   └── comparison with the cheapest valid pair
 │   └── flight_options_by_traveler
 │       └── 1–4 distinct category-winning FlightOption objects per traveler
@@ -28,9 +29,15 @@ Duffel payloads stay inside the provider layer.
 ## Recommended pair and city score
 
 Each destination has one recommended pair containing one eligible round-trip
-offer for each traveler. This pair is selected within 50% of the cheapest valid
-pair using arrival alignment, connections, shared trip time, total travel time,
-price, and stable offer-ID tie-breakers.
+offer for each traveler. Every valid pair is scored using price, arrival
+alignment, travel time, connections, and shared trip time. No fixed percentage
+price guardrail removes a pair before scoring. The highest-scoring pair is
+selected, followed by deterministic cost, travel-time, arrival-gap, connection,
+shared-trip, and stable-ID tie-breakers.
+
+The pair-selection score is published separately from the destination score.
+It explains why two flights were paired within one city; it is not added to the
+destination score.
 
 The destination's affordability, travel-fairness, preference-match, and
 travel-time features are calculated from the recommended pair. Their fixed V1
@@ -41,11 +48,17 @@ weights are:
 - preference match: 20%; and
 - travel time: 15%.
 
+Travel fairness is itself transparent: 50% duration balance, 30% airfare-budget
+burden balance, and 20% arrival alignment. These values compare the two
+travelers, while the top-level travel-time score represents their total travel
+burden.
+
 The response exposes the recommended pair's combined price. Its
 `price_comparison` also provides the cheapest valid combined price and the
 recommended pair's premium in dollars and percentage. It does not expose the
 cheapest pair's offer IDs because that pair is an explanation baseline, not a
-second recommendation.
+second recommendation. The premium percentage is informational and may exceed
+50%; it is not a constraint.
 
 ## Four selection categories per traveler
 

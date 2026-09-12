@@ -141,6 +141,11 @@ def valid_response() -> dict[str, object]:
                         "weight": 0.15,
                         "contribution": 0.12,
                     },
+                    "travel_fairness_details": {
+                        "duration_balance": 0.8,
+                        "budget_burden_balance": 0.8,
+                        "arrival_alignment": 0.8,
+                    },
                 },
                 "recommended_pair": {
                     "offers": [
@@ -149,9 +154,38 @@ def valid_response() -> dict[str, object]:
                     ],
                     "combined_price_usd": "615.00",
                     "arrival_gap_minutes": 60,
+                    "return_departure_gap_minutes": 60,
                     "shared_trip_minutes": 5760,
                     "total_connections": 0,
                     "combined_travel_minutes": 1200,
+                    "selection_score": 0.92,
+                    "selection_score_breakdown": {
+                        "price": {
+                            "value": 0.9,
+                            "weight": 0.35,
+                            "contribution": 0.315,
+                        },
+                        "arrival_alignment": {
+                            "value": 1.0,
+                            "weight": 0.25,
+                            "contribution": 0.25,
+                        },
+                        "travel_time": {
+                            "value": 0.8,
+                            "weight": 0.20,
+                            "contribution": 0.16,
+                        },
+                        "connections": {
+                            "value": 1.0,
+                            "weight": 0.10,
+                            "contribution": 0.10,
+                        },
+                        "shared_trip": {
+                            "value": 0.95,
+                            "weight": 0.10,
+                            "contribution": 0.095,
+                        },
+                    },
                     "price_comparison": {
                         "lowest_valid_combined_price_usd": "580.00",
                         "premium_usd": "35.00",
@@ -219,6 +253,26 @@ def test_response_rejects_more_than_four_options_per_traveler() -> None:
 
     with pytest.raises(ValidationError, match="at most 4 items"):
         RecommendationResponse.model_validate(payload)
+
+
+def test_pair_price_comparison_allows_a_premium_above_fifty_percent() -> None:
+    """The response explains high premiums without enforcing a fixed guardrail."""
+    payload = valid_response()
+    pair = payload["recommendations"][0]["recommended_pair"]  # type: ignore[index]
+    pair["combined_price_usd"] = "615.00"  # type: ignore[index]
+    pair["price_comparison"] = {  # type: ignore[index]
+        "lowest_valid_combined_price_usd": "300.00",
+        "premium_usd": "315.00",
+        "premium_percentage": 105.0,
+    }
+
+    response = RecommendationResponse.model_validate(payload)
+
+    assert (
+        response.recommendations[0]
+        .recommended_pair.price_comparison.premium_percentage
+        == 105.0
+    )
 
 
 def test_response_requires_recommended_offer_in_traveler_options() -> None:

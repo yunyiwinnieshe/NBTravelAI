@@ -6,6 +6,8 @@ from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
+from travel_ai.schemas.flights import FlightPairScoreBreakdown
+
 
 class RecommendationStatus(StrEnum):
     """Terminal outcomes for a completed recommendation request."""
@@ -89,6 +91,7 @@ class ScoreBreakdown(BaseModel):
     travel_fairness: ScoreComponent
     preference_match: ScoreComponent
     travel_time: ScoreComponent
+    travel_fairness_details: "TravelFairnessDetails"
 
     @model_validator(mode="after")
     def validate_weights(self) -> "ScoreBreakdown":
@@ -101,7 +104,36 @@ class ScoreBreakdown(BaseModel):
         )
         if abs(sum(component.weight for component in components) - 1.0) > 0.0005:
             raise ValueError("score component weights must add up to 1")
+        if (
+            abs(
+                self.travel_fairness.value
+                - self.travel_fairness_details.calculated_value
+            )
+            > 0.0005
+        ):
+            raise ValueError(
+                "travel fairness value must match its detailed calculation"
+            )
         return self
+
+
+class TravelFairnessDetails(BaseModel):
+    """Auditable subcomponents of the destination travel-fairness feature."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    duration_balance: float = Field(ge=0, le=1)
+    budget_burden_balance: float = Field(ge=0, le=1)
+    arrival_alignment: float = Field(ge=0, le=1)
+
+    @property
+    def calculated_value(self) -> float:
+        """Combine duration, budget burden, and arrival alignment for V1."""
+        return (
+            0.50 * self.duration_balance
+            + 0.30 * self.budget_burden_balance
+            + 0.20 * self.arrival_alignment
+        )
 
 
 class FlightJourneySummary(BaseModel):
@@ -226,7 +258,7 @@ class PairPriceComparison(BaseModel):
 
     lowest_valid_combined_price_usd: Decimal = Field(gt=0)
     premium_usd: Decimal = Field(ge=0)
-    premium_percentage: float = Field(ge=0, le=50)
+    premium_percentage: float = Field(ge=0)
 
     @model_validator(mode="after")
     def validate_percentage(self) -> "PairPriceComparison":
@@ -247,9 +279,12 @@ class RecommendedFlightPair(BaseModel):
     offers: list[TravelerOfferReference] = Field(min_length=2, max_length=2)
     combined_price_usd: Decimal = Field(gt=0)
     arrival_gap_minutes: int = Field(ge=0)
+    return_departure_gap_minutes: int = Field(ge=0)
     shared_trip_minutes: int = Field(gt=0)
     total_connections: int = Field(ge=0)
     combined_travel_minutes: int = Field(gt=0)
+    selection_score: float = Field(ge=0, le=1)
+    selection_score_breakdown: FlightPairScoreBreakdown
     price_comparison: PairPriceComparison
 
     @model_validator(mode="after")
@@ -371,9 +406,18 @@ class DestinationRecommendation(BaseModel):
         arrivals = [option.outbound.arrival_at for option in selected_options]
         returns = [option.return_flight.departure_at for option in selected_options]
         arrival_gap = int(abs((arrivals[0] - arrivals[1]).total_seconds()) // 60)
+        return_departure_gap = int(
+            abs((returns[0] - returns[1]).total_seconds()) // 60
+        )
         shared_trip = int((min(returns) - max(arrivals)).total_seconds() // 60)
         if arrival_gap != self.recommended_pair.arrival_gap_minutes:
             raise ValueError("recommended pair arrival gap must match its offers")
+        if return_departure_gap != (
+            self.recommended_pair.return_departure_gap_minutes
+        ):
+            raise ValueError(
+                "recommended pair return departure gap must match its offers"
+            )
         if shared_trip != self.recommended_pair.shared_trip_minutes:
             raise ValueError("recommended pair shared trip time must match its offers")
         return self

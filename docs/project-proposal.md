@@ -292,8 +292,11 @@ travelers is not mistaken for a good outcome. At minimum, the system reports:
 fairness_gap = abs(travel_hours_A - travel_hours_B)
 ```
 
-The ranking may also include the difference in traveler costs. The initial
-weights are a baseline to evaluate, not a claim of universal correctness.
+For V1, `fairness_score` combines 50% travel-duration balance, 30% airfare
+budget-burden balance, and 20% arrival alignment from the recommended flight
+pair. The separate `travel_time_score` measures total burden, while fairness
+measures how evenly that burden is distributed. The initial weights are a
+baseline to evaluate, not a claim of universal correctness.
 
 ## 9. Technical approach
 
