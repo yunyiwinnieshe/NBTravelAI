@@ -1,6 +1,6 @@
 """Tests for normalized flight offers, fixture loading, and selection policy."""
 
-from datetime import date
+from datetime import UTC, date, datetime, timedelta
 from decimal import Decimal
 from pathlib import Path
 
@@ -107,6 +107,19 @@ def test_round_trip_offer_must_return_to_its_outbound_origin() -> None:
 
     with pytest.raises(ValidationError, match="outbound origin"):
         FlightOffer.model_validate(offer_data)
+
+
+def test_expired_offer_metadata_is_allowed_for_research_results() -> None:
+    """V1 may compare a recorded offer without promising current bookability."""
+    provider = FixtureFlightOfferProvider()
+    offer_data = provider.search(chicago_search_query())[0].model_dump()
+    retrieved_at = datetime(2099, 6, 1, 12, tzinfo=UTC)
+    offer_data["retrieved_at"] = retrieved_at
+    offer_data["expires_at"] = retrieved_at - timedelta(minutes=1)
+
+    offer = FlightOffer.model_validate(offer_data)
+
+    assert offer.expires_at < offer.retrieved_at
 
 
 def test_flight_pairs_derive_arrival_and_shared_time_metrics() -> None:
