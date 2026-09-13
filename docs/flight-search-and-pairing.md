@@ -88,8 +88,9 @@ The generated V1 snapshot belongs at
 `src/travel_ai/fixtures/airport_reference.json`. A repeatable generation script
 should retain U.S. airports with an IATA code and scheduled service whose type
 is `large_airport` or `medium_airport`. The generated file records its source
-date and schema version. Refreshing it is a deliberate release task rather than
-a runtime API call.
+date and schema version. Refresh it quarterly and before a tagged demo or
+release, whichever comes first. Refreshing is a deliberate release task rather
+than a runtime API call.
 
 V1 accepts an explicit airport/IATA code or a city plus state. It does not
 accept arbitrary street addresses and does not require a geocoder. If Duffel
