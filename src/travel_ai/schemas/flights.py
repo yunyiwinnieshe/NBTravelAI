@@ -203,9 +203,20 @@ class FlightOfferPair(BaseModel):
     combined_price_usd: Decimal = Field(gt=0)
     arrival_gap_minutes: int = Field(ge=0)
     return_departure_gap_minutes: int = Field(ge=0)
-    shared_trip_minutes: int = Field(gt=0)
+    time_together_minutes: int = Field(gt=0)
+    traveler_a_connections: int = Field(ge=0)
+    traveler_b_connections: int = Field(ge=0)
     total_connections: int = Field(ge=0)
     combined_travel_minutes: int = Field(gt=0)
+
+    @model_validator(mode="after")
+    def validate_connection_total(self) -> "FlightOfferPair":
+        """Keep the published total consistent with both travelers."""
+        if self.total_connections != (
+            self.traveler_a_connections + self.traveler_b_connections
+        ):
+            raise ValueError("total_connections must equal both traveler counts")
+        return self
 
 
 class PairScoreComponent(BaseModel):
@@ -234,7 +245,7 @@ class FlightPairScoreBreakdown(BaseModel):
     arrival_alignment: PairScoreComponent
     travel_time: PairScoreComponent
     connections: PairScoreComponent
-    shared_trip: PairScoreComponent
+    time_together: PairScoreComponent
 
     @model_validator(mode="after")
     def validate_weights(self) -> "FlightPairScoreBreakdown":
@@ -247,7 +258,7 @@ class FlightPairScoreBreakdown(BaseModel):
                     self.arrival_alignment,
                     self.travel_time,
                     self.connections,
-                    self.shared_trip,
+                    self.time_together,
                 )
             )
             - 1.0
@@ -275,7 +286,7 @@ class ScoredFlightOfferPair(BaseModel):
                 self.score_breakdown.arrival_alignment,
                 self.score_breakdown.travel_time,
                 self.score_breakdown.connections,
-                self.score_breakdown.shared_trip,
+                self.score_breakdown.time_together,
             )
         )
         if abs(self.selection_score - calculated) > 0.000001:

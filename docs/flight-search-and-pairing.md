@@ -84,13 +84,12 @@ fields are `iata_code`, `type`, and `scheduled_service`; the data version must b
 recorded because this is external reference data. The application, not the LLM,
 performs the join, filtering, distance calculation, and stable ranking.
 
-The generated V1 snapshot belongs at
-`src/travel_ai/fixtures/airport_reference.json`. A repeatable generation script
-should retain U.S. airports with an IATA code and scheduled service whose type
-is `large_airport` or `medium_airport`. The generated file records its source
-date and schema version. Refresh it quarterly and before a tagged demo or
-release, whichever comes first. Refreshing is a deliberate release task rather
-than a runtime API call.
+`src/travel_ai/fixtures/airport_reference.json` is generated from the
+public-domain OurAirports CSV. It retains U.S. airports with an IATA code and
+scheduled service whose type is `large_airport` or `medium_airport`, plus the
+source date and schema version. Refresh it quarterly and before a tagged demo
+or release using `python -m travel_ai.scripts.build_airport_reference
+airports.csv --source-date YYYY-MM-DD`.
 
 V1 accepts an explicit airport/IATA code or a city plus state. It does not
 accept arbitrary street addresses and does not require a geocoder. If Duffel
@@ -175,15 +174,15 @@ For every pair, derive:
 combined_price_usd = A.total_amount + B.total_amount
 arrival_gap_minutes = abs(A.outbound_arrival - B.outbound_arrival)
 return_departure_gap_minutes = abs(A.return_departure - B.return_departure)
-shared_trip_start = max(A.outbound_arrival, B.outbound_arrival)
-shared_trip_end = min(A.return_departure, B.return_departure)
-shared_trip_minutes = max(0, shared_trip_end - shared_trip_start)
+time_together_start = max(A.outbound_arrival, B.outbound_arrival)
+time_together_end = min(A.return_departure, B.return_departure)
+time_together_minutes = max(0, time_together_end - time_together_start)
 total_connections = A.total_connections + B.total_connections
 combined_travel_minutes = A.total_travel_minutes + B.total_travel_minutes
 ```
 
-Compare timestamps as timezone-aware instants. A pair with no positive shared
-trip time is invalid. For V1, both travelers in a pair must arrive at the same
+Compare timestamps as timezone-aware instants. A pair with no positive time
+together is invalid. For V1, both travelers in a pair must arrive at the same
 destination airport because the system does not yet model ground transfers
 between airports.
 
@@ -195,7 +194,7 @@ An illustrative internal contract is:
   "traveler_b_offer_id": "offer_b_004",
   "combined_price_usd": "780.00",
   "arrival_gap_minutes": 45,
-  "shared_trip_minutes": 5160,
+  "time_together_minutes": 5160,
   "total_connections": 0,
   "combined_travel_minutes": 690
 }
@@ -214,7 +213,7 @@ pair_selection_score = 0.35 * price_score
                      + 0.25 * arrival_alignment_score
                      + 0.20 * travel_time_score
                      + 0.10 * connection_score
-                     + 0.10 * shared_trip_score
+                     + 0.10 * time_together_score
 ```
 
 The component values are normalized within the valid pairs for one city:
@@ -222,20 +221,21 @@ The component values are normalized within the valid pairs for one city:
 ```text
 price_score = cheapest_pair_price / pair_price
 travel_time_score = shortest_pair_travel_minutes / pair_travel_minutes
-connection_score = 1 / (1 + pair_total_connections)
-shared_trip_score = pair_shared_trip_minutes / longest_shared_trip_minutes
+connection_score = (
+    1 / (1 + A.total_connections)
+    + 1 / (1 + B.total_connections)
+) / 2
+time_together_score = pair_time_together_minutes / longest_time_together_minutes
 ```
 
-The connection formula is an initial product heuristic, not a Duffel or
-industry standard. Under this curve, one total connection scores `0.5`. The
-team must validate whether this penalty is too strong before calling the
-weights final.
+The connection score averages each traveler's burden. Two nonstop trips score
+`1.0`; one nonstop plus one one-stop trip scores `0.75`; two one-stop trips
+score `0.5`.
 
 Arrival alignment gives full credit when the travelers arrive within two hours,
 declines linearly between two and six hours, and gives zero credit at six hours
-or more. These two- and six-hour values are initial product hypotheses, not
-external standards. They remain soft-score boundaries and must be checked
-against labeled pair-selection examples.
+or more. These approved V1 thresholds are product rules, not external
+standards, and may be tuned using labeled pair-selection examples.
 
 ```text
 arrival_alignment_score = 1.0                         when gap <= 120 minutes
@@ -243,13 +243,13 @@ arrival_alignment_score = (360 - gap) / (360 - 120) when 120 < gap < 360
 arrival_alignment_score = 0.0                         when gap >= 360 minutes
 ```
 
-Arrival alignment and shared trip measure different effects. Arrival alignment
-measures how close the outbound arrivals are. Shared trip measures the usable
+Arrival alignment and time together measure different effects. Arrival alignment
+measures how close the outbound arrivals are. Time together measures the usable
 overlap from the later outbound arrival until the earlier return departure, so
 it captures the effect of both travelers' arrival and return schedules. The
 return-departure gap is still returned for explanation, but V1 does not add a
 separate return-alignment weight because that would partly double-count shared
-trip time.
+schedule overlap.
 
 The pair with the highest score is recommended. Equal scores are resolved by:
 
@@ -257,7 +257,7 @@ The pair with the highest score is recommended. Equal scores are resolved by:
 2. shorter combined travel time;
 3. smaller arrival-time difference;
 4. fewer combined connections;
-5. longer shared trip time; then
+5. longer time together; then
 6. lexicographically smaller stable offer IDs.
 
 This scoring step answers which two flights work best together for one city. It
@@ -266,12 +266,9 @@ pair's raw price, travel-time, arrival, and burden values together with city
 preferences. It does not use `pair_selection_score` as a destination-score
 component.
 
-"Normalized within one city" means that Chicago pairs are compared with other
-Chicago pairs and Denver pairs with other Denver pairs. A score of `0.90` for
-a Chicago pair is therefore not directly better than `0.85` for a Denver pair.
-The pair score selects the flights representing each city; the separate
-destination score compares cities using consistently normalized destination
-features.
+Pair components are normalized within one city: Chicago pairs compete with
+Chicago pairs, and Denver pairs with Denver pairs. Pair scores do not compare
+cities; the separate destination score does.
 
 ## 6. Return up to four distinct options per traveler
 
@@ -300,7 +297,7 @@ The API returns a smaller public `FlightOption` rather than every internal
 `lowest_price`, `shortest_travel`, or `fewest_connections`. The recommended
 pair's two offers are always present in their respective lists. Travelers may
 choose a different combination from their independent lists; the client or
-service then recalculates combined price, arrival gap, and shared trip time
+service then recalculates combined price, arrival gap, and time together
 without reranking the destination.
 
 The recommended pair—not the cheapest valid pair—is used for the city's score.

@@ -122,7 +122,7 @@ def test_expired_offer_metadata_is_allowed_for_research_results() -> None:
     assert offer.expires_at < offer.retrieved_at
 
 
-def test_flight_pairs_derive_arrival_and_shared_time_metrics() -> None:
+def test_flight_pairs_derive_arrival_and_time_together_metrics() -> None:
     """Every A/B combination records the schedule metrics used for selection."""
     provider = FixtureFlightOfferProvider()
     traveler_a_offers = provider.search(chicago_search_query())
@@ -138,7 +138,9 @@ def test_flight_pairs_derive_arrival_and_shared_time_metrics() -> None:
     assert synchronized_pair.traveler_b_offer_id == "fixture_b_chicago_nonstop"
     assert synchronized_pair.combined_price_usd == Decimal("615.00")
     assert synchronized_pair.return_departure_gap_minutes == 120
-    assert synchronized_pair.shared_trip_minutes == 5955
+    assert synchronized_pair.time_together_minutes == 5955
+    assert synchronized_pair.traveler_a_connections == 2
+    assert synchronized_pair.traveler_b_connections == 0
 
 
 def test_flight_pairs_require_the_same_destination_airport() -> None:
@@ -189,7 +191,7 @@ def test_every_valid_pair_receives_an_auditable_score() -> None:
                     scored.score_breakdown.arrival_alignment,
                     scored.score_breakdown.travel_time,
                     scored.score_breakdown.connections,
-                    scored.score_breakdown.shared_trip,
+                    scored.score_breakdown.time_together,
                 )
             )
         )
@@ -248,6 +250,27 @@ def test_arrival_alignment_has_two_hour_preferred_and_six_hour_zero_windows() ->
     }
 
     assert scores == {120: 1.0, 240: 0.5, 360: 0.0}
+
+
+def test_connection_score_averages_each_travelers_connection_burden() -> None:
+    """One nonstop and one one-stop itinerary receive a 0.75 pair score."""
+    provider = FixtureFlightOfferProvider()
+    pair = build_flight_offer_pairs(
+        provider.search(chicago_search_query()),
+        provider.search(
+            chicago_search_query("traveler_b", "new_york_ny", ["JFK", "LGA", "EWR"])
+        ),
+    )[0].model_copy(
+        update={
+            "traveler_a_connections": 1,
+            "traveler_b_connections": 0,
+            "total_connections": 1,
+        }
+    )
+
+    scored = score_flight_offer_pairs([pair])[0]
+
+    assert scored.score_breakdown.connections.value == 0.75
 
 
 def test_display_offers_are_distinct_and_include_recommended_pair_offer() -> None:

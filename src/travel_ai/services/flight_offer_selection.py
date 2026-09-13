@@ -12,7 +12,7 @@ PAIR_PRICE_WEIGHT = 0.35
 PAIR_ARRIVAL_ALIGNMENT_WEIGHT = 0.25
 PAIR_TRAVEL_TIME_WEIGHT = 0.20
 PAIR_CONNECTIONS_WEIGHT = 0.10
-PAIR_SHARED_TRIP_WEIGHT = 0.10
+PAIR_TIME_TOGETHER_WEIGHT = 0.10
 
 FULL_ARRIVAL_ALIGNMENT_MINUTES = 120
 ZERO_ARRIVAL_ALIGNMENT_MINUTES = 360
@@ -55,12 +55,12 @@ def build_flight_offer_pairs(
             return_a = offer_a.return_slice.segments[0].departure_at
             return_b = offer_b.return_slice.segments[0].departure_at
 
-            shared_trip_start = max(arrival_a, arrival_b)
-            shared_trip_end = min(return_a, return_b)
-            shared_trip_minutes = int(
-                (shared_trip_end - shared_trip_start).total_seconds() // 60
+            time_together_start = max(arrival_a, arrival_b)
+            time_together_end = min(return_a, return_b)
+            time_together_minutes = int(
+                (time_together_end - time_together_start).total_seconds() // 60
             )
-            if shared_trip_minutes <= 0:
+            if time_together_minutes <= 0:
                 continue
 
             arrival_gap_minutes = int(
@@ -79,7 +79,9 @@ def build_flight_offer_pairs(
                     combined_price_usd=(offer_a.total_amount + offer_b.total_amount),
                     arrival_gap_minutes=arrival_gap_minutes,
                     return_departure_gap_minutes=return_departure_gap_minutes,
-                    shared_trip_minutes=shared_trip_minutes,
+                    time_together_minutes=time_together_minutes,
+                    traveler_a_connections=offer_a.total_connections,
+                    traveler_b_connections=offer_b.total_connections,
                     total_connections=(
                         offer_a.total_connections + offer_b.total_connections
                     ),
@@ -121,14 +123,17 @@ def score_flight_offer_pairs(
 
     lowest_price = min(pair.combined_price_usd for pair in valid_pairs)
     shortest_travel = min(pair.combined_travel_minutes for pair in valid_pairs)
-    longest_shared_trip = max(pair.shared_trip_minutes for pair in valid_pairs)
+    longest_time_together = max(pair.time_together_minutes for pair in valid_pairs)
 
     scored_pairs: list[ScoredFlightOfferPair] = []
     for pair in valid_pairs:
         price_value = float(lowest_price / pair.combined_price_usd)
         travel_time_value = shortest_travel / pair.combined_travel_minutes
-        connection_value = 1 / (1 + pair.total_connections)
-        shared_trip_value = pair.shared_trip_minutes / longest_shared_trip
+        connection_value = (
+            (1 / (1 + pair.traveler_a_connections))
+            + (1 / (1 + pair.traveler_b_connections))
+        ) / 2
+        time_together_value = pair.time_together_minutes / longest_time_together
 
         breakdown = FlightPairScoreBreakdown(
             price=_score_component(price_value, PAIR_PRICE_WEIGHT),
@@ -144,9 +149,9 @@ def score_flight_offer_pairs(
                 connection_value,
                 PAIR_CONNECTIONS_WEIGHT,
             ),
-            shared_trip=_score_component(
-                shared_trip_value,
-                PAIR_SHARED_TRIP_WEIGHT,
+            time_together=_score_component(
+                time_together_value,
+                PAIR_TIME_TOGETHER_WEIGHT,
             ),
         )
         selection_score = round(
@@ -157,7 +162,7 @@ def score_flight_offer_pairs(
                     breakdown.arrival_alignment,
                     breakdown.travel_time,
                     breakdown.connections,
-                    breakdown.shared_trip,
+                    breakdown.time_together,
                 )
             ),
             6,
@@ -186,7 +191,7 @@ def select_recommended_flight_pair(
             scored.pair.combined_travel_minutes,
             scored.pair.arrival_gap_minutes,
             scored.pair.total_connections,
-            -scored.pair.shared_trip_minutes,
+            -scored.pair.time_together_minutes,
             scored.pair.traveler_a_offer_id,
             scored.pair.traveler_b_offer_id,
         ),
