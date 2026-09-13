@@ -1,5 +1,6 @@
 """Provider-independent contracts for resolving locations to usable airports."""
 
+from datetime import date
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -66,6 +67,26 @@ class AirportReference(BaseModel):
     iata_code: str = Field(pattern=r"^[A-Z]{3}$")
     airport_type: AirportType
     scheduled_service: bool
+
+
+class AirportReferenceDataset(BaseModel):
+    """Versioned subset generated from the public OurAirports dataset."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    schema_version: str = Field(pattern=r"^v\d+$")
+    source: str = Field(min_length=1, max_length=50)
+    source_url: str = Field(min_length=1, max_length=500)
+    source_date: date
+    airports: list[AirportReference] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def validate_unique_codes(self) -> "AirportReferenceDataset":
+        """Require one stable record per IATA airport code."""
+        codes = [airport.iata_code for airport in self.airports]
+        if len(codes) != len(set(codes)):
+            raise ValueError("airport reference IATA codes must be unique")
+        return self
 
 
 class ResolvedAirport(BaseModel):

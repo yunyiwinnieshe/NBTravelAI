@@ -6,14 +6,37 @@ from pydantic import TypeAdapter, ValidationError
 
 from travel_ai.providers.base import FlightOfferProvider
 from travel_ai.schemas.flights import FlightOffer, FlightSearchQuery
+from travel_ai.schemas.locations import AirportReferenceDataset
 
 DEFAULT_FLIGHT_OFFERS_PATH = (
     Path(__file__).resolve().parent.parent / "fixtures" / "flight_offers.json"
+)
+DEFAULT_AIRPORT_REFERENCE_PATH = (
+    Path(__file__).resolve().parent.parent / "fixtures" / "airport_reference.json"
 )
 
 
 class FixtureDataError(ValueError):
     """Raised when a fixture file cannot be read or validated."""
+
+
+def load_airport_reference_dataset(
+    fixture_path: Path = DEFAULT_AIRPORT_REFERENCE_PATH,
+) -> AirportReferenceDataset:
+    """Load and validate the versioned OurAirports reference subset."""
+    try:
+        fixture_json = fixture_path.read_text(encoding="utf-8")
+    except OSError as error:
+        raise FixtureDataError(
+            f"Unable to read airport reference fixture: {fixture_path}"
+        ) from error
+
+    try:
+        return AirportReferenceDataset.model_validate_json(fixture_json)
+    except ValidationError as error:
+        raise FixtureDataError(
+            f"Invalid airport reference fixture: {fixture_path}"
+        ) from error
 
 
 class FixtureFlightOfferProvider(FlightOfferProvider):
