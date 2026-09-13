@@ -88,8 +88,7 @@ performs the join, filtering, distance calculation, and stable ranking.
 public-domain OurAirports CSV. It retains U.S. airports with an IATA code and
 scheduled service whose type is `large_airport` or `medium_airport`, plus the
 source date and schema version. Refresh it quarterly and before a tagged demo
-or release using `python -m travel_ai.scripts.build_airport_reference
-airports.csv --source-date YYYY-MM-DD`.
+or release using `build_airport_reference.py`.
 
 V1 accepts an explicit airport/IATA code or a city plus state. It does not
 accept arbitrary street addresses and does not require a geocoder. If Duffel
@@ -248,8 +247,8 @@ measures how close the outbound arrivals are. Time together measures the usable
 overlap from the later outbound arrival until the earlier return departure, so
 it captures the effect of both travelers' arrival and return schedules. The
 return-departure gap is still returned for explanation, but V1 does not add a
-separate return-alignment weight because that would partly double-count shared
-schedule overlap.
+separate return-alignment weight because that would double-count schedule
+overlap.
 
 The pair with the highest score is recommended. Equal scores are resolved by:
 
