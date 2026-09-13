@@ -145,7 +145,7 @@ class FlightOffer(BaseModel):
 
     @model_validator(mode="after")
     def validate_round_trip(self) -> "FlightOffer":
-        """Validate chronology, route direction, and live-offer freshness data."""
+        """Validate chronology, route direction, and timestamp metadata."""
         outbound_arrival = self.outbound_slice.segments[-1].arrival_at
         return_departure = self.return_slice.segments[0].departure_at
         if return_departure <= outbound_arrival:
@@ -162,11 +162,8 @@ class FlightOffer(BaseModel):
 
         if self.retrieved_at.tzinfo is None:
             raise ValueError("retrieved_at must include a timezone")
-        if self.expires_at is not None:
-            if self.expires_at.tzinfo is None:
-                raise ValueError("expires_at must include a timezone")
-            if self.expires_at <= self.retrieved_at:
-                raise ValueError("expires_at must be after retrieved_at")
+        if self.expires_at is not None and self.expires_at.tzinfo is None:
+            raise ValueError("expires_at must include a timezone")
         return self
 
     @property
