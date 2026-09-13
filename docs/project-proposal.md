@@ -188,6 +188,13 @@ nearby airports deterministically, and returns at most three airport codes. The
 LLM must not invent airport codes, coordinates, commercial-service status, or
 airport priority.
 
+For V1, origins are limited to an explicit airport/IATA code or a city plus
+state. If several verified place results are plausible, the LLM asks the user
+to choose among them. Arbitrary addresses and geocoding are deferred. The
+filtered, versioned reference snapshot is generated at
+`src/travel_ai/fixtures/airport_reference.json`; its source date and schema
+version are recorded and it is refreshed as an explicit release task.
+
 ## 7. Data strategy
 
 The MVP uses versioned JSON fixtures validated with Pydantic. This keeps local
@@ -325,6 +332,13 @@ Evaluation is a product feature. We will build a versioned test set that
 covers normal requests, missing fields, ambiguous requests, impossible trips,
 constraint boundaries, provider failures, prompt injection, time-zone/date
 edge cases, and preference changes.
+
+Flight-pair policy examples belong in
+`evals/flight_pair_selection_cases.json`. Each labeled case contains the two
+travelers' eligible offers, the expected recommended offer IDs, and a short
+reason describing the intended tradeoff. Unit tests verify formulas and
+invariants; this evaluation set checks whether the chosen weights, arrival
+thresholds, and connection penalty produce useful product decisions.
 
 We will track metrics appropriate to each layer:
 
