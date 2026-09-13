@@ -45,6 +45,11 @@ def build_flight_offer_pairs(
     pairs: list[FlightOfferPair] = []
     for offer_a in traveler_a_offers:
         for offer_b in traveler_b_offers:
+            if (
+                offer_a.outbound_slice.destination_airport_code
+                != offer_b.outbound_slice.destination_airport_code
+            ):
+                continue
             arrival_a = offer_a.outbound_slice.segments[-1].arrival_at
             arrival_b = offer_b.outbound_slice.segments[-1].arrival_at
             return_a = offer_a.return_slice.segments[0].departure_at

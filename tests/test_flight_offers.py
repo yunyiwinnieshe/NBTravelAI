@@ -128,6 +128,30 @@ def test_flight_pairs_derive_arrival_and_shared_time_metrics() -> None:
     assert synchronized_pair.shared_trip_minutes == 5955
 
 
+def test_flight_pairs_require_the_same_destination_airport() -> None:
+    """V1 does not pair arrivals at different airports in the same metro area."""
+    provider = FixtureFlightOfferProvider()
+    traveler_a_offers = provider.search(chicago_search_query())
+    traveler_b_offers = provider.search(
+        chicago_search_query("traveler_b", "new_york_ny", ["JFK", "LGA", "EWR"])
+    )
+    mdw_offer = traveler_b_offers[0].model_copy(
+        update={
+            "offer_id": "fixture_b_chicago_mdw",
+            "outbound_slice": traveler_b_offers[0].outbound_slice.model_copy(
+                update={"destination_airport_code": "MDW"}
+            ),
+            "return_slice": traveler_b_offers[0].return_slice.model_copy(
+                update={"origin_airport_code": "MDW"}
+            ),
+        }
+    )
+
+    pairs = build_flight_offer_pairs(traveler_a_offers, [mdw_offer])
+
+    assert pairs == []
+
+
 def test_every_valid_pair_receives_an_auditable_score() -> None:
     """Pair selection scores every valid combination without a price cutoff."""
     provider = FixtureFlightOfferProvider()
