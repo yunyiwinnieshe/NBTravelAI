@@ -153,7 +153,7 @@ After hard constraints remove ineligible flight offers, the system builds every
 valid combination of one round-trip offer per traveler for a candidate city.
 Every valid pair receives a separate, auditable selection score based on
 combined price, arrival alignment, combined travel time, connections, and
-shared trip time. Price is penalized continuously relative to the cheapest
+time together. Price is penalized continuously relative to the cheapest
 valid pair; the selector does not use a fixed percentage price guardrail.
 
 The pair score chooses flights within one city. It is distinct from the final
@@ -163,14 +163,16 @@ ranker never treats the pair score itself as a ranking component.
 
 Arrival alignment receives full pair-score credit within two hours, declines
 linearly until six hours, and receives zero credit after six hours. Poor arrival
-alignment alone does not make a city ineligible. Shared trip time accounts for
+alignment alone does not make a city ineligible. Time together accounts for
 the later arrival and earlier return departure, so incompatible return
 schedules also reduce pair quality.
 
 Connecting offers remain eligible and receive a continuous connection penalty.
+The pair score averages the two travelers' individual connection scores, so one
+traveler's single connection does not halve the entire pair's connection score.
 V1 does not accept a `nonstop_only` request field. Pair-score ties are resolved
 by lower combined cost, shorter combined travel time, smaller arrival gap,
-fewer connections, longer shared trip time, and stable offer IDs.
+fewer connections, longer time together, and stable offer IDs.
 
 The customer receives up to four distinct offers per traveler: the recommended
 pair offer plus the lowest-price, shortest-travel, and fewest-connections
@@ -191,7 +193,7 @@ airport priority.
 For V1, origins are limited to an explicit airport/IATA code or a city plus
 state. If several verified place results are plausible, the LLM asks the user
 to choose among them. Arbitrary addresses and geocoding are deferred. The
-filtered, versioned reference snapshot is generated at
+filtered, versioned OurAirports reference snapshot is stored at
 `src/travel_ai/fixtures/airport_reference.json`; its source date and schema
 version are recorded. It is refreshed quarterly and before a tagged demo or
 release, whichever comes first, as an explicit release task.

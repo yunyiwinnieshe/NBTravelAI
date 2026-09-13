@@ -2,7 +2,7 @@
 
 Travel AI is a portfolio-focused Applied AI project by Winnie and Ivy. It
 helps two people who live in different places choose a fair destination for a
-shared trip, balancing cost, travel time, and preferences.
+trip together, balancing cost, travel time, and preferences.
 
 The first version returns three eligible destinations with transparent score
 breakdowns and tradeoffs. A later version will generate and verify a detailed

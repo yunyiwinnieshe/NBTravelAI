@@ -1,5 +1,6 @@
 """Tests for deterministic commercial-airport filtering and ranking."""
 
+from travel_ai.providers.fixtures import load_airport_reference_dataset
 from travel_ai.schemas.locations import AirportCandidate, AirportReference
 from travel_ai.services.airport_selection import select_major_commercial_airports
 
@@ -77,6 +78,17 @@ def airport_references() -> list[AirportReference]:
             scheduled_service=True,
         ),
     ]
+
+
+def test_bundled_reference_is_a_versioned_ourairports_subset() -> None:
+    """The generated fixture contains known U.S. commercial airports."""
+    dataset = load_airport_reference_dataset()
+    references = {airport.iata_code: airport for airport in dataset.airports}
+
+    assert dataset.source == "OurAirports"
+    assert dataset.schema_version == "v1"
+    assert references["BOS"].airport_type == "large_airport"
+    assert all(airport.scheduled_service for airport in dataset.airports)
 
 
 def test_filters_noncommercial_airports_and_ranks_by_size_then_distance() -> None:
