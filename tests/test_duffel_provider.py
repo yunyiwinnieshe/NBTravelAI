@@ -296,8 +296,8 @@ def test_search_expands_airport_pairs_and_deduplicates_provider_ids() -> None:
     assert len(offers) == 1
 
 
-def test_search_sorts_by_price_and_applies_offer_limit() -> None:
-    """The provider bounds downstream pair calculations deterministically."""
+def test_search_applies_offer_limit_with_lowest_price_first() -> None:
+    """A one-offer bound retains the deterministic lowest-price winner."""
 
     def handle(_request: httpx.Request) -> httpx.Response:
         return httpx.Response(
@@ -317,6 +317,31 @@ def test_search_sorts_by_price_and_applies_offer_limit() -> None:
     offers = provider.search(search_query())
 
     assert [offer.provider_offer_id for offer in offers] == ["off_cheapest"]
+
+
+def test_search_bound_retains_price_and_travel_time_winners() -> None:
+    """The bounded set is diversified instead of containing only cheap offers."""
+    cheapest = raw_offer(offer_id="off_cheapest", amount="250.00")
+    fastest = raw_offer(offer_id="off_fastest", amount="400.00")
+    fastest["slices"][0]["duration"] = "PT1H"  # type: ignore[index]
+    fastest["slices"][1]["duration"] = "PT1H"  # type: ignore[index]
+
+    provider = provider_with_handler(
+        httpx.MockTransport(
+            lambda _request: httpx.Response(
+                201,
+                json={"data": {"offers": [cheapest, fastest]}},
+            )
+        ),
+        maximum_offers=2,
+    )
+
+    offers = provider.search(search_query())
+
+    assert [offer.provider_offer_id for offer in offers] == [
+        "off_cheapest",
+        "off_fastest",
+    ]
 
 
 def test_search_returns_empty_list_when_duffel_has_no_offers() -> None:

@@ -15,7 +15,7 @@ FlightSearchQuery
     → one Duffel Offer Request per approved airport pair
     → validate the response fields Travel AI consumes
     → normalize each result into FlightOffer
-    → deduplicate, sort deterministically, and retain at most 20 offers
+    → deduplicate and retain a deterministic mix of at most 20 offers
 ```
 
 Neither the recommendation service nor ranking code receives raw Duffel JSON.
@@ -80,13 +80,32 @@ token and is not executed by pytest or GitHub Actions.
   The provider attaches each airport's IANA `time_zone` before comparisons.
 - Only USD offers enter the normalized V1 contract.
 - Duplicate Duffel offer IDs are returned once.
-- At most 20 offers continue to pairing, ordered by price, travel time,
-  connections, and stable internal offer ID.
+- At most 20 offers continue to pairing. The bounded set is selected
+  deterministically across price, travel-time, and connection rankings rather
+  than retaining only the cheapest offers.
+- Offer expiration is retained as informational metadata but does not filter or
+  rank this research-only V1 response. Any future booking handoff must search
+  again.
 - Authentication, rate-limit, transport, HTTP, and response-shape failures use
   separate controlled exceptions.
 - Airport-pair requests currently run sequentially and fail the overall search
   if any request fails.
 - CI tests use `httpx.MockTransport` and never call Duffel.
+
+## Service-integration decisions
+
+V1 accepts an exact airport/IATA code or a city plus state. Ambiguous Duffel
+place matches return verified choices for an LLM clarification turn; the LLM
+does not choose a city or invent coordinates.
+
+The integrated live workflow should first use an unambiguous metropolitan city
+code and filter the actual returned airports against the approved airport
+groups. Explicit airport-pair searches are the fallback. When explicit searches
+partially fail, the service uses successful results and returns structured
+warnings; it fails the destination only if every attempt fails. Implementing
+that policy requires the workflow result contract to carry both `offers` and
+`warnings`, so the current provider continues to fail fast until that contract
+is introduced.
 
 Duffel test mode exercises the real HTTP integration but may return unrealistic
 prices and schedules. Travel AI therefore continues to use curated fixtures for

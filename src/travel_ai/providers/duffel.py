@@ -252,16 +252,56 @@ class DuffelFlightOfferProvider(FlightOfferProvider):
                     self._normalize_offer(raw_offer, query, retrieved_at),
                 )
 
-        offers = sorted(
-            normalized_by_provider_id.values(),
-            key=lambda offer: (
-                offer.total_amount,
-                offer.total_travel_minutes,
-                offer.total_connections,
-                offer.offer_id,
+        return self._select_bounded_offers(
+            list(normalized_by_provider_id.values())
+        )
+
+    def _select_bounded_offers(
+        self,
+        offers: list[FlightOffer],
+    ) -> list[FlightOffer]:
+        """Retain a deterministic mix of price, time, and connection winners."""
+        rankings = (
+            sorted(
+                offers,
+                key=lambda offer: (
+                    offer.total_amount,
+                    offer.total_travel_minutes,
+                    offer.total_connections,
+                    offer.offer_id,
+                ),
+            ),
+            sorted(
+                offers,
+                key=lambda offer: (
+                    offer.total_travel_minutes,
+                    offer.total_amount,
+                    offer.total_connections,
+                    offer.offer_id,
+                ),
+            ),
+            sorted(
+                offers,
+                key=lambda offer: (
+                    offer.total_connections,
+                    offer.total_amount,
+                    offer.total_travel_minutes,
+                    offer.offer_id,
+                ),
             ),
         )
-        return offers[: self._maximum_offers]
+        selected: list[FlightOffer] = []
+        selected_ids: set[str] = set()
+        for rank_index in range(len(offers)):
+            for ranking in rankings:
+                candidate = ranking[rank_index]
+                if candidate.offer_id in selected_ids:
+                    continue
+                selected.append(candidate)
+                selected_ids.add(candidate.offer_id)
+                if len(selected) == self._maximum_offers:
+                    return selected
+        return selected
 
     @staticmethod
     def _parse_offers(raw_response: dict[str, object]) -> list[_DuffelOffer]:
