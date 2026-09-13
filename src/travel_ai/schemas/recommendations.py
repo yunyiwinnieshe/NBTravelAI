@@ -403,6 +403,14 @@ class DestinationRecommendation(BaseModel):
         ):
             raise ValueError("recommended pair travel time must equal its offer totals")
 
+        destination_airports = {
+            option.outbound.destination_airport_code for option in selected_options
+        }
+        if len(destination_airports) != 1:
+            raise ValueError(
+                "recommended pair offers must arrive at the same destination airport"
+            )
+
         arrivals = [option.outbound.arrival_at for option in selected_options]
         returns = [option.return_flight.departure_at for option in selected_options]
         arrival_gap = int(abs((arrivals[0] - arrivals[1]).total_seconds()) // 60)

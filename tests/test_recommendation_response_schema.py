@@ -285,6 +285,19 @@ def test_response_requires_recommended_offer_in_traveler_options() -> None:
         RecommendationResponse.model_validate(payload)
 
 
+def test_response_requires_recommended_pair_to_arrive_at_same_airport() -> None:
+    """The V1 response cannot publish a pair that needs an airport transfer."""
+    payload = valid_response()
+    recommendation = payload["recommendations"][0]  # type: ignore[index]
+    traveler_b = recommendation["flight_options_by_traveler"][1]  # type: ignore[index]
+    recommended = traveler_b["options"][0]  # type: ignore[index]
+    recommended["outbound"]["destination_airport_code"] = "MDW"  # type: ignore[index]
+    recommended["return_flight"]["origin_airport_code"] = "MDW"  # type: ignore[index]
+
+    with pytest.raises(ValidationError, match="same destination airport"):
+        RecommendationResponse.model_validate(payload)
+
+
 def test_no_match_response_has_no_recommendations() -> None:
     """A completed evaluation may return exclusions instead of ranked cities."""
     payload = valid_response()
