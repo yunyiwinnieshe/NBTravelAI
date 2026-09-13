@@ -155,7 +155,7 @@ def valid_response() -> dict[str, object]:
                     "combined_price_usd": "615.00",
                     "arrival_gap_minutes": 60,
                     "return_departure_gap_minutes": 60,
-                    "shared_trip_minutes": 5760,
+                    "time_together_minutes": 5760,
                     "total_connections": 0,
                     "combined_travel_minutes": 1200,
                     "selection_score": 0.92,
@@ -180,7 +180,7 @@ def valid_response() -> dict[str, object]:
                             "weight": 0.10,
                             "contribution": 0.10,
                         },
-                        "shared_trip": {
+                        "time_together": {
                             "value": 0.95,
                             "weight": 0.10,
                             "contribution": 0.095,

@@ -30,7 +30,7 @@ Duffel payloads stay inside the provider layer.
 
 Each destination has one recommended pair containing one eligible round-trip
 offer for each traveler. Every valid pair is scored using price, arrival
-alignment, travel time, connections, and shared trip time. No fixed percentage
+alignment, travel time, connections, and time together. No fixed percentage
 price guardrail removes a pair before scoring. The highest-scoring pair is
 selected, followed by deterministic cost, travel-time, arrival-gap, connection,
 shared-trip, and stable-ID tie-breakers.

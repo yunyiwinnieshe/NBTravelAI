@@ -280,7 +280,7 @@ class RecommendedFlightPair(BaseModel):
     combined_price_usd: Decimal = Field(gt=0)
     arrival_gap_minutes: int = Field(ge=0)
     return_departure_gap_minutes: int = Field(ge=0)
-    shared_trip_minutes: int = Field(gt=0)
+    time_together_minutes: int = Field(gt=0)
     total_connections: int = Field(ge=0)
     combined_travel_minutes: int = Field(gt=0)
     selection_score: float = Field(ge=0, le=1)
@@ -417,7 +417,7 @@ class DestinationRecommendation(BaseModel):
         return_departure_gap = int(
             abs((returns[0] - returns[1]).total_seconds()) // 60
         )
-        shared_trip = int((min(returns) - max(arrivals)).total_seconds() // 60)
+        time_together = int((min(returns) - max(arrivals)).total_seconds() // 60)
         if arrival_gap != self.recommended_pair.arrival_gap_minutes:
             raise ValueError("recommended pair arrival gap must match its offers")
         if return_departure_gap != (
@@ -426,8 +426,8 @@ class DestinationRecommendation(BaseModel):
             raise ValueError(
                 "recommended pair return departure gap must match its offers"
             )
-        if shared_trip != self.recommended_pair.shared_trip_minutes:
-            raise ValueError("recommended pair shared trip time must match its offers")
+        if time_together != self.recommended_pair.time_together_minutes:
+            raise ValueError("recommended pair time together must match its offers")
         return self
 
 
