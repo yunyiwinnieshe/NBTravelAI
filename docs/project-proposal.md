@@ -193,7 +193,8 @@ state. If several verified place results are plausible, the LLM asks the user
 to choose among them. Arbitrary addresses and geocoding are deferred. The
 filtered, versioned reference snapshot is generated at
 `src/travel_ai/fixtures/airport_reference.json`; its source date and schema
-version are recorded and it is refreshed as an explicit release task.
+version are recorded. It is refreshed quarterly and before a tagged demo or
+release, whichever comes first, as an explicit release task.
 
 ## 7. Data strategy
 
