@@ -32,3 +32,6 @@ select = ["E", "F", "I", "B", "UP"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+travel_ai = ["fixtures/*.json"]
