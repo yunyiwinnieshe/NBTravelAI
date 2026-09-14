@@ -1,0 +1,1202 @@
+[
+    {
+        "city_id":  "san_diego_ca",
+        "month":  1,
+        "average_daytime_temperature_celsius":  19.1,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, San Diego Lindbergh Field (USW00023188)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023188",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "san_diego_ca",
+        "month":  2,
+        "average_daytime_temperature_celsius":  19,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, San Diego Lindbergh Field (USW00023188)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023188",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "san_diego_ca",
+        "month":  3,
+        "average_daytime_temperature_celsius":  19.4,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, San Diego Lindbergh Field (USW00023188)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023188",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "san_diego_ca",
+        "month":  4,
+        "average_daytime_temperature_celsius":  20.4,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, San Diego Lindbergh Field (USW00023188)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023188",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "san_diego_ca",
+        "month":  5,
+        "average_daytime_temperature_celsius":  20.8,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, San Diego Lindbergh Field (USW00023188)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023188",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "san_diego_ca",
+        "month":  6,
+        "average_daytime_temperature_celsius":  22.1,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, San Diego Lindbergh Field (USW00023188)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023188",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "san_diego_ca",
+        "month":  7,
+        "average_daytime_temperature_celsius":  24.1,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, San Diego Lindbergh Field (USW00023188)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023188",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "san_diego_ca",
+        "month":  8,
+        "average_daytime_temperature_celsius":  25.2,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, San Diego Lindbergh Field (USW00023188)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023188",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "san_diego_ca",
+        "month":  9,
+        "average_daytime_temperature_celsius":  25.1,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, San Diego Lindbergh Field (USW00023188)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023188",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "san_diego_ca",
+        "month":  10,
+        "average_daytime_temperature_celsius":  23.7,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, San Diego Lindbergh Field (USW00023188)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023188",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "san_diego_ca",
+        "month":  11,
+        "average_daytime_temperature_celsius":  21.5,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, San Diego Lindbergh Field (USW00023188)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023188",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "san_diego_ca",
+        "month":  12,
+        "average_daytime_temperature_celsius":  18.9,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, San Diego Lindbergh Field (USW00023188)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023188",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_york_ny",
+        "month":  1,
+        "average_daytime_temperature_celsius":  4.2,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New York Central Park (USW00094728)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094728",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_york_ny",
+        "month":  2,
+        "average_daytime_temperature_celsius":  5.7,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New York Central Park (USW00094728)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094728",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_york_ny",
+        "month":  3,
+        "average_daytime_temperature_celsius":  9.9,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New York Central Park (USW00094728)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094728",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_york_ny",
+        "month":  4,
+        "average_daytime_temperature_celsius":  16.6,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New York Central Park (USW00094728)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094728",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_york_ny",
+        "month":  5,
+        "average_daytime_temperature_celsius":  21.9,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New York Central Park (USW00094728)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094728",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_york_ny",
+        "month":  6,
+        "average_daytime_temperature_celsius":  26.5,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New York Central Park (USW00094728)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094728",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_york_ny",
+        "month":  7,
+        "average_daytime_temperature_celsius":  29.4,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New York Central Park (USW00094728)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094728",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_york_ny",
+        "month":  8,
+        "average_daytime_temperature_celsius":  28.5,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New York Central Park (USW00094728)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094728",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_york_ny",
+        "month":  9,
+        "average_daytime_temperature_celsius":  24.6,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New York Central Park (USW00094728)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094728",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_york_ny",
+        "month":  10,
+        "average_daytime_temperature_celsius":  18.1,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New York Central Park (USW00094728)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094728",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_york_ny",
+        "month":  11,
+        "average_daytime_temperature_celsius":  12.2,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New York Central Park (USW00094728)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094728",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_york_ny",
+        "month":  12,
+        "average_daytime_temperature_celsius":  6.8,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New York Central Park (USW00094728)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094728",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "seattle_wa",
+        "month":  1,
+        "average_daytime_temperature_celsius":  8.9,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Seattle Tacoma Airport (USW00024233)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00024233",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "seattle_wa",
+        "month":  2,
+        "average_daytime_temperature_celsius":  10.2,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Seattle Tacoma Airport (USW00024233)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00024233",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "seattle_wa",
+        "month":  3,
+        "average_daytime_temperature_celsius":  12.3,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Seattle Tacoma Airport (USW00024233)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00024233",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "seattle_wa",
+        "month":  4,
+        "average_daytime_temperature_celsius":  15.2,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Seattle Tacoma Airport (USW00024233)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00024233",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "seattle_wa",
+        "month":  5,
+        "average_daytime_temperature_celsius":  19.1,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Seattle Tacoma Airport (USW00024233)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00024233",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "seattle_wa",
+        "month":  6,
+        "average_daytime_temperature_celsius":  21.7,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Seattle Tacoma Airport (USW00024233)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00024233",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "seattle_wa",
+        "month":  7,
+        "average_daytime_temperature_celsius":  25.2,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Seattle Tacoma Airport (USW00024233)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00024233",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "seattle_wa",
+        "month":  8,
+        "average_daytime_temperature_celsius":  25.3,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Seattle Tacoma Airport (USW00024233)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00024233",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "seattle_wa",
+        "month":  9,
+        "average_daytime_temperature_celsius":  22,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Seattle Tacoma Airport (USW00024233)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00024233",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "seattle_wa",
+        "month":  10,
+        "average_daytime_temperature_celsius":  15.8,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Seattle Tacoma Airport (USW00024233)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00024233",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "seattle_wa",
+        "month":  11,
+        "average_daytime_temperature_celsius":  11.2,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Seattle Tacoma Airport (USW00024233)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00024233",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "seattle_wa",
+        "month":  12,
+        "average_daytime_temperature_celsius":  8.3,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Seattle Tacoma Airport (USW00024233)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00024233",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "denver_co",
+        "month":  1,
+        "average_daytime_temperature_celsius":  7,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Denver International Airport (USW00003017)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00003017",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "denver_co",
+        "month":  2,
+        "average_daytime_temperature_celsius":  7.6,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Denver International Airport (USW00003017)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00003017",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "denver_co",
+        "month":  3,
+        "average_daytime_temperature_celsius":  13.2,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Denver International Airport (USW00003017)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00003017",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "denver_co",
+        "month":  4,
+        "average_daytime_temperature_celsius":  16.5,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Denver International Airport (USW00003017)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00003017",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "denver_co",
+        "month":  5,
+        "average_daytime_temperature_celsius":  21.8,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Denver International Airport (USW00003017)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00003017",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "denver_co",
+        "month":  6,
+        "average_daytime_temperature_celsius":  28.6,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Denver International Airport (USW00003017)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00003017",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "denver_co",
+        "month":  7,
+        "average_daytime_temperature_celsius":  32.2,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Denver International Airport (USW00003017)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00003017",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "denver_co",
+        "month":  8,
+        "average_daytime_temperature_celsius":  30.8,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Denver International Airport (USW00003017)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00003017",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "denver_co",
+        "month":  9,
+        "average_daytime_temperature_celsius":  26.4,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Denver International Airport (USW00003017)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00003017",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "denver_co",
+        "month":  10,
+        "average_daytime_temperature_celsius":  18.5,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Denver International Airport (USW00003017)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00003017",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "denver_co",
+        "month":  11,
+        "average_daytime_temperature_celsius":  11.6,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Denver International Airport (USW00003017)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00003017",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "denver_co",
+        "month":  12,
+        "average_daytime_temperature_celsius":  6.7,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Denver International Airport (USW00003017)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00003017",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "chicago_il",
+        "month":  1,
+        "average_daytime_temperature_celsius":  -0.2,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Chicago O\u0027Hare International Airport (USW00094846)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094846",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "chicago_il",
+        "month":  2,
+        "average_daytime_temperature_celsius":  2.1,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Chicago O\u0027Hare International Airport (USW00094846)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094846",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "chicago_il",
+        "month":  3,
+        "average_daytime_temperature_celsius":  8.3,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Chicago O\u0027Hare International Airport (USW00094846)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094846",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "chicago_il",
+        "month":  4,
+        "average_daytime_temperature_celsius":  15,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Chicago O\u0027Hare International Airport (USW00094846)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094846",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "chicago_il",
+        "month":  5,
+        "average_daytime_temperature_celsius":  21.4,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Chicago O\u0027Hare International Airport (USW00094846)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094846",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "chicago_il",
+        "month":  6,
+        "average_daytime_temperature_celsius":  26.9,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Chicago O\u0027Hare International Airport (USW00094846)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094846",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "chicago_il",
+        "month":  7,
+        "average_daytime_temperature_celsius":  29.2,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Chicago O\u0027Hare International Airport (USW00094846)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094846",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "chicago_il",
+        "month":  8,
+        "average_daytime_temperature_celsius":  28.1,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Chicago O\u0027Hare International Airport (USW00094846)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094846",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "chicago_il",
+        "month":  9,
+        "average_daytime_temperature_celsius":  24.2,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Chicago O\u0027Hare International Airport (USW00094846)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094846",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "chicago_il",
+        "month":  10,
+        "average_daytime_temperature_celsius":  17.1,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Chicago O\u0027Hare International Airport (USW00094846)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094846",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "chicago_il",
+        "month":  11,
+        "average_daytime_temperature_celsius":  9.1,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Chicago O\u0027Hare International Airport (USW00094846)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094846",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "chicago_il",
+        "month":  12,
+        "average_daytime_temperature_celsius":  2.6,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Chicago O\u0027Hare International Airport (USW00094846)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00094846",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "miami_fl",
+        "month":  1,
+        "average_daytime_temperature_celsius":  24.6,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Miami International Airport (USW00012839)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012839",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "miami_fl",
+        "month":  2,
+        "average_daytime_temperature_celsius":  25.7,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Miami International Airport (USW00012839)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012839",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "miami_fl",
+        "month":  3,
+        "average_daytime_temperature_celsius":  27,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Miami International Airport (USW00012839)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012839",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "miami_fl",
+        "month":  4,
+        "average_daytime_temperature_celsius":  28.7,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Miami International Airport (USW00012839)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012839",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "miami_fl",
+        "month":  5,
+        "average_daytime_temperature_celsius":  30.4,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Miami International Airport (USW00012839)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012839",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "miami_fl",
+        "month":  6,
+        "average_daytime_temperature_celsius":  31.8,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Miami International Airport (USW00012839)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012839",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "miami_fl",
+        "month":  7,
+        "average_daytime_temperature_celsius":  32.6,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Miami International Airport (USW00012839)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012839",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "miami_fl",
+        "month":  8,
+        "average_daytime_temperature_celsius":  32.6,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Miami International Airport (USW00012839)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012839",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "miami_fl",
+        "month":  9,
+        "average_daytime_temperature_celsius":  31.7,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Miami International Airport (USW00012839)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012839",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "miami_fl",
+        "month":  10,
+        "average_daytime_temperature_celsius":  29.9,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Miami International Airport (USW00012839)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012839",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "miami_fl",
+        "month":  11,
+        "average_daytime_temperature_celsius":  27.4,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Miami International Airport (USW00012839)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012839",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "miami_fl",
+        "month":  12,
+        "average_daytime_temperature_celsius":  25.7,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Miami International Airport (USW00012839)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012839",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_orleans_la",
+        "month":  1,
+        "average_daytime_temperature_celsius":  16.9,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New Orleans International Airport (USW00012916)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012916",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_orleans_la",
+        "month":  2,
+        "average_daytime_temperature_celsius":  19.1,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New Orleans International Airport (USW00012916)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012916",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_orleans_la",
+        "month":  3,
+        "average_daytime_temperature_celsius":  22.4,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New Orleans International Airport (USW00012916)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012916",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_orleans_la",
+        "month":  4,
+        "average_daytime_temperature_celsius":  25.8,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New Orleans International Airport (USW00012916)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012916",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_orleans_la",
+        "month":  5,
+        "average_daytime_temperature_celsius":  29.6,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New Orleans International Airport (USW00012916)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012916",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_orleans_la",
+        "month":  6,
+        "average_daytime_temperature_celsius":  32.2,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New Orleans International Airport (USW00012916)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012916",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_orleans_la",
+        "month":  7,
+        "average_daytime_temperature_celsius":  33,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New Orleans International Airport (USW00012916)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012916",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_orleans_la",
+        "month":  8,
+        "average_daytime_temperature_celsius":  32.9,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New Orleans International Airport (USW00012916)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012916",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_orleans_la",
+        "month":  9,
+        "average_daytime_temperature_celsius":  31.2,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New Orleans International Airport (USW00012916)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012916",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_orleans_la",
+        "month":  10,
+        "average_daytime_temperature_celsius":  27,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New Orleans International Airport (USW00012916)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012916",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_orleans_la",
+        "month":  11,
+        "average_daytime_temperature_celsius":  21.8,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New Orleans International Airport (USW00012916)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012916",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "new_orleans_la",
+        "month":  12,
+        "average_daytime_temperature_celsius":  18.2,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, New Orleans International Airport (USW00012916)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00012916",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "nashville_tn",
+        "month":  1,
+        "average_daytime_temperature_celsius":  9.5,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Nashville International Airport (USW00013897)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013897",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "nashville_tn",
+        "month":  2,
+        "average_daytime_temperature_celsius":  12.1,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Nashville International Airport (USW00013897)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013897",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "nashville_tn",
+        "month":  3,
+        "average_daytime_temperature_celsius":  17.1,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Nashville International Airport (USW00013897)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013897",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "nashville_tn",
+        "month":  4,
+        "average_daytime_temperature_celsius":  22.6,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Nashville International Airport (USW00013897)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013897",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "nashville_tn",
+        "month":  5,
+        "average_daytime_temperature_celsius":  26.9,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Nashville International Airport (USW00013897)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013897",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "nashville_tn",
+        "month":  6,
+        "average_daytime_temperature_celsius":  30.9,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Nashville International Airport (USW00013897)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013897",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "nashville_tn",
+        "month":  7,
+        "average_daytime_temperature_celsius":  32.7,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Nashville International Airport (USW00013897)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013897",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "nashville_tn",
+        "month":  8,
+        "average_daytime_temperature_celsius":  32.4,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Nashville International Airport (USW00013897)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013897",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "nashville_tn",
+        "month":  9,
+        "average_daytime_temperature_celsius":  29.1,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Nashville International Airport (USW00013897)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013897",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "nashville_tn",
+        "month":  10,
+        "average_daytime_temperature_celsius":  23.1,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Nashville International Airport (USW00013897)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013897",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "nashville_tn",
+        "month":  11,
+        "average_daytime_temperature_celsius":  16.3,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Nashville International Airport (USW00013897)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013897",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "nashville_tn",
+        "month":  12,
+        "average_daytime_temperature_celsius":  11.2,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Nashville International Airport (USW00013897)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013897",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "las_vegas_nv",
+        "month":  1,
+        "average_daytime_temperature_celsius":  14.7,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Las Vegas Airport (USW00023169)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023169",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "las_vegas_nv",
+        "month":  2,
+        "average_daytime_temperature_celsius":  17.2,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Las Vegas Airport (USW00023169)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023169",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "las_vegas_nv",
+        "month":  3,
+        "average_daytime_temperature_celsius":  21.7,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Las Vegas Airport (USW00023169)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023169",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "las_vegas_nv",
+        "month":  4,
+        "average_daytime_temperature_celsius":  25.8,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Las Vegas Airport (USW00023169)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023169",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "las_vegas_nv",
+        "month":  5,
+        "average_daytime_temperature_celsius":  31.4,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Las Vegas Airport (USW00023169)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023169",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "las_vegas_nv",
+        "month":  6,
+        "average_daytime_temperature_celsius":  37.4,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Las Vegas Airport (USW00023169)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023169",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "las_vegas_nv",
+        "month":  7,
+        "average_daytime_temperature_celsius":  40.3,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Las Vegas Airport (USW00023169)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023169",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "las_vegas_nv",
+        "month":  8,
+        "average_daytime_temperature_celsius":  39.3,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Las Vegas Airport (USW00023169)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023169",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "las_vegas_nv",
+        "month":  9,
+        "average_daytime_temperature_celsius":  34.9,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Las Vegas Airport (USW00023169)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023169",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "las_vegas_nv",
+        "month":  10,
+        "average_daytime_temperature_celsius":  27.3,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Las Vegas Airport (USW00023169)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023169",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "las_vegas_nv",
+        "month":  11,
+        "average_daytime_temperature_celsius":  19.5,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Las Vegas Airport (USW00023169)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023169",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "las_vegas_nv",
+        "month":  12,
+        "average_daytime_temperature_celsius":  13.8,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Las Vegas Airport (USW00023169)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00023169",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "washington_dc",
+        "month":  1,
+        "average_daytime_temperature_celsius":  7.1,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Washington Reagan National Airport (USW00013743)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013743",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "washington_dc",
+        "month":  2,
+        "average_daytime_temperature_celsius":  9.1,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Washington Reagan National Airport (USW00013743)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013743",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "washington_dc",
+        "month":  3,
+        "average_daytime_temperature_celsius":  13.6,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Washington Reagan National Airport (USW00013743)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013743",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "washington_dc",
+        "month":  4,
+        "average_daytime_temperature_celsius":  20,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Washington Reagan National Airport (USW00013743)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013743",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "washington_dc",
+        "month":  5,
+        "average_daytime_temperature_celsius":  24.7,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Washington Reagan National Airport (USW00013743)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013743",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "washington_dc",
+        "month":  6,
+        "average_daytime_temperature_celsius":  29.5,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Washington Reagan National Airport (USW00013743)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013743",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "washington_dc",
+        "month":  7,
+        "average_daytime_temperature_celsius":  32,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Washington Reagan National Airport (USW00013743)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013743",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "washington_dc",
+        "month":  8,
+        "average_daytime_temperature_celsius":  31,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Washington Reagan National Airport (USW00013743)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013743",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "washington_dc",
+        "month":  9,
+        "average_daytime_temperature_celsius":  27.1,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Washington Reagan National Airport (USW00013743)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013743",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "washington_dc",
+        "month":  10,
+        "average_daytime_temperature_celsius":  20.8,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Washington Reagan National Airport (USW00013743)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013743",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "washington_dc",
+        "month":  11,
+        "average_daytime_temperature_celsius":  14.6,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Washington Reagan National Airport (USW00013743)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013743",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    },
+    {
+        "city_id":  "washington_dc",
+        "month":  12,
+        "average_daytime_temperature_celsius":  9.3,
+        "source":  "NOAA NCEI 1991-2020 U.S. Climate Normals, Washington Reagan National Airport (USW00013743)",
+        "source_url":  "https://www.ncei.noaa.gov/access/services/data/v1?dataset=normals-monthly-1991-2020\u0026format=pdf\u0026stations=USW00013743",
+        "reference_period":  "1991-2020",
+        "retrieved_at":  "2026-08-29",
+        "data_version":  "v1"
+    }
+]

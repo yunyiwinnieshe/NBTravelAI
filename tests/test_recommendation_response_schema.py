@@ -269,8 +269,7 @@ def test_pair_price_comparison_allows_a_premium_above_fifty_percent() -> None:
     response = RecommendationResponse.model_validate(payload)
 
     assert (
-        response.recommendations[0]
-        .recommended_pair.price_comparison.premium_percentage
+        response.recommendations[0].recommended_pair.price_comparison.premium_percentage
         == 105.0
     )
 

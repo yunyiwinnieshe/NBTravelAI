@@ -414,15 +414,11 @@ class DestinationRecommendation(BaseModel):
         arrivals = [option.outbound.arrival_at for option in selected_options]
         returns = [option.return_flight.departure_at for option in selected_options]
         arrival_gap = int(abs((arrivals[0] - arrivals[1]).total_seconds()) // 60)
-        return_departure_gap = int(
-            abs((returns[0] - returns[1]).total_seconds()) // 60
-        )
+        return_departure_gap = int(abs((returns[0] - returns[1]).total_seconds()) // 60)
         time_together = int((min(returns) - max(arrivals)).total_seconds() // 60)
         if arrival_gap != self.recommended_pair.arrival_gap_minutes:
             raise ValueError("recommended pair arrival gap must match its offers")
-        if return_departure_gap != (
-            self.recommended_pair.return_departure_gap_minutes
-        ):
+        if return_departure_gap != (self.recommended_pair.return_departure_gap_minutes):
             raise ValueError(
                 "recommended pair return departure gap must match its offers"
             )

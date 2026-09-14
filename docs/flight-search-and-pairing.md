@@ -1,7 +1,7 @@
 # Travel AI Flight Search and Pairing
 
 **Status:** Flight contracts and selectors implemented; service/API integration
-remains a follow-up task  
+remains a follow-up task
 **Scope:** Airport resolution, provider searches, flight eligibility, pair
 selection, and customer-facing flight options
 

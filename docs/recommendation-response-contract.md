@@ -1,7 +1,7 @@
 # Travel AI Recommendation Response Contract
 
 **Status:** Pydantic contract implemented; service population remains a
-follow-up task  
+follow-up task
 **Scope:** The public success and no-match response from `POST /recommendations`
 
 ## Response structure

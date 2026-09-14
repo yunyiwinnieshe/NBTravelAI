@@ -77,7 +77,8 @@ def test_recommendations_rejects_a_request_without_two_travelers() -> None:
 def test_recommendations_rejects_an_invalid_trip_length() -> None:
     """The initial scope accepts only trips from three through seven days."""
     request = valid_trip_request()
-    request["end_date"] = "2026-10-20"
+    start_date = date.fromisoformat(str(request["start_date"]))
+    request["end_date"] = (start_date + timedelta(days=7)).isoformat()
 
     response = client.post("/recommendations", json=request)
 
