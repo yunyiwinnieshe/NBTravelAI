@@ -52,18 +52,15 @@ def test_health_check_returns_ok() -> None:
     assert response.json() == {"status": "ok"}
 
 
-def test_recommendations_validates_and_returns_placeholder() -> None:
-    """A valid request reaches the placeholder while ranking is not implemented."""
+def test_recommendations_validates_then_reports_service_not_implemented() -> None:
+    """A valid request reaches the service while integration remains pending."""
     response = client.post("/recommendations", json=valid_trip_request())
 
-    assert response.status_code == 200
+    assert response.status_code == 501
     assert response.json() == {
-        "status": "not_implemented",
-        "recommendations": [],
-        "message": (
-            "Trip request is valid. Deterministic destination ranking "
-            "will be added in Week 2."
-        ),
+        "detail": (
+            "Recommendation generation will be enabled after service integration."
+        )
     }
 
 

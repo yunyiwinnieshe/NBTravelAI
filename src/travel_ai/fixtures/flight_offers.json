@@ -1,0 +1,226 @@
+[
+  {
+    "offer_id": "fixture_a_chicago_connecting",
+    "provider": "fixture",
+    "provider_offer_id": null,
+    "traveler_id": "traveler_a",
+    "origin_id": "boston_ma",
+    "destination_id": "chicago_il",
+    "cabin_class": "economy",
+    "total_amount": "300.00",
+    "currency": "USD",
+    "outbound_slice": {
+      "origin_airport_code": "BOS",
+      "destination_airport_code": "ORD",
+      "duration_minutes": 360,
+      "segments": [
+        {
+          "origin_airport_code": "BOS",
+          "destination_airport_code": "DTW",
+          "departure_at": "2099-06-10T07:00:00-04:00",
+          "arrival_at": "2099-06-10T09:10:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "101"
+        },
+        {
+          "origin_airport_code": "DTW",
+          "destination_airport_code": "ORD",
+          "departure_at": "2099-06-10T10:15:00-04:00",
+          "arrival_at": "2099-06-10T10:45:00-05:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "102"
+        }
+      ]
+    },
+    "return_slice": {
+      "origin_airport_code": "ORD",
+      "destination_airport_code": "BOS",
+      "duration_minutes": 350,
+      "segments": [
+        {
+          "origin_airport_code": "ORD",
+          "destination_airport_code": "DTW",
+          "departure_at": "2099-06-14T14:00:00-05:00",
+          "arrival_at": "2099-06-14T16:20:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "103"
+        },
+        {
+          "origin_airport_code": "DTW",
+          "destination_airport_code": "BOS",
+          "departure_at": "2099-06-14T17:20:00-04:00",
+          "arrival_at": "2099-06-14T19:05:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "104"
+        }
+      ]
+    },
+    "retrieved_at": "2026-09-06T12:00:00Z",
+    "expires_at": null,
+    "is_available": true,
+    "is_fixture": true
+  },
+  {
+    "offer_id": "fixture_a_chicago_nonstop",
+    "provider": "fixture",
+    "provider_offer_id": null,
+    "traveler_id": "traveler_a",
+    "origin_id": "boston_ma",
+    "destination_id": "chicago_il",
+    "cabin_class": "economy",
+    "total_amount": "324.00",
+    "currency": "USD",
+    "outbound_slice": {
+      "origin_airport_code": "BOS",
+      "destination_airport_code": "ORD",
+      "duration_minutes": 180,
+      "segments": [
+        {
+          "origin_airport_code": "BOS",
+          "destination_airport_code": "ORD",
+          "departure_at": "2099-06-10T08:00:00-04:00",
+          "arrival_at": "2099-06-10T10:00:00-05:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "201"
+        }
+      ]
+    },
+    "return_slice": {
+      "origin_airport_code": "ORD",
+      "destination_airport_code": "BOS",
+      "duration_minutes": 170,
+      "segments": [
+        {
+          "origin_airport_code": "ORD",
+          "destination_airport_code": "BOS",
+          "departure_at": "2099-06-14T15:00:00-05:00",
+          "arrival_at": "2099-06-14T18:50:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "202"
+        }
+      ]
+    },
+    "retrieved_at": "2026-09-06T12:00:00Z",
+    "expires_at": null,
+    "is_available": true,
+    "is_fixture": true
+  },
+  {
+    "offer_id": "fixture_b_chicago_connecting",
+    "provider": "fixture",
+    "provider_offer_id": null,
+    "traveler_id": "traveler_b",
+    "origin_id": "new_york_ny",
+    "destination_id": "chicago_il",
+    "cabin_class": "economy",
+    "total_amount": "280.00",
+    "currency": "USD",
+    "outbound_slice": {
+      "origin_airport_code": "JFK",
+      "destination_airport_code": "ORD",
+      "duration_minutes": 330,
+      "segments": [
+        {
+          "origin_airport_code": "JFK",
+          "destination_airport_code": "DCA",
+          "departure_at": "2099-06-10T07:30:00-04:00",
+          "arrival_at": "2099-06-10T09:00:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "301"
+        },
+        {
+          "origin_airport_code": "DCA",
+          "destination_airport_code": "ORD",
+          "departure_at": "2099-06-10T10:00:00-04:00",
+          "arrival_at": "2099-06-10T11:30:00-05:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "302"
+        }
+      ]
+    },
+    "return_slice": {
+      "origin_airport_code": "ORD",
+      "destination_airport_code": "JFK",
+      "duration_minutes": 340,
+      "segments": [
+        {
+          "origin_airport_code": "ORD",
+          "destination_airport_code": "DCA",
+          "departure_at": "2099-06-14T13:00:00-05:00",
+          "arrival_at": "2099-06-14T16:00:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "303"
+        },
+        {
+          "origin_airport_code": "DCA",
+          "destination_airport_code": "JFK",
+          "departure_at": "2099-06-14T17:00:00-04:00",
+          "arrival_at": "2099-06-14T18:15:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "304"
+        }
+      ]
+    },
+    "retrieved_at": "2026-09-06T12:00:00Z",
+    "expires_at": null,
+    "is_available": true,
+    "is_fixture": true
+  },
+  {
+    "offer_id": "fixture_b_chicago_nonstop",
+    "provider": "fixture",
+    "provider_offer_id": null,
+    "traveler_id": "traveler_b",
+    "origin_id": "new_york_ny",
+    "destination_id": "chicago_il",
+    "cabin_class": "economy",
+    "total_amount": "315.00",
+    "currency": "USD",
+    "outbound_slice": {
+      "origin_airport_code": "JFK",
+      "destination_airport_code": "ORD",
+      "duration_minutes": 165,
+      "segments": [
+        {
+          "origin_airport_code": "JFK",
+          "destination_airport_code": "ORD",
+          "departure_at": "2099-06-10T09:00:00-04:00",
+          "arrival_at": "2099-06-10T10:45:00-05:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "401"
+        }
+      ]
+    },
+    "return_slice": {
+      "origin_airport_code": "ORD",
+      "destination_airport_code": "JFK",
+      "duration_minutes": 160,
+      "segments": [
+        {
+          "origin_airport_code": "ORD",
+          "destination_airport_code": "JFK",
+          "departure_at": "2099-06-14T16:00:00-05:00",
+          "arrival_at": "2099-06-14T19:40:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "402"
+        }
+      ]
+    },
+    "retrieved_at": "2026-09-06T12:00:00Z",
+    "expires_at": null,
+    "is_available": true,
+    "is_fixture": true
+  }
+]

@@ -2,7 +2,7 @@
 
 Travel AI is a portfolio-focused Applied AI project by Winnie and Ivy. It
 helps two people who live in different places choose a fair destination for a
-shared trip, balancing cost, travel time, and preferences.
+trip together, balancing cost, travel time, and preferences.
 
 The first version returns three eligible destinations with transparent score
 breakdowns and tradeoffs. A later version will generate and verify a detailed
@@ -24,6 +24,12 @@ itinerary for a destination the travelers select.
 - [Preference and request contract](docs/preference-and-request-contract.md)
   - hard constraints, per-traveler preferences, normalization, clarification,
   and preference-scoring rules.
+- [Flight search and pairing](docs/flight-search-and-pairing.md) - origin and
+  airport resolution, provider-search boundaries, synchronized-arrival pairing,
+  and four-category flight selection.
+- [Recommendation response contract](docs/recommendation-response-contract.md)
+  - public destination, score, recommended-pair, flight-option, exclusion, and
+  metadata fields.
 
 ## Current direction
 
