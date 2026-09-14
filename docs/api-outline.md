@@ -14,7 +14,8 @@ LLM-provider API directly.
 
 The direct recommendation endpoint remains useful for automated evaluation,
 API testing, and a future structured form. It accepts only a complete,
-validated `TripRequest`.
+validated `TripRequest` whose origins have already been resolved to canonical
+IDs. The conversation flow owns free-text origin clarification and resolution.
 
 ## Implemented endpoints
 
@@ -36,9 +37,10 @@ deterministic top three destinations. It is currently a validated placeholder.
 {
   "travelers": [
     {
-      "origin": "Boston, MA",
+      "traveler_id": "traveler_a",
+      "origin_id": "boston_ma",
       "budget_usd": 2000,
-      "max_travel_time_hours": 8,
+      "max_one_way_travel_minutes": 480,
       "preferences": {
         "temperature_range": {
           "minimum_celsius": 20,
@@ -48,9 +50,10 @@ deterministic top three destinations. It is currently a validated placeholder.
       }
     },
     {
-      "origin": "San Francisco, CA",
+      "traveler_id": "traveler_b",
+      "origin_id": "san_francisco_ca",
       "budget_usd": 1800,
-      "max_travel_time_hours": 7,
+      "max_one_way_travel_minutes": 420,
       "preferences": {
         "interest_tags": ["nature", "outdoor_activities"]
       }
@@ -62,7 +65,8 @@ deterministic top three destinations. It is currently a validated placeholder.
 ```
 
 The canonical hard-constraint and preference rules are in the
-[preference and request contract](preference-and-request-contract.md).
+[preference and request contract](preference-and-request-contract.md). This
+example represents the implemented confirmed request contract.
 
 ### Recommendation processing and result contract
 
