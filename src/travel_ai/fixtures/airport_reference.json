@@ -1,0 +1,2518 @@
+{
+  "schema_version": "v1",
+  "source": "OurAirports",
+  "source_url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+  "source_date": "2026-09-13",
+  "airports": [
+    {
+      "iata_code": "ABE",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ABI",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ABL",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ABQ",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ABR",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ABY",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ACK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ACT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ACV",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ACY",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ADK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ADQ",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "AEX",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "AGS",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "AIA",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "AIN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "AKN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "AKP",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ALB",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ALO",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ALS",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ALW",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "AMA",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ANC",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ANI",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ANV",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "AOO",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "APN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ARC",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ART",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ASE",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ATK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ATL",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ATW",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ATY",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "AUG",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "AUS",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "AVL",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "AVP",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "AZA",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "AZO",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BDL",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BED",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BET",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BFD",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BFF",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BFI",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BFL",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BGM",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BGR",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BHB",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BHM",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BIH",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BIL",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BIS",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BJC",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BKG",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BKW",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BLD",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BLI",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BLV",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BMI",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BNA",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BOI",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BOS",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BPT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BQK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BRD",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BRL",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BRO",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BRW",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BTI",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BTM",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BTR",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BTV",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BUF",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BUR",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BWI",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "BZN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CAE",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CAK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CCR",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CDB",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CDC",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CDR",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CDV",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CEC",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CEZ",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CGI",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CHA",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CHO",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CHS",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CID",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CIU",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CKB",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CLD",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CLE",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CLL",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CLT",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CMH",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CMI",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CMX",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CNM",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CNY",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "COD",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "COS",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "COU",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CPR",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CRP",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CRW",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CSG",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CVG",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CVN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CWA",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "CYS",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "DAB",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "DAL",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "DAY",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "DBQ",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "DCA",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "DDC",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "DEC",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "DEN",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "DFW",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "DHN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "DIK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "DJT",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "DLG",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "DLH",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "DOV",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "DRG",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "DRO",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "DSI",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "DSM",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "DTW",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "DUJ",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "DUT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "DVL",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "EAR",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "EAT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "EAU",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ECP",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "EGE",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "EGX",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "EKO",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ELD",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ELM",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ELP",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "EMK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ENA",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ERI",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ESC",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ESD",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "EUG",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "EVV",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "EWB",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "EWN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "EWR",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "EYW",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "FAI",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "FAR",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "FAT",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "FAY",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "FCA",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "FLG",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "FLL",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "FLO",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "FNT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "FOD",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "FRD",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "FSD",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "FSM",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "FTW",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "FWA",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "FYU",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GAL",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GAM",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GCC",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GCK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GCN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GDV",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GEG",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GFK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GGG",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GGW",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GJT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GKN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GLH",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GNV",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GPT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GRB",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GRI",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GRK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GRR",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GSO",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GSP",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GST",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GTF",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GTR",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GUC",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GUP",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "GYY",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HCR",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HDN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HGR",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HHH",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HHR",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HIB",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HII",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HLN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HNL",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HNM",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HNS",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HOB",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HOM",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HOT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HOU",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HPN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HRL",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HRO",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HSL",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HSV",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HTS",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HVN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HVR",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HYA",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "HYS",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "IAD",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "IAG",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "IAH",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "IAN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ICT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "IDA",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ILG",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ILI",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ILM",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "IMT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "IND",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "INL",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "IPL",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "IPT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "IRK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ISP",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ITH",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ITO",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "JAC",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "JAN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "JAX",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "JBR",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "JFK",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "JHM",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "JLN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "JMS",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "JNU",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "JST",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "KLW",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "KOA",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "KTN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LAF",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LAL",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LAN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LAR",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LAS",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LAW",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LAX",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LBB",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LBE",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LBF",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LBL",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LCH",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LCK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LEB",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LEX",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LFT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LGA",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LGB",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LIH",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LIT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LNK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LNS",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LNY",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LRD",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LRU",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LSE",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LUK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LUR",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LWB",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LWS",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "LYH",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MAF",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MBS",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MCE",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MCG",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MCI",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MCK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MCN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MCO",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MCW",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MDT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MDW",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MEI",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MEM",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MFE",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MFR",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MGC",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MGM",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MGW",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MHK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MHT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MIA",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MKE",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MKG",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MKK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MKL",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MLB",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MLI",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MLU",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MMH",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MOB",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MOT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MQT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MRI",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MRY",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MSL",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MSN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MSO",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MSP",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MSS",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MSY",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MTJ",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MUE",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MWA",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MWL",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MYL",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MYR",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "MYU",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "NPT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "NUI",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "OAJ",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "OAK",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "OCE",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "OGD",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "OGG",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "OGS",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "OKC",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "OLF",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "OLM",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "OMA",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "OME",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ONT",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "OPF",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ORD",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ORF",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ORH",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ORT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "OTH",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "OTZ",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "OWB",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PAE",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PAH",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PBG",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PDK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PDT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PDX",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PGA",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PGD",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PGV",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PHF",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PHL",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PHX",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PIA",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PIB",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PIE",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PIH",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PIR",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PIT",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PIZ",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PKB",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PLN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PNS",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PQI",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PRC",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PSC",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PSG",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PSM",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PSP",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PTH",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PTU",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PUB",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PUW",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PVD",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PVU",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "PWM",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "RAP",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "RBY",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "RDD",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "RDM",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "RDU",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "RFD",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "RHI",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "RIC",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "RIW",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "RKD",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "RKS",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "RNO",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ROA",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ROC",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "ROW",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "RST",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "RSW",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "RUT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SAF",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SAN",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SAT",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SAV",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SBA",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SBD",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SBN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SBP",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SBY",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SCC",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SCE",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SCK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SDF",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SDP",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SDY",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SEA",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SFB",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SFO",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SGF",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SGU",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SHD",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SHR",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SHV",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SIT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SJC",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SJT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SLC",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SLE",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SLK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SLN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SMF",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SMN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SMX",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SNA",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SNP",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SOW",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SPI",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SPS",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SQL",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SRQ",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "STC",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "STG",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "STL",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "STS",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SUN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SUX",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SVA",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SVC",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SWF",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SWO",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "SYR",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "TBN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "TEB",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "TEX",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "TIW",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "TKF",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "TLH",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "TOL",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "TPA",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "TRI",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "TSM",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "TTN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "TUL",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "TUP",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "TUS",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "TVC",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "TVF",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "TWF",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "TXK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "TYR",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "TYS",
+      "airport_type": "large_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "UIN",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "UNK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "USA",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "UST",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "UTO",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "VCT",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "VDZ",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "VEL",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "VLD",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "VPS",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "VRB",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "WKK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "WRG",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "WST",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "WYS",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "XNA",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "XWA",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "YAK",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "YKM",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    },
+    {
+      "iata_code": "YUM",
+      "airport_type": "medium_airport",
+      "scheduled_service": true
+    }
+  ]
+}
