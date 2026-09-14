@@ -14,6 +14,12 @@ from travel_ai.schemas.flights import FlightOffer
 from travel_ai.schemas.trip import TravelerRequest
 
 
+def _validate_evaluated_at(evaluated_at: datetime) -> None:
+    """Require an unambiguous instant for deterministic expiry checks."""
+    if evaluated_at.utcoffset() is None:
+        raise ValueError("evaluated_at must include a timezone")
+
+
 def evaluate_offer(
     offer: FlightOffer,
     traveler: TravelerRequest,
@@ -24,8 +30,7 @@ def evaluate_offer(
     evaluated_at: datetime,
 ) -> OfferRejection | None:
     """Return every rule violation for one offer, or None when it is eligible."""
-    if evaluated_at.tzinfo is None:
-        raise ValueError("evaluated_at must include a timezone")
+    _validate_evaluated_at(evaluated_at)
 
     reasons: list[OfferExclusionReason] = []
     if offer.traveler_id != traveler.traveler_id:
@@ -84,6 +89,8 @@ def evaluate_traveler_city_offers(
     evaluated_at: datetime,
 ) -> ConstraintEvaluationResult:
     """Partition offers and exclude the city when no eligible offer remains."""
+    _validate_evaluated_at(evaluated_at)
+
     eligible_offers: list[FlightOffer] = []
     rejected_offers: list[OfferRejection] = []
 

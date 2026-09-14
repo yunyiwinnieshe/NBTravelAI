@@ -242,3 +242,16 @@ def test_evaluation_timestamp_must_be_timezone_aware() -> None:
             trip_end_date=TRIP_END,
             evaluated_at=datetime(2026, 9, 6, 12),
         )
+
+
+def test_empty_offer_evaluation_timestamp_must_be_timezone_aware() -> None:
+    with pytest.raises(ValueError, match="must include a timezone"):
+        evaluate_traveler_city_offers(
+            traveler=traveler(),
+            city=chicago(),
+            origin_airport_codes=["BOS"],
+            trip_start_date=TRIP_START,
+            trip_end_date=TRIP_END,
+            offers=[],
+            evaluated_at=datetime(2026, 9, 6, 12),
+        )
