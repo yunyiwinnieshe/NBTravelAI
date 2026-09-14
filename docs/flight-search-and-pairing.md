@@ -285,17 +285,24 @@ Each category uses the other attributes as deterministic tie-breakers:
 - fewest connections: connections, price, travel time, then offer ID.
 
 Deduplicate by stable internal offer ID when the recommended offer or another
-offer wins more than one category. Return the offer once with every truthful
-label. Do not backfill an arbitrary alternative merely to reach four options;
-the response may therefore contain fewer than four distinct offers. Reserving
-the first slot for the recommended pair ensures that the synchronized choices
-are always visible.
+offer wins more than one category. Keep every applicable label on that single
+option and do not backfill with an unrelated alternative. The response therefore
+contains between one and four distinct options, depending on how many category
+winners are different. Reserving the first slot for the recommended pair
+ensures that the two synchronized choices are always visible.
 
-The API returns each `FlightOffer` once and identifies the recommended
-combination using the two stable offer IDs. Travelers may choose a different
-combination from their independent lists; the client or service then
-recalculates combined price, arrival gap, and time together without reranking
-the destination.
+The API returns a smaller public `FlightOption` rather than every internal
+`FlightOffer` field. Each option has one or more labels: `recommended_pair`,
+`lowest_price`, `shortest_travel`, or `fewest_connections`. The recommended
+pair's two offers are always present in their respective lists. Travelers may
+choose a different combination from their independent lists; the client or
+service then recalculates combined price, arrival gap, and time together
+without reranking the destination.
+
+The recommended pair—not the cheapest valid pair—is used for the city's score.
+The cheapest pair remains an internal affordability anchor. The response
+publishes its combined price and the recommended pair's dollar and percentage
+premium, but does not expose a second pair of baseline offer IDs.
 
 ## 7. Implementation order
 

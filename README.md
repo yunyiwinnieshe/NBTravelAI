@@ -26,9 +26,12 @@ itinerary for a destination the travelers select.
   and preference-scoring rules.
 - [Flight search and pairing](docs/flight-search-and-pairing.md) - origin and
   airport resolution, provider-search boundaries, synchronized-arrival pairing,
-  and three-option selection.
+  and four-category flight selection.
 - [Duffel test-mode provider](docs/duffel-flight-provider.md) - sandbox
   configuration, normalization boundary, manual smoke test, and failure policy.
+- [Recommendation response contract](docs/recommendation-response-contract.md)
+  - public destination, score, recommended-pair, flight-option, exclusion, and
+  metadata fields.
 
 ## Current direction
 
