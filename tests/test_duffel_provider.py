@@ -194,9 +194,12 @@ def test_place_search_expands_city_airports_and_deduplicates_results() -> None:
     candidates = provider.search_airports(LocationSearchQuery(query="Boston"))
 
     assert [candidate.iata_code for candidate in candidates] == ["BNH", "BOS"]
-    assert next(
-        candidate for candidate in candidates if candidate.iata_code == "BOS"
-    ).associated_with_selected_city is True
+    assert (
+        next(
+            candidate for candidate in candidates if candidate.iata_code == "BOS"
+        ).associated_with_selected_city
+        is True
+    )
 
 
 def test_place_search_supports_coordinate_radius_parameters() -> None:

@@ -121,9 +121,11 @@ correct it:
 
 V1 compares this request with historical monthly average daytime temperature
 from fixtures. It is an estimate, not a weather forecast. A destination inside
-the range receives a full temperature match; the score declines gradually as
-the destination moves outside it. If no temperature preference is provided,
-temperature is omitted from that traveler's preference score.
+the range receives a full temperature match. Outside the range, subtract 0.1
+per degree Celsius; a destination at least 10°C outside the range receives
+zero. If no temperature preference is provided, temperature is omitted from
+that traveler's preference score. Trips crossing months use a calendar-day-
+weighted average of the relevant monthly temperatures.
 
 ### Interests
 
@@ -141,7 +143,9 @@ records, not assigning a numeric value to every city.
 ## Preference scoring and fairness
 
 Calculate a separate preference score for each traveler. Average only the
-categories that traveler supplied:
+categories that traveler supplied. Temperature and interests each have an
+initial weight of 0.5, with active weights re-normalized when a category is
+missing:
 
 ```text
 traveler_preference_score = average(

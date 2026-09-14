@@ -252,9 +252,7 @@ class DuffelFlightOfferProvider(FlightOfferProvider):
                     self._normalize_offer(raw_offer, query, retrieved_at),
                 )
 
-        return self._select_bounded_offers(
-            list(normalized_by_provider_id.values())
-        )
+        return self._select_bounded_offers(list(normalized_by_provider_id.values()))
 
     def _select_bounded_offers(
         self,

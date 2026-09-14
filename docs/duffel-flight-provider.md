@@ -1,7 +1,7 @@
 # Duffel Test-Mode Flight Provider
 
 **Status:** Provider and mocked tests implemented; recommendation-service
-integration remains a later task  
+integration remains a later task
 **Scope:** Place suggestions and round-trip flight searches through Duffel test
 mode only
 

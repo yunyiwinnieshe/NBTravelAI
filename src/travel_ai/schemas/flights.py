@@ -250,19 +250,22 @@ class FlightPairScoreBreakdown(BaseModel):
     @model_validator(mode="after")
     def validate_weights(self) -> "FlightPairScoreBreakdown":
         """Require pair-selection weights to form one complete score."""
-        if abs(
-            sum(
-                component.weight
-                for component in (
-                    self.price,
-                    self.arrival_alignment,
-                    self.travel_time,
-                    self.connections,
-                    self.time_together,
+        if (
+            abs(
+                sum(
+                    component.weight
+                    for component in (
+                        self.price,
+                        self.arrival_alignment,
+                        self.travel_time,
+                        self.connections,
+                        self.time_together,
+                    )
                 )
+                - 1.0
             )
-            - 1.0
-        ) > 0.000001:
+            > 0.000001
+        ):
             raise ValueError("pair score component weights must add up to 1")
         return self
 
