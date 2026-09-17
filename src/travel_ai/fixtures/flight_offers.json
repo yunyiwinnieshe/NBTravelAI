@@ -222,5 +222,565 @@
     "expires_at": null,
     "is_available": true,
     "is_fixture": true
+  },
+  {
+    "offer_id": "fixture_a_miami_nonstop",
+    "provider": "fixture",
+    "provider_offer_id": null,
+    "traveler_id": "traveler_a",
+    "origin_id": "boston_ma",
+    "destination_id": "miami_fl",
+    "cabin_class": "economy",
+    "total_amount": "340.00",
+    "currency": "USD",
+    "outbound_slice": {
+      "origin_airport_code": "BOS",
+      "destination_airport_code": "MIA",
+      "duration_minutes": 205,
+      "segments": [
+        {
+          "origin_airport_code": "BOS",
+          "destination_airport_code": "MIA",
+          "departure_at": "2099-06-10T07:00:00-04:00",
+          "arrival_at": "2099-06-10T10:25:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "501"
+        }
+      ]
+    },
+    "return_slice": {
+      "origin_airport_code": "MIA",
+      "destination_airport_code": "BOS",
+      "duration_minutes": 195,
+      "segments": [
+        {
+          "origin_airport_code": "MIA",
+          "destination_airport_code": "BOS",
+          "departure_at": "2099-06-14T15:00:00-04:00",
+          "arrival_at": "2099-06-14T18:15:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "502"
+        }
+      ]
+    },
+    "retrieved_at": "2026-09-13T12:00:00Z",
+    "expires_at": null,
+    "is_available": true,
+    "is_fixture": true
+  },
+  {
+    "offer_id": "fixture_a_miami_connecting",
+    "provider": "fixture",
+    "provider_offer_id": null,
+    "traveler_id": "traveler_a",
+    "origin_id": "boston_ma",
+    "destination_id": "miami_fl",
+    "cabin_class": "economy",
+    "total_amount": "260.00",
+    "currency": "USD",
+    "outbound_slice": {
+      "origin_airport_code": "BOS",
+      "destination_airport_code": "MIA",
+      "duration_minutes": 315,
+      "segments": [
+        {
+          "origin_airport_code": "BOS",
+          "destination_airport_code": "CLT",
+          "departure_at": "2099-06-10T07:00:00-04:00",
+          "arrival_at": "2099-06-10T09:10:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "511"
+        },
+        {
+          "origin_airport_code": "CLT",
+          "destination_airport_code": "MIA",
+          "departure_at": "2099-06-10T10:10:00-04:00",
+          "arrival_at": "2099-06-10T12:15:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "512"
+        }
+      ]
+    },
+    "return_slice": {
+      "origin_airport_code": "MIA",
+      "destination_airport_code": "BOS",
+      "duration_minutes": 310,
+      "segments": [
+        {
+          "origin_airport_code": "MIA",
+          "destination_airport_code": "CLT",
+          "departure_at": "2099-06-14T15:00:00-04:00",
+          "arrival_at": "2099-06-14T17:05:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "513"
+        },
+        {
+          "origin_airport_code": "CLT",
+          "destination_airport_code": "BOS",
+          "departure_at": "2099-06-14T18:00:00-04:00",
+          "arrival_at": "2099-06-14T20:10:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "514"
+        }
+      ]
+    },
+    "retrieved_at": "2026-09-13T12:00:00Z",
+    "expires_at": null,
+    "is_available": true,
+    "is_fixture": true
+  },
+  {
+    "offer_id": "fixture_b_miami_nonstop",
+    "provider": "fixture",
+    "provider_offer_id": null,
+    "traveler_id": "traveler_b",
+    "origin_id": "new_york_ny",
+    "destination_id": "miami_fl",
+    "cabin_class": "economy",
+    "total_amount": "310.00",
+    "currency": "USD",
+    "outbound_slice": {
+      "origin_airport_code": "JFK",
+      "destination_airport_code": "MIA",
+      "duration_minutes": 190,
+      "segments": [
+        {
+          "origin_airport_code": "JFK",
+          "destination_airport_code": "MIA",
+          "departure_at": "2099-06-10T08:00:00-04:00",
+          "arrival_at": "2099-06-10T11:10:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "521"
+        }
+      ]
+    },
+    "return_slice": {
+      "origin_airport_code": "MIA",
+      "destination_airport_code": "JFK",
+      "duration_minutes": 195,
+      "segments": [
+        {
+          "origin_airport_code": "MIA",
+          "destination_airport_code": "JFK",
+          "departure_at": "2099-06-14T15:30:00-04:00",
+          "arrival_at": "2099-06-14T18:45:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "522"
+        }
+      ]
+    },
+    "retrieved_at": "2026-09-13T12:00:00Z",
+    "expires_at": null,
+    "is_available": true,
+    "is_fixture": true
+  },
+  {
+    "offer_id": "fixture_b_miami_connecting",
+    "provider": "fixture",
+    "provider_offer_id": null,
+    "traveler_id": "traveler_b",
+    "origin_id": "new_york_ny",
+    "destination_id": "miami_fl",
+    "cabin_class": "economy",
+    "total_amount": "240.00",
+    "currency": "USD",
+    "outbound_slice": {
+      "origin_airport_code": "JFK",
+      "destination_airport_code": "MIA",
+      "duration_minutes": 325,
+      "segments": [
+        {
+          "origin_airport_code": "JFK",
+          "destination_airport_code": "ATL",
+          "departure_at": "2099-06-10T07:00:00-04:00",
+          "arrival_at": "2099-06-10T09:35:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "531"
+        },
+        {
+          "origin_airport_code": "ATL",
+          "destination_airport_code": "MIA",
+          "departure_at": "2099-06-10T10:35:00-04:00",
+          "arrival_at": "2099-06-10T12:25:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "532"
+        }
+      ]
+    },
+    "return_slice": {
+      "origin_airport_code": "MIA",
+      "destination_airport_code": "JFK",
+      "duration_minutes": 320,
+      "segments": [
+        {
+          "origin_airport_code": "MIA",
+          "destination_airport_code": "ATL",
+          "departure_at": "2099-06-14T14:30:00-04:00",
+          "arrival_at": "2099-06-14T16:20:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "533"
+        },
+        {
+          "origin_airport_code": "ATL",
+          "destination_airport_code": "JFK",
+          "departure_at": "2099-06-14T17:20:00-04:00",
+          "arrival_at": "2099-06-14T19:50:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "534"
+        }
+      ]
+    },
+    "retrieved_at": "2026-09-13T12:00:00Z",
+    "expires_at": null,
+    "is_available": true,
+    "is_fixture": true
+  },
+  {
+    "offer_id": "fixture_a_seattle_nonstop",
+    "provider": "fixture",
+    "provider_offer_id": null,
+    "traveler_id": "traveler_a",
+    "origin_id": "boston_ma",
+    "destination_id": "seattle_wa",
+    "cabin_class": "economy",
+    "total_amount": "480.00",
+    "currency": "USD",
+    "outbound_slice": {
+      "origin_airport_code": "BOS",
+      "destination_airport_code": "SEA",
+      "duration_minutes": 390,
+      "segments": [
+        {
+          "origin_airport_code": "BOS",
+          "destination_airport_code": "SEA",
+          "departure_at": "2099-06-10T07:00:00-04:00",
+          "arrival_at": "2099-06-10T10:30:00-07:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "601"
+        }
+      ]
+    },
+    "return_slice": {
+      "origin_airport_code": "SEA",
+      "destination_airport_code": "BOS",
+      "duration_minutes": 330,
+      "segments": [
+        {
+          "origin_airport_code": "SEA",
+          "destination_airport_code": "BOS",
+          "departure_at": "2099-06-14T15:00:00-07:00",
+          "arrival_at": "2099-06-14T23:30:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "602"
+        }
+      ]
+    },
+    "retrieved_at": "2026-09-13T12:00:00Z",
+    "expires_at": null,
+    "is_available": true,
+    "is_fixture": true
+  },
+  {
+    "offer_id": "fixture_a_seattle_connecting",
+    "provider": "fixture",
+    "provider_offer_id": null,
+    "traveler_id": "traveler_a",
+    "origin_id": "boston_ma",
+    "destination_id": "seattle_wa",
+    "cabin_class": "economy",
+    "total_amount": "390.00",
+    "currency": "USD",
+    "outbound_slice": {
+      "origin_airport_code": "BOS",
+      "destination_airport_code": "SEA",
+      "duration_minutes": 470,
+      "segments": [
+        {
+          "origin_airport_code": "BOS",
+          "destination_airport_code": "DEN",
+          "departure_at": "2099-06-10T06:00:00-04:00",
+          "arrival_at": "2099-06-10T08:20:00-06:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "611"
+        },
+        {
+          "origin_airport_code": "DEN",
+          "destination_airport_code": "SEA",
+          "departure_at": "2099-06-10T09:20:00-06:00",
+          "arrival_at": "2099-06-10T10:50:00-07:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "612"
+        }
+      ]
+    },
+    "return_slice": {
+      "origin_airport_code": "SEA",
+      "destination_airport_code": "BOS",
+      "duration_minutes": 380,
+      "segments": [
+        {
+          "origin_airport_code": "SEA",
+          "destination_airport_code": "DEN",
+          "departure_at": "2099-06-14T13:00:00-07:00",
+          "arrival_at": "2099-06-14T16:20:00-06:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "613"
+        },
+        {
+          "origin_airport_code": "DEN",
+          "destination_airport_code": "BOS",
+          "departure_at": "2099-06-14T17:20:00-06:00",
+          "arrival_at": "2099-06-14T22:20:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "614"
+        }
+      ]
+    },
+    "retrieved_at": "2026-09-13T12:00:00Z",
+    "expires_at": null,
+    "is_available": true,
+    "is_fixture": true
+  },
+  {
+    "offer_id": "fixture_b_seattle_nonstop",
+    "provider": "fixture",
+    "provider_offer_id": null,
+    "traveler_id": "traveler_b",
+    "origin_id": "new_york_ny",
+    "destination_id": "seattle_wa",
+    "cabin_class": "economy",
+    "total_amount": "450.00",
+    "currency": "USD",
+    "outbound_slice": {
+      "origin_airport_code": "JFK",
+      "destination_airport_code": "SEA",
+      "duration_minutes": 405,
+      "segments": [
+        {
+          "origin_airport_code": "JFK",
+          "destination_airport_code": "SEA",
+          "departure_at": "2099-06-10T07:00:00-04:00",
+          "arrival_at": "2099-06-10T10:45:00-07:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "621"
+        }
+      ]
+    },
+    "return_slice": {
+      "origin_airport_code": "SEA",
+      "destination_airport_code": "JFK",
+      "duration_minutes": 330,
+      "segments": [
+        {
+          "origin_airport_code": "SEA",
+          "destination_airport_code": "JFK",
+          "departure_at": "2099-06-14T15:00:00-07:00",
+          "arrival_at": "2099-06-14T23:30:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "622"
+        }
+      ]
+    },
+    "retrieved_at": "2026-09-13T12:00:00Z",
+    "expires_at": null,
+    "is_available": true,
+    "is_fixture": true
+  },
+  {
+    "offer_id": "fixture_b_seattle_connecting",
+    "provider": "fixture",
+    "provider_offer_id": null,
+    "traveler_id": "traveler_b",
+    "origin_id": "new_york_ny",
+    "destination_id": "seattle_wa",
+    "cabin_class": "economy",
+    "total_amount": "360.00",
+    "currency": "USD",
+    "outbound_slice": {
+      "origin_airport_code": "JFK",
+      "destination_airport_code": "SEA",
+      "duration_minutes": 465,
+      "segments": [
+        {
+          "origin_airport_code": "JFK",
+          "destination_airport_code": "MSP",
+          "departure_at": "2099-06-10T06:00:00-04:00",
+          "arrival_at": "2099-06-10T08:00:00-05:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "631"
+        },
+        {
+          "origin_airport_code": "MSP",
+          "destination_airport_code": "SEA",
+          "departure_at": "2099-06-10T09:00:00-05:00",
+          "arrival_at": "2099-06-10T10:45:00-07:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "632"
+        }
+      ]
+    },
+    "return_slice": {
+      "origin_airport_code": "SEA",
+      "destination_airport_code": "JFK",
+      "duration_minutes": 390,
+      "segments": [
+        {
+          "origin_airport_code": "SEA",
+          "destination_airport_code": "MSP",
+          "departure_at": "2099-06-14T13:00:00-07:00",
+          "arrival_at": "2099-06-14T18:00:00-05:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "633"
+        },
+        {
+          "origin_airport_code": "MSP",
+          "destination_airport_code": "JFK",
+          "departure_at": "2099-06-14T19:00:00-05:00",
+          "arrival_at": "2099-06-14T22:30:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "634"
+        }
+      ]
+    },
+    "retrieved_at": "2026-09-13T12:00:00Z",
+    "expires_at": null,
+    "is_available": true,
+    "is_fixture": true
+  },
+  {
+    "offer_id": "fixture_a_denver_over_budget",
+    "provider": "fixture",
+    "provider_offer_id": null,
+    "traveler_id": "traveler_a",
+    "origin_id": "boston_ma",
+    "destination_id": "denver_co",
+    "cabin_class": "economy",
+    "total_amount": "850.00",
+    "currency": "USD",
+    "outbound_slice": {
+      "origin_airport_code": "BOS",
+      "destination_airport_code": "DEN",
+      "duration_minutes": 270,
+      "segments": [
+        {
+          "origin_airport_code": "BOS",
+          "destination_airport_code": "DEN",
+          "departure_at": "2099-06-10T08:00:00-04:00",
+          "arrival_at": "2099-06-10T10:30:00-06:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "641"
+        }
+      ]
+    },
+    "return_slice": {
+      "origin_airport_code": "DEN",
+      "destination_airport_code": "BOS",
+      "duration_minutes": 240,
+      "segments": [
+        {
+          "origin_airport_code": "DEN",
+          "destination_airport_code": "BOS",
+          "departure_at": "2099-06-14T16:00:00-06:00",
+          "arrival_at": "2099-06-14T22:00:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "642"
+        }
+      ]
+    },
+    "retrieved_at": "2026-09-13T12:00:00Z",
+    "expires_at": null,
+    "is_available": true,
+    "is_fixture": true
+  },
+  {
+    "offer_id": "fixture_b_denver_excessive_time",
+    "provider": "fixture",
+    "provider_offer_id": null,
+    "traveler_id": "traveler_b",
+    "origin_id": "new_york_ny",
+    "destination_id": "denver_co",
+    "cabin_class": "economy",
+    "total_amount": "350.00",
+    "currency": "USD",
+    "outbound_slice": {
+      "origin_airport_code": "JFK",
+      "destination_airport_code": "DEN",
+      "duration_minutes": 810,
+      "segments": [
+        {
+          "origin_airport_code": "JFK",
+          "destination_airport_code": "ATL",
+          "departure_at": "2099-06-10T06:00:00-04:00",
+          "arrival_at": "2099-06-10T08:30:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "651"
+        },
+        {
+          "origin_airport_code": "ATL",
+          "destination_airport_code": "DEN",
+          "departure_at": "2099-06-10T15:30:00-04:00",
+          "arrival_at": "2099-06-10T17:30:00-06:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "652"
+        }
+      ]
+    },
+    "return_slice": {
+      "origin_airport_code": "DEN",
+      "destination_airport_code": "JFK",
+      "duration_minutes": 690,
+      "segments": [
+        {
+          "origin_airport_code": "DEN",
+          "destination_airport_code": "ATL",
+          "departure_at": "2099-06-14T09:00:00-06:00",
+          "arrival_at": "2099-06-14T14:00:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "653"
+        },
+        {
+          "origin_airport_code": "ATL",
+          "destination_airport_code": "JFK",
+          "departure_at": "2099-06-14T20:00:00-04:00",
+          "arrival_at": "2099-06-14T22:30:00-04:00",
+          "marketing_carrier_code": "ZZ",
+          "operating_carrier_code": "ZZ",
+          "flight_number": "654"
+        }
+      ]
+    },
+    "retrieved_at": "2026-09-13T12:00:00Z",
+    "expires_at": null,
+    "is_available": true,
+    "is_fixture": true
   }
 ]
