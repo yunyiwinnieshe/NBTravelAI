@@ -113,6 +113,28 @@ def test_miami_fixtures_cover_price_duration_and_connection_tradeoffs() -> None:
         )
 
 
+@pytest.mark.parametrize("destination_id", ["miami_fl", "seattle_wa", "denver_co"])
+def test_expanded_fixture_durations_match_timestamps(destination_id: str) -> None:
+    """Expanded fixture durations include flight and layover time across zones."""
+    records = json.loads(DEFAULT_FLIGHT_OFFERS_PATH.read_text(encoding="utf-8"))
+    offers = [
+        FlightOffer.model_validate(record)
+        for record in records
+        if record["destination_id"] == destination_id
+    ]
+    assert offers
+    for offer in offers:
+        for flight_slice in (offer.outbound_slice, offer.return_slice):
+            elapsed = (
+                flight_slice.segments[-1].arrival_at
+                - flight_slice.segments[0].departure_at
+            )
+            assert timedelta(minutes=flight_slice.duration_minutes) == elapsed, (
+                offer.offer_id,
+                flight_slice.origin_airport_code,
+            )
+
+
 def test_every_fixture_offer_targets_a_supported_candidate_city() -> None:
     """Flight fixtures may start anywhere but must end in the candidate pool."""
     supported_destination_ids = {

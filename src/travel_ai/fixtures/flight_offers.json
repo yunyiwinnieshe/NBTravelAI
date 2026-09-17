@@ -532,7 +532,7 @@
     "return_slice": {
       "origin_airport_code": "SEA",
       "destination_airport_code": "BOS",
-      "duration_minutes": 440,
+      "duration_minutes": 380,
       "segments": [
         {
           "origin_airport_code": "SEA",
@@ -644,7 +644,7 @@
     "return_slice": {
       "origin_airport_code": "SEA",
       "destination_airport_code": "JFK",
-      "duration_minutes": 450,
+      "duration_minutes": 390,
       "segments": [
         {
           "origin_airport_code": "SEA",
@@ -756,7 +756,7 @@
     "return_slice": {
       "origin_airport_code": "DEN",
       "destination_airport_code": "JFK",
-      "duration_minutes": 780,
+      "duration_minutes": 690,
       "segments": [
         {
           "origin_airport_code": "DEN",
