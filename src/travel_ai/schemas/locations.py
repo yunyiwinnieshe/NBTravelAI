@@ -114,3 +114,27 @@ class ResolvedLocation(BaseModel):
     iata_city_code: str | None = Field(default=None, pattern=r"^[A-Z]{3}$")
     airports: list[ResolvedAirport] = Field(min_length=1, max_length=3)
     source: str = Field(min_length=1, max_length=50)
+
+
+class OriginAirportMapping(BaseModel):
+    """Map one origin location to its approved departure airport codes."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    origin_id: str = Field(min_length=2, max_length=120, pattern=r"^[a-z0-9_]+$")
+    airport_codes: list[str] = Field(min_length=1, max_length=3)
+
+    @model_validator(mode="after")
+    def validate_airport_codes(self) -> "OriginAirportMapping":
+        """Require one to three unique uppercase IATA codes in the mapping."""
+        if any(
+            len(code) != 3
+            or not code.isascii()
+            or not code.isalpha()
+            or code != code.upper()
+            for code in self.airport_codes
+        ):
+            raise ValueError("airport codes must contain three uppercase ASCII letters")
+        if len(self.airport_codes) != len(set(self.airport_codes)):
+            raise ValueError("airport codes must not contain duplicates")
+        return self

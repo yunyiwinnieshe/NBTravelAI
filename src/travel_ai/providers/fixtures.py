@@ -4,15 +4,18 @@ from pathlib import Path
 
 from pydantic import TypeAdapter, ValidationError
 
-from travel_ai.providers.base import FlightOfferProvider
+from travel_ai.providers.base import FlightOfferProvider, OriginAirportProvider
 from travel_ai.schemas.flights import FlightOffer, FlightSearchQuery
-from travel_ai.schemas.locations import AirportReferenceDataset
+from travel_ai.schemas.locations import AirportReferenceDataset, OriginAirportMapping
 
 DEFAULT_FLIGHT_OFFERS_PATH = (
     Path(__file__).resolve().parent.parent / "fixtures" / "flight_offers.json"
 )
 DEFAULT_AIRPORT_REFERENCE_PATH = (
     Path(__file__).resolve().parent.parent / "fixtures" / "airport_reference.json"
+)
+DEFAULT_ORIGIN_AIRPORTS_PATH = (
+    Path(__file__).resolve().parent.parent / "fixtures" / "origin_airports.json"
 )
 
 
@@ -37,6 +40,32 @@ def load_airport_reference_dataset(
         raise FixtureDataError(
             f"Invalid airport reference fixture: {fixture_path}"
         ) from error
+
+
+def load_origin_airport_mappings(
+    fixture_path: Path = DEFAULT_ORIGIN_AIRPORTS_PATH,
+) -> list[OriginAirportMapping]:
+    """Load and validate fixture-mode origin-to-airport mappings."""
+    try:
+        fixture_json = fixture_path.read_text(encoding="utf-8")
+    except OSError as error:
+        raise FixtureDataError(
+            f"Unable to read origin airport fixture: {fixture_path}"
+        ) from error
+
+    try:
+        airport_mappings = TypeAdapter(list[OriginAirportMapping]).validate_json(
+            fixture_json
+        )
+    except ValidationError as error:
+        raise FixtureDataError(
+            f"Invalid origin airport fixture: {fixture_path}"
+        ) from error
+
+    origin_ids = [mapping.origin_id for mapping in airport_mappings]
+    if len(origin_ids) != len(set(origin_ids)):
+        raise FixtureDataError("origin airport fixture contains duplicate origin IDs")
+    return airport_mappings
 
 
 class FixtureFlightOfferProvider(FlightOfferProvider):
@@ -81,3 +110,22 @@ class FixtureFlightOfferProvider(FlightOfferProvider):
             == query.departure_date
             and offer.return_slice.segments[0].departure_at.date() == query.return_date
         ]
+
+
+class FixtureOriginAirportProvider(OriginAirportProvider):
+    """Resolve fixture origins without calling live place or geocoding services."""
+
+    def __init__(self, fixture_path: Path = DEFAULT_ORIGIN_AIRPORTS_PATH) -> None:
+        airport_mappings = load_origin_airport_mappings(fixture_path)
+        self._airport_mappings_by_origin_id = {
+            mapping.origin_id: mapping for mapping in airport_mappings
+        }
+
+    def resolve(self, origin_id: str) -> OriginAirportMapping:
+        """Return the configured airport mapping or raise a clear fixture error."""
+        try:
+            return self._airport_mappings_by_origin_id[origin_id]
+        except KeyError as error:
+            raise FixtureDataError(
+                f"origin ID is not configured in fixture airports: {origin_id}"
+            ) from error

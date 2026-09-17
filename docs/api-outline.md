@@ -17,6 +17,10 @@ The direct recommendation endpoint remains useful for automated evaluation,
 API testing, and a future structured form. It accepts only a complete,
 validated `TripRequest` whose origins have already been resolved to canonical
 IDs. The conversation flow owns free-text origin clarification and resolution.
+The planned live resolver will assign and persist internal location IDs after
+confirmation, reusing the record for the same place. This storage integration
+is not implemented yet. Readable origin IDs in examples remain test identifiers;
+see [the origin-ID decision](design-decisions.md).
 
 ## Implemented endpoints
 

@@ -60,7 +60,12 @@ normalizes them into this validated structure before deterministic ranking:
 
 The conversation draft may initially store an origin as free text. Before it
 constructs `TripRequest`, the system resolves that text to `origin_id`, a
-canonical metro-area or airport identifier. It asks a clarification question
+reference to a confirmed metro-area or airport location. In live mode, the
+application will generate and persist an internal location ID and reuse it for
+the same confirmed place. This resolver/storage integration is pending; readable
+IDs in the examples are deterministic test identifiers, not a live ID-generation
+rule. See [the origin-ID decision](design-decisions.md). The system asks a
+clarification question
 when an origin is unresolved or ambiguous, such as Vancouver, British
 Columbia versus Vancouver, Washington. `traveler_id` is stable and unique
 within one request.

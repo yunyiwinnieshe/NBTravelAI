@@ -315,3 +315,54 @@ def test_no_match_response_has_no_recommendations() -> None:
 
     assert response.status == "no_match"
     assert response.exclusions[0].reason_code == "no_eligible_flight"
+
+
+def test_no_match_response_can_explain_incompatible_eligible_offers() -> None:
+    """A pair-level exclusion does not incorrectly blame one traveler."""
+    payload = valid_response()
+    payload["status"] = "no_match"
+    payload["recommendations"] = []
+    payload["exclusions"] = [
+        {
+            "destination_id": "chicago_il",
+            "reason_code": "no_compatible_flight_pair",
+        }
+    ]
+    payload["metadata"]["eligible_destination_count"] = 0  # type: ignore[index]
+
+    response = RecommendationResponse.model_validate(payload)
+
+    assert response.exclusions[0].traveler_id is None
+    assert response.exclusions[0].reason_code == "no_compatible_flight_pair"
+
+
+@pytest.mark.parametrize(
+    ("reason_code", "traveler_id", "message"),
+    [
+        ("no_eligible_flight", None, "requires a traveler_id"),
+        (
+            "no_compatible_flight_pair",
+            "traveler_a",
+            "must not include a traveler_id",
+        ),
+    ],
+)
+def test_response_exclusions_require_context_matching_the_reason(
+    reason_code: str,
+    traveler_id: str | None,
+    message: str,
+) -> None:
+    payload = valid_response()
+    payload["status"] = "no_match"
+    payload["recommendations"] = []
+    payload["exclusions"] = [
+        {
+            "destination_id": "chicago_il",
+            "traveler_id": traveler_id,
+            "reason_code": reason_code,
+        }
+    ]
+    payload["metadata"]["eligible_destination_count"] = 0  # type: ignore[index]
+
+    with pytest.raises(ValidationError, match=message):
+        RecommendationResponse.model_validate(payload)

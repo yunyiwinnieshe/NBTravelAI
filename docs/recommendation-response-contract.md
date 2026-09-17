@@ -91,9 +91,11 @@ and compatibility metrics; it does not silently change the destination score.
 
 ## Exclusions and metadata
 
-`exclusions` contains stable city-level reason codes. V1 begins with
-`no_eligible_flight`; internal offer-level failures remain logs rather than
-expanding the public response.
+`exclusions` contains stable city-level reason codes. V1 uses
+`no_eligible_flight` when one traveler has no eligible offer and
+`no_compatible_flight_pair` when both travelers have eligible offers but none
+can form a valid same-airport pair. Internal offer-level failures remain logs
+rather than expanding the public response.
 
 `metadata` records the evaluation timestamp, candidate-pool version, either
 `fixture` or `live` data mode, and the number of eligible destinations. These fields make

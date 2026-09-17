@@ -10,6 +10,9 @@ itinerary for a destination the travelers select.
 
 ## Project documents
 
+- [Design decisions](docs/design-decisions.md) - accepted architecture decisions,
+  rationale, implementation status, and follow-up work.
+
 - [Project proposal](docs/project-proposal.md) - product scope, architecture,
   ranking approach, ownership, and evaluation strategy.
 - [Project timeline](docs/project-timeline.md) - completed kickoff work,

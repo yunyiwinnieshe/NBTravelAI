@@ -2,7 +2,7 @@
 
 from enum import StrEnum
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 
 class OfferExclusionReason(StrEnum):
@@ -22,6 +22,7 @@ class CityExclusionReason(StrEnum):
     """Stable codes explaining why a candidate city cannot continue."""
 
     NO_ELIGIBLE_FLIGHT = "no_eligible_flight"
+    NO_COMPATIBLE_FLIGHT_PAIR = "no_compatible_flight_pair"
 
 
 class OfferRejection(BaseModel):
@@ -54,11 +55,12 @@ class OfferRejection(BaseModel):
 
 
 class CityExclusion(BaseModel):
-    """Record that one traveler has no eligible flight to a candidate city."""
+    """Record why a candidate city cannot produce a recommended flight pair."""
 
     model_config = ConfigDict(extra="forbid")
 
-    traveler_id: str = Field(
+    traveler_id: str | None = Field(
+        default=None,
         min_length=1,
         max_length=50,
         pattern=r"^[a-z0-9]+(?:_[a-z0-9]+)*$",
@@ -69,3 +71,18 @@ class CityExclusion(BaseModel):
         pattern=r"^[a-z0-9]+(?:_[a-z0-9]+)*$",
     )
     reason_code: CityExclusionReason = CityExclusionReason.NO_ELIGIBLE_FLIGHT
+
+    @model_validator(mode="after")
+    def validate_reason_context(self) -> "CityExclusion":
+        """Attach traveler context only when a traveler lacks an eligible offer."""
+        if (
+            self.reason_code == CityExclusionReason.NO_ELIGIBLE_FLIGHT
+            and self.traveler_id is None
+        ):
+            raise ValueError("no_eligible_flight requires a traveler_id")
+        if (
+            self.reason_code == CityExclusionReason.NO_COMPATIBLE_FLIGHT_PAIR
+            and self.traveler_id is not None
+        ):
+            raise ValueError("no_compatible_flight_pair must not include a traveler_id")
+        return self
