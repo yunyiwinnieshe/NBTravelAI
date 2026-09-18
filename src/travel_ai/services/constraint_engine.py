@@ -1,7 +1,7 @@
 """Pure deterministic filtering rules for normalized flight offers."""
 
 from collections.abc import Collection, Sequence
-from datetime import date, datetime
+from datetime import date
 
 from travel_ai.schemas.constraints import (
     CityExclusion,
@@ -14,12 +14,6 @@ from travel_ai.schemas.flights import FlightOffer
 from travel_ai.schemas.trip import TravelerRequest
 
 
-def _validate_evaluated_at(evaluated_at: datetime) -> None:
-    """Require an unambiguous instant for deterministic expiry checks."""
-    if evaluated_at.utcoffset() is None:
-        raise ValueError("evaluated_at must include a timezone")
-
-
 def evaluate_offer(
     offer: FlightOffer,
     traveler: TravelerRequest,
@@ -27,11 +21,8 @@ def evaluate_offer(
     origin_airport_codes: Collection[str],
     trip_start_date: date,
     trip_end_date: date,
-    evaluated_at: datetime,
 ) -> OfferRejection | None:
     """Return every rule violation for one offer, or None when it is eligible."""
-    _validate_evaluated_at(evaluated_at)
-
     reasons: list[OfferExclusionReason] = []
     if offer.traveler_id != traveler.traveler_id:
         reasons.append(OfferExclusionReason.TRAVELER_MISMATCH)
@@ -66,9 +57,6 @@ def evaluate_offer(
     if not offer.is_available:
         reasons.append(OfferExclusionReason.OFFER_UNAVAILABLE)
 
-    if offer.expires_at is not None and offer.expires_at <= evaluated_at:
-        reasons.append(OfferExclusionReason.OFFER_EXPIRED)
-
     if not reasons:
         return None
     return OfferRejection(
@@ -86,11 +74,8 @@ def evaluate_traveler_city_offers(
     trip_start_date: date,
     trip_end_date: date,
     offers: Sequence[FlightOffer],
-    evaluated_at: datetime,
 ) -> ConstraintEvaluationResult:
     """Partition offers and exclude the city when no eligible offer remains."""
-    _validate_evaluated_at(evaluated_at)
-
     eligible_offers: list[FlightOffer] = []
     rejected_offers: list[OfferRejection] = []
 
@@ -102,7 +87,6 @@ def evaluate_traveler_city_offers(
             origin_airport_codes=origin_airport_codes,
             trip_start_date=trip_start_date,
             trip_end_date=trip_end_date,
-            evaluated_at=evaluated_at,
         )
         if rejection is None:
             eligible_offers.append(offer)
