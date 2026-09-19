@@ -24,7 +24,7 @@ This document records the project’s weekly outcomes, key decisions, and remain
 
 ## Week 3 — Flight contracts and recommendation response
 
-**Status:** completed, except the Duffel provider PR is awaiting merge
+**Status:** completed
 
 - **Trip request contract — merged**
   - Exactly two travelers with distinct origins and IDs.
@@ -43,11 +43,12 @@ This document records the project’s weekly outcomes, key decisions, and remain
   - Includes ranked destinations, destination score breakdown, recommended pair, flight options, and exclusions.
   - Keeps internal provider fields out of the customer response.
 
-- **Duffel test-mode provider — awaiting merge into `main`**
+- **Duffel test-mode provider — merged**
   - Searches round-trip flights and normalizes Duffel responses.
   - Handles timezone-less Duffel timestamps.
   - Supports airport lookup, partial failures, deduplication, and the 20-offer limit.
-  - Its branch is synchronized with `main`, but `origin/main` does not yet contain it.
+  - Provides an optional live-data adapter; fixture data remains the default
+    deterministic source for tests.
 
 ### Key architectural decision
 
@@ -58,11 +59,36 @@ Travel AI now uses two separate scoring stages:
 
 ## Week 4 — In progress
 
-**Planned focus:** expand flight fixtures, build the fixture-backed recommendation workflow, connect it to FastAPI, and define the LLM extraction contract without integrating a live model.
+**Status:** implementation in progress
 
-### Update template
+- **Expanded flight fixtures — committed on `wshe_week4-expanded-flight-fixtures`**
+  - Added Chicago, Miami, and Seattle as eligible fixture scenarios, with two
+    offers per traveler.
+  - Added nonstop and connecting choices with distinct price, duration, and
+    arrival-time tradeoffs.
+  - Added Denver as a no-match scenario: one over-budget offer and one
+    excessive-travel-time offer.
+  - Added tests that ensure every fixture destination belongs to the candidate
+    pool and that the scenario matrix remains available.
 
-- **Completed:**
-- **In review:**
-- **Blocked or open decisions:**
-- **Next week:**
+- **LLM extraction contract — committed on `wshe_week4-llm-extraction-contract`**
+  - Added a typed extraction result, missing/ambiguous field representation,
+    clarification and review statuses, a `PreferenceExtractor` interface, and
+    a deterministic fixture extractor.
+  - No DeepSeek integration or recommendation-endpoint dependency was added.
+
+- **Recommendation-workflow foundation — committed on `wshe_week4-recommendation-workflow`**
+  - Added a fixture-backed origin-airport provider for Boston and New York.
+  - Added `no_compatible_flight_pair` so a city can explain that both travelers
+    had eligible offers but no valid same-airport pair.
+  - Documented the split between offline fixture resolution and live Duffel
+    Places plus OurAirports resolution.
+
+### Open work
+
+- Ivy's concrete constraint-engine and destination-ranker input/output
+  contracts need to be implemented and reviewed.
+- Connect fixture destinations, climate, origin airports, offer filtering,
+  pair selection, and ranking in `RecommendationService`.
+- Connect the completed service to `POST /recommendations` with dependency
+  injection and API-level deterministic tests.

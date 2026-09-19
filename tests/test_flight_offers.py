@@ -1,5 +1,6 @@
 """Tests for normalized flight offers, fixture loading, and selection policy."""
 
+import json
 from datetime import UTC, date, datetime, timedelta
 from decimal import Decimal
 from pathlib import Path
@@ -7,8 +8,13 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
-from travel_ai.providers.fixtures import FixtureDataError, FixtureFlightOfferProvider
+from travel_ai.providers.fixtures import (
+    DEFAULT_FLIGHT_OFFERS_PATH,
+    FixtureDataError,
+    FixtureFlightOfferProvider,
+)
 from travel_ai.schemas.flights import FlightOffer, FlightSearchQuery
+from travel_ai.services.fixture_loader import load_destination_fixtures
 from travel_ai.services.flight_offer_selection import (
     build_flight_offer_pairs,
     score_flight_offer_pairs,
@@ -34,6 +40,42 @@ def chicago_search_query(
     )
 
 
+def miami_search_query(
+    traveler_id: str = "traveler_a",
+    origin_id: str = "boston_ma",
+    origin_airport_codes: list[str] | None = None,
+) -> FlightSearchQuery:
+    """Return the Miami search represented by the expanded fixtures."""
+    return FlightSearchQuery(
+        traveler_id=traveler_id,
+        origin_id=origin_id,
+        destination_id="miami_fl",
+        origin_airport_codes=origin_airport_codes or ["BOS"],
+        destination_airport_codes=["MIA"],
+        departure_date=date(2099, 6, 10),
+        return_date=date(2099, 6, 14),
+    )
+
+
+def destination_search_query(
+    traveler_id: str,
+    origin_id: str,
+    destination_id: str,
+    origin_airport_code: str,
+    destination_airport_code: str,
+) -> FlightSearchQuery:
+    """Return the standard fixture search for one traveler and candidate city."""
+    return FlightSearchQuery(
+        traveler_id=traveler_id,
+        origin_id=origin_id,
+        destination_id=destination_id,
+        origin_airport_codes=[origin_airport_code],
+        destination_airport_codes=[destination_airport_code],
+        departure_date=date(2099, 6, 10),
+        return_date=date(2099, 6, 14),
+    )
+
+
 def test_fixture_provider_loads_round_trip_offers_for_both_travelers() -> None:
     """The provider returns only records matching each airport-group query."""
     provider = FixtureFlightOfferProvider()
@@ -47,6 +89,112 @@ def test_fixture_provider_loads_round_trip_offers_for_both_travelers() -> None:
     assert len(traveler_b_offers) == 2
     assert all(offer.outbound_slice.segments for offer in traveler_a_offers)
     assert all(offer.return_slice.segments for offer in traveler_b_offers)
+
+
+def test_miami_fixtures_cover_price_duration_and_connection_tradeoffs() -> None:
+    """Both travelers have comparable nonstop and connecting alternatives."""
+    provider = FixtureFlightOfferProvider()
+
+    traveler_a_offers = provider.search(miami_search_query())
+    traveler_b_offers = provider.search(
+        miami_search_query("traveler_b", "new_york_ny", ["JFK"])
+    )
+
+    assert len(traveler_a_offers) == len(traveler_b_offers) == 2
+    for offers in (traveler_a_offers, traveler_b_offers):
+        nonstop = next(offer for offer in offers if offer.is_round_trip_nonstop)
+        connecting = next(offer for offer in offers if not offer.is_round_trip_nonstop)
+
+        assert nonstop.total_amount > connecting.total_amount
+        assert nonstop.total_travel_minutes < connecting.total_travel_minutes
+        assert (
+            nonstop.outbound_slice.segments[-1].arrival_at
+            != connecting.outbound_slice.segments[-1].arrival_at
+        )
+
+
+@pytest.mark.parametrize("destination_id", ["miami_fl", "seattle_wa", "denver_co"])
+def test_expanded_fixture_durations_match_timestamps(destination_id: str) -> None:
+    """Expanded fixture durations include flight and layover time across zones."""
+    records = json.loads(DEFAULT_FLIGHT_OFFERS_PATH.read_text(encoding="utf-8"))
+    offers = [
+        FlightOffer.model_validate(record)
+        for record in records
+        if record["destination_id"] == destination_id
+    ]
+    assert offers
+    for offer in offers:
+        for flight_slice in (offer.outbound_slice, offer.return_slice):
+            elapsed = (
+                flight_slice.segments[-1].arrival_at
+                - flight_slice.segments[0].departure_at
+            )
+            assert timedelta(minutes=flight_slice.duration_minutes) == elapsed, (
+                offer.offer_id,
+                flight_slice.origin_airport_code,
+            )
+
+
+def test_every_fixture_offer_targets_a_supported_candidate_city() -> None:
+    """Flight fixtures may start anywhere but must end in the candidate pool."""
+    supported_destination_ids = {
+        city.city_id for city in load_destination_fixtures().cities
+    }
+    fixture_records = json.loads(DEFAULT_FLIGHT_OFFERS_PATH.read_text(encoding="utf-8"))
+    fixture_destination_ids = {record["destination_id"] for record in fixture_records}
+
+    assert fixture_destination_ids <= supported_destination_ids
+
+
+def test_fixture_dataset_covers_eligible_and_no_match_workflow_scenarios() -> None:
+    """Three cities are eligible under the standard fixture request; Denver is not."""
+    provider = FixtureFlightOfferProvider()
+    standard_city_queries = {
+        "chicago_il": ("ORD",),
+        "miami_fl": ("MIA",),
+        "seattle_wa": ("SEA",),
+    }
+
+    for city_id, (airport_code,) in standard_city_queries.items():
+        traveler_a_offers = provider.search(
+            destination_search_query(
+                "traveler_a", "boston_ma", city_id, "BOS", airport_code
+            )
+        )
+        traveler_b_offers = provider.search(
+            destination_search_query(
+                "traveler_b", "new_york_ny", city_id, "JFK", airport_code
+            )
+        )
+
+        assert len(traveler_a_offers) >= 2
+        assert len(traveler_b_offers) >= 2
+        assert all(
+            offer.total_amount <= Decimal("500.00") for offer in traveler_a_offers
+        )
+        assert all(
+            offer.total_amount <= Decimal("500.00") for offer in traveler_b_offers
+        )
+        assert all(
+            offer.maximum_one_way_travel_minutes <= 600
+            for offer in traveler_a_offers + traveler_b_offers
+        )
+
+    denver_a_offers = provider.search(
+        destination_search_query("traveler_a", "boston_ma", "denver_co", "BOS", "DEN")
+    )
+    denver_b_offers = provider.search(
+        destination_search_query("traveler_b", "new_york_ny", "denver_co", "JFK", "DEN")
+    )
+
+    assert [offer.offer_id for offer in denver_a_offers] == [
+        "fixture_a_denver_over_budget"
+    ]
+    assert [offer.offer_id for offer in denver_b_offers] == [
+        "fixture_b_denver_excessive_time"
+    ]
+    assert denver_a_offers[0].total_amount > Decimal("500.00")
+    assert denver_b_offers[0].maximum_one_way_travel_minutes > 600
 
 
 def test_search_query_expands_all_airport_pairs() -> None:

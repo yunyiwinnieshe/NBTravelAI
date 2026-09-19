@@ -18,7 +18,6 @@ from travel_ai.services.fixture_loader import load_destination_fixtures
 
 TRIP_START = date(2099, 6, 10)
 TRIP_END = date(2099, 6, 14)
-EVALUATED_AT = datetime(2026, 9, 6, 12, tzinfo=UTC)
 
 
 def base_offer() -> FlightOffer:
@@ -58,7 +57,6 @@ def evaluate(
         origin_airport_codes=["BOS"],
         trip_start_date=TRIP_START,
         trip_end_date=TRIP_END,
-        evaluated_at=EVALUATED_AT,
     )
 
 
@@ -105,11 +103,6 @@ def test_valid_offer_is_eligible_at_exact_budget_and_time_boundaries() -> None:
             {},
             "offer_unavailable",
         ),
-        (
-            {"expires_at": EVALUATED_AT},
-            {},
-            "offer_expired",
-        ),
     ],
 )
 def test_offer_rules_return_expected_reason(
@@ -149,7 +142,6 @@ def test_route_rule_checks_approved_airport_groups() -> None:
         origin_airport_codes=["JFK"],
         trip_start_date=TRIP_START,
         trip_end_date=TRIP_END,
-        evaluated_at=EVALUATED_AT,
     )
 
     assert rejection is not None
@@ -163,7 +155,6 @@ def test_offer_returns_all_reasons_in_stable_rule_order() -> None:
             "origin_id": "seattle_wa",
             "destination_id": "miami_fl",
             "is_available": False,
-            "expires_at": EVALUATED_AT,
         }
     )
 
@@ -183,7 +174,6 @@ def test_offer_returns_all_reasons_in_stable_rule_order() -> None:
         "max_travel_time_exceeded",
         "budget_exceeded",
         "offer_unavailable",
-        "offer_expired",
     ]
 
 
@@ -200,7 +190,6 @@ def test_evaluation_partitions_eligible_and_rejected_offers() -> None:
         trip_start_date=TRIP_START,
         trip_end_date=TRIP_END,
         offers=[valid_offer, unavailable_offer],
-        evaluated_at=EVALUATED_AT,
     )
 
     assert [offer.offer_id for offer in result.eligible_offers] == [
@@ -218,7 +207,6 @@ def test_evaluation_excludes_city_when_no_offer_is_eligible() -> None:
         trip_start_date=TRIP_START,
         trip_end_date=TRIP_END,
         offers=[],
-        evaluated_at=EVALUATED_AT,
     )
 
     assert result.eligible_offers == []
@@ -231,27 +219,26 @@ def test_evaluation_excludes_city_when_no_offer_is_eligible() -> None:
     }
 
 
-def test_evaluation_timestamp_must_be_timezone_aware() -> None:
-    with pytest.raises(ValueError, match="must include a timezone"):
-        evaluate_offer(
-            offer=base_offer(),
-            traveler=traveler(),
-            city=chicago(),
-            origin_airport_codes=["BOS"],
-            trip_start_date=TRIP_START,
-            trip_end_date=TRIP_END,
-            evaluated_at=datetime(2026, 9, 6, 12),
-        )
+@pytest.mark.parametrize("is_fixture", [False, True])
+def test_expiry_metadata_does_not_exclude_available_offers(is_fixture: bool) -> None:
+    """V1 comparison results remain eligible after a provider quote expires."""
+    payload = base_offer().model_dump()
+    payload.update(
+        is_fixture=is_fixture,
+        retrieved_at=datetime(2020, 1, 1, tzinfo=UTC),
+        expires_at=datetime(2020, 1, 2, tzinfo=UTC),
+    )
+    offer = FlightOffer.model_validate(payload)
 
-
-def test_empty_offer_evaluation_timestamp_must_be_timezone_aware() -> None:
-    with pytest.raises(ValueError, match="must include a timezone"):
-        evaluate_traveler_city_offers(
-            traveler=traveler(),
-            city=chicago(),
-            origin_airport_codes=["BOS"],
-            trip_start_date=TRIP_START,
-            trip_end_date=TRIP_END,
-            offers=[],
-            evaluated_at=datetime(2026, 9, 6, 12),
-        )
+    assert evaluate(offer) is None
+    result = evaluate_traveler_city_offers(
+        traveler=traveler(),
+        city=chicago(),
+        origin_airport_codes=["BOS"],
+        trip_start_date=TRIP_START,
+        trip_end_date=TRIP_END,
+        offers=[offer],
+    )
+    assert result.eligible_offers == [offer]
+    assert result.rejected_offers == []
+    assert result.city_exclusion is None
