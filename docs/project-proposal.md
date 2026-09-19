@@ -263,7 +263,8 @@ make their own tradeoffs:
    lowest-combined-airfare flight pair becomes the reference pair.
 6. The ranker scores eligible cities from their reference flight pairs: 35%
    affordability, 30% travel fairness, 20% preference match (including
-   climate), and 15% travel time. It returns the three highest-ranked cities.
+   climate), and 15% travel time. The workflow returns up to three highest-ranked
+   cities from the complete ordered ranking.
 7. For every returned city, the API presents independent choices: up to three
    flights for Traveler A and up to three flights for Traveler B. The reference
    pair is always included and labeled.
@@ -380,7 +381,10 @@ fairness_gap = abs(travel_hours_A - travel_hours_B)
 
 For V1, `fairness_score` combines 50% travel-duration balance, 30% airfare
 budget-burden balance, and 20% arrival alignment from the recommended flight
-pair. The separate `travel_time_score` measures total burden, while fairness
+pair. Duration balance compares each traveler's longer one-way journey relative
+to their own time limit; the raw hours gap above is a separate reporting metric.
+The exact formulas, missing-preference weights, and destination tie-breaks are
+defined in [Ranking input contract](ranking-input-contract.md). The separate `travel_time_score` measures total burden, while fairness
 measures how evenly that burden is distributed. The initial weights are a
 baseline to evaluate, not a claim of universal correctness.
 

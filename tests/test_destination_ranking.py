@@ -214,3 +214,105 @@ def test_ranking_rejects_an_offer_that_bypassed_constraints() -> None:
 
     with pytest.raises(ValueError, match="budget burden"):
         calculate_destination_score(invalid)
+
+
+@pytest.mark.parametrize(
+    "traveler_ids", [("other_a", "other_b"), ("traveler_a", "traveler_a")]
+)
+def test_ranking_rejects_mismatched_preference_travelers(traveler_ids) -> None:
+    payload = _ranking_input().model_dump()
+    for feature, traveler_id in zip(
+        payload["preference_features"]["travelers"], traveler_ids, strict=True
+    ):
+        feature["traveler_id"] = traveler_id
+    candidate = DestinationRankingInput.model_validate(payload)
+    with pytest.raises(ValueError, match="preference features must belong"):
+        calculate_destination_score(candidate)
+
+
+@pytest.mark.parametrize(
+    "metric",
+    [
+        "combined_price_usd",
+        "combined_travel_minutes",
+        "arrival_gap_minutes",
+        "return_departure_gap_minutes",
+        "time_together_minutes",
+    ],
+)
+def test_ranking_rejects_stale_pair_metrics(metric: str) -> None:
+    payload = _ranking_input().model_dump()
+    payload["recommended_pair"]["pair"][metric] += 1
+    candidate = DestinationRankingInput.model_validate(payload)
+    with pytest.raises(ValueError, match="pair metrics must match"):
+        calculate_destination_score(candidate)
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    [
+        ("origin_id", "wrong_origin", "match its traveler's origin"),
+        ("is_available", False, "must be available"),
+    ],
+)
+def test_ranking_rejects_ineligible_offer_context(field, value, message) -> None:
+    payload = _ranking_input().model_dump()
+    payload["recommended_offers"][0][field] = value
+    candidate = DestinationRankingInput.model_validate(payload)
+    with pytest.raises(ValueError, match=message):
+        calculate_destination_score(candidate)
+
+
+def test_ranking_accepts_reordered_travelers_offers_and_preferences() -> None:
+    candidate = _ranking_input()
+    payload = candidate.model_dump()
+    payload["travelers"] = tuple(reversed(payload["travelers"]))
+    payload["recommended_offers"] = tuple(reversed(payload["recommended_offers"]))
+    payload["preference_features"]["travelers"] = tuple(
+        reversed(payload["preference_features"]["travelers"])
+    )
+    assert calculate_destination_score(
+        DestinationRankingInput.model_validate(payload)
+    ) == (calculate_destination_score(candidate))
+
+
+def test_ranking_handles_empty_and_duplicate_candidates() -> None:
+    assert rank_destinations([]) == []
+    candidate = _ranking_input()
+    with pytest.raises(ValueError, match="destination IDs must be unique"):
+        rank_destinations([candidate, candidate])
+
+
+def test_ranking_tie_breaks_use_price_then_duration_then_id(monkeypatch) -> None:
+    """Isolate sorting from scoring so every candidate has an exactly tied score."""
+    base = _ranking_input()
+    base_score = calculate_destination_score(base)
+    candidates = [
+        _clone_for_destination(base, name)
+        for name in ["a_expensive", "b_longer", "d_equal", "c_equal"]
+    ]
+    results = {
+        name: base_score.model_copy(
+            update={
+                "destination_id": name,
+                "combined_airfare_usd": Decimal(price),
+                "combined_travel_minutes": minutes,
+            }
+        )
+        for name, price, minutes in [
+            ("a_expensive", "600", 200),
+            ("b_longer", "500", 400),
+            ("d_equal", "500", 300),
+            ("c_equal", "500", 300),
+        ]
+    }
+    monkeypatch.setattr(
+        "travel_ai.services.destination_ranking.calculate_destination_score",
+        lambda candidate: results[candidate.destination_id],
+    )
+    assert [item.destination_id for item in rank_destinations(candidates)] == [
+        "c_equal",
+        "d_equal",
+        "b_longer",
+        "a_expensive",
+    ]

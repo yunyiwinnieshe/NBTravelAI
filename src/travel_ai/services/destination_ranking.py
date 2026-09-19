@@ -13,6 +13,7 @@ from travel_ai.schemas.recommendations import (
     TravelFairnessDetails,
 )
 from travel_ai.services.flight_offer_selection import (
+    build_flight_offer_pairs,
     calculate_arrival_alignment_score,
 )
 
@@ -57,6 +58,14 @@ def calculate_destination_score(
     if len(travelers_by_id) != 2:
         raise ValueError("ranking requires two distinct travelers")
 
+    feature_traveler_ids = [
+        feature.traveler_id for feature in ranking_input.preference_features.travelers
+    ]
+    if len(set(feature_traveler_ids)) != 2 or set(feature_traveler_ids) != set(
+        travelers_by_id
+    ):
+        raise ValueError("preference features must belong to both ranking travelers")
+
     offers_by_id = {offer.offer_id: offer for offer in ranking_input.recommended_offers}
     if len(offers_by_id) != 2:
         raise ValueError("ranking requires two distinct recommended offers")
@@ -65,6 +74,11 @@ def calculate_destination_score(
         (pair.traveler_a_id, pair.traveler_a_offer_id),
         (pair.traveler_b_id, pair.traveler_b_offer_id),
     )
+    if {pair.traveler_a_id, pair.traveler_b_id} != set(travelers_by_id):
+        raise ValueError("recommended pair must reference both ranking travelers")
+    if {pair.traveler_a_offer_id, pair.traveler_b_offer_id} != set(offers_by_id):
+        raise ValueError("recommended pair must reference both recommended offers")
+
     budget_burdens: list[float] = []
     time_burdens: list[float] = []
     for traveler_id, offer_id in pair_references:
@@ -76,6 +90,11 @@ def calculate_destination_score(
             raise ValueError("recommended offer must belong to its traveler")
         if offer.destination_id != ranking_input.destination_id:
             raise ValueError("recommended offer must belong to the destination")
+
+        if offer.origin_id != traveler.origin_id:
+            raise ValueError("recommended offer must match its traveler's origin")
+        if not offer.is_available:
+            raise ValueError("recommended offer must be available after constraints")
 
         budget_burdens.append(
             _validate_burden(
@@ -90,6 +109,16 @@ def calculate_destination_score(
                 "travel-time burden",
             )
         )
+
+    # Reuse pairing rules so cached metrics cannot disagree with the offers.
+    derived_pairs = build_flight_offer_pairs(
+        [offers_by_id[pair.traveler_a_offer_id]],
+        [offers_by_id[pair.traveler_b_offer_id]],
+    )
+    if not derived_pairs:
+        raise ValueError("recommended offers must form a compatible flight pair")
+    if pair != derived_pairs[0]:
+        raise ValueError("recommended pair metrics must match its offers")
 
     affordability = sum(1.0 - burden for burden in budget_burdens) / 2
     travel_time = sum(1.0 - burden for burden in time_burdens) / 2

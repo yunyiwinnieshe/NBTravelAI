@@ -11,7 +11,7 @@ from travel_ai.schemas.trip import TravelerRequest
 
 
 class DestinationRankingInput(BaseModel):
-    """Validated inputs needed to score one eligible destination."""
+    """One eligible destination; the scorer checks cross-field consistency."""
 
     model_config = ConfigDict(extra="forbid")
 
