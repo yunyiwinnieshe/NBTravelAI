@@ -236,12 +236,13 @@ only when both travelers have at least one eligible flight offer. The response
 then returns a bounded, sorted subset of those offers so users can choose based
 on their own tradeoffs.
 
-To make city scores comparable, the system also creates a deterministic
-**reference flight pair** for each eligible city. For the MVP, it is the
-lowest-combined-airfare pair: one eligible flight per traveler. Fixed
-tie-breakers use shorter total travel time, fewer stops, and then stable
-provider offer IDs. The reference pair is used for ranking only; it does not
-remove other flight choices from the response.
+To make city scores comparable, the system selects a deterministic
+**recommended flight pair** for each eligible city using the weighted
+pair-selection policy: price, arrival alignment, travel time, connections, and
+time together. Its underlying flight facts feed destination ranking; its
+pair-selection score is not added to the destination score. The cheapest valid
+pair is only the price-comparison baseline. Selecting a recommended pair does
+not remove other flight choices from the response.
 
 ### Recommendation flow and customer choice
 

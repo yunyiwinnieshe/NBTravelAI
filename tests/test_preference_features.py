@@ -138,6 +138,7 @@ def test_traveler_without_preferences_has_no_score() -> None:
 
 def test_city_features_calculate_combined_score_gap_and_fairness() -> None:
     result = calculate_city_preference_features(
+        traveler_ids=("traveler_a", "traveler_b"),
         city=city(),
         climate_records=[climate(10, 25)],
         start_date=date(2026, 10, 9),
@@ -160,6 +161,7 @@ def test_city_features_calculate_combined_score_gap_and_fairness() -> None:
 
 def test_city_features_omit_fairness_with_one_traveler_score() -> None:
     result = calculate_city_preference_features(
+        traveler_ids=("traveler_a", "traveler_b"),
         city=city(),
         climate_records=[climate(10, 25)],
         start_date=date(2026, 10, 9),
@@ -177,6 +179,7 @@ def test_city_features_omit_fairness_with_one_traveler_score() -> None:
 
 def test_city_features_have_no_combined_score_without_preferences() -> None:
     result = calculate_city_preference_features(
+        traveler_ids=("traveler_a", "traveler_b"),
         city=city(),
         climate_records=[climate(10, 25)],
         start_date=date(2026, 10, 9),
@@ -187,3 +190,15 @@ def test_city_features_have_no_combined_score_without_preferences() -> None:
     assert result.combined_preference_score is None
     assert result.preference_gap is None
     assert result.preference_fairness is None
+
+
+def test_city_preferences_reject_duplicate_traveler_ids() -> None:
+    with pytest.raises(ValueError, match="two distinct traveler IDs"):
+        calculate_city_preference_features(
+            city(),
+            [climate(9, 24)],
+            date(2099, 9, 10),
+            date(2099, 9, 14),
+            (TripPreferences(), TripPreferences()),
+            traveler_ids=("alice", "alice"),
+        )

@@ -159,6 +159,8 @@ The workflow owns trip dates, city and climate datasets, source versions, and
 response evaluation timestamps. It filters offers for both travelers, builds
 compatible pairs, selects one pair per city, and computes preference features
 before calling ranking. Ranking does not call providers or replace constraints.
+`calculate_city_preference_features()` requires explicit `traveler_ids`, in the
+same order as `traveler_preferences`, so features retain the request identities.
 
 The scorer checks traveler/destination references, preference-feature traveler
 identity, offer origins and availability, budget/time limits, and that the pair's
