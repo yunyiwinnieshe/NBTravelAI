@@ -1,7 +1,6 @@
 # Travel AI Recommendation Response Contract
 
-**Status:** Pydantic contract implemented; service population remains a
-follow-up task
+**Status:** Pydantic contract and fixture-backed service/API population implemented
 **Scope:** The public success and no-match response from `POST /recommendations`
 
 ## Response structure
@@ -105,9 +104,10 @@ rather than expanding the public response.
 `fixture` or `live` data mode, and the number of eligible destinations. These fields make
 test results and demonstrations reproducible.
 
-## Endpoint state before service integration
+## Endpoint behavior
 
-The response contract represents completed recommendation work and therefore
-contains only `success` and `no_match`. Until the recommendation service can
-populate this contract from real constraints and ranking, the HTTP endpoint
-returns `501 Not Implemented` instead of a `200` placeholder response.
+`POST /recommendations` populates this contract through the fixture workflow.
+It returns HTTP 200 with `success` or `no_match`, at most three recommendations,
+and the total eligible destination count before truncation. Unsupported fixture
+origins and invalid requests return HTTP 422. Live integration remains pending;
+the current response always identifies its data mode as `fixture`.

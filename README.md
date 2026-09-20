@@ -65,3 +65,20 @@ python -m ruff format --check .
 python -m ruff check .
 python -m pytest
 ```
+
+## Try the fixture recommendation workflow
+
+With the API running, send this request. It uses the versioned test flights for
+June 10–14, 2099; these are mock prices and schedules, not live availability.
+
+```bash
+curl -X POST http://127.0.0.1:8000/recommendations \
+  -H 'Content-Type: application/json' \
+  -d '{"start_date":"2099-06-10","end_date":"2099-06-14","travelers":[{"traveler_id":"alice","origin_id":"boston_ma","budget_usd":500,"max_one_way_travel_minutes":600},{"traveler_id":"bob","origin_id":"new_york_ny","budget_usd":500,"max_one_way_travel_minutes":600}]}'
+```
+
+The response contains up to three ranked cities, flight options and category
+labels for both travelers, pair-price comparisons, and exclusion reasons.
+Dates without fixture flights return `no_match`; unsupported origins return 422.
+The endpoint defaults to fixtures and makes no external API calls. Live provider
+integration and conversational trip sessions remain follow-up work.

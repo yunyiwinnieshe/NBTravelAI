@@ -1,10 +1,8 @@
 # Travel AI - API Outline
 
-**Status:** `GET /health` is implemented. The request and response contracts
-for `POST /recommendations` are finalized, but recommendation generation still
-returns `501 Not Implemented` until the provider and ranking services are
-connected. The conversation endpoints are also explicit `501` stubs until
-session storage and the LLM workflow are added.
+**Status:** `GET /health` and fixture-backed `POST /recommendations` are
+implemented. Conversation endpoints remain explicit `501` stubs until session
+storage and the LLM workflow are added. Live recommendation integration is pending.
 
 ## Design principle
 
@@ -35,9 +33,15 @@ checks use this endpoint; it is not part of travel planning.
 
 ### `POST /recommendations`
 
-Accepts a complete structured trip request and will return up to three
-deterministically ranked destinations. It currently validates the request and
-then returns `501 Not Implemented`; it does not return a fake successful result.
+Accepts a complete structured trip request and returns up to three ranked
+destinations using the real constraint engine, pair selector, and destination
+ranker over fixtures. Both success and no-match results return HTTP 200. Invalid
+requests or unsupported fixture origins return HTTP 422. Provider/data failures
+are not converted into a misleading no-match result.
+
+Fixture searches support Boston (`boston_ma`) and New York (`new_york_ny`) for
+June 10–14, 2099. Other valid dates return no matches. Traveler IDs are
+request-specific and need not be `traveler_a` or `traveler_b`.
 
 ```json
 {
@@ -57,7 +61,7 @@ then returns `501 Not Implemented`; it does not return a fake successful result.
     },
     {
       "traveler_id": "traveler_b",
-      "origin_id": "san_francisco_ca",
+      "origin_id": "new_york_ny",
       "budget_usd": 1800,
       "max_one_way_travel_minutes": 420,
       "preferences": {
@@ -65,8 +69,8 @@ then returns `501 Not Implemented`; it does not return a fake successful result.
       }
     }
   ],
-  "start_date": "2026-10-09",
-  "end_date": "2026-10-13"
+  "start_date": "2099-06-10",
+  "end_date": "2099-06-14"
 }
 ```
 
@@ -149,6 +153,8 @@ ranking independently testable and replaceable.
 
 ## Next implementation boundaries
 
-The next implementation connects fixture providers, constraints, pair
-selection, and ranking to the finalized response. The session endpoints and
-LLM integration remain later work after the deterministic flow is working.
+The fixture workflow connects providers, constraints, pair selection, preference
+calculation, and ranking to the finalized response. Remaining work is live origin
+resolution/storage, live provider warning/error handling, and conversation/LLM
+integration. `get_recommendation_service` is an overridable FastAPI dependency;
+the default service is cached and uses fixtures without network calls.

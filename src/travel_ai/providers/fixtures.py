@@ -93,10 +93,9 @@ class FixtureFlightOfferProvider(FlightOfferProvider):
     def search(self, query: FlightSearchQuery) -> list[FlightOffer]:
         """Return airport-group/date matches; constraints remain service concerns."""
         return [
-            offer
+            offer.model_copy(update={"traveler_id": query.traveler_id}, deep=True)
             for offer in self._offers
             if offer.destination_id == query.destination_id
-            and offer.traveler_id == query.traveler_id
             and offer.origin_id == query.origin_id
             and offer.cabin_class == query.cabin_class
             and offer.outbound_slice.origin_airport_code in query.origin_airport_codes
