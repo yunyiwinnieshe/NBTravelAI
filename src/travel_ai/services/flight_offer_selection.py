@@ -103,7 +103,7 @@ def _score_component(value: float, weight: float) -> PairScoreComponent:
     )
 
 
-def _arrival_alignment_score(arrival_gap_minutes: int) -> float:
+def calculate_arrival_alignment_score(arrival_gap_minutes: int) -> float:
     """Give full credit within two hours and decline to zero at six hours."""
     if arrival_gap_minutes <= FULL_ARRIVAL_ALIGNMENT_MINUTES:
         return 1.0
@@ -138,7 +138,7 @@ def score_flight_offer_pairs(
         breakdown = FlightPairScoreBreakdown(
             price=_score_component(price_value, PAIR_PRICE_WEIGHT),
             arrival_alignment=_score_component(
-                _arrival_alignment_score(pair.arrival_gap_minutes),
+                calculate_arrival_alignment_score(pair.arrival_gap_minutes),
                 PAIR_ARRIVAL_ALIGNMENT_WEIGHT,
             ),
             travel_time=_score_component(

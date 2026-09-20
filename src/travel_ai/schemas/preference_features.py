@@ -8,7 +8,7 @@ class TravelerPreferenceFeatures(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    traveler_id: str = Field(pattern=r"^[a-z0-9]+(?:_[a-z0-9]+)*$")
+    traveler_id: str = Field(min_length=1, max_length=50, pattern=r"^[a-z0-9_]+$")
     interest_match: float | None = Field(default=None, ge=0, le=1)
     temperature_match: float | None = Field(default=None, ge=0, le=1)
     preference_score: float | None = Field(default=None, ge=0, le=1)

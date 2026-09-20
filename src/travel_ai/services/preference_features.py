@@ -113,8 +113,12 @@ def calculate_city_preference_features(
     start_date: date,
     end_date: date,
     traveler_preferences: tuple[TripPreferences, TripPreferences],
+    *,
+    traveler_ids: tuple[str, str],
 ) -> CityPreferenceFeatures:
-    """Calculate preference satisfaction and fairness for both travelers."""
+    """Calculate features using request IDs in the same order as preferences."""
+    if len(traveler_ids) != 2 or len(set(traveler_ids)) != 2:
+        raise ValueError("preference calculation requires two distinct traveler IDs")
     wrong_city_ids = {
         record.city_id for record in climate_records if record.city_id != city.city_id
     }
@@ -131,12 +135,14 @@ def calculate_city_preference_features(
     )
     travelers = tuple(
         calculate_traveler_preference_features(
-            traveler_id=f"traveler_{suffix}",
+            traveler_id=traveler_id,
             preferences=preferences,
             city_tags=city.interest_tags,
             trip_temperature_celsius=trip_temperature,
         )
-        for suffix, preferences in zip(("a", "b"), traveler_preferences, strict=True)
+        for traveler_id, preferences in zip(
+            traveler_ids, traveler_preferences, strict=True
+        )
     )
     scores = [
         traveler.preference_score

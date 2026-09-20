@@ -108,9 +108,9 @@ and booking data are outside the request and budget calculation. Connection
 limits and provider timeouts are adapter configuration, not user preferences,
 and must be consistent across a ranking run.
 
-## Complete ranking input
+## Complete workflow input
 
-The deterministic ranking system needs more than the confirmed user request.
+The recommendation workflow needs more than the confirmed user request.
 After flight searches or fixture loading, the recommendation service assembles:
 
 - the confirmed trip request;
@@ -123,7 +123,7 @@ After flight searches or fixture loading, the recommendation service assembles:
 Conceptually:
 
 ```text
-RankingInput
+RecommendationWorkflowInput
 ├── confirmed_trip_request
 ├── candidate_cities
 ├── monthly_climate
@@ -146,8 +146,61 @@ directly.
 - A city is eligible only when both travelers have at least one valid flight
   that satisfies dates, route, availability, maximum one-way travel time, and
   flight budget.
-- The result may return up to three independently selectable flight offers per
+- The result may return up to four distinct flight offers per
   traveler. There is no flight-and-lodging package or reference lodging offer
   in V1.
 - Customer-facing explanations must label costs as estimated round-trip
   airfare and state that accommodation and other trip expenses are excluded.
+
+## Per-destination scoring contract
+
+`DestinationRankingInput` is the smaller input for scoring one already-eligible
+city. It contains the destination ID, exactly two travelers, their selected
+`ScoredFlightOfferPair`, the two referenced offers, and `CityPreferenceFeatures`.
+The workflow owns trip dates, city and climate datasets, source versions, and
+response evaluation timestamps. It filters offers for both travelers, builds
+compatible pairs, selects one pair per city, and computes preference features
+before calling ranking. Ranking does not call providers or replace constraints.
+`calculate_city_preference_features()` requires explicit `traveler_ids`, in the
+same order as `traveler_preferences`, so features retain the request identities.
+
+The scorer checks traveler/destination references, preference-feature traveler
+identity, offer origins and availability, budget/time limits, and that the pair's
+derived metrics match its offers. These consistency checks run when scoring;
+constructing the Pydantic input alone does not establish eligibility. Pair
+selection scores are not added to destination scores or recalculated from just
+the selected two offers, since they depend on the city's candidate pairs.
+
+## Destination scoring formulas
+
+For each traveler, budget burden is round-trip airfare divided by their budget.
+Time burden is the longer one-way journey divided by their maximum one-way time.
+Both burdens must be between zero and one after constraints.
+
+- Affordability: average of `1 - budget_burden` for the two travelers.
+- Travel time: average of `1 - time_burden` for the two travelers.
+- Duration balance: `1 - abs(time_burden_A - time_burden_B)`.
+- Budget-burden balance: `1 - abs(budget_burden_A - budget_burden_B)`.
+- Arrival alignment: 1 for gaps up to 120 minutes, 0 for gaps of at least
+  360 minutes, and `(360 - gap_minutes) / 240` in between.
+- Travel fairness: 50% duration balance, 30% budget-burden balance, and
+  20% arrival alignment.
+
+Duration balance measures relative burden, not equal elapsed hours: a two-hour
+journey with a four-hour limit and a five-hour journey with a ten-hour limit
+have equal time burdens. Raw duration differences can be reported separately.
+
+The destination weights are 35% affordability, 30% travel fairness, 20%
+preference match, and 15% travel time. Preference match uses the precomputed
+combined preference score, including climate when requested. If neither
+traveler has preferences, its weight and contribution are zero; the remaining
+weights become 43.75%, 37.5%, and 18.75%, respectively. The inactive preference
+component uses value 1 with weight 0, not a claim of a measured perfect match.
+
+Component values and contributions are rounded to six decimal places. The
+final score is the sum of rounded contributions, rounded to six decimal places.
+Destinations sort by descending score, then ascending combined round-trip
+price, combined round-trip travel minutes, and destination ID. The ranker returns
+all candidates; the workflow selects up to three and constructs the public
+response. An empty candidate list returns an empty ranking. Expiration remains
+metadata and does not affect eligibility or scoring in V1.

@@ -4,15 +4,19 @@ from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
+from travel_ai.schemas.flights import FlightOffer
+
 
 class OfferExclusionReason(StrEnum):
     """Stable codes explaining why a flight offer cannot continue."""
 
+    TRAVELER_MISMATCH = "traveler_mismatch"
     ORIGIN_MISMATCH = "origin_mismatch"
     DESTINATION_MISMATCH = "destination_mismatch"
     DATE_MISMATCH = "date_mismatch"
     MAX_TRAVEL_TIME_EXCEEDED = "max_travel_time_exceeded"
     BUDGET_EXCEEDED = "budget_exceeded"
+    OFFER_UNAVAILABLE = "offer_unavailable"
     OFFER_EXPIRED = "offer_expired"
     INVALID_PRICE = "invalid_price"
     UNSUPPORTED_CURRENCY = "unsupported_currency"
@@ -30,11 +34,7 @@ class OfferRejection(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    traveler_id: str = Field(
-        min_length=1,
-        max_length=50,
-        pattern=r"^[a-z0-9]+(?:_[a-z0-9]+)*$",
-    )
+    traveler_id: str = Field(min_length=1, max_length=50, pattern=r"^[a-z0-9_]+$")
     city_id: str = Field(
         min_length=1,
         max_length=100,
@@ -60,10 +60,7 @@ class CityExclusion(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     traveler_id: str | None = Field(
-        default=None,
-        min_length=1,
-        max_length=50,
-        pattern=r"^[a-z0-9]+(?:_[a-z0-9]+)*$",
+        default=None, min_length=1, max_length=50, pattern=r"^[a-z0-9_]+$"
     )
     city_id: str = Field(
         min_length=1,
@@ -86,3 +83,19 @@ class CityExclusion(BaseModel):
         ):
             raise ValueError("no_compatible_flight_pair must not include a traveler_id")
         return self
+
+
+class ConstraintEvaluationResult(BaseModel):
+    """Eligible and rejected offers for one traveler and candidate city."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    traveler_id: str = Field(min_length=1, max_length=50, pattern=r"^[a-z0-9_]+$")
+    city_id: str = Field(
+        min_length=1,
+        max_length=100,
+        pattern=r"^[a-z0-9]+(?:_[a-z0-9]+)*$",
+    )
+    eligible_offers: list[FlightOffer] = Field(default_factory=list)
+    rejected_offers: list[OfferRejection] = Field(default_factory=list)
+    city_exclusion: CityExclusion | None = None
