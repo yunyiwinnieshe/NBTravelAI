@@ -158,3 +158,21 @@ calculation, and ranking to the finalized response. Remaining work is live origi
 resolution/storage, live provider warning/error handling, and conversation/LLM
 integration. `get_recommendation_service` is an overridable FastAPI dependency;
 the default service is cached and uses fixtures without network calls.
+
+## API integration coverage
+
+`tests/test_recommendations_api.py` sends requests through FastAPI's in-process
+`TestClient` and runs the real fixture workflow. With June 10–14, 2099 dates and
+a 600-minute one-way limit, per-person budgets of $500, $300, $260, and $1 yield
+three, two, one, and zero eligible cities, respectively.
+
+The suite verifies response-schema validation, consecutive ranks, eligible
+counts, traveler and pair exclusion reasons, and HTTP 422 for malformed
+requests before workflow execution. A fixed injected clock permits exact JSON
+comparison across repeated requests, including an interleaved no-match request.
+In normal execution, `metadata.evaluated_at` changes on each evaluation.
+
+The module blocks Duffel operations, real HTTP transports, and outbound socket
+connections. A separate test exercises the default service dependency with no
+Duffel credentials. These tests require no live API access; the existing
+router and dependency wiring are reused.
