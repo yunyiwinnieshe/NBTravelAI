@@ -51,7 +51,11 @@ weights are:
 Travel fairness is itself transparent: 50% duration balance, 30% airfare-budget
 burden balance, and 20% arrival alignment. These values compare the two
 travelers, while the top-level travel-time score represents their total travel
-burden.
+burden. Duration balance uses each traveler's longer one-way duration divided
+by their own time limit, rather than the raw difference in hours. When neither
+traveler has preferences, the preference weight is zero and the other weights
+are proportionally redistributed. See [Ranking input contract](ranking-input-contract.md)
+for exact formulas, rounding, and destination tie-breaks.
 
 The response exposes the recommended pair's combined price. Its
 `price_comparison` also provides the cheapest valid combined price and the
