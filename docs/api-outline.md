@@ -176,3 +176,21 @@ The module blocks Duffel operations, real HTTP transports, and outbound socket
 connections. A separate test exercises the default service dependency with no
 Duffel credentials. These tests require no live API access; the existing
 router and dependency wiring are reused.
+
+### Provider boundary and diagnostics
+
+Flight providers declare `data_mode` before any search. This fixture workflow
+rejects live providers during construction and rechecks the mode before each
+request. It also rejects non-fixture offers returned by a provider that claims
+fixture mode. Live providers are not enabled by this interface addition.
+
+For every rejected offer, the service emits an INFO-level
+`recommendation_offer_rejected` log record with `traveler_id`, `destination_id`,
+`offer_id`, and `reason_codes` as structured attributes. Configure the
+`travel_ai.services.recommendation_service` logger at INFO and a formatter that
+includes these attributes to collect them. Full requests and provider payloads
+are not logged by this event. Public exclusions remain city/traveler-level.
+
+Unexpected provider failures propagate as HTTP 500, not successful `no_match`
+responses; internal exception details are not included in the default response.
+API coverage verifies this behavior with a failing injected provider.

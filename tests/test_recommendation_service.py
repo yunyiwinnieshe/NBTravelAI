@@ -160,3 +160,67 @@ def test_top_three_limit_preserves_total_eligible_count() -> None:
         e.destination_id in {"chicago_il", "denver_co", "miami_fl", "seattle_wa"}
         for e in response.exclusions
     )
+
+
+def test_workflow_logs_offer_rejection_details(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    with caplog.at_level("INFO", logger="travel_ai.services.recommendation_service"):
+        response = RecommendationService().get_recommendations(request())
+    records = [
+        r for r in caplog.records if r.message == "recommendation_offer_rejected"
+    ]
+    assert [
+        (r.traveler_id, r.destination_id, r.offer_id, r.reason_codes) for r in records
+    ] == [
+        ("alice", "denver_co", "fixture_a_denver_over_budget", ["budget_exceeded"]),
+        (
+            "bob",
+            "denver_co",
+            "fixture_b_denver_excessive_time",
+            ["max_travel_time_exceeded"],
+        ),
+    ]
+    assert all(
+        not hasattr(r, "trip_request") and not hasattr(r, "offers") for r in records
+    )
+    assert {e.reason_code for e in response.exclusions} == {"no_eligible_flight"}
+
+
+@pytest.mark.parametrize("return_offers", [False, True])
+def test_live_provider_is_rejected_before_search(return_offers: bool) -> None:
+    class LiveProvider(FixtureFlightOfferProvider):
+        calls = 0
+
+        @property
+        def data_mode(self):
+            return "live"
+
+        def search(self, query):
+            self.calls += 1
+            return super().search(query) if return_offers else []
+
+    provider = LiveProvider()
+    with pytest.raises(ValueError, match="fixture providers only"):
+        RecommendationService(flight_provider=provider)
+    assert provider.calls == 0
+    # The guard also applies if a caller replaces a previously valid provider.
+    service = RecommendationService()
+    service.flight_provider = provider
+    with pytest.raises(ValueError, match="fixture providers only"):
+        service.get_recommendations(request())
+    assert provider.calls == 0
+
+
+def test_fixture_provider_cannot_return_live_offers() -> None:
+    class MisconfiguredProvider(FixtureFlightOfferProvider):
+        def search(self, query):
+            return [
+                offer.model_copy(update={"is_fixture": False})
+                for offer in super().search(query)
+            ]
+
+    with pytest.raises(ValueError, match="fixture offers only"):
+        RecommendationService(
+            flight_provider=MisconfiguredProvider()
+        ).get_recommendations(request())

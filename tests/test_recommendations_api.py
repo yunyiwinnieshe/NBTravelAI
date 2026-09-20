@@ -201,3 +201,18 @@ def test_default_api_dependency_is_offline_without_duffel_credentials(
         assert response.json()["metadata"]["data_mode"] == "fixture"
     finally:
         get_recommendation_service.cache_clear()
+
+
+def test_provider_failure_is_a_server_error_not_no_match() -> None:
+    class FailingProvider(FixtureFlightOfferProvider):
+        def search(self, query: FlightSearchQuery) -> list[FlightOffer]:
+            raise RuntimeError("provider failure: internal diagnostic")
+
+    app = create_app()
+    service = RecommendationService(flight_provider=FailingProvider())
+    app.dependency_overrides[get_recommendation_service] = lambda: service
+    with TestClient(app, raise_server_exceptions=False) as client:
+        response = client.post("/recommendations", json=trip_payload())
+    assert response.status_code == 500
+    assert response.text == "Internal Server Error"
+    assert "internal diagnostic" not in response.text

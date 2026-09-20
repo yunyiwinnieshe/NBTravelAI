@@ -1,5 +1,6 @@
 """Coordinate fixture-backed, deterministic recommendations for two travelers."""
 
+import logging
 from collections.abc import Callable
 from datetime import UTC, datetime
 
@@ -38,6 +39,8 @@ from travel_ai.services.flight_offer_selection import (
     select_recommended_flight_pair,
 )
 from travel_ai.services.preference_features import calculate_city_preference_features
+
+logger = logging.getLogger(__name__)
 
 
 class UnsupportedOriginError(ValueError):
@@ -101,6 +104,7 @@ class RecommendationService:
         clock: Callable[[], datetime] | None = None,
     ) -> None:
         self.flight_provider = flight_provider or FixtureFlightOfferProvider()
+        self._validate_provider_mode()
         self.origin_provider = origin_provider or FixtureOriginAirportProvider()
         self.destinations = destinations or load_destination_fixtures()
         self.clock = clock or (lambda: datetime.now(UTC))
@@ -109,8 +113,14 @@ class RecommendationService:
             raise ValueError("candidate pool must contain exactly one data version")
         self.candidate_pool_version = versions.pop()
 
+    def _validate_provider_mode(self) -> None:
+        """Reject unsupported providers before they can perform any search."""
+        if self.flight_provider.data_mode != "fixture":
+            raise ValueError("this workflow currently supports fixture providers only")
+
     def get_recommendations(self, trip_request: TripRequest) -> RecommendationResponse:
         """Return up to three eligible cities or an explained no-match result."""
+        self._validate_provider_mode()
         evaluated_at = self.clock()
         if evaluated_at.utcoffset() is None:
             raise ValueError("recommendation clock must include a timezone")
@@ -152,6 +162,18 @@ class RecommendationService:
                     trip_request.end_date,
                     offers,
                 )
+                for rejection in result.rejected_offers:
+                    logger.info(
+                        "recommendation_offer_rejected",
+                        extra={
+                            "traveler_id": rejection.traveler_id,
+                            "destination_id": rejection.city_id,
+                            "offer_id": rejection.offer_id,
+                            "reason_codes": [
+                                reason.value for reason in rejection.reason_codes
+                            ],
+                        },
+                    )
                 eligible.append(result.eligible_offers)
                 if result.city_exclusion:
                     exclusions.append(

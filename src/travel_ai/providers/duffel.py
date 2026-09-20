@@ -6,6 +6,7 @@ from collections.abc import Callable
 from datetime import UTC, datetime
 from decimal import Decimal
 from math import ceil
+from typing import Literal
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
@@ -217,6 +218,11 @@ class DuffelAirportPlaceProvider(AirportPlaceProvider):
 
 class DuffelFlightOfferProvider(FlightOfferProvider):
     """Search approved airport pairs and normalize Duffel sandbox offers."""
+
+    @property
+    def data_mode(self) -> Literal["fixture", "live"]:
+        """Identify this provider's source without executing a search."""
+        return "live"
 
     def __init__(
         self,

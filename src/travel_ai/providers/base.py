@@ -1,6 +1,7 @@
 """Interfaces implemented by provider-backed data sources."""
 
 from abc import ABC, abstractmethod
+from typing import Literal
 
 from travel_ai.schemas.flights import FlightOffer, FlightSearchQuery
 from travel_ai.schemas.locations import (
@@ -12,6 +13,11 @@ from travel_ai.schemas.locations import (
 
 class FlightOfferProvider(ABC):
     """Load normalized flight offers without exposing provider-specific JSON."""
+
+    @property
+    @abstractmethod
+    def data_mode(self) -> Literal["fixture", "live"]:
+        """Declare the data source before any search, including empty results."""
 
     @abstractmethod
     def search(self, query: FlightSearchQuery) -> list[FlightOffer]:

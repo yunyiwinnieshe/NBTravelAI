@@ -1,6 +1,7 @@
 """Fixture-backed implementations of provider interfaces."""
 
 from pathlib import Path
+from typing import Literal
 
 from pydantic import TypeAdapter, ValidationError
 
@@ -70,6 +71,11 @@ def load_origin_airport_mappings(
 
 class FixtureFlightOfferProvider(FlightOfferProvider):
     """Load deterministic, normalized round-trip offers from versioned JSON."""
+
+    @property
+    def data_mode(self) -> Literal["fixture", "live"]:
+        """Identify this provider's source without executing a search."""
+        return "fixture"
 
     def __init__(self, fixture_path: Path = DEFAULT_FLIGHT_OFFERS_PATH) -> None:
         self._fixture_path = fixture_path
