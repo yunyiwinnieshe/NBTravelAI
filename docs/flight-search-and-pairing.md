@@ -1,6 +1,6 @@
 # Travel AI Flight Search and Pairing
 
-**Status:** Flight contracts and selectors implemented; service/API integration
+**Status:** Fixture-backed service/API workflow implemented; live integration
 remains a follow-up task
 **Scope:** Airport resolution, provider searches, flight eligibility, pair
 selection, and customer-facing flight options
@@ -31,8 +31,15 @@ work:
 7. Use no more than three airports. If multiple places are plausible before
    airport ranking, ask the traveler to choose rather than silently resolving
    the wrong city.
-8. Cache the resolved result so later turns and repeated candidate searches do
-   not resolve the same origin again.
+8. In the planned live integration, persist the confirmed location under a
+   generated internal ID, retaining its provider identity and approved airports.
+   Reuse the record for the same confirmed place and use its ID as
+   `TripRequest.origin_id`. Cache the resolution to avoid repeated place searches.
+
+ID generation, persistence, and lookup are deferred until live resolver
+integration. Readable IDs in the example below remain illustrative test keys;
+they are not a rule for generating IDs from place names. See
+[the origin-ID decision](design-decisions.md) for scope and rationale.
 
 Duffel's airport records can supply the name, IATA code, associated IATA city
 code, latitude, longitude, and time zone. A city result may have null
@@ -75,6 +82,15 @@ airports would not implement the intended product rule. For live Duffel search,
 use the resolved IATA city code when possible and let returned offers identify
 the actual departure airport. For fixture mode or explicit-airport searches,
 use the curated airport group and its maximum of three codes.
+
+Fixture mode stores approved origin-to-airport mappings in
+`src/travel_ai/fixtures/origin_airports.json`. `FixtureOriginAirportProvider`
+loads those mappings without a network call using
+`load_origin_airport_mappings()`. Each `OriginAirportMapping` links one origin
+ID to one to three approved departure airport codes.
+Live integration will use the saved, verified location produced by Duffel Places
+and the airport-reference selection step above. The persistence model still
+needs to retain provider identity alongside the existing `ResolvedLocation` data.
 
 Duffel Places supplies search relevance and geographic airport records, but its
 response does not include a major-airport rank, passenger count, or explicit

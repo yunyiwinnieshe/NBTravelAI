@@ -31,7 +31,7 @@ def valid_trip_request() -> dict[str, object]:
             },
             {
                 "traveler_id": "traveler_b",
-                "origin_id": "san_francisco_ca",
+                "origin_id": "new_york_ny",
                 "budget_usd": 2000,
                 "max_one_way_travel_minutes": 480,
                 "preferences": {
@@ -52,16 +52,29 @@ def test_health_check_returns_ok() -> None:
     assert response.json() == {"status": "ok"}
 
 
-def test_recommendations_validates_then_reports_service_not_implemented() -> None:
-    """A valid request reaches the service while integration remains pending."""
+def test_recommendations_returns_no_match_for_dates_without_fixtures() -> None:
     response = client.post("/recommendations", json=valid_trip_request())
+    assert response.status_code == 200
+    assert response.json()["status"] == "no_match"
 
-    assert response.status_code == 501
-    assert response.json() == {
-        "detail": (
-            "Recommendation generation will be enabled after service integration."
-        )
-    }
+
+def test_recommendations_returns_fixture_results_through_api() -> None:
+    request = valid_trip_request()
+    request.update(start_date="2099-06-10", end_date="2099-06-14")
+    response = client.post("/recommendations", json=request)
+    assert response.status_code == 200
+    body = response.json()
+    assert body["status"] == "success"
+    assert 1 <= len(body["recommendations"]) <= 3
+    assert body["metadata"]["data_mode"] == "fixture"
+
+
+def test_recommendations_rejects_unsupported_fixture_origin() -> None:
+    request = valid_trip_request()
+    request["travelers"][0]["origin_id"] = "unknown_city"
+    response = client.post("/recommendations", json=request)
+    assert response.status_code == 422
+    assert "origin ID is not configured" in response.json()["detail"]
 
 
 def test_recommendations_rejects_a_request_without_two_travelers() -> None:

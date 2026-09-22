@@ -1,10 +1,8 @@
 # Travel AI - API Outline
 
-**Status:** `GET /health` is implemented. The request and response contracts
-for `POST /recommendations` are finalized, but recommendation generation still
-returns `501 Not Implemented` until the provider and ranking services are
-connected. The conversation endpoints are also explicit `501` stubs until
-session storage and the LLM workflow are added.
+**Status:** `GET /health` and fixture-backed `POST /recommendations` are
+implemented. Conversation endpoints remain explicit `501` stubs until session
+storage and the LLM workflow are added. Live recommendation integration is pending.
 
 ## Design principle
 
@@ -17,6 +15,10 @@ The direct recommendation endpoint remains useful for automated evaluation,
 API testing, and a future structured form. It accepts only a complete,
 validated `TripRequest` whose origins have already been resolved to canonical
 IDs. The conversation flow owns free-text origin clarification and resolution.
+The planned live resolver will assign and persist internal location IDs after
+confirmation, reusing the record for the same place. This storage integration
+is not implemented yet. Readable origin IDs in examples remain test identifiers;
+see [the origin-ID decision](design-decisions.md).
 
 ## Implemented endpoints
 
@@ -31,9 +33,15 @@ checks use this endpoint; it is not part of travel planning.
 
 ### `POST /recommendations`
 
-Accepts a complete structured trip request and will return up to three
-deterministically ranked destinations. It currently validates the request and
-then returns `501 Not Implemented`; it does not return a fake successful result.
+Accepts a complete structured trip request and returns up to three ranked
+destinations using the real constraint engine, pair selector, and destination
+ranker over fixtures. Both success and no-match results return HTTP 200. Invalid
+requests or unsupported fixture origins return HTTP 422. Provider/data failures
+are not converted into a misleading no-match result.
+
+Fixture searches support Boston (`boston_ma`) and New York (`new_york_ny`) for
+June 10–14, 2099. Other valid dates return no matches. Traveler IDs are
+request-specific and need not be `traveler_a` or `traveler_b`.
 
 ```json
 {
@@ -53,7 +61,7 @@ then returns `501 Not Implemented`; it does not return a fake successful result.
     },
     {
       "traveler_id": "traveler_b",
-      "origin_id": "san_francisco_ca",
+      "origin_id": "new_york_ny",
       "budget_usd": 1800,
       "max_one_way_travel_minutes": 420,
       "preferences": {
@@ -61,8 +69,8 @@ then returns `501 Not Implemented`; it does not return a fake successful result.
       }
     }
   ],
-  "start_date": "2026-10-09",
-  "end_date": "2026-10-13"
+  "start_date": "2099-06-10",
+  "end_date": "2099-06-14"
 }
 ```
 
@@ -145,6 +153,44 @@ ranking independently testable and replaceable.
 
 ## Next implementation boundaries
 
-The next implementation connects fixture providers, constraints, pair
-selection, and ranking to the finalized response. The session endpoints and
-LLM integration remain later work after the deterministic flow is working.
+The fixture workflow connects providers, constraints, pair selection, preference
+calculation, and ranking to the finalized response. Remaining work is live origin
+resolution/storage, live provider warning/error handling, and conversation/LLM
+integration. `get_recommendation_service` is an overridable FastAPI dependency;
+the default service is cached and uses fixtures without network calls.
+
+## API integration coverage
+
+`tests/test_recommendations_api.py` sends requests through FastAPI's in-process
+`TestClient` and runs the real fixture workflow. With June 10–14, 2099 dates and
+a 600-minute one-way limit, per-person budgets of $500, $300, $260, and $1 yield
+three, two, one, and zero eligible cities, respectively.
+
+The suite verifies response-schema validation, consecutive ranks, eligible
+counts, traveler and pair exclusion reasons, and HTTP 422 for malformed
+requests before workflow execution. A fixed injected clock permits exact JSON
+comparison across repeated requests, including an interleaved no-match request.
+In normal execution, `metadata.evaluated_at` changes on each evaluation.
+
+The module blocks Duffel operations, real HTTP transports, and outbound socket
+connections. A separate test exercises the default service dependency with no
+Duffel credentials. These tests require no live API access; the existing
+router and dependency wiring are reused.
+
+### Provider boundary and diagnostics
+
+Flight providers declare `data_mode` before any search. This fixture workflow
+rejects live providers during construction and rechecks the mode before each
+request. It also rejects non-fixture offers returned by a provider that claims
+fixture mode. Live providers are not enabled by this interface addition.
+
+For every rejected offer, the service emits an INFO-level
+`recommendation_offer_rejected` log record with `traveler_id`, `destination_id`,
+`offer_id`, and `reason_codes` as structured attributes. Configure the
+`travel_ai.services.recommendation_service` logger at INFO and a formatter that
+includes these attributes to collect them. Full requests and provider payloads
+are not logged by this event. Public exclusions remain city/traveler-level.
+
+Unexpected provider failures propagate as HTTP 500, not successful `no_match`
+responses; internal exception details are not included in the default response.
+API coverage verifies this behavior with a failing injected provider.

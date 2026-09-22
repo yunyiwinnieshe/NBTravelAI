@@ -215,6 +215,25 @@ def select_display_flight_offers(
     if recommended_offer_id not in offers_by_id:
         raise ValueError("recommended offer must be eligible")
 
+    category_ids = flight_option_category_ids(eligible_offers, recommended_offer_id)
+    ordered_candidates = [offers_by_id[offer_id] for offer_id in category_ids.values()]
+    selected: list[FlightOffer] = []
+    selected_ids: set[str] = set()
+    for offer in ordered_candidates:
+        if offer.offer_id in selected_ids:
+            continue
+        selected.append(offer)
+        selected_ids.add(offer.offer_id)
+        if len(selected) == maximum_options:
+            break
+    return selected
+
+
+def flight_option_category_ids(
+    eligible_offers: list[FlightOffer],
+    recommended_offer_id: str,
+) -> dict[str, str]:
+    """Identify category winners using the same tie-breaks as display selection."""
     lowest_price = min(
         eligible_offers,
         key=lambda offer: (
@@ -243,19 +262,9 @@ def select_display_flight_offers(
         ),
     )
 
-    ordered_candidates = [
-        offers_by_id[recommended_offer_id],
-        lowest_price,
-        shortest_travel,
-        fewest_connections,
-    ]
-    selected: list[FlightOffer] = []
-    selected_ids: set[str] = set()
-    for offer in ordered_candidates:
-        if offer.offer_id in selected_ids:
-            continue
-        selected.append(offer)
-        selected_ids.add(offer.offer_id)
-        if len(selected) == maximum_options:
-            break
-    return selected
+    return {
+        "recommended_pair": recommended_offer_id,
+        "lowest_price": lowest_price.offer_id,
+        "shortest_travel": shortest_travel.offer_id,
+        "fewest_connections": fewest_connections.offer_id,
+    }

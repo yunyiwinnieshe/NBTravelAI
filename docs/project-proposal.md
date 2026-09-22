@@ -196,6 +196,11 @@ with multiple labels; the service does not add an arbitrary backfill option.
 The airport-resolution, synchronized-arrival pairing, and four-category option
 selection rules are defined in [Flight search and pairing](flight-search-and-pairing.md).
 
+Live origins will use generated internal IDs referencing saved, confirmed
+locations, with provider identifiers stored separately. Fixture IDs stay
+deterministic. ID generation and persistence are deferred to live resolver
+integration; see [the origin-ID decision](design-decisions.md).
+
 Origin cities do not need to appear in the destination candidate pool. Duffel
 Place Suggestions resolves a user's confirmed city or airport text into city
 and airport candidates. A versioned airport-reference snapshot then filters for

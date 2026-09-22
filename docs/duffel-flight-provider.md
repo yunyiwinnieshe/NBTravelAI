@@ -94,6 +94,12 @@ token and is not executed by pytest or GitHub Actions.
 
 ## Service-integration decisions
 
+The live resolver will assign and persist a generated internal location ID after
+confirmation, retain Duffel place identity separately, and reuse the stored ID
+for the same place. `TripRequest.origin_id` will reference that record. The
+current CLI still accepts a caller-supplied `--origin-id`; automatic generation
+and storage are deferred. See [the origin-ID decision](design-decisions.md).
+
 V1 accepts an exact airport/IATA code or a city plus state. Ambiguous Duffel
 place matches return verified choices for an LLM clarification turn; the LLM
 does not choose a city or invent coordinates.

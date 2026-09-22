@@ -20,8 +20,10 @@ Trips must last 3-7 calendar days, and the start date must not be in the past.
 ### Traveler
 
 - `traveler_id`: Stable identifier within the request.
-- `origin_id`: Resolved metro-area identifier. The origin catalog maps it to
-  one or more airports.
+- `origin_id`: Internal reference to a confirmed metro-area or airport location.
+  The planned live resolver will persist and reuse generated location IDs;
+  lookup supplies the approved airport or city codes. Readable IDs in the example
+  are deterministic test identifiers. See [the origin-ID decision](design-decisions.md).
 - `budget_usd`: Maximum round-trip airfare for this traveler. Lodging and all
   other trip costs are outside the V1 budget calculation.
 - `max_one_way_travel_minutes`: Maximum one-way flight itinerary duration,

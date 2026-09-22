@@ -84,7 +84,18 @@ Travel AI now uses two separate scoring stages:
   - Documented the split between offline fixture resolution and live Duffel
     Places plus OurAirports resolution.
 
+### Origin identity decision — 2026-09-16
+
+Accepted generated internal IDs for confirmed live locations, with stored
+provider identity and airport selections and reuse of the same location record.
+Implementation belongs with live resolver/storage integration; fixture IDs stay
+deterministic. Renamed the origin-airport model to `OriginAirportMapping` and
+its loader to `load_origin_airport_mappings()`, with matching provider wording.
+See [the design decision](design-decisions.md).
+
 ### Open work
+
+- Implement live location persistence, generated IDs, lookup, and reuse together.
 
 - Ivy's concrete constraint-engine and destination-ranker input/output
   contracts need to be implemented and reviewed.

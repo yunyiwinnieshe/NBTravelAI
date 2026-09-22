@@ -36,6 +36,7 @@ class DestinationExclusionReason(StrEnum):
     """Stable public reason codes for excluding a candidate city."""
 
     NO_ELIGIBLE_FLIGHT = "no_eligible_flight"
+    NO_COMPATIBLE_FLIGHT_PAIR = "no_compatible_flight_pair"
 
 
 class DestinationSummary(BaseModel):
@@ -435,6 +436,21 @@ class DestinationExclusion(BaseModel):
     destination_id: str = Field(pattern=r"^[a-z0-9_]+$")
     traveler_id: str | None = Field(default=None, pattern=r"^[a-z0-9_]+$")
     reason_code: DestinationExclusionReason
+
+    @model_validator(mode="after")
+    def validate_reason_context(self) -> "DestinationExclusion":
+        """Explain whether exclusion applies to a traveler or to the pair."""
+        if (
+            self.reason_code == DestinationExclusionReason.NO_ELIGIBLE_FLIGHT
+            and self.traveler_id is None
+        ):
+            raise ValueError("no_eligible_flight requires a traveler_id")
+        if (
+            self.reason_code == DestinationExclusionReason.NO_COMPATIBLE_FLIGHT_PAIR
+            and self.traveler_id is not None
+        ):
+            raise ValueError("no_compatible_flight_pair must not include a traveler_id")
+        return self
 
 
 class RecommendationMetadata(BaseModel):
