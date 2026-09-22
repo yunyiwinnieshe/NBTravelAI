@@ -23,6 +23,11 @@ class TravelerPreferencesDraft(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
+    traveler_id: str = Field(
+        min_length=1,
+        max_length=50,
+        pattern=r"^[a-z0-9_]+$",
+    )
     origin: str | None = Field(default=None, min_length=2, max_length=120)
     budget_usd: float | None = Field(default=None, gt=0, le=100_000)
     max_travel_time_hours: float | None = Field(default=None, gt=0, le=48)
