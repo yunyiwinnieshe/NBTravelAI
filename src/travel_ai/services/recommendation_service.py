@@ -136,7 +136,7 @@ class RecommendationService:
 
         candidates = []
         exclusions = []
-        presentation = {}
+        response_details_by_destination = {}
         for city in self.destinations.cities:
             eligible = []
             for traveler in travelers:
@@ -251,7 +251,7 @@ class RecommendationService:
                     premium_percentage=float(premium / baseline * 100),
                 ),
             )
-            presentation[city.city_id] = (
+            response_details_by_destination[city.city_id] = (
                 city,
                 public_pair,
                 [
@@ -267,7 +267,7 @@ class RecommendationService:
         ranked = rank_destinations(candidates)
         recommendations = []
         for rank, result in enumerate(ranked[:3], start=1):
-            city, pair, options = presentation[result.destination_id]
+            city, pair, options = response_details_by_destination[result.destination_id]
             recommendations.append(
                 DestinationRecommendation(
                     rank=rank,
