@@ -83,6 +83,10 @@ The finalized success/no-match response shape is defined in the
 
 ## Planned conversation endpoints
 
+The agreed state transitions, confirmation gate, update rules, and example
+conversations are defined in the
+[planning-session behavior](planning-session-behavior.md).
+
 ### `POST /trip-sessions`
 
 Starts a travel-planning conversation. The response will create a server-owned
