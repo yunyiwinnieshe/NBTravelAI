@@ -32,6 +32,8 @@ The session requires exact trip dates and, for each of exactly two travelers:
 - an individual round-trip airfare budget in USD; and
 - a maximum one-way itinerary duration, including layovers.
 
+The two travelers must have distinct resolved origins.
+
 The confirmed trip must satisfy the canonical request rules, including a future
 trip lasting 3–7 calendar days. Preference values are optional. A traveler may
 provide a temperature range, interest tags, both, or neither. When no
@@ -66,9 +68,9 @@ asks the user to identify the intended place. If the resolved place is not
 supported by the fixture provider, the app asks for a supported origin. It does
 not silently substitute another city.
 
-The product behavior allows both travelers to use the same origin. The current
-`TripRequest` validator still requires distinct origins, so that validator must
-be aligned before the session API implements this rule.
+The travelers cannot use the same resolved origin in V1. If both origins resolve
+to the same ID, the app remains in `collecting` and asks for two distinct
+origins.
 
 ### Review, confirmation, and later changes
 
