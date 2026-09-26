@@ -4,9 +4,31 @@
 implement and integrate during the weekend, review each other's changes, and
 merge only when the week's acceptance criteria pass.
 
-**Schedule:** Week 0 kickoff is complete. Weeks 1-10 deliver the core
-portfolio project; Weeks 11-12 are buffer time or an optional learned-ranking
-extension.
+**Schedule:** Retain the 12-week plan: core demo by Week 10, portfolio package
+in Week 11, and protected buffer in Week 12. Week numbers are project milestones,
+not newly assigned calendar dates.
+
+## Replanned checkpoint — 2026-09-26
+
+The deterministic recommendation API and fixture-backed planning sessions are
+implemented. Sessions support clarification, corrections, normalized review,
+explicit confirmation, and repeated-confirmation result reuse. The extraction
+contract exists, but extraction still uses scripted fixtures, not a live LLM.
+The Duffel test-mode adapter exists separately; the recommendation workflow
+currently accepts fixture providers only. A versioned evaluation runner and
+report are still needed; passing unit tests does not replace this milestone.
+
+The original Week 4 LLM milestone has slipped. Weeks 5-6 below prioritize a
+working LLM-to-fixture-recommendations flow and its evaluation. Full Duffel
+workflow integration moves to an optional Week 8 task. Itinerary generation,
+lodging, and a learned ranker are not required for the V1 release.
+
+**Extension decision:** No extension beyond Week 12 is planned now. Check the
+Week 6 exit criteria together: if they are incomplete, use Week 7 for core
+integration/evaluation and defer richer explanations and optional provider work.
+At the end of Week 8, reassess against available hours. If core failures still
+threaten deployment and the evaluation report, agree on a bounded 1–2 week
+extension with named unfinished deliverables; do not silently push dates.
 
 ## Week 0 - Kickoff and project decisions (complete)
 
@@ -53,6 +75,11 @@ and see CI pass. The documented v1 decisions and LLM selection are reviewed
 and approved by both contributors.
 
 ## Week 2 - City recommendation and offer-set design
+
+**Historical note:** The initial cheapest-reference-pair / three-option design
+below was superseded by separate pair and destination scores and up to four
+deduplicated flight-option categories. See `flight-search-and-pairing.md` and
+`recommendation-response-contract.md` for the current contracts.
 
 **Goal:** Make the city-level recommendation contract and its supporting data
 unambiguous before building the deterministic vertical slice.
@@ -118,54 +145,93 @@ top three cities, reference-pair scores, alternate flight ranges, and
 exclusion reasons. Every filtered city has a reason, and the constraint and
 ranking suite is deterministic and well covered.
 
-## Week 4 - LLM extraction and clarification
+## Week 4 - Deterministic integration and planning-session foundation
 
-**Goal:** Use the LLM only for natural-language handling.
+**Status:** Implemented foundation; real LLM extraction carries into Week 5.
 
-- Convert free-text requests into the validated canonical schema.
-- Ask focused clarification questions for missing or ambiguous fields.
-- Reject or repair invalid structured model output before it reaches ranking.
-- Generate explanations from verified recommendation data only.
-- Record prompt version, model, validation outcome, token usage, and latency.
+- Expanded candidate-pool-aligned flight fixtures and connected constraints,
+  pair selection, preference features, ranking, and the recommendation API.
+- Defined the extractor interface and partial request/issue contracts.
+- Implemented fixture-backed sessions with stable IDs, optional display names,
+  saved-field preservation, origin resolution, and validation before review.
+- Added structured confirmation, result reuse, and renewed confirmation after
+  changes, with regression tests for the agreed planning-session behavior.
 
-**Exit criterion:** Complete, incomplete, and contradictory requests follow
-controlled paths, and the LLM cannot change facts, eligibility, or ranking.
+**Boundary:** This is a working scripted API flow, not general language
+understanding. Sessions are in memory and fixture origins are Boston/New York.
 
-## Week 5 - Live flight-offer integration
+## Week 5 - Real LLM extraction and first end-to-end conversation
 
-**Goal:** Add real data without sacrificing predictable development and tests.
+**Goal:** Replace scripted extraction with a validated LLM adapter while keeping
+flight data and ranking deterministic.
 
-- Confirm flight-provider account access, pricing, rate limits, and permitted
-  use of search results.
-- Integrate a live flight-offer adapter behind `FlightOfferProvider`.
-- Normalize provider responses into the internal offer schemas rather than
-  exposing provider-specific JSON to the recommendation engine.
-- Add timeouts, limited retries, response validation, error translation,
-  caching, rate-limit handling, and freshness timestamps.
-- Record representative flight fixtures for local development and CI.
-- Test success, timeout, malformed responses, no result, rate limiting, and
-  cached fallback behavior.
+**Winnie, in order**
 
-**Exit criterion:** Live flight offers enrich the estimate, fixture-only mode
-still works, tests make no live calls, price freshness is visible, and
-provider failures are controlled. Lodging remains deferred beyond V1.
+1. Implement a DeepSeek-backed `PreferenceExtractor` behind dependency injection;
+   keep the fixture extractor for offline tests and development.
+2. Validate structured output, allowed issue paths, supported preference tags,
+   and server-owned traveler IDs. Invalid output must not corrupt saved state.
+3. Add timeouts and bounded retry/repair behavior. On failure, preserve the
+   draft and return a controlled error; never invent missing values.
+4. Connect the adapter to planning sessions, not directly to `/recommendations`.
+5. Record prompt/model version, validation outcome, token usage, latency, and
+   estimated cost without secrets or unnecessary personal data.
 
-## Week 6 - Evaluation suite and baseline comparison
+**Ivy, in parallel**
 
-**Goal:** Measure quality instead of relying on a polished demo.
+- Draft labeled extraction/conversation and ranking evaluation cases.
+- Review expected tags, constraints, pair compatibility, and exclusion reasons.
+- Define the baseline: lowest combined airfare among valid pairs/cities,
+  enforcing the same hard constraints and deterministic tie-breakers.
 
-- Build a versioned evaluation set with at least 50 cases; target 75-100 by
-  the portfolio release.
-- Cover normal, ambiguous, impossible, boundary, provider-failure, fairness,
-  prompt-injection, and unsupported-claim cases.
-- Measure extraction quality, hard-constraint violations, ranking agreement,
-  unsupported claims, reliability, latency, and estimated cost.
-- Compare the system against at least one simple baseline.
-- Create a failure taxonomy and turn material failures into issues or
-  regression tests.
+**Exit criterion:** A Postman or command-line conversation using ordinary text
+can collect details, clarify one missing value, apply a correction, show review,
+and return fixture recommendations only after explicit confirmation. Mocked
+provider tests cover malformed output, timeout, and failure. No UI, production
+flight data, persistent storage, or broad origin coverage is required.
 
-**Exit criterion:** A single command runs the evaluation set and produces
-saved results plus a category-level summary.
+## Week 6 - Working planning session and first evaluation report
+
+**Goal:** Demonstrate and measure the full LLM-to-fixture-recommendations path.
+Start the evaluation data in Week 5 rather than leaving it all for this week.
+
+**Winnie**
+
+1. Finish any Week 5 integration gaps and verify multi-turn corrections,
+   unsupported/ambiguous input, confirmation, and `no_match` end to end.
+2. Add a single evaluation entry point with offline and explicit opt-in LLM
+   modes. Routine CI stays offline; actual model evaluation is a separate,
+   cost-bounded run using environment credentials.
+3. Save per-case results and a summary with dataset/prompt/model versions,
+   extraction accuracy, clarification outcomes, failures, latency, and cost.
+   Record the actual LLM run; scripted results are not evidence of LLM quality.
+
+**Ivy**
+
+1. Finalize the versioned dataset with at least 50 cases. Suggested split:
+   30 extraction/multi-turn scenarios and 20 deterministic recommendation cases.
+2. Cover normal, missing, ambiguous, contradictory, impossible, boundary,
+   fairness, provider-failure, unsupported-preference, and prompt-injection cases.
+3. Compare ranking with the agreed baseline; report hard-constraint violations,
+   expected exclusions, and ranking agreement where human labels exist.
+
+**Shared exit checklist — required by the end of Week 6**
+
+- [ ] Real LLM extraction works through the planning-session API with fixture
+  flights; a frontend is not required.
+- [ ] Complete, incomplete, corrected, and no-match conversations work; no
+  recommendation runs before confirmation and repeat confirmation reuses results.
+- [ ] One command runs at least 50 versioned cases and saves per-case results
+  plus category summaries; a separate opt-in run measures real LLM extraction.
+- [ ] A baseline comparison and failure taxonomy are saved. Known material
+  failures have regression tests or tracked issues; results are not cherry-picked.
+- [ ] The deterministic evaluation has zero hard-constraint violations and
+  confirmation-gate failures. Report observed LLM accuracy; agree on a release
+  threshold after this first measured run rather than inventing a success claim.
+- [ ] Both contributors can reproduce the demo and offline evaluation.
+
+**Not required:** Duffel workflow integration, arbitrary origin geocoding,
+database-backed sessions, polished UI, itinerary generation, or lodging.
 
 ## Week 7 - Grounded recommendation explanations
 
@@ -180,19 +246,25 @@ saved results plus a category-level summary.
 **Exit criterion:** Users can understand why destinations ranked as they did,
 and explanation quality is measured rather than assumed.
 
-## Week 8 - Itinerary generation and deterministic verifier
+## Week 8 - Evaluation fixes and optional Duffel test-mode workflow
 
-**Goal:** Add the v2 direction only after the recommendation decision is solid.
+**Goal:** Close measured V1 gaps before expanding the data path.
 
-- Let users choose one recommended destination.
-- Generate a structured daily itinerary from verified activity data.
-- Verify date alignment, schedule overlap, budget, travel plausibility,
-  availability assumptions, and evidence links.
-- Permit at most one controlled regeneration after a verifier failure.
-- Clearly label partial verification or remaining warnings.
+- First fix material extraction, session, constraint, and ranking failures from
+  the evaluation report; expand toward 75–100 cases by portfolio release.
+- Only if Week 6 acceptance is met, wire the existing Duffel test adapter into
+  the workflow with explicit provider mode, origin resolution, timeouts, bounded
+  retries, rate-limit handling, and response validation.
+- Keep CI offline. Test failures and fallback behavior without network calls;
+  never silently present fixture fallback as current provider prices.
+- Label Duffel sandbox schedules/prices as test data, not realistic estimates.
 
-**Exit criterion:** Intentionally invalid itinerary examples are caught, and
-unsupported activities or claims are rejected or warned about.
+**Exit criterion:** Material V1 failures are resolved or explicitly bounded. Any
+enabled external-data mode has controlled failures and visible source metadata.
+Provider integration is optional and must not delay the evaluated core demo.
+
+**Deferred to V2:** Itinerary generation/verifier and lodging. These are no
+longer Week 8 acceptance criteria.
 
 ## Week 9 - Reliability, tracing, and safe fallbacks
 
