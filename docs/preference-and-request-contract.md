@@ -20,6 +20,21 @@ preferences, clarification behavior, and deterministic preference features.
 
 ## Canonical request shape
 
+### Traveler identity in conversations
+
+- Sessions assign stable `traveler_a` and `traveler_b` IDs; users do not enter IDs.
+- Each traveler draft has an optional `display_name` (1–50 characters after
+  trimming). Without a name, display “Traveler A” or “Traveler B”.
+- Names may change or be identical. They are labels, never identity keys.
+  An extractor must ask for clarification when a reference is ambiguous,
+  preserve assigned IDs, and return only mentioned fields as sparse updates.
+  The session retains unmentioned constraints and preferences. Invalid or
+  ambiguous values are omitted and reported as field-level issues, not saved
+  over valid values. The fixture extractor uses scripted
+  responses, not general name understanding.
+- Names are not required for confirmation and stay in the session draft;
+  canonical `TripRequest`, flight selection, and ranking use IDs only.
+
 The conversational flow may accept free text and qualitative terms. The LLM
 normalizes them into this validated structure before deterministic ranking:
 

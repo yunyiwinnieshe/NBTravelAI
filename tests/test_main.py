@@ -130,11 +130,11 @@ def test_recommendations_rejects_the_same_resolved_origin() -> None:
     assert response.status_code == 422
 
 
-def test_trip_session_routes_are_explicitly_not_implemented() -> None:
-    """Conversation routes are documented before session storage is introduced."""
-    response = client.post("/trip-sessions", json={"initial_message": "Help us plan."})
+def test_trip_session_starts_collecting_without_an_initial_message() -> None:
+    """A new fixture session is ready to collect the first planning detail."""
+    response = client.post("/trip-sessions", json={})
 
-    assert response.status_code == 501
-    assert response.json() == {
-        "detail": "Trip sessions will be implemented with the LLM workflow in Week 4."
-    }
+    assert response.status_code == 200
+    assert response.json()["state"] == "collecting"
+    assert len(response.json()["missing_fields"]) == 8
+    assert response.json()["assistant_message"] == "What is your start date?"

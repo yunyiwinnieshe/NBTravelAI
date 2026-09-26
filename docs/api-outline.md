@@ -91,22 +91,40 @@ conversations are defined in the
 
 Starts a travel-planning conversation. The response will create a server-owned
 `session_id` that identifies later messages from the same planning session.
-The contract accepts an optional first message. The endpoint is currently a
-`501 Not Implemented` stub because storage is not part of the current backend
-milestone.
+The contract accepts an optional first message. Sessions currently use in-memory
+storage and scripted fixture extraction, not a live LLM or persistent storage.
+The server creates two draft travelers with IDs `traveler_a` and `traveler_b`.
+Each has an optional `display_name`; clients fall back to “Traveler A” and
+“Traveler B” when absent. Names are editable labels, not unique keys, and are
+excluded from the confirmed ranking request. See the
+[identity rules](preference-and-request-contract.md#traveler-identity-in-conversations).
 
 ### `POST /trip-sessions/{session_id}/messages`
 
-Receives one natural-language user message and returns the next turn of the
-conversation. The endpoint is currently a `501 Not Implemented` stub. When
-implemented, it will internally:
+Accepts exactly one of `{"message": "..."}` or `{"action": "confirm"}`.
+Ordinary text never confirms a trip. The fixture-backed implementation:
 
 1. Loads the session's existing preference draft.
 2. Uses the preference-extraction service when language interpretation is
    needed.
-3. Validates the resulting draft against the canonical trip schema.
-4. Returns a clarification, a review request, deterministic results, or a
-   no-match explanation.
+3. Merges valid mentioned fields, preserving other saved values and stable IDs.
+   Resolves origins and validates dates and distinct origins before review.
+4. Asks one focused question (hard constraints first), or shows a complete
+   normalized summary, including omitted preferences, for review.
+5. Confirmation runs recommendations once for the unchanged reviewed request.
+   Repeated confirmation returns the stored result. Edits require new review
+   and confirmation; unresolved corrections remain in `collecting`.
+
+The old `/trip-sessions/{session_id}/confirm` endpoint remains a deprecated
+compatibility alias. Both routes share the same confirmation gate and cache.
+Storage, caching, and per-session locking are in-process only; sessions do not
+survive a restart or synchronize between server workers.
+
+Extractor results contain sparse typed updates for both traveler IDs. Omitted
+fields stay unchanged; explicit `null` clears optional draft fields. Invalid,
+ambiguous, or unsupported values must be omitted and reported in `missing_fields`
+using paths such as `travelers.traveler_a.budget_usd`. The service independently
+computes readiness rather than trusting the extractor's status.
 
 The response has one concise state:
 
@@ -121,8 +139,8 @@ Example clarification response:
 {
   "session_id": "trip_session_123",
   "state": "collecting",
-  "assistant_message": "What dates are you considering, and what is each person's budget and maximum travel time?",
-  "missing_fields": ["start_date", "end_date", "budget_usd", "max_travel_time_hours"]
+  "assistant_message": "What is your start date?",
+  "missing_fields": ["start_date", "end_date", "travelers.traveler_a.budget_usd"]
 }
 ```
 
