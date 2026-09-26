@@ -35,20 +35,26 @@ def get_trip_session_service() -> TripSessionService:
     """Build the limited offline session flow used before live LLM integration."""
     initial_draft = TripRequestDraft(
         travelers=[
-            TravelerPreferencesDraft(traveler_id="alice", origin="Boston"),
-            TravelerPreferencesDraft(traveler_id="bob", origin="New York"),
+            TravelerPreferencesDraft(
+                traveler_id="traveler_a", display_name="Alice", origin="Boston"
+            ),
+            TravelerPreferencesDraft(
+                traveler_id="traveler_b", display_name="Bob", origin="New York"
+            ),
         ]
     )
     complete_draft = TripRequestDraft(
         travelers=[
             TravelerPreferencesDraft(
-                traveler_id="alice",
+                traveler_id="traveler_a",
+                display_name="Alice",
                 origin="Boston",
                 budget_usd=500,
                 max_travel_time_hours=10,
             ),
             TravelerPreferencesDraft(
-                traveler_id="bob",
+                traveler_id="traveler_b",
+                display_name="Bob",
                 origin="New York",
                 budget_usd=500,
                 max_travel_time_hours=10,
@@ -129,6 +135,9 @@ def add_trip_session_message(
 ) -> ConversationTurnResponse:
     """Apply a fixture extraction result to the saved session draft."""
     try:
+        if request.action == "confirm":
+            return service.confirm_session(session_id)
+        assert request.message is not None
         return service.add_message(session_id, request.message)
     except TripSessionNotFoundError as error:
         raise HTTPException(
@@ -142,7 +151,9 @@ def add_trip_session_message(
         ) from error
 
 
-@router.post("/{session_id}/confirm", response_model=ConversationTurnResponse)
+@router.post(
+    "/{session_id}/confirm", response_model=ConversationTurnResponse, deprecated=True
+)
 def confirm_trip_session(
     session_id: str,
     service: Annotated[TripSessionService, Depends(get_trip_session_service)],

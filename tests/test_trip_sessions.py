@@ -35,8 +35,11 @@ def test_fixture_conversation_collects_reviews_and_confirms(client: TestClient) 
     assert [
         traveler["traveler_id"]
         for traveler in collecting_body["trip_request_draft"]["travelers"]
-    ] == ["alice", "bob"]
-    assert len(collecting_body["missing_fields"]) == 3
+    ] == ["traveler_a", "traveler_b"]
+    assert [
+        t["display_name"] for t in collecting_body["trip_request_draft"]["travelers"]
+    ] == ["Alice", "Bob"]
+    assert len(collecting_body["missing_fields"]) == 6
 
     session_id = collecting_body["session_id"]
     review = client.post(
@@ -48,7 +51,9 @@ def test_fixture_conversation_collects_reviews_and_confirms(client: TestClient) 
     assert review.json()["state"] == "review"
     assert review.json()["missing_fields"] == []
 
-    confirmed = client.post(f"/trip-sessions/{session_id}/confirm")
+    confirmed = client.post(
+        f"/trip-sessions/{session_id}/messages", json={"action": "confirm"}
+    )
 
     assert confirmed.status_code == 200
     assert confirmed.json()["state"] == "results"
@@ -59,7 +64,9 @@ def test_session_cannot_confirm_before_review(client: TestClient) -> None:
     """Recommendations only run after a complete draft is explicitly confirmed."""
     session_id = client.post("/trip-sessions", json={}).json()["session_id"]
 
-    response = client.post(f"/trip-sessions/{session_id}/confirm")
+    response = client.post(
+        f"/trip-sessions/{session_id}/messages", json={"action": "confirm"}
+    )
 
     assert response.status_code == 422
     assert response.json()["detail"] == (

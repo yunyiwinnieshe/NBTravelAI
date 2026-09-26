@@ -19,6 +19,8 @@ class MissingFieldReason(StrEnum):
 
     MISSING = "missing"
     AMBIGUOUS = "ambiguous"
+    INVALID = "invalid"
+    UNSUPPORTED = "unsupported"
 
 
 class MissingField(BaseModel):

@@ -2,8 +2,9 @@
 
 from datetime import date
 from enum import StrEnum
+from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from travel_ai.schemas.recommendations import DestinationRecommendation
 from travel_ai.schemas.trip import TripPreferences
@@ -28,10 +29,26 @@ class TravelerPreferencesDraft(BaseModel):
         max_length=50,
         pattern=r"^[a-z0-9_]+$",
     )
+    display_name: str | None = Field(default=None, min_length=1, max_length=50)
     origin: str | None = Field(default=None, min_length=2, max_length=120)
+    origin_id: str | None = None
     budget_usd: float | None = Field(default=None, gt=0, le=100_000)
     max_travel_time_hours: float | None = Field(default=None, gt=0, le=48)
     preferences: TripPreferences = Field(default_factory=TripPreferences)
+
+    @field_validator("display_name", mode="before")
+    @classmethod
+    def trim_display_name(cls, value: object) -> object:
+        """Trim user-facing names; reject blank names through field validation."""
+        return value.strip() if isinstance(value, str) else value
+
+    @property
+    def display_label(self) -> str:
+        """Use a friendly fallback without making a name mandatory."""
+        return self.display_name or {
+            "traveler_a": "Traveler A",
+            "traveler_b": "Traveler B",
+        }.get(self.traveler_id, self.traveler_id)
 
 
 class TripRequestDraft(BaseModel):
@@ -57,7 +74,15 @@ class TripSessionMessageRequest(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    message: str = Field(min_length=1, max_length=10_000)
+    message: str | None = Field(default=None, min_length=1, max_length=10_000)
+    action: Literal["confirm"] | None = None
+
+    @model_validator(mode="after")
+    def validate_action(self) -> "TripSessionMessageRequest":
+        """Accept exactly one text message or structured confirmation."""
+        if (self.message is None) == (self.action is None):
+            raise ValueError("provide exactly one of message or action")
+        return self
 
 
 class ConversationTurnResponse(BaseModel):

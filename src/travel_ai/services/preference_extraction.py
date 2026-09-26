@@ -15,7 +15,14 @@ class PreferenceExtractor(ABC):
         user_message: str,
         current_draft: TripRequestDraft,
     ) -> PreferenceExtractionResult:
-        """Interpret one message against the conversation's current draft."""
+        """Return sparse updates for both assigned traveler IDs.
+
+        Omit unmentioned fields. Omit invalid/ambiguous values and report them
+        in missing_fields using start_date/end_date or
+        travelers.<traveler_id>.<field> paths. Names are labels, not identity:
+        ambiguous references require clarification. The service merges valid
+        updates and independently determines readiness.
+        """
 
 
 class FixturePreferenceExtractor(PreferenceExtractor):
