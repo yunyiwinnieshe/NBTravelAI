@@ -1,0 +1,591 @@
+{
+  "version": "1.0",
+  "reference_date": "2026-09-27",
+  "description": "Synthetic development evaluation, not a production accuracy benchmark.",
+  "initial_draft": {
+    "travelers": [
+      {
+        "traveler_id": "traveler_a",
+        "display_name": "Winnie",
+        "origin": "Boston, MA",
+        "origin_id": null,
+        "budget_usd": 1000.0,
+        "max_travel_time_hours": 8.0,
+        "preferences": {
+          "temperature_range": {
+            "minimum_celsius": 15.0,
+            "maximum_celsius": 23.0
+          },
+          "interest_tags": [
+            "museums"
+          ]
+        }
+      },
+      {
+        "traveler_id": "traveler_b",
+        "display_name": "Ivy",
+        "origin": "New York, NY",
+        "origin_id": null,
+        "budget_usd": 900.0,
+        "max_travel_time_hours": 7.0,
+        "preferences": {
+          "temperature_range": null,
+          "interest_tags": []
+        }
+      }
+    ],
+    "start_date": "2026-10-11",
+    "end_date": "2026-10-15"
+  },
+  "scenarios": [
+    {
+      "id": "speaker_budget",
+      "category": "identity",
+      "turns": [
+        {
+          "id": "speaker_budget",
+          "message": "I have an $800 USD round-trip airfare budget.",
+          "expected_updates": {
+            "travelers.traveler_a.budget_usd": 800
+          },
+          "expected_status": "ready_for_review",
+          "required_issues": [],
+          "expected_unsupported": false
+        }
+      ]
+    },
+    {
+      "id": "my_budget",
+      "category": "identity",
+      "turns": [
+        {
+          "id": "my_budget",
+          "message": "My round-trip airfare budget is $650 USD.",
+          "expected_updates": {
+            "travelers.traveler_a.budget_usd": 650
+          },
+          "expected_status": "ready_for_review",
+          "required_issues": [],
+          "expected_unsupported": false
+        }
+      ]
+    },
+    {
+      "id": "named_speaker",
+      "category": "identity",
+      "turns": [
+        {
+          "id": "named_speaker",
+          "message": "Winnie's round-trip airfare budget is $750 USD.",
+          "expected_updates": {
+            "travelers.traveler_a.budget_usd": 750
+          },
+          "expected_status": "ready_for_review",
+          "required_issues": [],
+          "expected_unsupported": false
+        }
+      ]
+    },
+    {
+      "id": "named_companion",
+      "category": "identity",
+      "turns": [
+        {
+          "id": "named_companion",
+          "message": "Ivy's round-trip airfare budget is $850 USD.",
+          "expected_updates": {
+            "travelers.traveler_b.budget_usd": 850
+          },
+          "expected_status": "ready_for_review",
+          "required_issues": [],
+          "expected_unsupported": false
+        }
+      ]
+    },
+    {
+      "id": "shared_budget",
+      "category": "identity",
+      "turns": [
+        {
+          "id": "shared_budget",
+          "message": "We both have a round-trip airfare budget of $800 USD each.",
+          "expected_updates": {
+            "travelers.traveler_a.budget_usd": 800,
+            "travelers.traveler_b.budget_usd": 800
+          },
+          "expected_status": "ready_for_review",
+          "required_issues": [],
+          "expected_unsupported": false
+        }
+      ]
+    },
+    {
+      "id": "add_interest",
+      "category": "preferences",
+      "turns": [
+        {
+          "id": "add_interest",
+          "message": "I also like beaches.",
+          "expected_updates": {
+            "travelers.traveler_a.preferences.interest_tags": [
+              "museums",
+              "beach"
+            ]
+          },
+          "expected_status": "ready_for_review",
+          "required_issues": [],
+          "expected_unsupported": false
+        }
+      ]
+    },
+    {
+      "id": "replace_interests",
+      "category": "preferences",
+      "turns": [
+        {
+          "id": "replace_interests",
+          "message": "Actually, I only want beaches.",
+          "expected_updates": {
+            "travelers.traveler_a.preferences.interest_tags": [
+              "beach"
+            ]
+          },
+          "expected_status": "ready_for_review",
+          "required_issues": [],
+          "expected_unsupported": false
+        }
+      ]
+    },
+    {
+      "id": "clear_preferences",
+      "category": "preferences",
+      "turns": [
+        {
+          "id": "clear_preferences",
+          "message": "Remove museums from my interests. I don't care about temperature anymore.",
+          "expected_updates": {
+            "travelers.traveler_a.preferences.interest_tags": [],
+            "travelers.traveler_a.preferences.temperature_range": null
+          },
+          "expected_status": "ready_for_review",
+          "required_issues": [],
+          "expected_unsupported": false
+        }
+      ]
+    },
+    {
+      "id": "next_friday",
+      "category": "dates",
+      "turns": [
+        {
+          "id": "next_friday",
+          "message": "We leave next Friday and return three days later.",
+          "expected_updates": {
+            "start_date": "2026-10-02",
+            "end_date": "2026-10-05"
+          },
+          "expected_status": "ready_for_review",
+          "required_issues": [],
+          "expected_unsupported": false
+        }
+      ]
+    },
+    {
+      "id": "mixed_hotel",
+      "category": "unsupported",
+      "turns": [
+        {
+          "id": "mixed_hotel",
+          "message": "I have $800 USD for round-trip airfare and want a hotel with a pool.",
+          "expected_updates": {
+            "travelers.traveler_a.budget_usd": 800
+          },
+          "expected_status": "needs_clarification",
+          "required_issues": [],
+          "expected_unsupported": true
+        }
+      ]
+    },
+    {
+      "id": "unsupported_romantic",
+      "category": "unsupported",
+      "turns": [
+        {
+          "id": "unsupported_romantic",
+          "message": "I want somewhere romantic.",
+          "expected_updates": {},
+          "expected_status": "needs_clarification",
+          "required_issues": [],
+          "expected_unsupported": null
+        }
+      ]
+    },
+    {
+      "id": "synonyms",
+      "category": "preferences",
+      "turns": [
+        {
+          "id": "synonyms",
+          "message": "I like great restaurants and clubbing instead of museums.",
+          "expected_updates": {
+            "travelers.traveler_a.preferences.interest_tags": [
+              "food",
+              "nightlife"
+            ]
+          },
+          "expected_status": "ready_for_review",
+          "required_issues": [],
+          "expected_unsupported": false
+        }
+      ]
+    },
+    {
+      "id": "warm_temperature",
+      "category": "preferences",
+      "turns": [
+        {
+          "id": "warm_temperature",
+          "message": "I prefer warm weather.",
+          "expected_updates": {
+            "travelers.traveler_a.preferences.temperature_range": {
+              "minimum_celsius": 20,
+              "maximum_celsius": 30
+            }
+          },
+          "expected_status": "ready_for_review",
+          "required_issues": [],
+          "expected_unsupported": false
+        }
+      ]
+    },
+    {
+      "id": "next_monday",
+      "category": "dates",
+      "turns": [
+        {
+          "id": "next_monday",
+          "message": "We leave next monday and return three days later.",
+          "expected_updates": {
+            "start_date": "2026-09-28",
+            "end_date": "2026-10-01"
+          },
+          "expected_status": "ready_for_review",
+          "required_issues": [],
+          "expected_unsupported": false
+        }
+      ]
+    },
+    {
+      "id": "next_tuesday",
+      "category": "dates",
+      "turns": [
+        {
+          "id": "next_tuesday",
+          "message": "We leave next tuesday and return three days later.",
+          "expected_updates": {
+            "start_date": "2026-09-29",
+            "end_date": "2026-10-02"
+          },
+          "expected_status": "ready_for_review",
+          "required_issues": [],
+          "expected_unsupported": false
+        }
+      ]
+    },
+    {
+      "id": "next_wednesday",
+      "category": "dates",
+      "turns": [
+        {
+          "id": "next_wednesday",
+          "message": "We leave next wednesday and return three days later.",
+          "expected_updates": {
+            "start_date": "2026-09-30",
+            "end_date": "2026-10-03"
+          },
+          "expected_status": "ready_for_review",
+          "required_issues": [],
+          "expected_unsupported": false
+        }
+      ]
+    },
+    {
+      "id": "next_thursday",
+      "category": "dates",
+      "turns": [
+        {
+          "id": "next_thursday",
+          "message": "We leave next thursday and return three days later.",
+          "expected_updates": {
+            "start_date": "2026-10-01",
+            "end_date": "2026-10-04"
+          },
+          "expected_status": "ready_for_review",
+          "required_issues": [],
+          "expected_unsupported": false
+        }
+      ]
+    },
+    {
+      "id": "next_saturday",
+      "category": "dates",
+      "turns": [
+        {
+          "id": "next_saturday",
+          "message": "We leave next saturday and return three days later.",
+          "expected_updates": {
+            "start_date": "2026-10-03",
+            "end_date": "2026-10-06"
+          },
+          "expected_status": "ready_for_review",
+          "required_issues": [],
+          "expected_unsupported": false
+        }
+      ]
+    },
+    {
+      "id": "next_sunday",
+      "category": "dates",
+      "turns": [
+        {
+          "id": "next_sunday",
+          "message": "We leave next sunday and return three days later.",
+          "expected_updates": {
+            "start_date": "2026-10-04",
+            "end_date": "2026-10-07"
+          },
+          "expected_status": "ready_for_review",
+          "required_issues": [],
+          "expected_unsupported": false
+        }
+      ]
+    },
+    {
+      "id": "missing_year",
+      "category": "clarification",
+      "turns": [
+        {
+          "id": "missing_year",
+          "message": "Change our departure date to October 10.",
+          "expected_updates": {},
+          "expected_status": "needs_clarification",
+          "required_issues": [
+            {
+              "paths": [
+                "start_date"
+              ],
+              "reasons": [
+                "ambiguous",
+                "missing"
+              ]
+            }
+          ],
+          "expected_unsupported": false
+        }
+      ]
+    },
+    {
+      "id": "month_only",
+      "category": "clarification",
+      "turns": [
+        {
+          "id": "month_only",
+          "message": "We want to travel in October.",
+          "expected_updates": {},
+          "expected_status": "needs_clarification",
+          "required_issues": [
+            {
+              "paths": [
+                "start_date",
+                "end_date"
+              ],
+              "reasons": [
+                "ambiguous",
+                "missing"
+              ]
+            }
+          ],
+          "expected_unsupported": false
+        }
+      ]
+    },
+    {
+      "id": "ambiguous_budget",
+      "category": "clarification",
+      "turns": [
+        {
+          "id": "ambiguous_budget",
+          "message": "Our budget is $2,000.",
+          "expected_updates": {},
+          "expected_status": "needs_clarification",
+          "required_issues": [
+            {
+              "paths": [
+                "travelers.traveler_a.budget_usd",
+                "travelers.traveler_b.budget_usd"
+              ],
+              "reasons": [
+                "ambiguous",
+                "missing"
+              ]
+            }
+          ],
+          "expected_unsupported": false
+        }
+      ]
+    },
+    {
+      "id": "duplicate_names",
+      "category": "clarification",
+      "initial_draft": {
+        "travelers": [
+          {
+            "traveler_id": "traveler_a",
+            "display_name": "Alex",
+            "origin": "Boston, MA",
+            "origin_id": null,
+            "budget_usd": 1000.0,
+            "max_travel_time_hours": 8.0,
+            "preferences": {
+              "temperature_range": {
+                "minimum_celsius": 15.0,
+                "maximum_celsius": 23.0
+              },
+              "interest_tags": [
+                "museums"
+              ]
+            }
+          },
+          {
+            "traveler_id": "traveler_b",
+            "display_name": "Alex",
+            "origin": "New York, NY",
+            "origin_id": null,
+            "budget_usd": 900.0,
+            "max_travel_time_hours": 7.0,
+            "preferences": {
+              "temperature_range": null,
+              "interest_tags": []
+            }
+          }
+        ],
+        "start_date": "2026-10-11",
+        "end_date": "2026-10-15"
+      },
+      "turns": [
+        {
+          "id": "duplicate_names",
+          "message": "Alex's round-trip airfare budget is $800 USD.",
+          "expected_updates": {},
+          "expected_status": "needs_clarification",
+          "required_issues": [
+            {
+              "paths": [
+                "travelers.traveler_a.budget_usd",
+                "travelers.traveler_b.budget_usd"
+              ],
+              "reasons": [
+                "ambiguous"
+              ]
+            }
+          ],
+          "expected_unsupported": false
+        }
+      ]
+    },
+    {
+      "id": "conversation",
+      "category": "multi_turn",
+      "initial_draft": {
+        "travelers": [
+          {
+            "traveler_id": "traveler_a",
+            "display_name": null,
+            "origin": "Boston, MA",
+            "origin_id": null,
+            "budget_usd": 1000.0,
+            "max_travel_time_hours": 8.0,
+            "preferences": {
+              "interest_tags": [],
+              "temperature_range": null
+            }
+          },
+          {
+            "traveler_id": "traveler_b",
+            "display_name": "Ivy",
+            "origin": "New York, NY",
+            "origin_id": null,
+            "budget_usd": 900.0,
+            "max_travel_time_hours": 7.0,
+            "preferences": {
+              "temperature_range": null,
+              "interest_tags": []
+            }
+          }
+        ],
+        "start_date": "2026-10-11",
+        "end_date": "2026-10-15"
+      },
+      "turns": [
+        {
+          "id": "introduce",
+          "message": "My name is Alex. My round-trip airfare budget is $800 USD.",
+          "expected_updates": {
+            "travelers.traveler_a.display_name": "Alex",
+            "travelers.traveler_a.budget_usd": 800
+          },
+          "expected_status": "ready_for_review",
+          "required_issues": [],
+          "expected_unsupported": false
+        },
+        {
+          "id": "museums",
+          "message": "I like museums.",
+          "expected_updates": {
+            "travelers.traveler_a.preferences.interest_tags": [
+              "museums"
+            ]
+          },
+          "expected_status": "ready_for_review",
+          "required_issues": [],
+          "expected_unsupported": false
+        },
+        {
+          "id": "hiking",
+          "message": "I also like hiking.",
+          "expected_updates": {
+            "travelers.traveler_a.preferences.interest_tags": [
+              "museums",
+              "outdoor_activities"
+            ]
+          },
+          "expected_status": "ready_for_review",
+          "required_issues": [],
+          "expected_unsupported": false
+        },
+        {
+          "id": "remove",
+          "message": "Remove museums from my interests.",
+          "expected_updates": {
+            "travelers.traveler_a.preferences.interest_tags": [
+              "outdoor_activities"
+            ]
+          },
+          "expected_status": "ready_for_review",
+          "required_issues": [],
+          "expected_unsupported": false
+        },
+        {
+          "id": "correct",
+          "message": "Alex's round-trip airfare budget is now $600 USD.",
+          "expected_updates": {
+            "travelers.traveler_a.budget_usd": 600
+          },
+          "expected_status": "ready_for_review",
+          "required_issues": [],
+          "expected_unsupported": false
+        }
+      ]
+    }
+  ]
+}
