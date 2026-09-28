@@ -66,6 +66,21 @@ python -m ruff check .
 python -m pytest
 ```
 
+## Standalone DeepSeek extraction
+
+The DeepSeek adapter converts messages into validated sparse trip updates. It is
+not yet wired into the API. See [configuration, behavior, and live smoke tests](docs/deepseek-preference-extractor.md).
+
+After exporting `DEEPSEEK_API_KEY`, explicitly opt in to the synthetic live cases:
+
+```bash
+python -m travel_ai.scripts.deepseek_extract --live
+```
+
+Automated extraction tests use mocked HTTP responses and make no network calls.
+For repeatable live evaluations, saved results, and comparisons after prompt or
+model changes, see the [evaluation guide](evals/preference_extraction/README.md).
+
 ## Try the fixture recommendation workflow
 
 With the API running, send this request. It uses the versioned test flights for

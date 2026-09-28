@@ -33,6 +33,15 @@ class MissingField(BaseModel):
     clarification_question: str = Field(min_length=1, max_length=500)
 
 
+class UnsupportedRequest(BaseModel):
+    """An out-of-scope request without an invented canonical field path."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    user_text: str = Field(min_length=1, max_length=10_000)
+    explanation: str = Field(min_length=1, max_length=500)
+
+
 class PreferenceExtractionResult(BaseModel):
     """Structured result from one extraction attempt; not a confirmed request."""
 
@@ -41,20 +50,21 @@ class PreferenceExtractionResult(BaseModel):
     draft: TripRequestDraft
     status: PreferenceExtractionStatus
     missing_fields: list[MissingField] = Field(default_factory=list)
+    unsupported_requests: list[UnsupportedRequest] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def validate_status_and_missing_fields(self) -> "PreferenceExtractionResult":
         """Keep clarification state consistent with the unresolved field list."""
-        if (
-            self.status == PreferenceExtractionStatus.NEEDS_CLARIFICATION
-            and not self.missing_fields
+        if self.status == PreferenceExtractionStatus.NEEDS_CLARIFICATION and not (
+            self.missing_fields or self.unsupported_requests
         ):
             raise ValueError(
-                "needs_clarification results must identify at least one missing field"
+                "needs_clarification results must identify an unresolved issue"
             )
-        if (
-            self.status == PreferenceExtractionStatus.READY_FOR_REVIEW
-            and self.missing_fields
+        if self.status == PreferenceExtractionStatus.READY_FOR_REVIEW and (
+            self.missing_fields or self.unsupported_requests
         ):
-            raise ValueError("ready_for_review results must not contain missing fields")
+            raise ValueError(
+                "ready_for_review results must not contain unresolved issues"
+            )
         return self
