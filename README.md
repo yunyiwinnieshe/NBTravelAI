@@ -66,10 +66,13 @@ python -m ruff check .
 python -m pytest
 ```
 
-## Standalone DeepSeek extraction
+## DeepSeek extraction and planning sessions
 
-The DeepSeek adapter converts messages into validated sparse trip updates. It is
-not yet wired into the API. See [configuration, behavior, and live smoke tests](docs/deepseek-preference-extractor.md).
+The DeepSeek adapter converts messages into validated sparse trip updates. Set
+`EXTRACTION_PROVIDER=deepseek` and supply `DEEPSEEK_API_KEY` in the environment
+to enable natural-language planning sessions. The default is `fixture`. See
+[session configuration and testing](docs/deepseek-planning-sessions.md) and
+[adapter behavior](docs/deepseek-preference-extractor.md).
 
 After exporting `DEEPSEEK_API_KEY`, explicitly opt in to the synthetic live cases:
 

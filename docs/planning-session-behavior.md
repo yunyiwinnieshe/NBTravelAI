@@ -1,7 +1,7 @@
 # Planning-session behavior
 
-**Status:** Agreed behavior for the planned conversational API; implementation
-is a follow-up.
+**Status:** Implemented with in-memory sessions and configurable fixture or
+DeepSeek extraction. See [configuration and tests](deepseek-planning-sessions.md).
 
 This document defines how a trip-planning session collects and updates a draft,
 asks for clarification, requests confirmation, and starts deterministic
@@ -10,7 +10,7 @@ recommendations. It supplements the endpoint outline in `docs/api-outline.md`.
 ## Session states
 
 - `collecting`: At least one required value is missing, ambiguous, or invalid.
-  The app saves any other valid values and asks one focused question.
+  The app saves any other valid values and asks up to three related questions.
 - `review`: All required values are valid. The app shows the complete normalized
   request and waits for explicit confirmation.
 - `results`: The user confirmed the current request revision and at least one
@@ -51,9 +51,11 @@ corresponding stable traveler record.
   or unclear.
 - An invalid or ambiguous value is not saved over a previously valid value.
 - Values not mentioned by the user remain unchanged.
-- If several issues remain, the app asks one focused clarification question at
-  a time. Hard constraints are clarified before optional preferences.
-- Unsupported preferences are explained rather than silently ignored.
+- If several issues remain, the app asks up to three clarification questions.
+  Hard constraints are clarified before optional preferences. When an unsupported
+  request needs acknowledgement, it asks up to two field questions alongside it.
+- Unsupported requests are explained and block confirmation until explicitly
+  deferred or resolved. Continuing without them is separate from confirming.
 
 ### Origin resolution
 
@@ -87,7 +89,7 @@ phrase inferred from ordinary text:
 }
 ```
 
-The eventual message-request contract must accept exactly one of `message` or
+The message-request contract accepts exactly one of `message` or
 `action`. `confirm` is accepted only while the current request is complete and
 in `review`.
 
@@ -116,7 +118,8 @@ We want to travel June 10–14, 2099.”
 - **Still missing or unclear:** Both budgets and both maximum one-way travel
   times.
 - **State:** `collecting`.
-- **App shows:** “What is Alice’s maximum round-trip airfare budget in USD?”
+- **App shows:** Up to three questions covering the missing budgets and travel
+  limits, using traveler names.
 - **Recommendations run:** No.
 
 ### 2. A message contains an unclear budget

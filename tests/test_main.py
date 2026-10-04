@@ -137,4 +137,5 @@ def test_trip_session_starts_collecting_without_an_initial_message() -> None:
     assert response.status_code == 200
     assert response.json()["state"] == "collecting"
     assert len(response.json()["missing_fields"]) == 8
-    assert response.json()["assistant_message"] == "What is your start date?"
+    assert len(response.json()["pending_questions"]) == 3
+    assert "including the year" in response.json()["assistant_message"]

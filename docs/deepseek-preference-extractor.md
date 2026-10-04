@@ -1,8 +1,9 @@
 # DeepSeek preference extractor
 
 `DeepSeekPreferenceExtractor` implements `PreferenceExtractor.extract(message,
-current_draft)` independently of planning-session/API wiring. The API still uses
-its existing fixture dependencies. No frontend, flight provider, or ranking
+current_draft)`. Planning sessions can select it with
+`EXTRACTION_PROVIDER=deepseek`; see [session wiring](deepseek-planning-sessions.md).
+The default remains fixture extraction. No frontend, flight provider, or ranking
 changes are included.
 
 ## Configuration and use
@@ -122,11 +123,10 @@ Errors expose no provider response body or key:
 - `DeepSeekResponseError`: malformed, truncated, or unsafe output;
   `retryable=True`.
 
-The later API-wiring ticket must catch these errors, preserve session state,
-show retry instructions for temporary failures, display unsupported notices,
-and retain unresolved unsupported requests until acknowledged as removed or
-deferred. The existing fixture session service does not yet consume that new
-notice list; do not switch its dependency to this adapter before handling it.
+The session layer catches these errors and preserves saved state. It adds bounded
+retries for temporary failures, a total caller deadline, clarification context,
+and unsupported-request acknowledgement. These policies are separate from the
+standalone adapter. See [session configuration](deepseek-planning-sessions.md).
 
 ## Tests
 

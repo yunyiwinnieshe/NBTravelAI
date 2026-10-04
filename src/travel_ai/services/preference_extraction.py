@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 
 from travel_ai.schemas.preference_extraction import PreferenceExtractionResult
-from travel_ai.schemas.sessions import TripRequestDraft
+from travel_ai.schemas.sessions import ExtractionContext, TripRequestDraft
 
 
 class PreferenceExtractor(ABC):
@@ -14,6 +14,7 @@ class PreferenceExtractor(ABC):
         self,
         user_message: str,
         current_draft: TripRequestDraft,
+        context: ExtractionContext | None = None,
     ) -> PreferenceExtractionResult:
         """Return sparse updates for both assigned traveler IDs.
 
@@ -21,8 +22,13 @@ class PreferenceExtractor(ABC):
         in missing_fields using start_date/end_date or
         travelers.<traveler_id>.<field> paths. Names are labels, not identity:
         ambiguous references require clarification. The service merges valid
-        updates and independently determines readiness.
+        updates and independently determines readiness. Optional context supplies
+        pending questions and unsupported requests for conversational follow-ups.
         """
+
+    def close(self) -> None:
+        """Release resources owned by an extractor, if any."""
+        return None
 
 
 class FixturePreferenceExtractor(PreferenceExtractor):
@@ -37,9 +43,10 @@ class FixturePreferenceExtractor(PreferenceExtractor):
         self,
         user_message: str,
         current_draft: TripRequestDraft,
+        context: ExtractionContext | None = None,
     ) -> PreferenceExtractionResult:
         """Return the matching fixture result without calling an LLM provider."""
-        del current_draft
+        del current_draft, context
         try:
             return self._results_by_message[user_message].model_copy(deep=True)
         except KeyError as error:

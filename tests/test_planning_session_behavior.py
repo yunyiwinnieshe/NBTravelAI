@@ -72,13 +72,16 @@ def workflow():
     return service, session_id, results, recommendations
 
 
-def test_partial_details_and_one_focused_question(workflow):
+def test_partial_details_and_three_focused_questions(workflow):
     service, sid, _, recommendations = workflow
     turn = service.add_message(sid, "partial")
     assert turn.state == "collecting"  # Despite extractor claiming readiness.
-    assert (
-        turn.assistant_message
-        == "What is Alice's maximum round-trip airfare budget in USD?"
+    assert turn.pending_questions[0].question == (
+        "What is Alice's maximum round-trip airfare budget in USD?"
+    )
+    assert len(turn.pending_questions) == 3
+    assert turn.assistant_message == "\n".join(
+        q.question for q in turn.pending_questions
     )
     assert len(turn.missing_fields) == 4
     assert [t.origin_id for t in turn.trip_request_draft.travelers] == [
@@ -194,7 +197,9 @@ def test_hard_constraints_before_unsupported_preference(workflow):
         ]
     )
     turn = service.add_message(sid, "unsupported")
-    assert turn.assistant_message == "What is your start date?"
+    assert "outside V1" in turn.assistant_message
+    assert "continue without" in turn.assistant_message
+    assert len(turn.pending_questions) == 2
     turn = service.add_message(sid, "complete")
     assert "outside V1" in turn.assistant_message
     scripts["remove"] = extraction({"preferences": {"interest_tags": []}})

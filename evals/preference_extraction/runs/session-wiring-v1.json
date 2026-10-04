@@ -1,0 +1,1168 @@
+{
+  "started_at_utc": "2026-09-28T23:34:01.114008+00:00",
+  "finished_at_utc": "2026-09-28T23:34:08.484268+00:00",
+  "scope": "Real HTTP session API + configured DeepSeek + deterministic fixture recommendations",
+  "passed": true,
+  "failures": [],
+  "records": [
+    {
+      "path": "/trip-sessions",
+      "request": {
+        "initial_message": "My name is Alex and I'm leaving from Boston. My companion Jamie leaves from New York. We travel June 10 to June 14, 2099. Jamie's maximum round-trip airfare budget is $500 USD. Each of us can travel at most 10 hours one way including layovers."
+      },
+      "status": 200,
+      "response": {
+        "session_id": "1dc071d8-f933-48e1-864b-c5f39a77039b",
+        "state": "collecting",
+        "assistant_message": "What is Alex's maximum round-trip airfare budget in USD?",
+        "trip_request_draft": {
+          "travelers": [
+            {
+              "traveler_id": "traveler_a",
+              "display_name": "Alex",
+              "origin": "Boston",
+              "origin_id": "boston_ma",
+              "budget_usd": null,
+              "max_travel_time_hours": 10.0,
+              "preferences": {
+                "temperature_range": null,
+                "interest_tags": []
+              }
+            },
+            {
+              "traveler_id": "traveler_b",
+              "display_name": "Jamie",
+              "origin": "New York",
+              "origin_id": "new_york_ny",
+              "budget_usd": 500.0,
+              "max_travel_time_hours": 10.0,
+              "preferences": {
+                "temperature_range": null,
+                "interest_tags": []
+              }
+            }
+          ],
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14"
+        },
+        "missing_fields": [
+          "travelers.traveler_a.budget_usd"
+        ],
+        "pending_questions": [
+          {
+            "field_path": "travelers.traveler_a.budget_usd",
+            "question": "What is Alex's maximum round-trip airfare budget in USD?",
+            "source_message": "My name is Alex and I'm leaving from Boston. My companion Jamie leaves from New York. We travel June 10 to June 14, 2099. Jamie's maximum round-trip airfare budget is $500 USD. Each of us can travel at most 10 hours one way including layovers."
+          }
+        ],
+        "unsupported_requests": [],
+        "deferred_requests": [],
+        "recommendations": []
+      },
+      "passed": true
+    },
+    {
+      "path": "/trip-sessions/1dc071d8-f933-48e1-864b-c5f39a77039b/messages",
+      "request": {
+        "message": "800"
+      },
+      "status": 200,
+      "response": {
+        "session_id": "1dc071d8-f933-48e1-864b-c5f39a77039b",
+        "state": "review",
+        "assistant_message": "Travel dates: 2099-06-10 to 2099-06-14.\nAlex: Boston (boston_ma); airfare budget $800.0 USD; maximum one-way time 10.0 hours including layovers. Preferences: none provided.\nJamie: New York (new_york_ny); airfare budget $500.0 USD; maximum one-way time 10.0 hours including layovers. Preferences: none provided.\nConfirm this trip request to find destinations.",
+        "trip_request_draft": {
+          "travelers": [
+            {
+              "traveler_id": "traveler_a",
+              "display_name": "Alex",
+              "origin": "Boston",
+              "origin_id": "boston_ma",
+              "budget_usd": 800.0,
+              "max_travel_time_hours": 10.0,
+              "preferences": {
+                "temperature_range": null,
+                "interest_tags": []
+              }
+            },
+            {
+              "traveler_id": "traveler_b",
+              "display_name": "Jamie",
+              "origin": "New York",
+              "origin_id": "new_york_ny",
+              "budget_usd": 500.0,
+              "max_travel_time_hours": 10.0,
+              "preferences": {
+                "temperature_range": null,
+                "interest_tags": []
+              }
+            }
+          ],
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14"
+        },
+        "missing_fields": [],
+        "pending_questions": [],
+        "unsupported_requests": [],
+        "deferred_requests": [],
+        "recommendations": []
+      },
+      "passed": true
+    },
+    {
+      "path": "/trip-sessions/1dc071d8-f933-48e1-864b-c5f39a77039b/messages",
+      "request": {
+        "message": "I also like hiking."
+      },
+      "status": 200,
+      "response": {
+        "session_id": "1dc071d8-f933-48e1-864b-c5f39a77039b",
+        "state": "review",
+        "assistant_message": "Travel dates: 2099-06-10 to 2099-06-14.\nAlex: Boston (boston_ma); airfare budget $800.0 USD; maximum one-way time 10.0 hours including layovers. Preferences: {'interest_tags': ['outdoor_activities']}.\nJamie: New York (new_york_ny); airfare budget $500.0 USD; maximum one-way time 10.0 hours including layovers. Preferences: none provided.\nConfirm this trip request to find destinations.",
+        "trip_request_draft": {
+          "travelers": [
+            {
+              "traveler_id": "traveler_a",
+              "display_name": "Alex",
+              "origin": "Boston",
+              "origin_id": "boston_ma",
+              "budget_usd": 800.0,
+              "max_travel_time_hours": 10.0,
+              "preferences": {
+                "temperature_range": null,
+                "interest_tags": [
+                  "outdoor_activities"
+                ]
+              }
+            },
+            {
+              "traveler_id": "traveler_b",
+              "display_name": "Jamie",
+              "origin": "New York",
+              "origin_id": "new_york_ny",
+              "budget_usd": 500.0,
+              "max_travel_time_hours": 10.0,
+              "preferences": {
+                "temperature_range": null,
+                "interest_tags": []
+              }
+            }
+          ],
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14"
+        },
+        "missing_fields": [],
+        "pending_questions": [],
+        "unsupported_requests": [],
+        "deferred_requests": [],
+        "recommendations": []
+      },
+      "passed": true
+    },
+    {
+      "path": "/trip-sessions/1dc071d8-f933-48e1-864b-c5f39a77039b/messages",
+      "request": {
+        "message": "My round-trip airfare budget is $600 USD, and I want a hotel with a pool."
+      },
+      "status": 200,
+      "response": {
+        "session_id": "1dc071d8-f933-48e1-864b-c5f39a77039b",
+        "state": "collecting",
+        "assistant_message": "Hotel selection and amenities like a pool are not supported; I can only record travel preferences such as interests, budget, origin, and dates.\nCan we continue without these unsupported requests?",
+        "trip_request_draft": {
+          "travelers": [
+            {
+              "traveler_id": "traveler_a",
+              "display_name": "Alex",
+              "origin": "Boston",
+              "origin_id": "boston_ma",
+              "budget_usd": 600.0,
+              "max_travel_time_hours": 10.0,
+              "preferences": {
+                "temperature_range": null,
+                "interest_tags": [
+                  "outdoor_activities"
+                ]
+              }
+            },
+            {
+              "traveler_id": "traveler_b",
+              "display_name": "Jamie",
+              "origin": "New York",
+              "origin_id": "new_york_ny",
+              "budget_usd": 500.0,
+              "max_travel_time_hours": 10.0,
+              "preferences": {
+                "temperature_range": null,
+                "interest_tags": []
+              }
+            }
+          ],
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14"
+        },
+        "missing_fields": [],
+        "pending_questions": [],
+        "unsupported_requests": [
+          {
+            "request_id": "8bbe5efb-dae7-4110-a32e-eebfbe2195f6",
+            "user_text": "I want a hotel with a pool.",
+            "explanation": "Hotel selection and amenities like a pool are not supported; I can only record travel preferences such as interests, budget, origin, and dates.",
+            "field_path": null
+          }
+        ],
+        "deferred_requests": [],
+        "recommendations": []
+      },
+      "passed": true
+    },
+    {
+      "path": "/trip-sessions/1dc071d8-f933-48e1-864b-c5f39a77039b/messages",
+      "request": {
+        "action": "confirm"
+      },
+      "status": 422,
+      "response": {
+        "detail": "complete the trip details before confirming this session"
+      },
+      "passed": true
+    },
+    {
+      "path": "/trip-sessions/1dc071d8-f933-48e1-864b-c5f39a77039b/messages",
+      "request": {
+        "message": "Yes, continue without the hotel request."
+      },
+      "status": 200,
+      "response": {
+        "session_id": "1dc071d8-f933-48e1-864b-c5f39a77039b",
+        "state": "review",
+        "assistant_message": "Travel dates: 2099-06-10 to 2099-06-14.\nAlex: Boston (boston_ma); airfare budget $600.0 USD; maximum one-way time 10.0 hours including layovers. Preferences: {'interest_tags': ['outdoor_activities']}.\nJamie: New York (new_york_ny); airfare budget $500.0 USD; maximum one-way time 10.0 hours including layovers. Preferences: none provided.\nNot included, as agreed: I want a hotel with a pool.\nConfirm this trip request to find destinations.",
+        "trip_request_draft": {
+          "travelers": [
+            {
+              "traveler_id": "traveler_a",
+              "display_name": "Alex",
+              "origin": "Boston",
+              "origin_id": "boston_ma",
+              "budget_usd": 600.0,
+              "max_travel_time_hours": 10.0,
+              "preferences": {
+                "temperature_range": null,
+                "interest_tags": [
+                  "outdoor_activities"
+                ]
+              }
+            },
+            {
+              "traveler_id": "traveler_b",
+              "display_name": "Jamie",
+              "origin": "New York",
+              "origin_id": "new_york_ny",
+              "budget_usd": 500.0,
+              "max_travel_time_hours": 10.0,
+              "preferences": {
+                "temperature_range": null,
+                "interest_tags": []
+              }
+            }
+          ],
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14"
+        },
+        "missing_fields": [],
+        "pending_questions": [],
+        "unsupported_requests": [],
+        "deferred_requests": [
+          "I want a hotel with a pool."
+        ],
+        "recommendations": []
+      },
+      "passed": true
+    },
+    {
+      "path": "/trip-sessions/1dc071d8-f933-48e1-864b-c5f39a77039b/messages",
+      "request": {
+        "action": "confirm"
+      },
+      "status": 200,
+      "response": {
+        "session_id": "1dc071d8-f933-48e1-864b-c5f39a77039b",
+        "state": "results",
+        "assistant_message": "Found 3 destination recommendations.",
+        "trip_request_draft": {
+          "travelers": [
+            {
+              "traveler_id": "traveler_a",
+              "display_name": "Alex",
+              "origin": "Boston",
+              "origin_id": "boston_ma",
+              "budget_usd": 600.0,
+              "max_travel_time_hours": 10.0,
+              "preferences": {
+                "temperature_range": null,
+                "interest_tags": [
+                  "outdoor_activities"
+                ]
+              }
+            },
+            {
+              "traveler_id": "traveler_b",
+              "display_name": "Jamie",
+              "origin": "New York",
+              "origin_id": "new_york_ny",
+              "budget_usd": 500.0,
+              "max_travel_time_hours": 10.0,
+              "preferences": {
+                "temperature_range": null,
+                "interest_tags": []
+              }
+            }
+          ],
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14"
+        },
+        "missing_fields": [],
+        "pending_questions": [],
+        "unsupported_requests": [],
+        "deferred_requests": [
+          "I want a hotel with a pool."
+        ],
+        "recommendations": [
+          {
+            "rank": 1,
+            "destination": {
+              "destination_id": "miami_fl",
+              "name": "Miami",
+              "state_code": "FL",
+              "metro_airport_codes": [
+                "MIA",
+                "FLL"
+              ]
+            },
+            "score": 0.735033,
+            "score_breakdown": {
+              "affordability": {
+                "value": 0.406667,
+                "weight": 0.35,
+                "contribution": 0.142333
+              },
+              "travel_fairness": {
+                "value": 0.975667,
+                "weight": 0.3,
+                "contribution": 0.2927
+              },
+              "preference_match": {
+                "value": 1.0,
+                "weight": 0.2,
+                "contribution": 0.2
+              },
+              "travel_time": {
+                "value": 0.666667,
+                "weight": 0.15,
+                "contribution": 0.1
+              },
+              "travel_fairness_details": {
+                "duration_balance": 0.983333,
+                "budget_burden_balance": 0.946667,
+                "arrival_alignment": 1.0
+              }
+            },
+            "recommended_pair": {
+              "offers": [
+                {
+                  "traveler_id": "traveler_a",
+                  "offer_id": "fixture_a_miami_nonstop"
+                },
+                {
+                  "traveler_id": "traveler_b",
+                  "offer_id": "fixture_b_miami_nonstop"
+                }
+              ],
+              "combined_price_usd": "650.00",
+              "arrival_gap_minutes": 45,
+              "return_departure_gap_minutes": 30,
+              "time_together_minutes": 5990,
+              "total_connections": 0,
+              "combined_travel_minutes": 785,
+              "selection_score": 0.919231,
+              "selection_score_breakdown": {
+                "price": {
+                  "value": 0.769231,
+                  "weight": 0.35,
+                  "contribution": 0.269231
+                },
+                "arrival_alignment": {
+                  "value": 1.0,
+                  "weight": 0.25,
+                  "contribution": 0.25
+                },
+                "travel_time": {
+                  "value": 1.0,
+                  "weight": 0.2,
+                  "contribution": 0.2
+                },
+                "connections": {
+                  "value": 1.0,
+                  "weight": 0.1,
+                  "contribution": 0.1
+                },
+                "time_together": {
+                  "value": 1.0,
+                  "weight": 0.1,
+                  "contribution": 0.1
+                }
+              },
+              "price_comparison": {
+                "lowest_valid_combined_price_usd": "500.00",
+                "premium_usd": "150.00",
+                "premium_percentage": 30.0
+              }
+            },
+            "flight_options_by_traveler": [
+              {
+                "traveler_id": "traveler_a",
+                "options": [
+                  {
+                    "offer_id": "fixture_a_miami_nonstop",
+                    "traveler_id": "traveler_a",
+                    "labels": [
+                      "recommended_pair",
+                      "shortest_travel",
+                      "fewest_connections"
+                    ],
+                    "round_trip_price_usd": "340.00",
+                    "outbound": {
+                      "origin_airport_code": "BOS",
+                      "destination_airport_code": "MIA",
+                      "departure_at": "2099-06-10T07:00:00-04:00",
+                      "arrival_at": "2099-06-10T10:25:00-04:00",
+                      "duration_minutes": 205,
+                      "connection_count": 0,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "return_flight": {
+                      "origin_airport_code": "MIA",
+                      "destination_airport_code": "BOS",
+                      "departure_at": "2099-06-14T15:00:00-04:00",
+                      "arrival_at": "2099-06-14T18:15:00-04:00",
+                      "duration_minutes": 195,
+                      "connection_count": 0,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "total_travel_minutes": 400,
+                    "total_connections": 0,
+                    "is_round_trip_nonstop": true,
+                    "expires_at": null
+                  },
+                  {
+                    "offer_id": "fixture_a_miami_connecting",
+                    "traveler_id": "traveler_a",
+                    "labels": [
+                      "lowest_price"
+                    ],
+                    "round_trip_price_usd": "260.00",
+                    "outbound": {
+                      "origin_airport_code": "BOS",
+                      "destination_airport_code": "MIA",
+                      "departure_at": "2099-06-10T07:00:00-04:00",
+                      "arrival_at": "2099-06-10T12:15:00-04:00",
+                      "duration_minutes": 315,
+                      "connection_count": 1,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "return_flight": {
+                      "origin_airport_code": "MIA",
+                      "destination_airport_code": "BOS",
+                      "departure_at": "2099-06-14T15:00:00-04:00",
+                      "arrival_at": "2099-06-14T20:10:00-04:00",
+                      "duration_minutes": 310,
+                      "connection_count": 1,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "total_travel_minutes": 625,
+                    "total_connections": 2,
+                    "is_round_trip_nonstop": false,
+                    "expires_at": null
+                  }
+                ]
+              },
+              {
+                "traveler_id": "traveler_b",
+                "options": [
+                  {
+                    "offer_id": "fixture_b_miami_nonstop",
+                    "traveler_id": "traveler_b",
+                    "labels": [
+                      "recommended_pair",
+                      "shortest_travel",
+                      "fewest_connections"
+                    ],
+                    "round_trip_price_usd": "310.00",
+                    "outbound": {
+                      "origin_airport_code": "JFK",
+                      "destination_airport_code": "MIA",
+                      "departure_at": "2099-06-10T08:00:00-04:00",
+                      "arrival_at": "2099-06-10T11:10:00-04:00",
+                      "duration_minutes": 190,
+                      "connection_count": 0,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "return_flight": {
+                      "origin_airport_code": "MIA",
+                      "destination_airport_code": "JFK",
+                      "departure_at": "2099-06-14T15:30:00-04:00",
+                      "arrival_at": "2099-06-14T18:45:00-04:00",
+                      "duration_minutes": 195,
+                      "connection_count": 0,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "total_travel_minutes": 385,
+                    "total_connections": 0,
+                    "is_round_trip_nonstop": true,
+                    "expires_at": null
+                  },
+                  {
+                    "offer_id": "fixture_b_miami_connecting",
+                    "traveler_id": "traveler_b",
+                    "labels": [
+                      "lowest_price"
+                    ],
+                    "round_trip_price_usd": "240.00",
+                    "outbound": {
+                      "origin_airport_code": "JFK",
+                      "destination_airport_code": "MIA",
+                      "departure_at": "2099-06-10T07:00:00-04:00",
+                      "arrival_at": "2099-06-10T12:25:00-04:00",
+                      "duration_minutes": 325,
+                      "connection_count": 1,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "return_flight": {
+                      "origin_airport_code": "MIA",
+                      "destination_airport_code": "JFK",
+                      "departure_at": "2099-06-14T14:30:00-04:00",
+                      "arrival_at": "2099-06-14T19:50:00-04:00",
+                      "duration_minutes": 320,
+                      "connection_count": 1,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "total_travel_minutes": 645,
+                    "total_connections": 2,
+                    "is_round_trip_nonstop": false,
+                    "expires_at": null
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "rank": 2,
+            "destination": {
+              "destination_id": "seattle_wa",
+              "name": "Seattle",
+              "state_code": "WA",
+              "metro_airport_codes": [
+                "SEA"
+              ]
+            },
+            "score": 0.590375,
+            "score_breakdown": {
+              "affordability": {
+                "value": 0.15,
+                "weight": 0.35,
+                "contribution": 0.0525
+              },
+              "travel_fairness": {
+                "value": 0.9575,
+                "weight": 0.3,
+                "contribution": 0.28725
+              },
+              "preference_match": {
+                "value": 1.0,
+                "weight": 0.2,
+                "contribution": 0.2
+              },
+              "travel_time": {
+                "value": 0.3375,
+                "weight": 0.15,
+                "contribution": 0.050625
+              },
+              "travel_fairness_details": {
+                "duration_balance": 0.975,
+                "budget_burden_balance": 0.9,
+                "arrival_alignment": 1.0
+              }
+            },
+            "recommended_pair": {
+              "offers": [
+                {
+                  "traveler_id": "traveler_a",
+                  "offer_id": "fixture_a_seattle_nonstop"
+                },
+                {
+                  "traveler_id": "traveler_b",
+                  "offer_id": "fixture_b_seattle_nonstop"
+                }
+              ],
+              "combined_price_usd": "930.00",
+              "arrival_gap_minutes": 15,
+              "return_departure_gap_minutes": 0,
+              "time_together_minutes": 6015,
+              "total_connections": 0,
+              "combined_travel_minutes": 1455,
+              "selection_score": 0.932258,
+              "selection_score_breakdown": {
+                "price": {
+                  "value": 0.806452,
+                  "weight": 0.35,
+                  "contribution": 0.282258
+                },
+                "arrival_alignment": {
+                  "value": 1.0,
+                  "weight": 0.25,
+                  "contribution": 0.25
+                },
+                "travel_time": {
+                  "value": 1.0,
+                  "weight": 0.2,
+                  "contribution": 0.2
+                },
+                "connections": {
+                  "value": 1.0,
+                  "weight": 0.1,
+                  "contribution": 0.1
+                },
+                "time_together": {
+                  "value": 1.0,
+                  "weight": 0.1,
+                  "contribution": 0.1
+                }
+              },
+              "price_comparison": {
+                "lowest_valid_combined_price_usd": "750.00",
+                "premium_usd": "180.00",
+                "premium_percentage": 24.0
+              }
+            },
+            "flight_options_by_traveler": [
+              {
+                "traveler_id": "traveler_a",
+                "options": [
+                  {
+                    "offer_id": "fixture_a_seattle_nonstop",
+                    "traveler_id": "traveler_a",
+                    "labels": [
+                      "recommended_pair",
+                      "shortest_travel",
+                      "fewest_connections"
+                    ],
+                    "round_trip_price_usd": "480.00",
+                    "outbound": {
+                      "origin_airport_code": "BOS",
+                      "destination_airport_code": "SEA",
+                      "departure_at": "2099-06-10T07:00:00-04:00",
+                      "arrival_at": "2099-06-10T10:30:00-07:00",
+                      "duration_minutes": 390,
+                      "connection_count": 0,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "return_flight": {
+                      "origin_airport_code": "SEA",
+                      "destination_airport_code": "BOS",
+                      "departure_at": "2099-06-14T15:00:00-07:00",
+                      "arrival_at": "2099-06-14T23:30:00-04:00",
+                      "duration_minutes": 330,
+                      "connection_count": 0,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "total_travel_minutes": 720,
+                    "total_connections": 0,
+                    "is_round_trip_nonstop": true,
+                    "expires_at": null
+                  },
+                  {
+                    "offer_id": "fixture_a_seattle_connecting",
+                    "traveler_id": "traveler_a",
+                    "labels": [
+                      "lowest_price"
+                    ],
+                    "round_trip_price_usd": "390.00",
+                    "outbound": {
+                      "origin_airport_code": "BOS",
+                      "destination_airport_code": "SEA",
+                      "departure_at": "2099-06-10T06:00:00-04:00",
+                      "arrival_at": "2099-06-10T10:50:00-07:00",
+                      "duration_minutes": 470,
+                      "connection_count": 1,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "return_flight": {
+                      "origin_airport_code": "SEA",
+                      "destination_airport_code": "BOS",
+                      "departure_at": "2099-06-14T13:00:00-07:00",
+                      "arrival_at": "2099-06-14T22:20:00-04:00",
+                      "duration_minutes": 380,
+                      "connection_count": 1,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "total_travel_minutes": 850,
+                    "total_connections": 2,
+                    "is_round_trip_nonstop": false,
+                    "expires_at": null
+                  }
+                ]
+              },
+              {
+                "traveler_id": "traveler_b",
+                "options": [
+                  {
+                    "offer_id": "fixture_b_seattle_nonstop",
+                    "traveler_id": "traveler_b",
+                    "labels": [
+                      "recommended_pair",
+                      "shortest_travel",
+                      "fewest_connections"
+                    ],
+                    "round_trip_price_usd": "450.00",
+                    "outbound": {
+                      "origin_airport_code": "JFK",
+                      "destination_airport_code": "SEA",
+                      "departure_at": "2099-06-10T07:00:00-04:00",
+                      "arrival_at": "2099-06-10T10:45:00-07:00",
+                      "duration_minutes": 405,
+                      "connection_count": 0,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "return_flight": {
+                      "origin_airport_code": "SEA",
+                      "destination_airport_code": "JFK",
+                      "departure_at": "2099-06-14T15:00:00-07:00",
+                      "arrival_at": "2099-06-14T23:30:00-04:00",
+                      "duration_minutes": 330,
+                      "connection_count": 0,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "total_travel_minutes": 735,
+                    "total_connections": 0,
+                    "is_round_trip_nonstop": true,
+                    "expires_at": null
+                  },
+                  {
+                    "offer_id": "fixture_b_seattle_connecting",
+                    "traveler_id": "traveler_b",
+                    "labels": [
+                      "lowest_price"
+                    ],
+                    "round_trip_price_usd": "360.00",
+                    "outbound": {
+                      "origin_airport_code": "JFK",
+                      "destination_airport_code": "SEA",
+                      "departure_at": "2099-06-10T06:00:00-04:00",
+                      "arrival_at": "2099-06-10T10:45:00-07:00",
+                      "duration_minutes": 465,
+                      "connection_count": 1,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "return_flight": {
+                      "origin_airport_code": "SEA",
+                      "destination_airport_code": "JFK",
+                      "departure_at": "2099-06-14T13:00:00-07:00",
+                      "arrival_at": "2099-06-14T22:30:00-04:00",
+                      "duration_minutes": 390,
+                      "connection_count": 1,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "total_travel_minutes": 855,
+                    "total_connections": 2,
+                    "is_round_trip_nonstop": false,
+                    "expires_at": null
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "rank": 3,
+            "destination": {
+              "destination_id": "chicago_il",
+              "name": "Chicago",
+              "state_code": "IL",
+              "metro_airport_codes": [
+                "ORD",
+                "MDW"
+              ]
+            },
+            "score": 0.540275,
+            "score_breakdown": {
+              "affordability": {
+                "value": 0.415,
+                "weight": 0.35,
+                "contribution": 0.14525
+              },
+              "travel_fairness": {
+                "value": 0.9605,
+                "weight": 0.3,
+                "contribution": 0.28815
+              },
+              "preference_match": {
+                "value": 0.0,
+                "weight": 0.2,
+                "contribution": 0.0
+              },
+              "travel_time": {
+                "value": 0.7125,
+                "weight": 0.15,
+                "contribution": 0.106875
+              },
+              "travel_fairness_details": {
+                "duration_balance": 0.975,
+                "budget_burden_balance": 0.91,
+                "arrival_alignment": 1.0
+              }
+            },
+            "recommended_pair": {
+              "offers": [
+                {
+                  "traveler_id": "traveler_a",
+                  "offer_id": "fixture_a_chicago_nonstop"
+                },
+                {
+                  "traveler_id": "traveler_b",
+                  "offer_id": "fixture_b_chicago_nonstop"
+                }
+              ],
+              "combined_price_usd": "639.00",
+              "arrival_gap_minutes": 45,
+              "return_departure_gap_minutes": 60,
+              "time_together_minutes": 6015,
+              "total_connections": 0,
+              "combined_travel_minutes": 675,
+              "selection_score": 0.967684,
+              "selection_score_breakdown": {
+                "price": {
+                  "value": 0.907668,
+                  "weight": 0.35,
+                  "contribution": 0.317684
+                },
+                "arrival_alignment": {
+                  "value": 1.0,
+                  "weight": 0.25,
+                  "contribution": 0.25
+                },
+                "travel_time": {
+                  "value": 1.0,
+                  "weight": 0.2,
+                  "contribution": 0.2
+                },
+                "connections": {
+                  "value": 1.0,
+                  "weight": 0.1,
+                  "contribution": 0.1
+                },
+                "time_together": {
+                  "value": 1.0,
+                  "weight": 0.1,
+                  "contribution": 0.1
+                }
+              },
+              "price_comparison": {
+                "lowest_valid_combined_price_usd": "580.00",
+                "premium_usd": "59.00",
+                "premium_percentage": 10.172413793103448
+              }
+            },
+            "flight_options_by_traveler": [
+              {
+                "traveler_id": "traveler_a",
+                "options": [
+                  {
+                    "offer_id": "fixture_a_chicago_nonstop",
+                    "traveler_id": "traveler_a",
+                    "labels": [
+                      "recommended_pair",
+                      "shortest_travel",
+                      "fewest_connections"
+                    ],
+                    "round_trip_price_usd": "324.00",
+                    "outbound": {
+                      "origin_airport_code": "BOS",
+                      "destination_airport_code": "ORD",
+                      "departure_at": "2099-06-10T08:00:00-04:00",
+                      "arrival_at": "2099-06-10T10:00:00-05:00",
+                      "duration_minutes": 180,
+                      "connection_count": 0,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "return_flight": {
+                      "origin_airport_code": "ORD",
+                      "destination_airport_code": "BOS",
+                      "departure_at": "2099-06-14T15:00:00-05:00",
+                      "arrival_at": "2099-06-14T18:50:00-04:00",
+                      "duration_minutes": 170,
+                      "connection_count": 0,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "total_travel_minutes": 350,
+                    "total_connections": 0,
+                    "is_round_trip_nonstop": true,
+                    "expires_at": null
+                  },
+                  {
+                    "offer_id": "fixture_a_chicago_connecting",
+                    "traveler_id": "traveler_a",
+                    "labels": [
+                      "lowest_price"
+                    ],
+                    "round_trip_price_usd": "300.00",
+                    "outbound": {
+                      "origin_airport_code": "BOS",
+                      "destination_airport_code": "ORD",
+                      "departure_at": "2099-06-10T07:00:00-04:00",
+                      "arrival_at": "2099-06-10T10:45:00-05:00",
+                      "duration_minutes": 360,
+                      "connection_count": 1,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "return_flight": {
+                      "origin_airport_code": "ORD",
+                      "destination_airport_code": "BOS",
+                      "departure_at": "2099-06-14T14:00:00-05:00",
+                      "arrival_at": "2099-06-14T19:05:00-04:00",
+                      "duration_minutes": 350,
+                      "connection_count": 1,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "total_travel_minutes": 710,
+                    "total_connections": 2,
+                    "is_round_trip_nonstop": false,
+                    "expires_at": null
+                  }
+                ]
+              },
+              {
+                "traveler_id": "traveler_b",
+                "options": [
+                  {
+                    "offer_id": "fixture_b_chicago_nonstop",
+                    "traveler_id": "traveler_b",
+                    "labels": [
+                      "recommended_pair",
+                      "shortest_travel",
+                      "fewest_connections"
+                    ],
+                    "round_trip_price_usd": "315.00",
+                    "outbound": {
+                      "origin_airport_code": "JFK",
+                      "destination_airport_code": "ORD",
+                      "departure_at": "2099-06-10T09:00:00-04:00",
+                      "arrival_at": "2099-06-10T10:45:00-05:00",
+                      "duration_minutes": 165,
+                      "connection_count": 0,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "return_flight": {
+                      "origin_airport_code": "ORD",
+                      "destination_airport_code": "JFK",
+                      "departure_at": "2099-06-14T16:00:00-05:00",
+                      "arrival_at": "2099-06-14T19:40:00-04:00",
+                      "duration_minutes": 160,
+                      "connection_count": 0,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "total_travel_minutes": 325,
+                    "total_connections": 0,
+                    "is_round_trip_nonstop": true,
+                    "expires_at": null
+                  },
+                  {
+                    "offer_id": "fixture_b_chicago_connecting",
+                    "traveler_id": "traveler_b",
+                    "labels": [
+                      "lowest_price"
+                    ],
+                    "round_trip_price_usd": "280.00",
+                    "outbound": {
+                      "origin_airport_code": "JFK",
+                      "destination_airport_code": "ORD",
+                      "departure_at": "2099-06-10T07:30:00-04:00",
+                      "arrival_at": "2099-06-10T11:30:00-05:00",
+                      "duration_minutes": 330,
+                      "connection_count": 1,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "return_flight": {
+                      "origin_airport_code": "ORD",
+                      "destination_airport_code": "JFK",
+                      "departure_at": "2099-06-14T13:00:00-05:00",
+                      "arrival_at": "2099-06-14T18:15:00-04:00",
+                      "duration_minutes": 340,
+                      "connection_count": 1,
+                      "carrier_codes": [
+                        "ZZ"
+                      ]
+                    },
+                    "total_travel_minutes": 670,
+                    "total_connections": 2,
+                    "is_round_trip_nonstop": false,
+                    "expires_at": null
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "passed": true
+    },
+    {
+      "path": "/trip-sessions/1dc071d8-f933-48e1-864b-c5f39a77039b/messages",
+      "request": {
+        "message": "We each now have a maximum round-trip airfare budget of $1 USD."
+      },
+      "status": 200,
+      "response": {
+        "session_id": "1dc071d8-f933-48e1-864b-c5f39a77039b",
+        "state": "review",
+        "assistant_message": "Travel dates: 2099-06-10 to 2099-06-14.\nAlex: Boston (boston_ma); airfare budget $1.0 USD; maximum one-way time 10.0 hours including layovers. Preferences: {'interest_tags': ['outdoor_activities']}.\nJamie: New York (new_york_ny); airfare budget $1.0 USD; maximum one-way time 10.0 hours including layovers. Preferences: none provided.\nNot included, as agreed: I want a hotel with a pool.\nConfirm this trip request to find destinations.",
+        "trip_request_draft": {
+          "travelers": [
+            {
+              "traveler_id": "traveler_a",
+              "display_name": "Alex",
+              "origin": "Boston",
+              "origin_id": "boston_ma",
+              "budget_usd": 1.0,
+              "max_travel_time_hours": 10.0,
+              "preferences": {
+                "temperature_range": null,
+                "interest_tags": [
+                  "outdoor_activities"
+                ]
+              }
+            },
+            {
+              "traveler_id": "traveler_b",
+              "display_name": "Jamie",
+              "origin": "New York",
+              "origin_id": "new_york_ny",
+              "budget_usd": 1.0,
+              "max_travel_time_hours": 10.0,
+              "preferences": {
+                "temperature_range": null,
+                "interest_tags": []
+              }
+            }
+          ],
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14"
+        },
+        "missing_fields": [],
+        "pending_questions": [],
+        "unsupported_requests": [],
+        "deferred_requests": [
+          "I want a hotel with a pool."
+        ],
+        "recommendations": []
+      },
+      "passed": true
+    },
+    {
+      "path": "/trip-sessions/1dc071d8-f933-48e1-864b-c5f39a77039b/messages",
+      "request": {
+        "action": "confirm"
+      },
+      "status": 200,
+      "response": {
+        "session_id": "1dc071d8-f933-48e1-864b-c5f39a77039b",
+        "state": "no_match",
+        "assistant_message": "No fixture destination meets both travelers' current constraints. Adjust a budget, travel-time limit, date, or origin and try again.",
+        "trip_request_draft": {
+          "travelers": [
+            {
+              "traveler_id": "traveler_a",
+              "display_name": "Alex",
+              "origin": "Boston",
+              "origin_id": "boston_ma",
+              "budget_usd": 1.0,
+              "max_travel_time_hours": 10.0,
+              "preferences": {
+                "temperature_range": null,
+                "interest_tags": [
+                  "outdoor_activities"
+                ]
+              }
+            },
+            {
+              "traveler_id": "traveler_b",
+              "display_name": "Jamie",
+              "origin": "New York",
+              "origin_id": "new_york_ny",
+              "budget_usd": 1.0,
+              "max_travel_time_hours": 10.0,
+              "preferences": {
+                "temperature_range": null,
+                "interest_tags": []
+              }
+            }
+          ],
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14"
+        },
+        "missing_fields": [],
+        "pending_questions": [],
+        "unsupported_requests": [],
+        "deferred_requests": [
+          "I want a hotel with a pool."
+        ],
+        "recommendations": []
+      },
+      "passed": true
+    }
+  ]
+}

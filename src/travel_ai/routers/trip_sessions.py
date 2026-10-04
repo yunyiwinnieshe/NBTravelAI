@@ -1,5 +1,6 @@
 """Conversational trip-planning HTTP routes."""
 
+import os
 from datetime import date
 from functools import lru_cache
 from typing import Annotated
@@ -19,8 +20,16 @@ from travel_ai.schemas.sessions import (
     TripRequestDraft,
     TripSessionMessageRequest,
 )
+from travel_ai.services.deepseek_preference_extraction import (
+    DeepSeekConfigurationError,
+    DeepSeekPreferenceExtractor,
+)
 from travel_ai.services.preference_extraction import FixturePreferenceExtractor
 from travel_ai.services.recommendation_service import RecommendationService
+from travel_ai.services.session_extraction import (
+    SessionExtractionPolicy,
+    SessionPreferenceExtractor,
+)
 from travel_ai.services.trip_session_service import (
     TripSessionNotFoundError,
     TripSessionNotReadyError,
@@ -32,7 +41,18 @@ router = APIRouter(prefix="/trip-sessions", tags=["trip sessions"])
 
 @lru_cache
 def get_trip_session_service() -> TripSessionService:
-    """Build the limited offline session flow used before live LLM integration."""
+    """Choose extraction only; deterministic recommendation dependencies stay fixed."""
+    provider = os.getenv("EXTRACTION_PROVIDER", "fixture").strip().lower()
+    if provider == "deepseek":
+        policy = SessionExtractionPolicy.from_environment()
+        return TripSessionService(
+            SessionPreferenceExtractor(DeepSeekPreferenceExtractor(), policy),
+            RecommendationService(),
+        )
+    if provider != "fixture":
+        raise DeepSeekConfigurationError(
+            "EXTRACTION_PROVIDER must be fixture or deepseek"
+        )
     initial_draft = TripRequestDraft(
         travelers=[
             TravelerPreferencesDraft(
@@ -114,7 +134,7 @@ def create_trip_session(
     request: CreateTripSessionRequest,
     service: Annotated[TripSessionService, Depends(get_trip_session_service)],
 ) -> ConversationTurnResponse:
-    """Start a fixture-backed planning session."""
+    """Start a planning session with the configured extractor."""
     try:
         return service.create_session(request.initial_message)
     except ValueError as error:
@@ -133,10 +153,12 @@ def add_trip_session_message(
     request: TripSessionMessageRequest,
     service: Annotated[TripSessionService, Depends(get_trip_session_service)],
 ) -> ConversationTurnResponse:
-    """Apply a fixture extraction result to the saved session draft."""
+    """Apply a validated extraction result to the saved session draft."""
     try:
         if request.action == "confirm":
             return service.confirm_session(session_id)
+        if request.action == "continue_without_unsupported":
+            return service.defer_unsupported(session_id)
         assert request.message is not None
         return service.add_message(session_id, request.message)
     except TripSessionNotFoundError as error:

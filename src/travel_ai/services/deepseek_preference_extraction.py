@@ -1,4 +1,4 @@
-"""Standalone DeepSeek adapter; deliberately not wired into planning sessions."""
+"""DeepSeek adapter with validated sparse updates and optional session context."""
 
 import json
 import math
@@ -17,9 +17,10 @@ from travel_ai.schemas.preference_extraction import (
     MissingField,
     PreferenceExtractionResult,
     PreferenceExtractionStatus,
+    UnsupportedAcknowledgment,
     UnsupportedRequest,
 )
-from travel_ai.schemas.sessions import TripRequestDraft
+from travel_ai.schemas.sessions import ExtractionContext, TripRequestDraft
 from travel_ai.schemas.trip import TripPreferences
 from travel_ai.services.preference_extraction import PreferenceExtractor
 
@@ -93,6 +94,9 @@ class _Response(BaseModel):
     operations: list[_Operation] = Field(max_length=100)
     missing_fields: list[MissingField] = Field(max_length=100)
     unsupported_requests: list[UnsupportedRequest] = Field(max_length=100)
+    acknowledged_unsupported: list[UnsupportedAcknowledgment] = Field(
+        default_factory=list, max_length=100
+    )
 
 
 _SCALARS = ("display_name", "origin", "budget_usd", "max_travel_time_hours")
@@ -164,6 +168,24 @@ For unsupported requests with no canonical field (hotels, booking, destination
 constraints, nonstop flights), use unsupported_requests with an exact user_text
 quote and a short explanation of the limitation. Do not invent a field path.
 Keep valid edits from mixed messages. No tools, scores, flights, or readiness claims.
+When conversation_context is supplied, use only its pending_questions (the questions
+actually shown) to interpret short replies. For example, '800' can answer a single
+known airfare-budget question. If several questions could fit, ask which one;
+never apply a bare number to both travelers or invent its owner. Context can resolve
+ownership even if the reply lacks a name. Quotes still come from the current reply.
+Each pending question may include the source_message that prompted it. Use that
+text only to resolve the pending answer: for example, '2099' answering a missing
+year for 'October 10' gives October 10, 2099. Never replay unrelated prior edits.
+Only Boston, MA and New York, NY are supported session origins when context is
+present. Ask about unsupported origins; never silently map another city to them.
+For conversation_context.unsupported_requests, acknowledge ONLY explicit agreement
+to continue
+without, remove, or defer those requests. Return acknowledged_unsupported entries
+with the existing request_id and an exact evidence quote. A bare 'yes' can agree
+to the displayed unsupported-request question only if unambiguous. A correction,
+new unrelated detail, or trip confirmation is not consent. Never invent request IDs.
+Keep unsupported explanations and questions in plain language, without mentioning
+schemas, canonical fields, IDs, or implementation details.
 """
 
 
@@ -213,8 +235,13 @@ class DeepSeekPreferenceExtractor(PreferenceExtractor):
         self.close()
 
     def extract(
-        self, user_message: str, current_draft: TripRequestDraft
+        self,
+        user_message: str,
+        current_draft: TripRequestDraft,
+        context: ExtractionContext | None = None,
     ) -> PreferenceExtractionResult:
+        if context is None:
+            context = ExtractionContext()
         ids = [t.traveler_id for t in current_draft.travelers]
         if sorted(ids) != ["traveler_a", "traveler_b"]:
             raise ValueError("draft must contain assigned traveler_a and traveler_b")
@@ -235,8 +262,18 @@ class DeepSeekPreferenceExtractor(PreferenceExtractor):
             "allowed_field_paths": sorted(_paths()),
             "response_schema": _Response.model_json_schema(),
         }
+        if context.pending_questions or context.unsupported_requests:
+            payload["conversation_context"] = context.model_dump(mode="json")
         parsed = self._request(payload)
-        return self._normalize(parsed, user_message, current_draft, today)
+        known_ids = {notice.request_id for notice in context.unsupported_requests}
+        if any(
+            ack.request_id not in known_ids or ack.evidence not in user_message
+            for ack in parsed.acknowledged_unsupported
+        ):
+            raise DeepSeekResponseError("Invalid unsupported-request acknowledgment")
+        result = self._normalize(parsed, user_message, current_draft, today)
+        result.acknowledged_unsupported = parsed.acknowledged_unsupported
+        return result
 
     def _request(self, payload: dict[str, Any]) -> _Response:
         try:
