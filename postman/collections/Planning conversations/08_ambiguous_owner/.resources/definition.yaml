@@ -1,0 +1,6 @@
+{
+  "$kind": "collection",
+  "name": "08_ambiguous_owner",
+  "description": "Do not assign a budget to either traveler when ownership is explicitly unspecified.",
+  "order": 8000
+}

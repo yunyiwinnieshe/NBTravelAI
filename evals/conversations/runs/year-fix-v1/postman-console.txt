@@ -1,0 +1,366 @@
+No authorization data found. Please use the `postman login` command.
+Refer:https://learning.postman.com/docs/postman-cli/postman-cli-options/#postman-login
+
+Running your collection...
+
+Iteration 1/3
+
+Root 5de30398a5a42de2613fbda1
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.16 KB, 1668 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Create session","status":20
+  | 0,"body":{"session_id":"62769127-0af4-4e35-98b4-432aa6
+  | df6ea1","state":"review","assistant_message":"Travel d
+  | ates: 2099-06-10 to 2099-06-14.\\nAlex: Boston (boston
+  | _ma); airfare budget $800.0 USD; maximum one-way time 
+  | 10.0 hours including layovers. Preferences: none provi
+  | ded.\\nJamie: New York (new_york_ny); airfare budget $
+  | 500.0 USD; maximum one-way time 10.0 hours including l
+  | ayovers. Preferences: none provided.\\nConfirm this tr
+  | ip request to find destinations.","trip_request_draft"
+  | :{"travelers":[{"traveler_id":"traveler_a","display_na
+  | me":"Alex","origin":"Boston","origin_id":"boston_ma","
+  | budget_usd":800,"max_travel_time_hours":10,"preference
+  | s":{"temperature_range":null,"interest_tags":[]}},{"tr
+  | aveler_id":"traveler_b","display_name":"Jamie","origin
+  | ":"New York","origin_id":"new_york_ny","budget_usd":50
+  | 0,"max_travel_time_hours":10,"preferences":{"temperatu
+  | re_range":null,"interest_tags":[]}}],"start_date":"209
+  | 9-06-10","end_date":"2099-06-14"},"missing_fields":[],
+  | "pending_questions":[],"unsupported_requests":[],"defe
+  | rred_requests":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.display_name
+  Pass  Expected travelers.traveler_b.display_name
+  Pass  Expected travelers.traveler_a.origin_id
+  Pass  Expected travelers.traveler_b.origin_id
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Expected travelers.traveler_a.max_travel_time_hours
+  Pass  Expected travelers.traveler_b.max_travel_time_hours
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root 8f268c51b7a52bbedb97ef1c
+
+  POST http://127.0.0.1:8012/trip-sessions/62769127-0af4-4e35-98b4-432aa6df6ea1/messages [200 OK, 1.03 KB, 1237 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Date without year","status"
+  | :200,"body":{"session_id":"62769127-0af4-4e35-98b4-432
+  | aa6df6ea1","state":"collecting","assistant_message":"W
+  | hat year is your June 11 departure date?","trip_reques
+  | t_draft":{"travelers":[{"traveler_id":"traveler_a","di
+  | splay_name":"Alex","origin":"Boston","origin_id":"bost
+  | on_ma","budget_usd":800,"max_travel_time_hours":10,"pr
+  | eferences":{"temperature_range":null,"interest_tags":[
+  | ]}},{"traveler_id":"traveler_b","display_name":"Jamie"
+  | ,"origin":"New York","origin_id":"new_york_ny","budget
+  | _usd":500,"max_travel_time_hours":10,"preferences":{"t
+  | emperature_range":null,"interest_tags":[]}}],"start_da
+  | te":"2099-06-10","end_date":"2099-06-14"},"missing_fie
+  | lds":["start_date"],"pending_questions":[{"field_path"
+  | :"start_date","question":"What year is your June 11 de
+  | parture date?","source_message":"Change my departure d
+  | ate to June 11; I have not specified the year."}],"uns
+  | upported_requests":[],"deferred_requests":[],"recommen
+  | dations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Clarify start_date
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 6e85b1dcf55c2ad35565469b
+
+  POST http://127.0.0.1:8012/trip-sessions/62769127-0af4-4e35-98b4-432aa6df6ea1/messages [200 OK, 1.16 KB, 691 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Supply year","status":200,"
+  | body":{"session_id":"62769127-0af4-4e35-98b4-432aa6df6
+  | ea1","state":"review","assistant_message":"Travel date
+  | s: 2099-06-11 to 2099-06-14.\\nAlex: Boston (boston_ma
+  | ); airfare budget $800.0 USD; maximum one-way time 10.
+  | 0 hours including layovers. Preferences: none provided
+  | .\\nJamie: New York (new_york_ny); airfare budget $500
+  | .0 USD; maximum one-way time 10.0 hours including layo
+  | vers. Preferences: none provided.\\nConfirm this trip 
+  | request to find destinations.","trip_request_draft":{"
+  | travelers":[{"traveler_id":"traveler_a","display_name"
+  | :"Alex","origin":"Boston","origin_id":"boston_ma","bud
+  | get_usd":800,"max_travel_time_hours":10,"preferences":
+  | {"temperature_range":null,"interest_tags":[]}},{"trave
+  | ler_id":"traveler_b","display_name":"Jamie","origin":"
+  | New York","origin_id":"new_york_ny","budget_usd":500,"
+  | max_travel_time_hours":10,"preferences":{"temperature_
+  | range":null,"interest_tags":[]}}],"start_date":"2099-0
+  | 6-11","end_date":"2099-06-14"},"missing_fields":[],"pe
+  | nding_questions":[],"unsupported_requests":[],"deferre
+  | d_requests":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Iteration 2/3
+
+Root 5de30398a5a42de2613fbda1
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.16 KB, 1804 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Create session","status":20
+  | 0,"body":{"session_id":"10fae374-6409-4581-a433-fb15ac
+  | a8f569","state":"review","assistant_message":"Travel d
+  | ates: 2099-06-10 to 2099-06-14.\\nAlex: Boston (boston
+  | _ma); airfare budget $800.0 USD; maximum one-way time 
+  | 10.0 hours including layovers. Preferences: none provi
+  | ded.\\nJamie: New York (new_york_ny); airfare budget $
+  | 500.0 USD; maximum one-way time 10.0 hours including l
+  | ayovers. Preferences: none provided.\\nConfirm this tr
+  | ip request to find destinations.","trip_request_draft"
+  | :{"travelers":[{"traveler_id":"traveler_a","display_na
+  | me":"Alex","origin":"Boston","origin_id":"boston_ma","
+  | budget_usd":800,"max_travel_time_hours":10,"preference
+  | s":{"temperature_range":null,"interest_tags":[]}},{"tr
+  | aveler_id":"traveler_b","display_name":"Jamie","origin
+  | ":"New York","origin_id":"new_york_ny","budget_usd":50
+  | 0,"max_travel_time_hours":10,"preferences":{"temperatu
+  | re_range":null,"interest_tags":[]}}],"start_date":"209
+  | 9-06-10","end_date":"2099-06-14"},"missing_fields":[],
+  | "pending_questions":[],"unsupported_requests":[],"defe
+  | rred_requests":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.display_name
+  Pass  Expected travelers.traveler_b.display_name
+  Pass  Expected travelers.traveler_a.origin_id
+  Pass  Expected travelers.traveler_b.origin_id
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Expected travelers.traveler_a.max_travel_time_hours
+  Pass  Expected travelers.traveler_b.max_travel_time_hours
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root 8f268c51b7a52bbedb97ef1c
+
+  POST http://127.0.0.1:8012/trip-sessions/10fae374-6409-4581-a433-fb15aca8f569/messages [200 OK, 1.03 KB, 1292 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Date without year","status"
+  | :200,"body":{"session_id":"10fae374-6409-4581-a433-fb1
+  | 5aca8f569","state":"collecting","assistant_message":"W
+  | hat year is your June 11 departure date?","trip_reques
+  | t_draft":{"travelers":[{"traveler_id":"traveler_a","di
+  | splay_name":"Alex","origin":"Boston","origin_id":"bost
+  | on_ma","budget_usd":800,"max_travel_time_hours":10,"pr
+  | eferences":{"temperature_range":null,"interest_tags":[
+  | ]}},{"traveler_id":"traveler_b","display_name":"Jamie"
+  | ,"origin":"New York","origin_id":"new_york_ny","budget
+  | _usd":500,"max_travel_time_hours":10,"preferences":{"t
+  | emperature_range":null,"interest_tags":[]}}],"start_da
+  | te":"2099-06-10","end_date":"2099-06-14"},"missing_fie
+  | lds":["start_date"],"pending_questions":[{"field_path"
+  | :"start_date","question":"What year is your June 11 de
+  | parture date?","source_message":"Change my departure d
+  | ate to June 11; I have not specified the year."}],"uns
+  | upported_requests":[],"deferred_requests":[],"recommen
+  | dations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Clarify start_date
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 6e85b1dcf55c2ad35565469b
+
+  POST http://127.0.0.1:8012/trip-sessions/10fae374-6409-4581-a433-fb15aca8f569/messages [200 OK, 1.16 KB, 833 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Supply year","status":200,"
+  | body":{"session_id":"10fae374-6409-4581-a433-fb15aca8f
+  | 569","state":"review","assistant_message":"Travel date
+  | s: 2099-06-11 to 2099-06-14.\\nAlex: Boston (boston_ma
+  | ); airfare budget $800.0 USD; maximum one-way time 10.
+  | 0 hours including layovers. Preferences: none provided
+  | .\\nJamie: New York (new_york_ny); airfare budget $500
+  | .0 USD; maximum one-way time 10.0 hours including layo
+  | vers. Preferences: none provided.\\nConfirm this trip 
+  | request to find destinations.","trip_request_draft":{"
+  | travelers":[{"traveler_id":"traveler_a","display_name"
+  | :"Alex","origin":"Boston","origin_id":"boston_ma","bud
+  | get_usd":800,"max_travel_time_hours":10,"preferences":
+  | {"temperature_range":null,"interest_tags":[]}},{"trave
+  | ler_id":"traveler_b","display_name":"Jamie","origin":"
+  | New York","origin_id":"new_york_ny","budget_usd":500,"
+  | max_travel_time_hours":10,"preferences":{"temperature_
+  | range":null,"interest_tags":[]}}],"start_date":"2099-0
+  | 6-11","end_date":"2099-06-14"},"missing_fields":[],"pe
+  | nding_questions":[],"unsupported_requests":[],"deferre
+  | d_requests":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Iteration 3/3
+
+Root 5de30398a5a42de2613fbda1
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.16 KB, 1819 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Create session","status":20
+  | 0,"body":{"session_id":"2451950f-15f7-41d5-b6ec-d910b4
+  | 65b9e5","state":"review","assistant_message":"Travel d
+  | ates: 2099-06-10 to 2099-06-14.\\nAlex: Boston (boston
+  | _ma); airfare budget $800.0 USD; maximum one-way time 
+  | 10.0 hours including layovers. Preferences: none provi
+  | ded.\\nJamie: New York (new_york_ny); airfare budget $
+  | 500.0 USD; maximum one-way time 10.0 hours including l
+  | ayovers. Preferences: none provided.\\nConfirm this tr
+  | ip request to find destinations.","trip_request_draft"
+  | :{"travelers":[{"traveler_id":"traveler_a","display_na
+  | me":"Alex","origin":"Boston","origin_id":"boston_ma","
+  | budget_usd":800,"max_travel_time_hours":10,"preference
+  | s":{"temperature_range":null,"interest_tags":[]}},{"tr
+  | aveler_id":"traveler_b","display_name":"Jamie","origin
+  | ":"New York","origin_id":"new_york_ny","budget_usd":50
+  | 0,"max_travel_time_hours":10,"preferences":{"temperatu
+  | re_range":null,"interest_tags":[]}}],"start_date":"209
+  | 9-06-10","end_date":"2099-06-14"},"missing_fields":[],
+  | "pending_questions":[],"unsupported_requests":[],"defe
+  | rred_requests":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.display_name
+  Pass  Expected travelers.traveler_b.display_name
+  Pass  Expected travelers.traveler_a.origin_id
+  Pass  Expected travelers.traveler_b.origin_id
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Expected travelers.traveler_a.max_travel_time_hours
+  Pass  Expected travelers.traveler_b.max_travel_time_hours
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root 8f268c51b7a52bbedb97ef1c
+
+  POST http://127.0.0.1:8012/trip-sessions/2451950f-15f7-41d5-b6ec-d910b465b9e5/messages [200 OK, 1.03 KB, 899 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Date without year","status"
+  | :200,"body":{"session_id":"2451950f-15f7-41d5-b6ec-d91
+  | 0b465b9e5","state":"collecting","assistant_message":"W
+  | hat year is your June 11 departure date?","trip_reques
+  | t_draft":{"travelers":[{"traveler_id":"traveler_a","di
+  | splay_name":"Alex","origin":"Boston","origin_id":"bost
+  | on_ma","budget_usd":800,"max_travel_time_hours":10,"pr
+  | eferences":{"temperature_range":null,"interest_tags":[
+  | ]}},{"traveler_id":"traveler_b","display_name":"Jamie"
+  | ,"origin":"New York","origin_id":"new_york_ny","budget
+  | _usd":500,"max_travel_time_hours":10,"preferences":{"t
+  | emperature_range":null,"interest_tags":[]}}],"start_da
+  | te":"2099-06-10","end_date":"2099-06-14"},"missing_fie
+  | lds":["start_date"],"pending_questions":[{"field_path"
+  | :"start_date","question":"What year is your June 11 de
+  | parture date?","source_message":"Change my departure d
+  | ate to June 11; I have not specified the year."}],"uns
+  | upported_requests":[],"deferred_requests":[],"recommen
+  | dations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Clarify start_date
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 6e85b1dcf55c2ad35565469b
+
+  POST http://127.0.0.1:8012/trip-sessions/2451950f-15f7-41d5-b6ec-d910b465b9e5/messages [200 OK, 1.16 KB, 780 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Supply year","status":200,"
+  | body":{"session_id":"2451950f-15f7-41d5-b6ec-d910b465b
+  | 9e5","state":"review","assistant_message":"Travel date
+  | s: 2099-06-11 to 2099-06-14.\\nAlex: Boston (boston_ma
+  | ); airfare budget $800.0 USD; maximum one-way time 10.
+  | 0 hours including layovers. Preferences: none provided
+  | .\\nJamie: New York (new_york_ny); airfare budget $500
+  | .0 USD; maximum one-way time 10.0 hours including layo
+  | vers. Preferences: none provided.\\nConfirm this trip 
+  | request to find destinations.","trip_request_draft":{"
+  | travelers":[{"traveler_id":"traveler_a","display_name"
+  | :"Alex","origin":"Boston","origin_id":"boston_ma","bud
+  | get_usd":800,"max_travel_time_hours":10,"preferences":
+  | {"temperature_range":null,"interest_tags":[]}},{"trave
+  | ler_id":"traveler_b","display_name":"Jamie","origin":"
+  | New York","origin_id":"new_york_ny","budget_usd":500,"
+  | max_travel_time_hours":10,"preferences":{"temperature_
+  | range":null,"interest_tags":[]}}],"start_date":"2099-0
+  | 6-11","end_date":"2099-06-14"},"missing_fields":[],"pe
+  | nding_questions":[],"unsupported_requests":[],"deferre
+  | d_requests":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+----------------------------------------------------------------------------
+|                         |               executed |                failed |
+--------------------------+------------------------+------------------------
+|              iterations |                      3 |                     0 |
+--------------------------+------------------------+------------------------
+|                requests |                      9 |                     0 |
+--------------------------+------------------------+------------------------
+|            test-scripts |                      9 |                     0 |
+--------------------------+------------------------+------------------------
+|      prerequest-scripts |                      3 |                     0 |
+--------------------------+------------------------+------------------------
+|              assertions |                     99 |                     0 |
+----------------------------------------------------------------------------
+| total run duration: 11.4 s                                               |
+----------------------------------------------------------------------------
+| total data received: 8.93 KB (approx)                                    |
+----------------------------------------------------------------------------
+| average response time: 1225 ms [min: 691 ms, max: 1819 ms, s.d.: 425 ms] |
+----------------------------------------------------------------------------

@@ -1,0 +1,6 @@
+{
+  "$kind": "collection",
+  "name": "01_complete",
+  "description": "Complete details reach review; text does not confirm; structured confirmation returns recommendations.",
+  "order": 1000
+}

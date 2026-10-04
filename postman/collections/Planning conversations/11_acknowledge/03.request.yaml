@@ -1,0 +1,24 @@
+{
+  "$kind": "http-request",
+  "name": "Agree to exclude hotel",
+  "order": 3000,
+  "method": "POST",
+  "url": "{{base_url}}/trip-sessions/{{session_id}}/messages",
+  "headers": [
+    {
+      "key": "Content-Type",
+      "value": "application/json"
+    }
+  ],
+  "body": {
+    "type": "json",
+    "content": "{\n  \"message\": \"Yes, continue without the hotel request.\"\n}"
+  },
+  "scripts": [
+    {
+      "type": "afterResponse",
+      "language": "text/javascript",
+      "code": "const expected = {\"http_status\": 200, \"state\": \"review\", \"unsupported\": false, \"deferred\": true, \"preserve_except\": []};\nconst body = pm.response.json();\nif (pm.environment.get(\"record_responses\") === \"true\") {\n    console.log(\"EVAL_RESPONSE \" + JSON.stringify({\n        request: pm.info.requestName, status: pm.response.code, body\n    }));\n}\npm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));\nif (pm.response.code === 200) {\n    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));\n    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);\n    const draft = body.trip_request_draft;\n    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));\n    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};\n    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);\n    for (const [path, value] of Object.entries(expected.fields || {})) {\n        pm.test(\"Expected \" + path, () => {\n            const actual = get(normalized, path);\n            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);\n        });\n    }\n    for (const path of expected.missing || []) {\n        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));\n    }\n    if (expected.missing_any) {\n        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));\n    }\n    if (expected.unsupported !== undefined) {\n        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));\n    }\n    if (expected.deferred) {\n        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));\n    }\n    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));\n    pm.test(\"Recommendation gate\", () => {\n        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);\n        else pm.expect(body.recommendations).to.eql([]);\n    });\n    if (expected.preserve_except) {\n        pm.test(\"Unrelated draft fields preserved\", () => {\n            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));\n            const after = JSON.parse(JSON.stringify(normalized));\n            const remove = (obj, path) => {\n                const keys = path.split(\".\"); const last = keys.pop();\n                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);\n                if (parent) delete parent[last];\n            };\n            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });\n            pm.expect(after).to.eql(before);\n        });\n    }\n    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));\n    pm.collectionVariables.set(\"session_id\", body.session_id);\n}\n"
+    }
+  ]
+}

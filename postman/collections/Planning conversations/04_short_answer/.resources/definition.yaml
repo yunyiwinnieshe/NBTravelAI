@@ -1,0 +1,6 @@
+{
+  "$kind": "collection",
+  "name": "04_short_answer",
+  "description": "A bare number answers the single pending budget question.",
+  "order": 4000
+}

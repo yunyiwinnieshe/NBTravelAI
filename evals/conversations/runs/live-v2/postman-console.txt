@@ -1,0 +1,1753 @@
+No authorization data found. Please use the `postman login` command.
+Refer:https://learning.postman.com/docs/postman-cli/postman-cli-options/#postman-login
+
+Running your collection...
+
+Root 5bbb1410015e99938e285d1f
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.16 KB, 1854 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Create session","status":20
+  | 0,"body":{"session_id":"efe9e0f6-a8b5-44c9-a9e6-593dd0
+  | 5967d6","state":"review","assistant_message":"Travel d
+  | ates: 2099-06-10 to 2099-06-14.\\nAlex: Boston (boston
+  | _ma); airfare budget $800.0 USD; maximum one-way time 
+  | 10.0 hours including layovers. Preferences: none provi
+  | ded.\\nJamie: New York (new_york_ny); airfare budget $
+  | 500.0 USD; maximum one-way time 10.0 hours including l
+  | ayovers. Preferences: none provided.\\nConfirm this tr
+  | ip request to find destinations.","trip_request_draft"
+  | :{"travelers":[{"traveler_id":"traveler_a","display_na
+  | me":"Alex","origin":"Boston","origin_id":"boston_ma","
+  | budget_usd":800,"max_travel_time_hours":10,"preference
+  | s":{"temperature_range":null,"interest_tags":[]}},{"tr
+  | aveler_id":"traveler_b","display_name":"Jamie","origin
+  | ":"New York","origin_id":"new_york_ny","budget_usd":50
+  | 0,"max_travel_time_hours":10,"preferences":{"temperatu
+  | re_range":null,"interest_tags":[]}}],"start_date":"209
+  | 9-06-10","end_date":"2099-06-14"},"missing_fields":[],
+  | "pending_questions":[],"unsupported_requests":[],"defe
+  | rred_requests":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.display_name
+  Pass  Expected travelers.traveler_b.display_name
+  Pass  Expected travelers.traveler_a.origin_id
+  Pass  Expected travelers.traveler_b.origin_id
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Expected travelers.traveler_a.max_travel_time_hours
+  Pass  Expected travelers.traveler_b.max_travel_time_hours
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root d2949fff2832f6127100fe91
+
+  POST http://127.0.0.1:8012/trip-sessions/efe9e0f6-a8b5-44c9-a9e6-593dd05967d6/messages [200 OK, 1.16 KB, 940 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Text is not confirmation","
+  | status":200,"body":{"session_id":"efe9e0f6-a8b5-44c9-a
+  | 9e6-593dd05967d6","state":"review","assistant_message"
+  | :"Travel dates: 2099-06-10 to 2099-06-14.\\nAlex: Bost
+  | on (boston_ma); airfare budget $800.0 USD; maximum one
+  | -way time 10.0 hours including layovers. Preferences: 
+  | none provided.\\nJamie: New York (new_york_ny); airfar
+  | e budget $500.0 USD; maximum one-way time 10.0 hours i
+  | ncluding layovers. Preferences: none provided.\\nConfi
+  | rm this trip request to find destinations.","trip_requ
+  | est_draft":{"travelers":[{"traveler_id":"traveler_a","
+  | display_name":"Alex","origin":"Boston","origin_id":"bo
+  | ston_ma","budget_usd":800,"max_travel_time_hours":10,"
+  | preferences":{"temperature_range":null,"interest_tags"
+  | :[]}},{"traveler_id":"traveler_b","display_name":"Jami
+  | e","origin":"New York","origin_id":"new_york_ny","budg
+  | et_usd":500,"max_travel_time_hours":10,"preferences":{
+  | "temperature_range":null,"interest_tags":[]}}],"start_
+  | date":"2099-06-10","end_date":"2099-06-14"},"missing_f
+  | ields":[],"pending_questions":[],"unsupported_requests
+  | ":[],"deferred_requests":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root a3dc62d256654f778713c770
+
+  POST http://127.0.0.1:8012/trip-sessions/efe9e0f6-a8b5-44c9-a9e6-593dd05967d6/messages [200 OK, 13.41 KB, 6 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Confirm reviewed trip","sta
+  | tus":200,"body":{"session_id":"efe9e0f6-a8b5-44c9-a9e6
+  | -593dd05967d6","state":"results","assistant_message":"
+  | Found 3 destination recommendations.","trip_request_dr
+  | aft":{"travelers":[{"traveler_id":"traveler_a","displa
+  | y_name":"Alex","origin":"Boston","origin_id":"boston_m
+  | a","budget_usd":800,"max_travel_time_hours":10,"prefer
+  | ences":{"temperature_range":null,"interest_tags":[]}},
+  | {"traveler_id":"traveler_b","display_name":"Jamie","or
+  | igin":"New York","origin_id":"new_york_ny","budget_usd
+  | ":500,"max_travel_time_hours":10,"preferences":{"tempe
+  | rature_range":null,"interest_tags":[]}}],"start_date":
+  | "2099-06-10","end_date":"2099-06-14"},"missing_fields"
+  | :[],"pending_questions":[],"unsupported_requests":[],"
+  | deferred_requests":[],"recommendations":[{"rank":1,"de
+  | stination":{"destination_id":"chicago_il","name":"Chic
+  | ago","state_code":"IL","metro_airport_codes":["ORD","M
+  | DW"]},"score":0.689688,"score_breakdown":{"affordabili
+  | ty":{"value":0.4825,"weight":0.4375,"contribution":0.2
+  | 11094},"travel_fairness":{"value":0.92,"weight":0.375,
+  | "contribution":0.345},"preference_match":{"value":1,"w
+  | eight":0,"contribution":0},"travel_time":{"value":0.71
+  | 25,"weight":0.1875,"contribution":0.133594},"travel_fa
+  | irness_details":{"duration_balance":0.975,"budget_burd
+  | en_balance":0.775,"arrival_alignment":1}},"recommended
+  | _pair":{"offers":[{"traveler_id":"traveler_a","offer_i
+  | d":"fixture_a_chicago_nonstop"},{"traveler_id":"travel
+  | er_b","offer_id":"fixture_b_chicago_nonstop"}],"combin
+  | ed_price_usd":"639.00","arrival_gap_minutes":45,"retur
+  | n_departure_gap_minutes":60,"time_together_minutes":60
+  | 15,"total_connections":0,"combined_travel_minutes":675
+  | ,"selection_score":0.967684,"selection_score_breakdown
+  | ":{"price":{"value":0.907668,"weight":0.35,"contributi
+  | on":0.317684},"arrival_alignment":{"value":1,"weight":
+  | 0.25,"contribution":0.25},"travel_time":{"value":1,"we
+  | ight":0.2,"contribution":0.2},"connections":{"value":1
+  | ,"weight":0.1,"contribution":0.1},"time_together":{"va
+  | lue":1,"weight":0.1,"contribution":0.1}},"price_compar
+  | ison":{"lowest_valid_combined_price_usd":"580.00","pre
+  | mium_usd":"59.00","premium_percentage":10.172413793103
+  | 448}},"flight_options_by_traveler":[{"traveler_id":"tr
+  | aveler_a","options":[{"offer_id":"fixture_a_chicago_no
+  | nstop","traveler_id":"traveler_a","labels":["recommend
+  | ed_pair","shortest_travel","fewest_connections"],"roun
+  | d_trip_price_usd":"324.00","outbound":{"origin_airport
+  | _code":"BOS","destination_airport_code":"ORD","departu
+  | re_at":"2099-06-10T08:00:00-04:00","arrival_at":"2099-
+  | 06-10T10:00:00-05:00","duration_minutes":180,"connecti
+  | on_count":0,"carrier_codes":["ZZ"]},"return_flight":{"
+  | origin_airport_code":"ORD","destination_airport_code":
+  | "BOS","departure_at":"2099-06-14T15:00:00-05:00","arri
+  | val_at":"2099-06-14T18:50:00-04:00","duration_minutes"
+  | :170,"connection_count":0,"carrier_codes":["ZZ"]},"tot
+  | al_travel_minutes":350,"total_connections":0,"is_round
+  | _trip_nonstop":true,"expires_at":null},{"offer_id":"fi
+  | xture_a_chicago_connecting","traveler_id":"traveler_a"
+  | ,"labels":["lowest_price"],"round_trip_price_usd":"300
+  | .00","outbound":{"origin_airport_code":"BOS","destinat
+  | ion_airport_code":"ORD","departure_at":"2099-06-10T07:
+  | 00:00-04:00","arrival_at":"2099-06-10T10:45:00-05:00",
+  | "duration_minutes":360,"connection_count":1,"carrier_c
+  | odes":["ZZ"]},"return_flight":{"origin_airport_code":"
+  | ORD","destination_airport_code":"BOS","departure_at":"
+  | 2099-06-14T14:00:00-05:00","arrival_at":"2099-06-14T19
+  | :05:00-04:00","duration_minutes":350,"connection_count
+  | ":1,"carrier_codes":["ZZ"]},"total_travel_minutes":710
+  | ,"total_connections":2,"is_round_trip_nonstop":false,"
+  | expires_at":null}]},{"traveler_id":"traveler_b","optio
+  | ns":[{"offer_id":"fixture_b_chicago_nonstop","traveler
+  | _id":"traveler_b","labels":["recommended_pair","shorte
+  | st_travel","fewest_connections"],"round_trip_price_usd
+  | ":"315.00","outbound":{"origin_airport_code":"JFK","de
+  | stination_airport_code":"ORD","departure_at":"2099-06-
+  | 10T09:00:00-04:00","arrival_at":"2099-06-10T10:45:00-0
+  | 5:00","duration_minutes":165,"connection_count":0,"car
+  | rier_codes":["ZZ"]},"return_flight":{"origin_airport_c
+  | ode":"ORD","destination_airport_code":"JFK","departure
+  | _at":"2099-06-14T16:00:00-05:00","arrival_at":"2099-06
+  | -14T19:40:00-04:00","duration_minutes":160,"connection
+  | _count":0,"carrier_codes":["ZZ"]},"total_travel_minute
+  | s":325,"total_connections":0,"is_round_trip_nonstop":t
+  | rue,"expires_at":null},{"offer_id":"fixture_b_chicago_
+  | connecting","traveler_id":"traveler_b","labels":["lowe
+  | st_price"],"round_trip_price_usd":"280.00","outbound":
+  | {"origin_airport_code":"JFK","destination_airport_code
+  | ":"ORD","departure_at":"2099-06-10T07:30:00-04:00","ar
+  | rival_at":"2099-06-10T11:30:00-05:00","duration_minute
+  | s":330,"connection_count":1,"carrier_codes":["ZZ"]},"r
+  | eturn_flight":{"origin_airport_code":"ORD","destinatio
+  | n_airport_code":"JFK","departure_at":"2099-06-14T13:00
+  | :00-05:00","arrival_at":"2099-06-14T18:15:00-04:00","d
+  | uration_minutes":340,"connection_count":1,"carrier_cod
+  | es":["ZZ"]},"total_travel_minutes":670,"total_connecti
+  | ons":2,"is_round_trip_nonstop":false,"expires_at":null
+  | }]}]},{"rank":2,"destination":{"destination_id":"miami
+  | _fl","name":"Miami","state_code":"FL","metro_airport_c
+  | odes":["MIA","FLL"]},"score":0.683844,"score_breakdown
+  | ":{"affordability":{"value":0.4775,"weight":0.4375,"co
+  | ntribution":0.208906},"travel_fairness":{"value":0.933
+  | 167,"weight":0.375,"contribution":0.349938},"preferenc
+  | e_match":{"value":1,"weight":0,"contribution":0},"trav
+  | el_time":{"value":0.666667,"weight":0.1875,"contributi
+  | on":0.125},"travel_fairness_details":{"duration_balanc
+  | e":0.983333,"budget_burden_balance":0.805,"arrival_ali
+  | gnment":1}},"recommended_pair":{"offers":[{"traveler_i
+  | d":"traveler_a","offer_id":"fixture_a_miami_nonstop"},
+  | {"traveler_id":"traveler_b","offer_id":"fixture_b_miam
+  | i_nonstop"}],"combined_price_usd":"650.00","arrival_ga
+  | p_minutes":45,"return_departure_gap_minutes":30,"time_
+  | together_minutes":5990,"total_connections":0,"combined
+  | _travel_minutes":785,"selection_score":0.919231,"selec
+  | tion_score_breakdown":{"price":{"value":0.769231,"weig
+  | ht":0.35,"contribution":0.269231},"arrival_alignment":
+  | {"value":1,"weight":0.25,"contribution":0.25},"travel_
+  | time":{"value":1,"weight":0.2,"contribution":0.2},"con
+  | nections":{"value":1,"weight":0.1,"contribution":0.1},
+  | "time_together":{"value":1,"weight":0.1,"contribution"
+  | :0.1}},"price_comparison":{"lowest_valid_combined_pric
+  | e_usd":"500.00","premium_usd":"150.00","premium_percen
+  | tage":30}},"flight_options_by_traveler":[{"traveler_id
+  | ":"traveler_a","options":[{"offer_id":"fixture_a_miami
+  | _nonstop","traveler_id":"traveler_a","labels":["recomm
+  | ended_pair","shortest_travel","fewest_connections"],"r
+  | ound_trip_price_usd":"340.00","outbound":{"origin_airp
+  | ort_code":"BOS","destination_airport_code":"MIA","depa
+  | rture_at":"2099-06-10T07:00:00-04:00","arrival_at":"20
+  | 99-06-10T10:25:00-04:00","duration_minutes":205,"conne
+  | ction_count":0,"carrier_codes":["ZZ"]},"return_flight"
+  | :{"origin_airport_code":"MIA","destination_airport_cod
+  | e":"BOS","departure_at":"2099-06-14T15:00:00-04:00","a
+  | rrival_at":"2099-06-14T18:15:00-04:00","duration_minut
+  | es":195,"connection_count":0,"carrier_codes":["ZZ"]},"
+  | total_travel_minutes":400,"total_connections":0,"is_ro
+  | und_trip_nonstop":true,"expires_at":null},{"offer_id":
+  | "fixture_a_miami_connecting","traveler_id":"traveler_a
+  | ","labels":["lowest_price"],"round_trip_price_usd":"26
+  | 0.00","outbound":{"origin_airport_code":"BOS","destina
+  | tion_airport_code":"MIA","departure_at":"2099-06-10T07
+  | :00:00-04:00","arrival_at":"2099-06-10T12:15:00-04:00"
+  | ,"duration_minutes":315,"connection_count":1,"carrier_
+  | codes":["ZZ"]},"return_flight":{"origin_airport_code":
+  | "MIA","destination_airport_code":"BOS","departure_at":
+  | "2099-06-14T15:00:00-04:00","arrival_at":"2099-06-14T2
+  | 0:10:00-04:00","duration_minutes":310,"connection_coun
+  | t":1,"carrier_codes":["ZZ"]},"total_travel_minutes":62
+  | 5,"total_connections":2,"is_round_trip_nonstop":false,
+  | "expires_at":null}]},{"traveler_id":"traveler_b","opti
+  | ons":[{"offer_id":"fixture_b_miami_nonstop","traveler_
+  | id":"traveler_b","labels":["recommended_pair","shortes
+  | t_travel","fewest_connections"],"round_trip_price_usd"
+  | :"310.00","outbound":{"origin_airport_code":"JFK","des
+  | tination_airport_code":"MIA","departure_at":"2099-06-1
+  | 0T08:00:00-04:00","arrival_at":"2099-06-10T11:10:00-04
+  | :00","duration_minutes":190,"connection_count":0,"carr
+  | ier_codes":["ZZ"]},"return_flight":{"origin_airport_co
+  | de":"MIA","destination_airport_code":"JFK","departure_
+  | at":"2099-06-14T15:30:00-04:00","arrival_at":"2099-06-
+  | 14T18:45:00-04:00","duration_minutes":195,"connection_
+  | count":0,"carrier_codes":["ZZ"]},"total_travel_minutes
+  | ":385,"total_connections":0,"is_round_trip_nonstop":tr
+  | ue,"expires_at":null},{"offer_id":"fixture_b_miami_con
+  | necting","traveler_id":"traveler_b","labels":["lowest_
+  | price"],"round_trip_price_usd":"240.00","outbound":{"o
+  | rigin_airport_code":"JFK","destination_airport_code":"
+  | MIA","departure_at":"2099-06-10T07:00:00-04:00","arriv
+  | al_at":"2099-06-10T12:25:00-04:00","duration_minutes":
+  | 325,"connection_count":1,"carrier_codes":["ZZ"]},"retu
+  | rn_flight":{"origin_airport_code":"MIA","destination_a
+  | irport_code":"JFK","departure_at":"2099-06-14T14:30:00
+  | -04:00","arrival_at":"2099-06-14T19:50:00-04:00","dura
+  | tion_minutes":320,"connection_count":1,"carrier_codes"
+  | :["ZZ"]},"total_travel_minutes":645,"total_connections
+  | ":2,"is_round_trip_nonstop":false,"expires_at":null}]}
+  | ]},{"rank":3,"destination":{"destination_id":"seattle_
+  | wa","name":"Seattle","state_code":"WA","metro_airport_
+  | codes":["SEA"]},"score":0.509218,"score_breakdown":{"a
+  | ffordability":{"value":0.25,"weight":0.4375,"contribut
+  | ion":0.109375},"travel_fairness":{"value":0.8975,"weig
+  | ht":0.375,"contribution":0.336562},"preference_match":
+  | {"value":1,"weight":0,"contribution":0},"travel_time":
+  | {"value":0.3375,"weight":0.1875,"contribution":0.06328
+  | 1},"travel_fairness_details":{"duration_balance":0.975
+  | ,"budget_burden_balance":0.7,"arrival_alignment":1}},"
+  | recommended_pair":{"offers":[{"traveler_id":"traveler_
+  | a","offer_id":"fixture_a_seattle_nonstop"},{"traveler_
+  | id":"travel'... 3611 more characters
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root aa30615c3e3dbab4df66b7e0
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.27 KB, 1657 ms]
+  -
+  | `EVAL_RESPONSE {"request":"Create session","status":20
+  | 0,"body":{"session_id":"867bf9e0-3bb5-4f0a-b1da-fc7085
+  | 996a50","state":"collecting","assistant_message":"What
+  |  is Alex's maximum round-trip airfare budget in USD?",
+  | "trip_request_draft":{"travelers":[{"traveler_id":"tra
+  | veler_a","display_name":"Alex","origin":"Boston","orig
+  | in_id":"boston_ma","budget_usd":null,"max_travel_time_
+  | hours":10,"preferences":{"temperature_range":null,"int
+  | erest_tags":[]}},{"traveler_id":"traveler_b","display_
+  | name":"Jamie","origin":"New York","origin_id":"new_yor
+  | k_ny","budget_usd":500,"max_travel_time_hours":10,"pre
+  | ferences":{"temperature_range":null,"interest_tags":[]
+  | }}],"start_date":"2099-06-10","end_date":"2099-06-14"}
+  | ,"missing_fields":["travelers.traveler_a.budget_usd"],
+  | "pending_questions":[{"field_path":"travelers.traveler
+  | _a.budget_usd","question":"What is Alex's maximum roun
+  | d-trip airfare budget in USD?","source_message":"My na
+  | me is Alex and I'm leaving from Boston. My companion J
+  | amie leaves from New York. We travel June 10 to June 1
+  | 4, 2099. Jamie's maximum round-trip airfare budget is 
+  | $500 USD. Each of us can travel at most 10 hours one w
+  | ay including layovers."}],"unsupported_requests":[],"d
+  | eferred_requests":[],"recommendations":[]}}`
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Clarify travelers.traveler_a.budget_usd
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root 04af4a72fa3e2384162c4e0f
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.69 KB, 1114 ms]
+  -
+  | `EVAL_RESPONSE {"request":"Create session","status":20
+  | 0,"body":{"session_id":"a6d28892-7a84-40ca-950c-727ae8
+  | 2460a7","state":"collecting","assistant_message":"What
+  |  is your exact departure date, including the year?\\nW
+  | hat is your exact return date, including the year?\\nW
+  | hat is Alex's maximum round-trip airfare budget in USD
+  | ?","trip_request_draft":{"travelers":[{"traveler_id":"
+  | traveler_a","display_name":"Alex","origin":"Boston","o
+  | rigin_id":"boston_ma","budget_usd":null,"max_travel_ti
+  | me_hours":null,"preferences":{"temperature_range":null
+  | ,"interest_tags":[]}},{"traveler_id":"traveler_b","dis
+  | play_name":"Jamie","origin":"New York","origin_id":"ne
+  | w_york_ny","budget_usd":null,"max_travel_time_hours":n
+  | ull,"preferences":{"temperature_range":null,"interest_
+  | tags":[]}}],"start_date":null,"end_date":null},"missin
+  | g_fields":["start_date","end_date","travelers.traveler
+  | _a.budget_usd","travelers.traveler_a.max_travel_time_h
+  | ours","travelers.traveler_b.budget_usd","travelers.tra
+  | veler_b.max_travel_time_hours"],"pending_questions":[{
+  | "field_path":"start_date","question":"What is your exa
+  | ct departure date, including the year?","source_messag
+  | e":"My name is Alex and I leave from Boston. Jamie lea
+  | ves from New York."},{"field_path":"end_date","questio
+  | n":"What is your exact return date, including the year
+  | ?","source_message":"My name is Alex and I leave from 
+  | Boston. Jamie leaves from New York."},{"field_path":"t
+  | ravelers.traveler_a.budget_usd","question":"What is Al
+  | ex's maximum round-trip airfare budget in USD?","sourc
+  | e_message":"My name is Alex and I leave from Boston. J
+  | amie leaves from New York."}],"unsupported_requests":[
+  | ],"deferred_requests":[],"recommendations":[]}}`
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Clarify start_date
+  Pass  Clarify end_date
+  Pass  Clarify travelers.traveler_a.budget_usd
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root da8cfc29daa5c367c42d9843
+
+  POST http://127.0.0.1:8012/trip-sessions/a6d28892-7a84-40ca-950c-727ae82460a7/messages [422 Unprocessable Entity, 210 B, 5 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Reject premature confirmati
+  | on","status":422,"body":{"detail":"complete the trip d
+  | etails before confirming this session"}}'
+  -
+  Pass  HTTP status
+
+Root ea8e3354af0b8ac215f71745
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.27 KB, 1631 ms]
+  -
+  | `EVAL_RESPONSE {"request":"Create session","status":20
+  | 0,"body":{"session_id":"e9960172-e804-48c5-87f0-4aa4fa
+  | 8ab2d5","state":"collecting","assistant_message":"What
+  |  is Alex's maximum round-trip airfare budget in USD?",
+  | "trip_request_draft":{"travelers":[{"traveler_id":"tra
+  | veler_a","display_name":"Alex","origin":"Boston","orig
+  | in_id":"boston_ma","budget_usd":null,"max_travel_time_
+  | hours":10,"preferences":{"temperature_range":null,"int
+  | erest_tags":[]}},{"traveler_id":"traveler_b","display_
+  | name":"Jamie","origin":"New York","origin_id":"new_yor
+  | k_ny","budget_usd":500,"max_travel_time_hours":10,"pre
+  | ferences":{"temperature_range":null,"interest_tags":[]
+  | }}],"start_date":"2099-06-10","end_date":"2099-06-14"}
+  | ,"missing_fields":["travelers.traveler_a.budget_usd"],
+  | "pending_questions":[{"field_path":"travelers.traveler
+  | _a.budget_usd","question":"What is Alex's maximum roun
+  | d-trip airfare budget in USD?","source_message":"My na
+  | me is Alex and I'm leaving from Boston. My companion J
+  | amie leaves from New York. We travel June 10 to June 1
+  | 4, 2099. Jamie's maximum round-trip airfare budget is 
+  | $500 USD. Each of us can travel at most 10 hours one w
+  | ay including layovers."}],"unsupported_requests":[],"d
+  | eferred_requests":[],"recommendations":[]}}`
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Clarify travelers.traveler_a.budget_usd
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root 7d9864b2d9207a1b2275b88a
+
+  POST http://127.0.0.1:8012/trip-sessions/e9960172-e804-48c5-87f0-4aa4fa8ab2d5/messages [200 OK, 1.16 KB, 899 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Answer pending budget","sta
+  | tus":200,"body":{"session_id":"e9960172-e804-48c5-87f0
+  | -4aa4fa8ab2d5","state":"review","assistant_message":"T
+  | ravel dates: 2099-06-10 to 2099-06-14.\\nAlex: Boston 
+  | (boston_ma); airfare budget $800.0 USD; maximum one-wa
+  | y time 10.0 hours including layovers. Preferences: non
+  | e provided.\\nJamie: New York (new_york_ny); airfare b
+  | udget $500.0 USD; maximum one-way time 10.0 hours incl
+  | uding layovers. Preferences: none provided.\\nConfirm 
+  | this trip request to find destinations.","trip_request
+  | _draft":{"travelers":[{"traveler_id":"traveler_a","dis
+  | play_name":"Alex","origin":"Boston","origin_id":"bosto
+  | n_ma","budget_usd":800,"max_travel_time_hours":10,"pre
+  | ferences":{"temperature_range":null,"interest_tags":[]
+  | }},{"traveler_id":"traveler_b","display_name":"Jamie",
+  | "origin":"New York","origin_id":"new_york_ny","budget_
+  | usd":500,"max_travel_time_hours":10,"preferences":{"te
+  | mperature_range":null,"interest_tags":[]}}],"start_dat
+  | e":"2099-06-10","end_date":"2099-06-14"},"missing_fiel
+  | ds":[],"pending_questions":[],"unsupported_requests":[
+  | ],"deferred_requests":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 17ddbffb6bb9bbacb95a0801
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.16 KB, 1667 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Create session","status":20
+  | 0,"body":{"session_id":"90d783fb-8e7b-42d9-aa39-755693
+  | 7b1d54","state":"review","assistant_message":"Travel d
+  | ates: 2099-06-10 to 2099-06-14.\\nAlex: Boston (boston
+  | _ma); airfare budget $800.0 USD; maximum one-way time 
+  | 10.0 hours including layovers. Preferences: none provi
+  | ded.\\nJamie: New York (new_york_ny); airfare budget $
+  | 500.0 USD; maximum one-way time 10.0 hours including l
+  | ayovers. Preferences: none provided.\\nConfirm this tr
+  | ip request to find destinations.","trip_request_draft"
+  | :{"travelers":[{"traveler_id":"traveler_a","display_na
+  | me":"Alex","origin":"Boston","origin_id":"boston_ma","
+  | budget_usd":800,"max_travel_time_hours":10,"preference
+  | s":{"temperature_range":null,"interest_tags":[]}},{"tr
+  | aveler_id":"traveler_b","display_name":"Jamie","origin
+  | ":"New York","origin_id":"new_york_ny","budget_usd":50
+  | 0,"max_travel_time_hours":10,"preferences":{"temperatu
+  | re_range":null,"interest_tags":[]}}],"start_date":"209
+  | 9-06-10","end_date":"2099-06-14"},"missing_fields":[],
+  | "pending_questions":[],"unsupported_requests":[],"defe
+  | rred_requests":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.display_name
+  Pass  Expected travelers.traveler_b.display_name
+  Pass  Expected travelers.traveler_a.origin_id
+  Pass  Expected travelers.traveler_b.origin_id
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Expected travelers.traveler_a.max_travel_time_hours
+  Pass  Expected travelers.traveler_b.max_travel_time_hours
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root 571368b96b1a74cbbdac2ea7
+
+  POST http://127.0.0.1:8012/trip-sessions/90d783fb-8e7b-42d9-aa39-7556937b1d54/messages [200 OK, 1.16 KB, 873 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Correct Alex budget","statu
+  | s":200,"body":{"session_id":"90d783fb-8e7b-42d9-aa39-7
+  | 556937b1d54","state":"review","assistant_message":"Tra
+  | vel dates: 2099-06-10 to 2099-06-14.\\nAlex: Boston (b
+  | oston_ma); airfare budget $600.0 USD; maximum one-way 
+  | time 10.0 hours including layovers. Preferences: none 
+  | provided.\\nJamie: New York (new_york_ny); airfare bud
+  | get $500.0 USD; maximum one-way time 10.0 hours includ
+  | ing layovers. Preferences: none provided.\\nConfirm th
+  | is trip request to find destinations.","trip_request_d
+  | raft":{"travelers":[{"traveler_id":"traveler_a","displ
+  | ay_name":"Alex","origin":"Boston","origin_id":"boston_
+  | ma","budget_usd":600,"max_travel_time_hours":10,"prefe
+  | rences":{"temperature_range":null,"interest_tags":[]}}
+  | ,{"traveler_id":"traveler_b","display_name":"Jamie","o
+  | rigin":"New York","origin_id":"new_york_ny","budget_us
+  | d":500,"max_travel_time_hours":10,"preferences":{"temp
+  | erature_range":null,"interest_tags":[]}}],"start_date"
+  | :"2099-06-10","end_date":"2099-06-14"},"missing_fields
+  | ":[],"pending_questions":[],"unsupported_requests":[],
+  | "deferred_requests":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 3f49ae76379383d68ac4bac4
+
+  POST http://127.0.0.1:8012/trip-sessions/90d783fb-8e7b-42d9-aa39-7556937b1d54/messages [200 OK, 13.41 KB, 7 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Confirm reviewed trip","sta
+  | tus":200,"body":{"session_id":"90d783fb-8e7b-42d9-aa39
+  | -7556937b1d54","state":"results","assistant_message":"
+  | Found 3 destination recommendations.","trip_request_dr
+  | aft":{"travelers":[{"traveler_id":"traveler_a","displa
+  | y_name":"Alex","origin":"Boston","origin_id":"boston_m
+  | a","budget_usd":600,"max_travel_time_hours":10,"prefer
+  | ences":{"temperature_range":null,"interest_tags":[]}},
+  | {"traveler_id":"traveler_b","display_name":"Jamie","or
+  | igin":"New York","origin_id":"new_york_ny","budget_usd
+  | ":500,"max_travel_time_hours":10,"preferences":{"tempe
+  | rature_range":null,"interest_tags":[]}}],"start_date":
+  | "2099-06-10","end_date":"2099-06-14"},"missing_fields"
+  | :[],"pending_questions":[],"unsupported_requests":[],"
+  | deferred_requests":[],"recommendations":[{"rank":1,"de
+  | stination":{"destination_id":"chicago_il","name":"Chic
+  | ago","state_code":"IL","metro_airport_codes":["ORD","M
+  | DW"]},"score":0.675343,"score_breakdown":{"affordabili
+  | ty":{"value":0.415,"weight":0.4375,"contribution":0.18
+  | 1562},"travel_fairness":{"value":0.9605,"weight":0.375
+  | ,"contribution":0.360187},"preference_match":{"value":
+  | 1,"weight":0,"contribution":0},"travel_time":{"value":
+  | 0.7125,"weight":0.1875,"contribution":0.133594},"trave
+  | l_fairness_details":{"duration_balance":0.975,"budget_
+  | burden_balance":0.91,"arrival_alignment":1}},"recommen
+  | ded_pair":{"offers":[{"traveler_id":"traveler_a","offe
+  | r_id":"fixture_a_chicago_nonstop"},{"traveler_id":"tra
+  | veler_b","offer_id":"fixture_b_chicago_nonstop"}],"com
+  | bined_price_usd":"639.00","arrival_gap_minutes":45,"re
+  | turn_departure_gap_minutes":60,"time_together_minutes"
+  | :6015,"total_connections":0,"combined_travel_minutes":
+  | 675,"selection_score":0.967684,"selection_score_breakd
+  | own":{"price":{"value":0.907668,"weight":0.35,"contrib
+  | ution":0.317684},"arrival_alignment":{"value":1,"weigh
+  | t":0.25,"contribution":0.25},"travel_time":{"value":1,
+  | "weight":0.2,"contribution":0.2},"connections":{"value
+  | ":1,"weight":0.1,"contribution":0.1},"time_together":{
+  | "value":1,"weight":0.1,"contribution":0.1}},"price_com
+  | parison":{"lowest_valid_combined_price_usd":"580.00","
+  | premium_usd":"59.00","premium_percentage":10.172413793
+  | 103448}},"flight_options_by_traveler":[{"traveler_id":
+  | "traveler_a","options":[{"offer_id":"fixture_a_chicago
+  | _nonstop","traveler_id":"traveler_a","labels":["recomm
+  | ended_pair","shortest_travel","fewest_connections"],"r
+  | ound_trip_price_usd":"324.00","outbound":{"origin_airp
+  | ort_code":"BOS","destination_airport_code":"ORD","depa
+  | rture_at":"2099-06-10T08:00:00-04:00","arrival_at":"20
+  | 99-06-10T10:00:00-05:00","duration_minutes":180,"conne
+  | ction_count":0,"carrier_codes":["ZZ"]},"return_flight"
+  | :{"origin_airport_code":"ORD","destination_airport_cod
+  | e":"BOS","departure_at":"2099-06-14T15:00:00-05:00","a
+  | rrival_at":"2099-06-14T18:50:00-04:00","duration_minut
+  | es":170,"connection_count":0,"carrier_codes":["ZZ"]},"
+  | total_travel_minutes":350,"total_connections":0,"is_ro
+  | und_trip_nonstop":true,"expires_at":null},{"offer_id":
+  | "fixture_a_chicago_connecting","traveler_id":"traveler
+  | _a","labels":["lowest_price"],"round_trip_price_usd":"
+  | 300.00","outbound":{"origin_airport_code":"BOS","desti
+  | nation_airport_code":"ORD","departure_at":"2099-06-10T
+  | 07:00:00-04:00","arrival_at":"2099-06-10T10:45:00-05:0
+  | 0","duration_minutes":360,"connection_count":1,"carrie
+  | r_codes":["ZZ"]},"return_flight":{"origin_airport_code
+  | ":"ORD","destination_airport_code":"BOS","departure_at
+  | ":"2099-06-14T14:00:00-05:00","arrival_at":"2099-06-14
+  | T19:05:00-04:00","duration_minutes":350,"connection_co
+  | unt":1,"carrier_codes":["ZZ"]},"total_travel_minutes":
+  | 710,"total_connections":2,"is_round_trip_nonstop":fals
+  | e,"expires_at":null}]},{"traveler_id":"traveler_b","op
+  | tions":[{"offer_id":"fixture_b_chicago_nonstop","trave
+  | ler_id":"traveler_b","labels":["recommended_pair","sho
+  | rtest_travel","fewest_connections"],"round_trip_price_
+  | usd":"315.00","outbound":{"origin_airport_code":"JFK",
+  | "destination_airport_code":"ORD","departure_at":"2099-
+  | 06-10T09:00:00-04:00","arrival_at":"2099-06-10T10:45:0
+  | 0-05:00","duration_minutes":165,"connection_count":0,"
+  | carrier_codes":["ZZ"]},"return_flight":{"origin_airpor
+  | t_code":"ORD","destination_airport_code":"JFK","depart
+  | ure_at":"2099-06-14T16:00:00-05:00","arrival_at":"2099
+  | -06-14T19:40:00-04:00","duration_minutes":160,"connect
+  | ion_count":0,"carrier_codes":["ZZ"]},"total_travel_min
+  | utes":325,"total_connections":0,"is_round_trip_nonstop
+  | ":true,"expires_at":null},{"offer_id":"fixture_b_chica
+  | go_connecting","traveler_id":"traveler_b","labels":["l
+  | owest_price"],"round_trip_price_usd":"280.00","outboun
+  | d":{"origin_airport_code":"JFK","destination_airport_c
+  | ode":"ORD","departure_at":"2099-06-10T07:30:00-04:00",
+  | "arrival_at":"2099-06-10T11:30:00-05:00","duration_min
+  | utes":330,"connection_count":1,"carrier_codes":["ZZ"]}
+  | ,"return_flight":{"origin_airport_code":"ORD","destina
+  | tion_airport_code":"JFK","departure_at":"2099-06-14T13
+  | :00:00-05:00","arrival_at":"2099-06-14T18:15:00-04:00"
+  | ,"duration_minutes":340,"connection_count":1,"carrier_
+  | codes":["ZZ"]},"total_travel_minutes":670,"total_conne
+  | ctions":2,"is_round_trip_nonstop":false,"expires_at":n
+  | ull}]}]},{"rank":2,"destination":{"destination_id":"mi
+  | ami_fl","name":"Miami","state_code":"FL","metro_airpor
+  | t_codes":["MIA","FLL"]},"score":0.668792,"score_breakd
+  | own":{"affordability":{"value":0.406667,"weight":0.437
+  | 5,"contribution":0.177917},"travel_fairness":{"value":
+  | 0.975667,"weight":0.375,"contribution":0.365875},"pref
+  | erence_match":{"value":1,"weight":0,"contribution":0},
+  | "travel_time":{"value":0.666667,"weight":0.1875,"contr
+  | ibution":0.125},"travel_fairness_details":{"duration_b
+  | alance":0.983333,"budget_burden_balance":0.946667,"arr
+  | ival_alignment":1}},"recommended_pair":{"offers":[{"tr
+  | aveler_id":"traveler_a","offer_id":"fixture_a_miami_no
+  | nstop"},{"traveler_id":"traveler_b","offer_id":"fixtur
+  | e_b_miami_nonstop"}],"combined_price_usd":"650.00","ar
+  | rival_gap_minutes":45,"return_departure_gap_minutes":3
+  | 0,"time_together_minutes":5990,"total_connections":0,"
+  | combined_travel_minutes":785,"selection_score":0.91923
+  | 1,"selection_score_breakdown":{"price":{"value":0.7692
+  | 31,"weight":0.35,"contribution":0.269231},"arrival_ali
+  | gnment":{"value":1,"weight":0.25,"contribution":0.25},
+  | "travel_time":{"value":1,"weight":0.2,"contribution":0
+  | .2},"connections":{"value":1,"weight":0.1,"contributio
+  | n":0.1},"time_together":{"value":1,"weight":0.1,"contr
+  | ibution":0.1}},"price_comparison":{"lowest_valid_combi
+  | ned_price_usd":"500.00","premium_usd":"150.00","premiu
+  | m_percentage":30}},"flight_options_by_traveler":[{"tra
+  | veler_id":"traveler_a","options":[{"offer_id":"fixture
+  | _a_miami_nonstop","traveler_id":"traveler_a","labels":
+  | ["recommended_pair","shortest_travel","fewest_connecti
+  | ons"],"round_trip_price_usd":"340.00","outbound":{"ori
+  | gin_airport_code":"BOS","destination_airport_code":"MI
+  | A","departure_at":"2099-06-10T07:00:00-04:00","arrival
+  | _at":"2099-06-10T10:25:00-04:00","duration_minutes":20
+  | 5,"connection_count":0,"carrier_codes":["ZZ"]},"return
+  | _flight":{"origin_airport_code":"MIA","destination_air
+  | port_code":"BOS","departure_at":"2099-06-14T15:00:00-0
+  | 4:00","arrival_at":"2099-06-14T18:15:00-04:00","durati
+  | on_minutes":195,"connection_count":0,"carrier_codes":[
+  | "ZZ"]},"total_travel_minutes":400,"total_connections":
+  | 0,"is_round_trip_nonstop":true,"expires_at":null},{"of
+  | fer_id":"fixture_a_miami_connecting","traveler_id":"tr
+  | aveler_a","labels":["lowest_price"],"round_trip_price_
+  | usd":"260.00","outbound":{"origin_airport_code":"BOS",
+  | "destination_airport_code":"MIA","departure_at":"2099-
+  | 06-10T07:00:00-04:00","arrival_at":"2099-06-10T12:15:0
+  | 0-04:00","duration_minutes":315,"connection_count":1,"
+  | carrier_codes":["ZZ"]},"return_flight":{"origin_airpor
+  | t_code":"MIA","destination_airport_code":"BOS","depart
+  | ure_at":"2099-06-14T15:00:00-04:00","arrival_at":"2099
+  | -06-14T20:10:00-04:00","duration_minutes":310,"connect
+  | ion_count":1,"carrier_codes":["ZZ"]},"total_travel_min
+  | utes":625,"total_connections":2,"is_round_trip_nonstop
+  | ":false,"expires_at":null}]},{"traveler_id":"traveler_
+  | b","options":[{"offer_id":"fixture_b_miami_nonstop","t
+  | raveler_id":"traveler_b","labels":["recommended_pair",
+  | "shortest_travel","fewest_connections"],"round_trip_pr
+  | ice_usd":"310.00","outbound":{"origin_airport_code":"J
+  | FK","destination_airport_code":"MIA","departure_at":"2
+  | 099-06-10T08:00:00-04:00","arrival_at":"2099-06-10T11:
+  | 10:00-04:00","duration_minutes":190,"connection_count"
+  | :0,"carrier_codes":["ZZ"]},"return_flight":{"origin_ai
+  | rport_code":"MIA","destination_airport_code":"JFK","de
+  | parture_at":"2099-06-14T15:30:00-04:00","arrival_at":"
+  | 2099-06-14T18:45:00-04:00","duration_minutes":195,"con
+  | nection_count":0,"carrier_codes":["ZZ"]},"total_travel
+  | _minutes":385,"total_connections":0,"is_round_trip_non
+  | stop":true,"expires_at":null},{"offer_id":"fixture_b_m
+  | iami_connecting","traveler_id":"traveler_b","labels":[
+  | "lowest_price"],"round_trip_price_usd":"240.00","outbo
+  | und":{"origin_airport_code":"JFK","destination_airport
+  | _code":"MIA","departure_at":"2099-06-10T07:00:00-04:00
+  | ","arrival_at":"2099-06-10T12:25:00-04:00","duration_m
+  | inutes":325,"connection_count":1,"carrier_codes":["ZZ"
+  | ]},"return_flight":{"origin_airport_code":"MIA","desti
+  | nation_airport_code":"JFK","departure_at":"2099-06-14T
+  | 14:30:00-04:00","arrival_at":"2099-06-14T19:50:00-04:0
+  | 0","duration_minutes":320,"connection_count":1,"carrie
+  | r_codes":["ZZ"]},"total_travel_minutes":645,"total_con
+  | nections":2,"is_round_trip_nonstop":false,"expires_at"
+  | :null}]}]},{"rank":3,"destination":{"destination_id":"
+  | seattle_wa","name":"Seattle","state_code":"WA","metro_
+  | airport_codes":["SEA"]},"score":0.487969,"score_breakd
+  | own":{"affordability":{"value":0.15,"weight":0.4375,"c
+  | ontribution":0.065625},"travel_fairness":{"value":0.95
+  | 75,"weight":0.375,"contribution":0.359063},"preference
+  | _match":{"value":1,"weight":0,"contribution":0},"trave
+  | l_time":{"value":0.3375,"weight":0.1875,"contribution"
+  | :0.063281},"travel_fairness_details":{"duration_balanc
+  | e":0.975,"budget_burden_balance":0.9,"arrival_alignmen
+  | t":1}},"recommended_pair":{"offers":[{"traveler_id":"t
+  | raveler_a","offer_id":"fixture_a_seattle_nonstop"},{"t
+  | raveler_id"'... 3619 more characters
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root 6ec23aa8d016ea3dd4ab963d
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.16 KB, 1657 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Create session","status":20
+  | 0,"body":{"session_id":"6c924343-1f0f-43db-8adf-df71f6
+  | ab6eec","state":"review","assistant_message":"Travel d
+  | ates: 2099-06-10 to 2099-06-14.\\nAlex: Boston (boston
+  | _ma); airfare budget $800.0 USD; maximum one-way time 
+  | 10.0 hours including layovers. Preferences: none provi
+  | ded.\\nJamie: New York (new_york_ny); airfare budget $
+  | 500.0 USD; maximum one-way time 10.0 hours including l
+  | ayovers. Preferences: none provided.\\nConfirm this tr
+  | ip request to find destinations.","trip_request_draft"
+  | :{"travelers":[{"traveler_id":"traveler_a","display_na
+  | me":"Alex","origin":"Boston","origin_id":"boston_ma","
+  | budget_usd":800,"max_travel_time_hours":10,"preference
+  | s":{"temperature_range":null,"interest_tags":[]}},{"tr
+  | aveler_id":"traveler_b","display_name":"Jamie","origin
+  | ":"New York","origin_id":"new_york_ny","budget_usd":50
+  | 0,"max_travel_time_hours":10,"preferences":{"temperatu
+  | re_range":null,"interest_tags":[]}}],"start_date":"209
+  | 9-06-10","end_date":"2099-06-14"},"missing_fields":[],
+  | "pending_questions":[],"unsupported_requests":[],"defe
+  | rred_requests":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.display_name
+  Pass  Expected travelers.traveler_b.display_name
+  Pass  Expected travelers.traveler_a.origin_id
+  Pass  Expected travelers.traveler_b.origin_id
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Expected travelers.traveler_a.max_travel_time_hours
+  Pass  Expected travelers.traveler_b.max_travel_time_hours
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root 77dcf7d08551071ee318f4c0
+
+  POST http://127.0.0.1:8012/trip-sessions/6c924343-1f0f-43db-8adf-df71f6ab6eec/messages [200 OK, 1.18 KB, 776 ms]
+  -
+  | `EVAL_RESPONSE {"request":"Set museums","status":200,"
+  | body":{"session_id":"6c924343-1f0f-43db-8adf-df71f6ab6
+  | eec","state":"review","assistant_message":"Travel date
+  | s: 2099-06-10 to 2099-06-14.\\nAlex: Boston (boston_ma
+  | ); airfare budget $800.0 USD; maximum one-way time 10.
+  | 0 hours including layovers. Preferences: {'interest_ta
+  | gs': ['museums']}.\\nJamie: New York (new_york_ny); ai
+  | rfare budget $500.0 USD; maximum one-way time 10.0 hou
+  | rs including layovers. Preferences: none provided.\\nC
+  | onfirm this trip request to find destinations.","trip_
+  | request_draft":{"travelers":[{"traveler_id":"traveler_
+  | a","display_name":"Alex","origin":"Boston","origin_id"
+  | :"boston_ma","budget_usd":800,"max_travel_time_hours":
+  | 10,"preferences":{"temperature_range":null,"interest_t
+  | ags":["museums"]}},{"traveler_id":"traveler_b","displa
+  | y_name":"Jamie","origin":"New York","origin_id":"new_y
+  | ork_ny","budget_usd":500,"max_travel_time_hours":10,"p
+  | references":{"temperature_range":null,"interest_tags":
+  | []}}],"start_date":"2099-06-10","end_date":"2099-06-14
+  | "},"missing_fields":[],"pending_questions":[],"unsuppo
+  | rted_requests":[],"deferred_requests":[],"recommendati
+  | ons":[]}}`
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected travelers.traveler_a.preferences.interest_tags
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 5443d7b61a67b2b5a5408818
+
+  POST http://127.0.0.1:8012/trip-sessions/6c924343-1f0f-43db-8adf-df71f6ab6eec/messages [200 OK, 1.23 KB, 1099 ms]
+  -
+  | `EVAL_RESPONSE {"request":"Add hiking","status":200,"b
+  | ody":{"session_id":"6c924343-1f0f-43db-8adf-df71f6ab6e
+  | ec","state":"review","assistant_message":"Travel dates
+  | : 2099-06-10 to 2099-06-14.\\nAlex: Boston (boston_ma)
+  | ; airfare budget $800.0 USD; maximum one-way time 10.0
+  |  hours including layovers. Preferences: {'interest_tag
+  | s': ['museums', 'outdoor_activities']}.\\nJamie: New Y
+  | ork (new_york_ny); airfare budget $500.0 USD; maximum 
+  | one-way time 10.0 hours including layovers. Preference
+  | s: none provided.\\nConfirm this trip request to find 
+  | destinations.","trip_request_draft":{"travelers":[{"tr
+  | aveler_id":"traveler_a","display_name":"Alex","origin"
+  | :"Boston","origin_id":"boston_ma","budget_usd":800,"ma
+  | x_travel_time_hours":10,"preferences":{"temperature_ra
+  | nge":null,"interest_tags":["museums","outdoor_activiti
+  | es"]}},{"traveler_id":"traveler_b","display_name":"Jam
+  | ie","origin":"New York","origin_id":"new_york_ny","bud
+  | get_usd":500,"max_travel_time_hours":10,"preferences":
+  | {"temperature_range":null,"interest_tags":[]}}],"start
+  | _date":"2099-06-10","end_date":"2099-06-14"},"missing_
+  | fields":[],"pending_questions":[],"unsupported_request
+  | s":[],"deferred_requests":[],"recommendations":[]}}`
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected travelers.traveler_a.preferences.interest_tags
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root ded75aeda0d99bfca34c2bea
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.16 KB, 1448 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Create session","status":20
+  | 0,"body":{"session_id":"85de44fa-a03b-4edf-89fa-32b8f4
+  | ef02b7","state":"review","assistant_message":"Travel d
+  | ates: 2099-06-10 to 2099-06-14.\\nAlex: Boston (boston
+  | _ma); airfare budget $800.0 USD; maximum one-way time 
+  | 10.0 hours including layovers. Preferences: none provi
+  | ded.\\nJamie: New York (new_york_ny); airfare budget $
+  | 500.0 USD; maximum one-way time 10.0 hours including l
+  | ayovers. Preferences: none provided.\\nConfirm this tr
+  | ip request to find destinations.","trip_request_draft"
+  | :{"travelers":[{"traveler_id":"traveler_a","display_na
+  | me":"Alex","origin":"Boston","origin_id":"boston_ma","
+  | budget_usd":800,"max_travel_time_hours":10,"preference
+  | s":{"temperature_range":null,"interest_tags":[]}},{"tr
+  | aveler_id":"traveler_b","display_name":"Jamie","origin
+  | ":"New York","origin_id":"new_york_ny","budget_usd":50
+  | 0,"max_travel_time_hours":10,"preferences":{"temperatu
+  | re_range":null,"interest_tags":[]}}],"start_date":"209
+  | 9-06-10","end_date":"2099-06-14"},"missing_fields":[],
+  | "pending_questions":[],"unsupported_requests":[],"defe
+  | rred_requests":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.display_name
+  Pass  Expected travelers.traveler_b.display_name
+  Pass  Expected travelers.traveler_a.origin_id
+  Pass  Expected travelers.traveler_b.origin_id
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Expected travelers.traveler_a.max_travel_time_hours
+  Pass  Expected travelers.traveler_b.max_travel_time_hours
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root 9d1b26c3353531a6d0660b89
+
+  POST http://127.0.0.1:8012/trip-sessions/85de44fa-a03b-4edf-89fa-32b8f4ef02b7/messages [200 OK, 1.18 KB, 940 ms]
+  -
+  | `EVAL_RESPONSE {"request":"Set museums","status":200,"
+  | body":{"session_id":"85de44fa-a03b-4edf-89fa-32b8f4ef0
+  | 2b7","state":"review","assistant_message":"Travel date
+  | s: 2099-06-10 to 2099-06-14.\\nAlex: Boston (boston_ma
+  | ); airfare budget $800.0 USD; maximum one-way time 10.
+  | 0 hours including layovers. Preferences: {'interest_ta
+  | gs': ['museums']}.\\nJamie: New York (new_york_ny); ai
+  | rfare budget $500.0 USD; maximum one-way time 10.0 hou
+  | rs including layovers. Preferences: none provided.\\nC
+  | onfirm this trip request to find destinations.","trip_
+  | request_draft":{"travelers":[{"traveler_id":"traveler_
+  | a","display_name":"Alex","origin":"Boston","origin_id"
+  | :"boston_ma","budget_usd":800,"max_travel_time_hours":
+  | 10,"preferences":{"temperature_range":null,"interest_t
+  | ags":["museums"]}},{"traveler_id":"traveler_b","displa
+  | y_name":"Jamie","origin":"New York","origin_id":"new_y
+  | ork_ny","budget_usd":500,"max_travel_time_hours":10,"p
+  | references":{"temperature_range":null,"interest_tags":
+  | []}}],"start_date":"2099-06-10","end_date":"2099-06-14
+  | "},"missing_fields":[],"pending_questions":[],"unsuppo
+  | rted_requests":[],"deferred_requests":[],"recommendati
+  | ons":[]}}`
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected travelers.traveler_a.preferences.interest_tags
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 9c24e0fdf32e56dedd01b365
+
+  POST http://127.0.0.1:8012/trip-sessions/85de44fa-a03b-4edf-89fa-32b8f4ef02b7/messages [200 OK, 1.18 KB, 1081 ms]
+  -
+  | `EVAL_RESPONSE {"request":"Replace interests","status"
+  | :200,"body":{"session_id":"85de44fa-a03b-4edf-89fa-32b
+  | 8f4ef02b7","state":"review","assistant_message":"Trave
+  | l dates: 2099-06-10 to 2099-06-14.\\nAlex: Boston (bos
+  | ton_ma); airfare budget $800.0 USD; maximum one-way ti
+  | me 10.0 hours including layovers. Preferences: {'inter
+  | est_tags': ['beach']}.\\nJamie: New York (new_york_ny)
+  | ; airfare budget $500.0 USD; maximum one-way time 10.0
+  |  hours including layovers. Preferences: none provided.
+  | \\nConfirm this trip request to find destinations.","t
+  | rip_request_draft":{"travelers":[{"traveler_id":"trave
+  | ler_a","display_name":"Alex","origin":"Boston","origin
+  | _id":"boston_ma","budget_usd":800,"max_travel_time_hou
+  | rs":10,"preferences":{"temperature_range":null,"intere
+  | st_tags":["beach"]}},{"traveler_id":"traveler_b","disp
+  | lay_name":"Jamie","origin":"New York","origin_id":"new
+  | _york_ny","budget_usd":500,"max_travel_time_hours":10,
+  | "preferences":{"temperature_range":null,"interest_tags
+  | ":[]}}],"start_date":"2099-06-10","end_date":"2099-06-
+  | 14"},"missing_fields":[],"pending_questions":[],"unsup
+  | ported_requests":[],"deferred_requests":[],"recommenda
+  | tions":[]}}`
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected travelers.traveler_a.preferences.interest_tags
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root c5807574d35dce5e1cb120be
+
+  POST http://127.0.0.1:8012/trip-sessions/85de44fa-a03b-4edf-89fa-32b8f4ef02b7/messages [200 OK, 1.16 KB, 1074 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Clear interests","status":2
+  | 00,"body":{"session_id":"85de44fa-a03b-4edf-89fa-32b8f
+  | 4ef02b7","state":"review","assistant_message":"Travel 
+  | dates: 2099-06-10 to 2099-06-14.\\nAlex: Boston (bosto
+  | n_ma); airfare budget $800.0 USD; maximum one-way time
+  |  10.0 hours including layovers. Preferences: none prov
+  | ided.\\nJamie: New York (new_york_ny); airfare budget 
+  | $500.0 USD; maximum one-way time 10.0 hours including 
+  | layovers. Preferences: none provided.\\nConfirm this t
+  | rip request to find destinations.","trip_request_draft
+  | ":{"travelers":[{"traveler_id":"traveler_a","display_n
+  | ame":"Alex","origin":"Boston","origin_id":"boston_ma",
+  | "budget_usd":800,"max_travel_time_hours":10,"preferenc
+  | es":{"temperature_range":null,"interest_tags":[]}},{"t
+  | raveler_id":"traveler_b","display_name":"Jamie","origi
+  | n":"New York","origin_id":"new_york_ny","budget_usd":5
+  | 00,"max_travel_time_hours":10,"preferences":{"temperat
+  | ure_range":null,"interest_tags":[]}}],"start_date":"20
+  | 99-06-10","end_date":"2099-06-14"},"missing_fields":[]
+  | ,"pending_questions":[],"unsupported_requests":[],"def
+  | erred_requests":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected travelers.traveler_a.preferences.interest_tags
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 7f0e978e25e7d305909b703e
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.16 KB, 1621 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Create session","status":20
+  | 0,"body":{"session_id":"97a11ad5-1c4f-4df3-af54-8897b9
+  | 1674de","state":"review","assistant_message":"Travel d
+  | ates: 2099-06-10 to 2099-06-14.\\nAlex: Boston (boston
+  | _ma); airfare budget $800.0 USD; maximum one-way time 
+  | 10.0 hours including layovers. Preferences: none provi
+  | ded.\\nJamie: New York (new_york_ny); airfare budget $
+  | 500.0 USD; maximum one-way time 10.0 hours including l
+  | ayovers. Preferences: none provided.\\nConfirm this tr
+  | ip request to find destinations.","trip_request_draft"
+  | :{"travelers":[{"traveler_id":"traveler_a","display_na
+  | me":"Alex","origin":"Boston","origin_id":"boston_ma","
+  | budget_usd":800,"max_travel_time_hours":10,"preference
+  | s":{"temperature_range":null,"interest_tags":[]}},{"tr
+  | aveler_id":"traveler_b","display_name":"Jamie","origin
+  | ":"New York","origin_id":"new_york_ny","budget_usd":50
+  | 0,"max_travel_time_hours":10,"preferences":{"temperatu
+  | re_range":null,"interest_tags":[]}}],"start_date":"209
+  | 9-06-10","end_date":"2099-06-14"},"missing_fields":[],
+  | "pending_questions":[],"unsupported_requests":[],"defe
+  | rred_requests":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.display_name
+  Pass  Expected travelers.traveler_b.display_name
+  Pass  Expected travelers.traveler_a.origin_id
+  Pass  Expected travelers.traveler_b.origin_id
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Expected travelers.traveler_a.max_travel_time_hours
+  Pass  Expected travelers.traveler_b.max_travel_time_hours
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root d33c4b5be104130e2faedc79
+
+  POST http://127.0.0.1:8012/trip-sessions/97a11ad5-1c4f-4df3-af54-8897b91674de/messages [200 OK, 1.26 KB, 902 ms]
+  -
+  | `EVAL_RESPONSE {"request":"Ambiguous budget","status":
+  | 200,"body":{"session_id":"97a11ad5-1c4f-4df3-af54-8897
+  | b91674de","state":"collecting","assistant_message":"Yo
+  | u mentioned a $650 USD round-trip airfare budget but d
+  | idn't say which traveler it belongs to. Is this budget
+  |  for Alex or Jamie?","trip_request_draft":{"travelers"
+  | :[{"traveler_id":"traveler_a","display_name":"Alex","o
+  | rigin":"Boston","origin_id":"boston_ma","budget_usd":8
+  | 00,"max_travel_time_hours":10,"preferences":{"temperat
+  | ure_range":null,"interest_tags":[]}},{"traveler_id":"t
+  | raveler_b","display_name":"Jamie","origin":"New York",
+  | "origin_id":"new_york_ny","budget_usd":500,"max_travel
+  | _time_hours":10,"preferences":{"temperature_range":nul
+  | l,"interest_tags":[]}}],"start_date":"2099-06-10","end
+  | _date":"2099-06-14"},"missing_fields":["travelers.trav
+  | eler_a.budget_usd"],"pending_questions":[{"field_path"
+  | :"travelers.traveler_a.budget_usd","question":"You men
+  | tioned a $650 USD round-trip airfare budget but didn't
+  |  say which traveler it belongs to. Is this budget for 
+  | Alex or Jamie?","source_message":"One of us has a $650
+  |  USD round-trip airfare budget, but I have not said wh
+  | ich traveler."}],"unsupported_requests":[],"deferred_r
+  | equests":[],"recommendations":[]}}`
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Clarify ambiguous ownership
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 4aa188c7b61ffd6c6a86f9be
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.16 KB, 1644 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Create session","status":20
+  | 0,"body":{"session_id":"85ff9099-1b26-4d50-8eec-2195fc
+  | bf2644","state":"review","assistant_message":"Travel d
+  | ates: 2099-06-10 to 2099-06-14.\\nAlex: Boston (boston
+  | _ma); airfare budget $800.0 USD; maximum one-way time 
+  | 10.0 hours including layovers. Preferences: none provi
+  | ded.\\nJamie: New York (new_york_ny); airfare budget $
+  | 500.0 USD; maximum one-way time 10.0 hours including l
+  | ayovers. Preferences: none provided.\\nConfirm this tr
+  | ip request to find destinations.","trip_request_draft"
+  | :{"travelers":[{"traveler_id":"traveler_a","display_na
+  | me":"Alex","origin":"Boston","origin_id":"boston_ma","
+  | budget_usd":800,"max_travel_time_hours":10,"preference
+  | s":{"temperature_range":null,"interest_tags":[]}},{"tr
+  | aveler_id":"traveler_b","display_name":"Jamie","origin
+  | ":"New York","origin_id":"new_york_ny","budget_usd":50
+  | 0,"max_travel_time_hours":10,"preferences":{"temperatu
+  | re_range":null,"interest_tags":[]}}],"start_date":"209
+  | 9-06-10","end_date":"2099-06-14"},"missing_fields":[],
+  | "pending_questions":[],"unsupported_requests":[],"defe
+  | rred_requests":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.display_name
+  Pass  Expected travelers.traveler_b.display_name
+  Pass  Expected travelers.traveler_a.origin_id
+  Pass  Expected travelers.traveler_b.origin_id
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Expected travelers.traveler_a.max_travel_time_hours
+  Pass  Expected travelers.traveler_b.max_travel_time_hours
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root 9e794e3c3171987842019fd0
+
+  POST http://127.0.0.1:8012/trip-sessions/85ff9099-1b26-4d50-8eec-2195fcbf2644/messages [200 OK, 1.03 KB, 832 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Date without year","status"
+  | :200,"body":{"session_id":"85ff9099-1b26-4d50-8eec-219
+  | 5fcbf2644","state":"collecting","assistant_message":"W
+  | hat year is your June 11 departure date?","trip_reques
+  | t_draft":{"travelers":[{"traveler_id":"traveler_a","di
+  | splay_name":"Alex","origin":"Boston","origin_id":"bost
+  | on_ma","budget_usd":800,"max_travel_time_hours":10,"pr
+  | eferences":{"temperature_range":null,"interest_tags":[
+  | ]}},{"traveler_id":"traveler_b","display_name":"Jamie"
+  | ,"origin":"New York","origin_id":"new_york_ny","budget
+  | _usd":500,"max_travel_time_hours":10,"preferences":{"t
+  | emperature_range":null,"interest_tags":[]}}],"start_da
+  | te":"2099-06-10","end_date":"2099-06-14"},"missing_fie
+  | lds":["start_date"],"pending_questions":[{"field_path"
+  | :"start_date","question":"What year is your June 11 de
+  | parture date?","source_message":"Change my departure d
+  | ate to June 11; I have not specified the year."}],"uns
+  | upported_requests":[],"deferred_requests":[],"recommen
+  | dations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Clarify start_date
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 38054144478c3f0c00a85df9
+
+  POST http://127.0.0.1:8012/trip-sessions/85ff9099-1b26-4d50-8eec-2195fcbf2644/messages [200 OK, 1.16 KB, 807 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Supply year","status":200,"
+  | body":{"session_id":"85ff9099-1b26-4d50-8eec-2195fcbf2
+  | 644","state":"review","assistant_message":"Travel date
+  | s: 2099-06-11 to 2099-06-14.\\nAlex: Boston (boston_ma
+  | ); airfare budget $800.0 USD; maximum one-way time 10.
+  | 0 hours including layovers. Preferences: none provided
+  | .\\nJamie: New York (new_york_ny); airfare budget $500
+  | .0 USD; maximum one-way time 10.0 hours including layo
+  | vers. Preferences: none provided.\\nConfirm this trip 
+  | request to find destinations.","trip_request_draft":{"
+  | travelers":[{"traveler_id":"traveler_a","display_name"
+  | :"Alex","origin":"Boston","origin_id":"boston_ma","bud
+  | get_usd":800,"max_travel_time_hours":10,"preferences":
+  | {"temperature_range":null,"interest_tags":[]}},{"trave
+  | ler_id":"traveler_b","display_name":"Jamie","origin":"
+  | New York","origin_id":"new_york_ny","budget_usd":500,"
+  | max_travel_time_hours":10,"preferences":{"temperature_
+  | range":null,"interest_tags":[]}}],"start_date":"2099-0
+  | 6-11","end_date":"2099-06-14"},"missing_fields":[],"pe
+  | nding_questions":[],"unsupported_requests":[],"deferre
+  | d_requests":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root a14cc53ae51b1ef746e9ce44
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.16 KB, 1812 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Create session","status":20
+  | 0,"body":{"session_id":"027cb184-011e-4a7a-a1c2-6fef9b
+  | 1427c1","state":"review","assistant_message":"Travel d
+  | ates: 2099-06-10 to 2099-06-14.\\nAlex: Boston (boston
+  | _ma); airfare budget $800.0 USD; maximum one-way time 
+  | 10.0 hours including layovers. Preferences: none provi
+  | ded.\\nJamie: New York (new_york_ny); airfare budget $
+  | 500.0 USD; maximum one-way time 10.0 hours including l
+  | ayovers. Preferences: none provided.\\nConfirm this tr
+  | ip request to find destinations.","trip_request_draft"
+  | :{"travelers":[{"traveler_id":"traveler_a","display_na
+  | me":"Alex","origin":"Boston","origin_id":"boston_ma","
+  | budget_usd":800,"max_travel_time_hours":10,"preference
+  | s":{"temperature_range":null,"interest_tags":[]}},{"tr
+  | aveler_id":"traveler_b","display_name":"Jamie","origin
+  | ":"New York","origin_id":"new_york_ny","budget_usd":50
+  | 0,"max_travel_time_hours":10,"preferences":{"temperatu
+  | re_range":null,"interest_tags":[]}}],"start_date":"209
+  | 9-06-10","end_date":"2099-06-14"},"missing_fields":[],
+  | "pending_questions":[],"unsupported_requests":[],"defe
+  | rred_requests":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.display_name
+  Pass  Expected travelers.traveler_b.display_name
+  Pass  Expected travelers.traveler_a.origin_id
+  Pass  Expected travelers.traveler_b.origin_id
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Expected travelers.traveler_a.max_travel_time_hours
+  Pass  Expected travelers.traveler_b.max_travel_time_hours
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root 8e9b8a356d9273dfc3ae5fee
+
+  POST http://127.0.0.1:8012/trip-sessions/027cb184-011e-4a7a-a1c2-6fef9b1427c1/messages [200 OK, 1.29 KB, 1021 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Budget and hotel","status":
+  | 200,"body":{"session_id":"027cb184-011e-4a7a-a1c2-6fef
+  | 9b1427c1","state":"collecting","assistant_message":"Ho
+  | tel selection and amenities like a pool are not suppor
+  | ted; I can only record trip preferences such as intere
+  | sts, budget, travel time, origin, and dates.\\nCan we 
+  | continue without these unsupported requests?","trip_re
+  | quest_draft":{"travelers":[{"traveler_id":"traveler_a"
+  | ,"display_name":"Alex","origin":"Boston","origin_id":"
+  | boston_ma","budget_usd":600,"max_travel_time_hours":10
+  | ,"preferences":{"temperature_range":null,"interest_tag
+  | s":[]}},{"traveler_id":"traveler_b","display_name":"Ja
+  | mie","origin":"New York","origin_id":"new_york_ny","bu
+  | dget_usd":500,"max_travel_time_hours":10,"preferences"
+  | :{"temperature_range":null,"interest_tags":[]}}],"star
+  | t_date":"2099-06-10","end_date":"2099-06-14"},"missing
+  | _fields":[],"pending_questions":[],"unsupported_reques
+  | ts":[{"request_id":"df039d43-cfe6-4230-b298-9c286d9346
+  | d2","user_text":"I want a hotel with a pool.","explana
+  | tion":"Hotel selection and amenities like a pool are n
+  | ot supported; I can only record trip preferences such 
+  | as interests, budget, travel time, origin, and dates."
+  | ,"field_path":null}],"deferred_requests":[],"recommend
+  | ations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Unsupported notice state
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root f6ad3e3b49c1e68493c68cbe
+
+  POST http://127.0.0.1:8012/trip-sessions/027cb184-011e-4a7a-a1c2-6fef9b1427c1/messages [200 OK, 1.29 KB, 805 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Unrelated confirmation of o
+  | rigin","status":200,"body":{"session_id":"027cb184-011
+  | e-4a7a-a1c2-6fef9b1427c1","state":"collecting","assist
+  | ant_message":"Hotel selection and amenities like a poo
+  | l are not supported; I can only record trip preference
+  | s such as interests, budget, travel time, origin, and 
+  | dates.\\nCan we continue without these unsupported req
+  | uests?","trip_request_draft":{"travelers":[{"traveler_
+  | id":"traveler_a","display_name":"Alex","origin":"Bosto
+  | n","origin_id":"boston_ma","budget_usd":600,"max_trave
+  | l_time_hours":10,"preferences":{"temperature_range":nu
+  | ll,"interest_tags":[]}},{"traveler_id":"traveler_b","d
+  | isplay_name":"Jamie","origin":"New York","origin_id":"
+  | new_york_ny","budget_usd":500,"max_travel_time_hours":
+  | 10,"preferences":{"temperature_range":null,"interest_t
+  | ags":[]}}],"start_date":"2099-06-10","end_date":"2099-
+  | 06-14"},"missing_fields":[],"pending_questions":[],"un
+  | supported_requests":[{"request_id":"df039d43-cfe6-4230
+  | -b298-9c286d9346d2","user_text":"I want a hotel with a
+  |  pool.","explanation":"Hotel selection and amenities l
+  | ike a pool are not supported; I can only record trip p
+  | references such as interests, budget, travel time, ori
+  | gin, and dates.","field_path":null}],"deferred_request
+  | s":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Unsupported notice state
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 470c1da31ae8338a29c0edd7
+
+  POST http://127.0.0.1:8012/trip-sessions/027cb184-011e-4a7a-a1c2-6fef9b1427c1/messages [422 Unprocessable Entity, 210 B, 1 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Reject unresolved confirmat
+  | ion","status":422,"body":{"detail":"complete the trip 
+  | details before confirming this session"}}'
+  -
+  Pass  HTTP status
+
+Root 982305c7924486b16eb9a673
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.16 KB, 1708 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Create session","status":20
+  | 0,"body":{"session_id":"f8722fd4-5725-411f-905c-c16002
+  | 8a6d9a","state":"review","assistant_message":"Travel d
+  | ates: 2099-06-10 to 2099-06-14.\\nAlex: Boston (boston
+  | _ma); airfare budget $800.0 USD; maximum one-way time 
+  | 10.0 hours including layovers. Preferences: none provi
+  | ded.\\nJamie: New York (new_york_ny); airfare budget $
+  | 500.0 USD; maximum one-way time 10.0 hours including l
+  | ayovers. Preferences: none provided.\\nConfirm this tr
+  | ip request to find destinations.","trip_request_draft"
+  | :{"travelers":[{"traveler_id":"traveler_a","display_na
+  | me":"Alex","origin":"Boston","origin_id":"boston_ma","
+  | budget_usd":800,"max_travel_time_hours":10,"preference
+  | s":{"temperature_range":null,"interest_tags":[]}},{"tr
+  | aveler_id":"traveler_b","display_name":"Jamie","origin
+  | ":"New York","origin_id":"new_york_ny","budget_usd":50
+  | 0,"max_travel_time_hours":10,"preferences":{"temperatu
+  | re_range":null,"interest_tags":[]}}],"start_date":"209
+  | 9-06-10","end_date":"2099-06-14"},"missing_fields":[],
+  | "pending_questions":[],"unsupported_requests":[],"defe
+  | rred_requests":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.display_name
+  Pass  Expected travelers.traveler_b.display_name
+  Pass  Expected travelers.traveler_a.origin_id
+  Pass  Expected travelers.traveler_b.origin_id
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Expected travelers.traveler_a.max_travel_time_hours
+  Pass  Expected travelers.traveler_b.max_travel_time_hours
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root d7ded04f3f9d3741bed26336
+
+  POST http://127.0.0.1:8012/trip-sessions/f8722fd4-5725-411f-905c-c160028a6d9a/messages [200 OK, 1.17 KB, 890 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Ask for hotel","status":200
+  | ,"body":{"session_id":"f8722fd4-5725-411f-905c-c160028
+  | a6d9a","state":"collecting","assistant_message":"Hotel
+  |  selection and amenities like a pool are not something
+  |  I can capture in this trip profile.\\nCan we continue
+  |  without these unsupported requests?","trip_request_dr
+  | aft":{"travelers":[{"traveler_id":"traveler_a","displa
+  | y_name":"Alex","origin":"Boston","origin_id":"boston_m
+  | a","budget_usd":800,"max_travel_time_hours":10,"prefer
+  | ences":{"temperature_range":null,"interest_tags":[]}},
+  | {"traveler_id":"traveler_b","display_name":"Jamie","or
+  | igin":"New York","origin_id":"new_york_ny","budget_usd
+  | ":500,"max_travel_time_hours":10,"preferences":{"tempe
+  | rature_range":null,"interest_tags":[]}}],"start_date":
+  | "2099-06-10","end_date":"2099-06-14"},"missing_fields"
+  | :[],"pending_questions":[],"unsupported_requests":[{"r
+  | equest_id":"c2022a1e-6019-4126-ae34-4354db56b264","use
+  | r_text":"I want a hotel with a pool.","explanation":"H
+  | otel selection and amenities like a pool are not somet
+  | hing I can capture in this trip profile.","field_path"
+  | :null}],"deferred_requests":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Unsupported notice state
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root c56bdb1b8c8e64549232c6c8
+
+  POST http://127.0.0.1:8012/trip-sessions/f8722fd4-5725-411f-905c-c160028a6d9a/messages [200 OK, 1.24 KB, 1056 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Agree to exclude hotel","st
+  | atus":200,"body":{"session_id":"f8722fd4-5725-411f-905
+  | c-c160028a6d9a","state":"review","assistant_message":"
+  | Travel dates: 2099-06-10 to 2099-06-14.\\nAlex: Boston
+  |  (boston_ma); airfare budget $800.0 USD; maximum one-w
+  | ay time 10.0 hours including layovers. Preferences: no
+  | ne provided.\\nJamie: New York (new_york_ny); airfare 
+  | budget $500.0 USD; maximum one-way time 10.0 hours inc
+  | luding layovers. Preferences: none provided.\\nNot inc
+  | luded, as agreed: I want a hotel with a pool.\\nConfir
+  | m this trip request to find destinations.","trip_reque
+  | st_draft":{"travelers":[{"traveler_id":"traveler_a","d
+  | isplay_name":"Alex","origin":"Boston","origin_id":"bos
+  | ton_ma","budget_usd":800,"max_travel_time_hours":10,"p
+  | references":{"temperature_range":null,"interest_tags":
+  | []}},{"traveler_id":"traveler_b","display_name":"Jamie
+  | ","origin":"New York","origin_id":"new_york_ny","budge
+  | t_usd":500,"max_travel_time_hours":10,"preferences":{"
+  | temperature_range":null,"interest_tags":[]}}],"start_d
+  | ate":"2099-06-10","end_date":"2099-06-14"},"missing_fi
+  | elds":[],"pending_questions":[],"unsupported_requests"
+  | :[],"deferred_requests":["I want a hotel with a pool."
+  | ],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Unsupported notice state
+  Pass  Excluded request recorded
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 8b7225fe05be0b959382c6b3
+
+  POST http://127.0.0.1:8012/trip-sessions/f8722fd4-5725-411f-905c-c160028a6d9a/messages [200 OK, 13.43 KB, 9 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Confirm reviewed trip","sta
+  | tus":200,"body":{"session_id":"f8722fd4-5725-411f-905c
+  | -c160028a6d9a","state":"results","assistant_message":"
+  | Found 3 destination recommendations.","trip_request_dr
+  | aft":{"travelers":[{"traveler_id":"traveler_a","displa
+  | y_name":"Alex","origin":"Boston","origin_id":"boston_m
+  | a","budget_usd":800,"max_travel_time_hours":10,"prefer
+  | ences":{"temperature_range":null,"interest_tags":[]}},
+  | {"traveler_id":"traveler_b","display_name":"Jamie","or
+  | igin":"New York","origin_id":"new_york_ny","budget_usd
+  | ":500,"max_travel_time_hours":10,"preferences":{"tempe
+  | rature_range":null,"interest_tags":[]}}],"start_date":
+  | "2099-06-10","end_date":"2099-06-14"},"missing_fields"
+  | :[],"pending_questions":[],"unsupported_requests":[],"
+  | deferred_requests":["I want a hotel with a pool."],"re
+  | commendations":[{"rank":1,"destination":{"destination_
+  | id":"chicago_il","name":"Chicago","state_code":"IL","m
+  | etro_airport_codes":["ORD","MDW"]},"score":0.689688,"s
+  | core_breakdown":{"affordability":{"value":0.4825,"weig
+  | ht":0.4375,"contribution":0.211094},"travel_fairness":
+  | {"value":0.92,"weight":0.375,"contribution":0.345},"pr
+  | eference_match":{"value":1,"weight":0,"contribution":0
+  | },"travel_time":{"value":0.7125,"weight":0.1875,"contr
+  | ibution":0.133594},"travel_fairness_details":{"duratio
+  | n_balance":0.975,"budget_burden_balance":0.775,"arriva
+  | l_alignment":1}},"recommended_pair":{"offers":[{"trave
+  | ler_id":"traveler_a","offer_id":"fixture_a_chicago_non
+  | stop"},{"traveler_id":"traveler_b","offer_id":"fixture
+  | _b_chicago_nonstop"}],"combined_price_usd":"639.00","a
+  | rrival_gap_minutes":45,"return_departure_gap_minutes":
+  | 60,"time_together_minutes":6015,"total_connections":0,
+  | "combined_travel_minutes":675,"selection_score":0.9676
+  | 84,"selection_score_breakdown":{"price":{"value":0.907
+  | 668,"weight":0.35,"contribution":0.317684},"arrival_al
+  | ignment":{"value":1,"weight":0.25,"contribution":0.25}
+  | ,"travel_time":{"value":1,"weight":0.2,"contribution":
+  | 0.2},"connections":{"value":1,"weight":0.1,"contributi
+  | on":0.1},"time_together":{"value":1,"weight":0.1,"cont
+  | ribution":0.1}},"price_comparison":{"lowest_valid_comb
+  | ined_price_usd":"580.00","premium_usd":"59.00","premiu
+  | m_percentage":10.172413793103448}},"flight_options_by_
+  | traveler":[{"traveler_id":"traveler_a","options":[{"of
+  | fer_id":"fixture_a_chicago_nonstop","traveler_id":"tra
+  | veler_a","labels":["recommended_pair","shortest_travel
+  | ","fewest_connections"],"round_trip_price_usd":"324.00
+  | ","outbound":{"origin_airport_code":"BOS","destination
+  | _airport_code":"ORD","departure_at":"2099-06-10T08:00:
+  | 00-04:00","arrival_at":"2099-06-10T10:00:00-05:00","du
+  | ration_minutes":180,"connection_count":0,"carrier_code
+  | s":["ZZ"]},"return_flight":{"origin_airport_code":"ORD
+  | ","destination_airport_code":"BOS","departure_at":"209
+  | 9-06-14T15:00:00-05:00","arrival_at":"2099-06-14T18:50
+  | :00-04:00","duration_minutes":170,"connection_count":0
+  | ,"carrier_codes":["ZZ"]},"total_travel_minutes":350,"t
+  | otal_connections":0,"is_round_trip_nonstop":true,"expi
+  | res_at":null},{"offer_id":"fixture_a_chicago_connectin
+  | g","traveler_id":"traveler_a","labels":["lowest_price"
+  | ],"round_trip_price_usd":"300.00","outbound":{"origin_
+  | airport_code":"BOS","destination_airport_code":"ORD","
+  | departure_at":"2099-06-10T07:00:00-04:00","arrival_at"
+  | :"2099-06-10T10:45:00-05:00","duration_minutes":360,"c
+  | onnection_count":1,"carrier_codes":["ZZ"]},"return_fli
+  | ght":{"origin_airport_code":"ORD","destination_airport
+  | _code":"BOS","departure_at":"2099-06-14T14:00:00-05:00
+  | ","arrival_at":"2099-06-14T19:05:00-04:00","duration_m
+  | inutes":350,"connection_count":1,"carrier_codes":["ZZ"
+  | ]},"total_travel_minutes":710,"total_connections":2,"i
+  | s_round_trip_nonstop":false,"expires_at":null}]},{"tra
+  | veler_id":"traveler_b","options":[{"offer_id":"fixture
+  | _b_chicago_nonstop","traveler_id":"traveler_b","labels
+  | ":["recommended_pair","shortest_travel","fewest_connec
+  | tions"],"round_trip_price_usd":"315.00","outbound":{"o
+  | rigin_airport_code":"JFK","destination_airport_code":"
+  | ORD","departure_at":"2099-06-10T09:00:00-04:00","arriv
+  | al_at":"2099-06-10T10:45:00-05:00","duration_minutes":
+  | 165,"connection_count":0,"carrier_codes":["ZZ"]},"retu
+  | rn_flight":{"origin_airport_code":"ORD","destination_a
+  | irport_code":"JFK","departure_at":"2099-06-14T16:00:00
+  | -05:00","arrival_at":"2099-06-14T19:40:00-04:00","dura
+  | tion_minutes":160,"connection_count":0,"carrier_codes"
+  | :["ZZ"]},"total_travel_minutes":325,"total_connections
+  | ":0,"is_round_trip_nonstop":true,"expires_at":null},{"
+  | offer_id":"fixture_b_chicago_connecting","traveler_id"
+  | :"traveler_b","labels":["lowest_price"],"round_trip_pr
+  | ice_usd":"280.00","outbound":{"origin_airport_code":"J
+  | FK","destination_airport_code":"ORD","departure_at":"2
+  | 099-06-10T07:30:00-04:00","arrival_at":"2099-06-10T11:
+  | 30:00-05:00","duration_minutes":330,"connection_count"
+  | :1,"carrier_codes":["ZZ"]},"return_flight":{"origin_ai
+  | rport_code":"ORD","destination_airport_code":"JFK","de
+  | parture_at":"2099-06-14T13:00:00-05:00","arrival_at":"
+  | 2099-06-14T18:15:00-04:00","duration_minutes":340,"con
+  | nection_count":1,"carrier_codes":["ZZ"]},"total_travel
+  | _minutes":670,"total_connections":2,"is_round_trip_non
+  | stop":false,"expires_at":null}]}]},{"rank":2,"destinat
+  | ion":{"destination_id":"miami_fl","name":"Miami","stat
+  | e_code":"FL","metro_airport_codes":["MIA","FLL"]},"sco
+  | re":0.683844,"score_breakdown":{"affordability":{"valu
+  | e":0.4775,"weight":0.4375,"contribution":0.208906},"tr
+  | avel_fairness":{"value":0.933167,"weight":0.375,"contr
+  | ibution":0.349938},"preference_match":{"value":1,"weig
+  | ht":0,"contribution":0},"travel_time":{"value":0.66666
+  | 7,"weight":0.1875,"contribution":0.125},"travel_fairne
+  | ss_details":{"duration_balance":0.983333,"budget_burde
+  | n_balance":0.805,"arrival_alignment":1}},"recommended_
+  | pair":{"offers":[{"traveler_id":"traveler_a","offer_id
+  | ":"fixture_a_miami_nonstop"},{"traveler_id":"traveler_
+  | b","offer_id":"fixture_b_miami_nonstop"}],"combined_pr
+  | ice_usd":"650.00","arrival_gap_minutes":45,"return_dep
+  | arture_gap_minutes":30,"time_together_minutes":5990,"t
+  | otal_connections":0,"combined_travel_minutes":785,"sel
+  | ection_score":0.919231,"selection_score_breakdown":{"p
+  | rice":{"value":0.769231,"weight":0.35,"contribution":0
+  | .269231},"arrival_alignment":{"value":1,"weight":0.25,
+  | "contribution":0.25},"travel_time":{"value":1,"weight"
+  | :0.2,"contribution":0.2},"connections":{"value":1,"wei
+  | ght":0.1,"contribution":0.1},"time_together":{"value":
+  | 1,"weight":0.1,"contribution":0.1}},"price_comparison"
+  | :{"lowest_valid_combined_price_usd":"500.00","premium_
+  | usd":"150.00","premium_percentage":30}},"flight_option
+  | s_by_traveler":[{"traveler_id":"traveler_a","options":
+  | [{"offer_id":"fixture_a_miami_nonstop","traveler_id":"
+  | traveler_a","labels":["recommended_pair","shortest_tra
+  | vel","fewest_connections"],"round_trip_price_usd":"340
+  | .00","outbound":{"origin_airport_code":"BOS","destinat
+  | ion_airport_code":"MIA","departure_at":"2099-06-10T07:
+  | 00:00-04:00","arrival_at":"2099-06-10T10:25:00-04:00",
+  | "duration_minutes":205,"connection_count":0,"carrier_c
+  | odes":["ZZ"]},"return_flight":{"origin_airport_code":"
+  | MIA","destination_airport_code":"BOS","departure_at":"
+  | 2099-06-14T15:00:00-04:00","arrival_at":"2099-06-14T18
+  | :15:00-04:00","duration_minutes":195,"connection_count
+  | ":0,"carrier_codes":["ZZ"]},"total_travel_minutes":400
+  | ,"total_connections":0,"is_round_trip_nonstop":true,"e
+  | xpires_at":null},{"offer_id":"fixture_a_miami_connecti
+  | ng","traveler_id":"traveler_a","labels":["lowest_price
+  | "],"round_trip_price_usd":"260.00","outbound":{"origin
+  | _airport_code":"BOS","destination_airport_code":"MIA",
+  | "departure_at":"2099-06-10T07:00:00-04:00","arrival_at
+  | ":"2099-06-10T12:15:00-04:00","duration_minutes":315,"
+  | connection_count":1,"carrier_codes":["ZZ"]},"return_fl
+  | ight":{"origin_airport_code":"MIA","destination_airpor
+  | t_code":"BOS","departure_at":"2099-06-14T15:00:00-04:0
+  | 0","arrival_at":"2099-06-14T20:10:00-04:00","duration_
+  | minutes":310,"connection_count":1,"carrier_codes":["ZZ
+  | "]},"total_travel_minutes":625,"total_connections":2,"
+  | is_round_trip_nonstop":false,"expires_at":null}]},{"tr
+  | aveler_id":"traveler_b","options":[{"offer_id":"fixtur
+  | e_b_miami_nonstop","traveler_id":"traveler_b","labels"
+  | :["recommended_pair","shortest_travel","fewest_connect
+  | ions"],"round_trip_price_usd":"310.00","outbound":{"or
+  | igin_airport_code":"JFK","destination_airport_code":"M
+  | IA","departure_at":"2099-06-10T08:00:00-04:00","arriva
+  | l_at":"2099-06-10T11:10:00-04:00","duration_minutes":1
+  | 90,"connection_count":0,"carrier_codes":["ZZ"]},"retur
+  | n_flight":{"origin_airport_code":"MIA","destination_ai
+  | rport_code":"JFK","departure_at":"2099-06-14T15:30:00-
+  | 04:00","arrival_at":"2099-06-14T18:45:00-04:00","durat
+  | ion_minutes":195,"connection_count":0,"carrier_codes":
+  | ["ZZ"]},"total_travel_minutes":385,"total_connections"
+  | :0,"is_round_trip_nonstop":true,"expires_at":null},{"o
+  | ffer_id":"fixture_b_miami_connecting","traveler_id":"t
+  | raveler_b","labels":["lowest_price"],"round_trip_price
+  | _usd":"240.00","outbound":{"origin_airport_code":"JFK"
+  | ,"destination_airport_code":"MIA","departure_at":"2099
+  | -06-10T07:00:00-04:00","arrival_at":"2099-06-10T12:25:
+  | 00-04:00","duration_minutes":325,"connection_count":1,
+  | "carrier_codes":["ZZ"]},"return_flight":{"origin_airpo
+  | rt_code":"MIA","destination_airport_code":"JFK","depar
+  | ture_at":"2099-06-14T14:30:00-04:00","arrival_at":"209
+  | 9-06-14T19:50:00-04:00","duration_minutes":320,"connec
+  | tion_count":1,"carrier_codes":["ZZ"]},"total_travel_mi
+  | nutes":645,"total_connections":2,"is_round_trip_nonsto
+  | p":false,"expires_at":null}]}]},{"rank":3,"destination
+  | ":{"destination_id":"seattle_wa","name":"Seattle","sta
+  | te_code":"WA","metro_airport_codes":["SEA"]},"score":0
+  | .509218,"score_breakdown":{"affordability":{"value":0.
+  | 25,"weight":0.4375,"contribution":0.109375},"travel_fa
+  | irness":{"value":0.8975,"weight":0.375,"contribution":
+  | 0.336562},"preference_match":{"value":1,"weight":0,"co
+  | ntribution":0},"travel_time":{"value":0.3375,"weight":
+  | 0.1875,"contribution":0.063281},"travel_fairness_detai
+  | ls":{"duration_balance":0.975,"budget_burden_balance":
+  | 0.7,"arrival_alignment":1}},"recommended_pair":{"offer
+  | s":[{"traveler_id":"traveler_a","offer_id":"fixture_a_
+  | seattle_non'... 3640 more characters
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root bdc3e3fa5d7ee19f9d505bd4
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.16 KB, 1749 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Create session","status":20
+  | 0,"body":{"session_id":"ae767104-6795-420c-9a4a-e7ae35
+  | c5536e","state":"review","assistant_message":"Travel d
+  | ates: 2099-06-10 to 2099-06-14.\\nAlex: Boston (boston
+  | _ma); airfare budget $800.0 USD; maximum one-way time 
+  | 10.0 hours including layovers. Preferences: none provi
+  | ded.\\nJamie: New York (new_york_ny); airfare budget $
+  | 500.0 USD; maximum one-way time 10.0 hours including l
+  | ayovers. Preferences: none provided.\\nConfirm this tr
+  | ip request to find destinations.","trip_request_draft"
+  | :{"travelers":[{"traveler_id":"traveler_a","display_na
+  | me":"Alex","origin":"Boston","origin_id":"boston_ma","
+  | budget_usd":800,"max_travel_time_hours":10,"preference
+  | s":{"temperature_range":null,"interest_tags":[]}},{"tr
+  | aveler_id":"traveler_b","display_name":"Jamie","origin
+  | ":"New York","origin_id":"new_york_ny","budget_usd":50
+  | 0,"max_travel_time_hours":10,"preferences":{"temperatu
+  | re_range":null,"interest_tags":[]}}],"start_date":"209
+  | 9-06-10","end_date":"2099-06-14"},"missing_fields":[],
+  | "pending_questions":[],"unsupported_requests":[],"defe
+  | rred_requests":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.display_name
+  Pass  Expected travelers.traveler_b.display_name
+  Pass  Expected travelers.traveler_a.origin_id
+  Pass  Expected travelers.traveler_b.origin_id
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Expected travelers.traveler_a.max_travel_time_hours
+  Pass  Expected travelers.traveler_b.max_travel_time_hours
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root d6182598a7a7aedb694b4ffd
+
+  POST http://127.0.0.1:8012/trip-sessions/ae767104-6795-420c-9a4a-e7ae35c5536e/messages [200 OK, 1.15 KB, 1195 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Lower both budgets","status
+  | ":200,"body":{"session_id":"ae767104-6795-420c-9a4a-e7
+  | ae35c5536e","state":"review","assistant_message":"Trav
+  | el dates: 2099-06-10 to 2099-06-14.\\nAlex: Boston (bo
+  | ston_ma); airfare budget $1.0 USD; maximum one-way tim
+  | e 10.0 hours including layovers. Preferences: none pro
+  | vided.\\nJamie: New York (new_york_ny); airfare budget
+  |  $1.0 USD; maximum one-way time 10.0 hours including l
+  | ayovers. Preferences: none provided.\\nConfirm this tr
+  | ip request to find destinations.","trip_request_draft"
+  | :{"travelers":[{"traveler_id":"traveler_a","display_na
+  | me":"Alex","origin":"Boston","origin_id":"boston_ma","
+  | budget_usd":1,"max_travel_time_hours":10,"preferences"
+  | :{"temperature_range":null,"interest_tags":[]}},{"trav
+  | eler_id":"traveler_b","display_name":"Jamie","origin":
+  | "New York","origin_id":"new_york_ny","budget_usd":1,"m
+  | ax_travel_time_hours":10,"preferences":{"temperature_r
+  | ange":null,"interest_tags":[]}}],"start_date":"2099-06
+  | -10","end_date":"2099-06-14"},"missing_fields":[],"pen
+  | ding_questions":[],"unsupported_requests":[],"deferred
+  | _requests":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 5df54e1e81d9cbb54b44d2e5
+
+  POST http://127.0.0.1:8012/trip-sessions/ae767104-6795-420c-9a4a-e7ae35c5536e/messages [200 OK, 954 B, 5 ms]
+  -
+  | `EVAL_RESPONSE {"request":"Confirm reviewed trip","sta
+  | tus":200,"body":{"session_id":"ae767104-6795-420c-9a4a
+  | -e7ae35c5536e","state":"no_match","assistant_message":
+  | "No fixture destination meets both travelers' current 
+  | constraints. Adjust a budget, travel-time limit, date,
+  |  or origin and try again.","trip_request_draft":{"trav
+  | elers":[{"traveler_id":"traveler_a","display_name":"Al
+  | ex","origin":"Boston","origin_id":"boston_ma","budget_
+  | usd":1,"max_travel_time_hours":10,"preferences":{"temp
+  | erature_range":null,"interest_tags":[]}},{"traveler_id
+  | ":"traveler_b","display_name":"Jamie","origin":"New Yo
+  | rk","origin_id":"new_york_ny","budget_usd":1,"max_trav
+  | el_time_hours":10,"preferences":{"temperature_range":n
+  | ull,"interest_tags":[]}}],"start_date":"2099-06-10","e
+  | nd_date":"2099-06-14"},"missing_fields":[],"pending_qu
+  | estions":[],"unsupported_requests":[],"deferred_reques
+  | ts":[],"recommendations":[]}}`
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+--------------------------------------------------------------------------
+|                         |              executed |               failed |
+--------------------------+-----------------------+-----------------------
+|              iterations |                     1 |                    0 |
+--------------------------+-----------------------+-----------------------
+|                requests |                    34 |                    0 |
+--------------------------+-----------------------+-----------------------
+|            test-scripts |                    34 |                    0 |
+--------------------------+-----------------------+-----------------------
+|      prerequest-scripts |                    12 |                    0 |
+--------------------------+-----------------------+-----------------------
+|              assertions |                   330 |                    0 |
+--------------------------------------------------------------------------
+| total run duration: 35.5 s                                             |
+--------------------------------------------------------------------------
+| total data received: 71.04 KB (approx)                                 |
+--------------------------------------------------------------------------
+| average response time: 1023 ms [min: 1 ms, max: 1854 ms, s.d.: 577 ms] |
+--------------------------------------------------------------------------

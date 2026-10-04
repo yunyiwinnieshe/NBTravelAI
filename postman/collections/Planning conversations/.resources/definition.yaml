@@ -1,0 +1,19 @@
+{
+  "$kind": "collection",
+  "name": "Planning conversations",
+  "description": "12 synthetic cases. Run with a DeepSeek-configured local server. Model calls incur usage. Each folder creates a fresh session. No credentials are needed in Postman.",
+  "variables": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8012"
+    },
+    {
+      "key": "session_id",
+      "value": ""
+    },
+    {
+      "key": "previous_draft",
+      "value": ""
+    }
+  ]
+}

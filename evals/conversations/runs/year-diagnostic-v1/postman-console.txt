@@ -1,0 +1,146 @@
+No authorization data found. Please use the `postman login` command.
+Refer:https://learning.postman.com/docs/postman-cli/postman-cli-options/#postman-login
+
+Running your collection...
+
+Root 833edf5c62601b2fa7d48f3d
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.16 KB, 2 s]
+  -
+  | 'EVAL_RESPONSE {"request":"Create session","status":20
+  | 0,"body":{"session_id":"67da0950-9e55-4908-8d3e-c8e1d6
+  | 5c4ec2","state":"review","assistant_message":"Travel d
+  | ates: 2099-06-10 to 2099-06-14.\\nAlex: Boston (boston
+  | _ma); airfare budget $800.0 USD; maximum one-way time 
+  | 10.0 hours including layovers. Preferences: none provi
+  | ded.\\nJamie: New York (new_york_ny); airfare budget $
+  | 500.0 USD; maximum one-way time 10.0 hours including l
+  | ayovers. Preferences: none provided.\\nConfirm this tr
+  | ip request to find destinations.","trip_request_draft"
+  | :{"travelers":[{"traveler_id":"traveler_a","display_na
+  | me":"Alex","origin":"Boston","origin_id":"boston_ma","
+  | budget_usd":800,"max_travel_time_hours":10,"preference
+  | s":{"temperature_range":null,"interest_tags":[]}},{"tr
+  | aveler_id":"traveler_b","display_name":"Jamie","origin
+  | ":"New York","origin_id":"new_york_ny","budget_usd":50
+  | 0,"max_travel_time_hours":10,"preferences":{"temperatu
+  | re_range":null,"interest_tags":[]}}],"start_date":"209
+  | 9-06-10","end_date":"2099-06-14"},"missing_fields":[],
+  | "pending_questions":[],"unsupported_requests":[],"defe
+  | rred_requests":[],"recommendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.display_name
+  Pass  Expected travelers.traveler_b.display_name
+  Pass  Expected travelers.traveler_a.origin_id
+  Pass  Expected travelers.traveler_b.origin_id
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Expected travelers.traveler_a.max_travel_time_hours
+  Pass  Expected travelers.traveler_b.max_travel_time_hours
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root 7e61603ad7e51881405d2cf6
+
+  POST http://127.0.0.1:8012/trip-sessions/67da0950-9e55-4908-8d3e-c8e1d65c4ec2/messages [200 OK, 1.03 KB, 811 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Date without year","status"
+  | :200,"body":{"session_id":"67da0950-9e55-4908-8d3e-c8e
+  | 1d65c4ec2","state":"collecting","assistant_message":"W
+  | hat year is your June 11 departure date in?","trip_req
+  | uest_draft":{"travelers":[{"traveler_id":"traveler_a",
+  | "display_name":"Alex","origin":"Boston","origin_id":"b
+  | oston_ma","budget_usd":800,"max_travel_time_hours":10,
+  | "preferences":{"temperature_range":null,"interest_tags
+  | ":[]}},{"traveler_id":"traveler_b","display_name":"Jam
+  | ie","origin":"New York","origin_id":"new_york_ny","bud
+  | get_usd":500,"max_travel_time_hours":10,"preferences":
+  | {"temperature_range":null,"interest_tags":[]}}],"start
+  | _date":"2099-06-10","end_date":"2099-06-14"},"missing_
+  | fields":["start_date"],"pending_questions":[{"field_pa
+  | th":"start_date","question":"What year is your June 11
+  |  departure date in?","source_message":"Change my depar
+  | ture date to June 11; I have not specified the year."}
+  | ],"unsupported_requests":[],"deferred_requests":[],"re
+  | commendations":[]}}'
+  -
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Clarify start_date
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root fe1210d57ee4126fd4518711
+
+  POST http://127.0.0.1:8012/trip-sessions/67da0950-9e55-4908-8d3e-c8e1d65c4ec2/messages [200 OK, 1.03 KB, 1013 ms]
+  -
+  | 'EVAL_RESPONSE {"request":"Supply year","status":200,"
+  | body":{"session_id":"67da0950-9e55-4908-8d3e-c8e1d65c4
+  | ec2","state":"collecting","assistant_message":"What ye
+  | ar is your June 11 departure date in?","trip_request_d
+  | raft":{"travelers":[{"traveler_id":"traveler_a","displ
+  | ay_name":"Alex","origin":"Boston","origin_id":"boston_
+  | ma","budget_usd":800,"max_travel_time_hours":10,"prefe
+  | rences":{"temperature_range":null,"interest_tags":[]}}
+  | ,{"traveler_id":"traveler_b","display_name":"Jamie","o
+  | rigin":"New York","origin_id":"new_york_ny","budget_us
+  | d":500,"max_travel_time_hours":10,"preferences":{"temp
+  | erature_range":null,"interest_tags":[]}}],"start_date"
+  | :"2099-06-10","end_date":"2099-06-14"},"missing_fields
+  | ":["start_date"],"pending_questions":[{"field_path":"s
+  | tart_date","question":"What year is your June 11 depar
+  | ture date in?","source_message":"Change my departure d
+  | ate to June 11; I have not specified the year."}],"uns
+  | upported_requests":[],"deferred_requests":[],"recommen
+  | dations":[]}}'
+  -
+  Pass  HTTP status
+  1. Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  2. Expected start_date
+  Pass  Expected end_date
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+------------------------------------------------------------------------
+|                         |             executed |              failed |
+--------------------------+----------------------+----------------------
+|              iterations |                    1 |                   0 |
+--------------------------+----------------------+----------------------
+|                requests |                    3 |                   0 |
+--------------------------+----------------------+----------------------
+|            test-scripts |                    3 |                   0 |
+--------------------------+----------------------+----------------------
+|      prerequest-scripts |                    1 |                   0 |
+--------------------------+----------------------+----------------------
+|              assertions |                   33 |                   2 |
+------------------------------------------------------------------------
+| total run duration: 4 s                                              |
+------------------------------------------------------------------------
+| total data received: 2.86 KB (approx)                                |
+------------------------------------------------------------------------
+| average response time: 1276 ms [min: 811 ms, max: 2 s, s.d.: 520 ms] |
+------------------------------------------------------------------------
+
+  #  failure         detail                                             
+                                                                        
+ 1.  AssertionError  Conversation state                                 
+                     expected 'collecting' to deeply equal 'review'     
+                     at assertion:1 in test-script                      
+                     inside "Supply year"                               
+                                                                        
+ 2.  AssertionError  Expected start_date                                
+                     expected '2099-06-10' to deeply equal '2099-06-11' 
+                     at assertion:4 in test-script                      
+                     inside "Supply year"                               

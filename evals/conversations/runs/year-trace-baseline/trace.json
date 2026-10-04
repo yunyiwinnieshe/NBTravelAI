@@ -1,0 +1,1007 @@
+[
+  {
+    "input": {
+      "user_message": "My name is Alex and I'm leaving from Boston. My companion Jamie leaves from New York. We travel June 10 to June 14, 2099. My maximum round-trip airfare budget is $800 USD and Jamie's is $500 USD. Each of us can travel at most 10 hours one way including layovers.",
+      "current_draft": {
+        "travelers": [
+          {
+            "traveler_id": "traveler_a",
+            "display_name": null,
+            "origin": null,
+            "origin_id": null,
+            "budget_usd": null,
+            "max_travel_time_hours": null,
+            "preferences": {
+              "temperature_range": null,
+              "interest_tags": []
+            }
+          },
+          {
+            "traveler_id": "traveler_b",
+            "display_name": null,
+            "origin": null,
+            "origin_id": null,
+            "budget_usd": null,
+            "max_travel_time_hours": null,
+            "preferences": {
+              "temperature_range": null,
+              "interest_tags": []
+            }
+          }
+        ],
+        "start_date": null,
+        "end_date": null
+      },
+      "reference_date": "2026-10-03",
+      "timezone": "America/Los_Angeles",
+      "next_weekdays": {
+        "monday": "2026-10-05",
+        "tuesday": "2026-10-06",
+        "wednesday": "2026-10-07",
+        "thursday": "2026-10-08",
+        "friday": "2026-10-09",
+        "saturday": "2026-10-10",
+        "sunday": "2026-10-04"
+      },
+      "allowed_field_paths": [
+        "end_date",
+        "start_date",
+        "travelers.traveler_a.budget_usd",
+        "travelers.traveler_a.display_name",
+        "travelers.traveler_a.max_travel_time_hours",
+        "travelers.traveler_a.origin",
+        "travelers.traveler_a.preferences.interest_tags",
+        "travelers.traveler_a.preferences.temperature_range",
+        "travelers.traveler_b.budget_usd",
+        "travelers.traveler_b.display_name",
+        "travelers.traveler_b.max_travel_time_hours",
+        "travelers.traveler_b.origin",
+        "travelers.traveler_b.preferences.interest_tags",
+        "travelers.traveler_b.preferences.temperature_range"
+      ],
+      "response_schema": {
+        "$defs": {
+          "MissingField": {
+            "additionalProperties": false,
+            "description": "One unresolved canonical field and the question needed to resolve it.",
+            "properties": {
+              "field_path": {
+                "maxLength": 200,
+                "minLength": 1,
+                "title": "Field Path",
+                "type": "string"
+              },
+              "reason": {
+                "$ref": "#/$defs/MissingFieldReason"
+              },
+              "clarification_question": {
+                "maxLength": 500,
+                "minLength": 1,
+                "title": "Clarification Question",
+                "type": "string"
+              }
+            },
+            "required": [
+              "field_path",
+              "reason",
+              "clarification_question"
+            ],
+            "title": "MissingField",
+            "type": "object"
+          },
+          "MissingFieldReason": {
+            "description": "Why the system cannot safely complete one canonical field.",
+            "enum": [
+              "missing",
+              "ambiguous",
+              "invalid",
+              "unsupported"
+            ],
+            "title": "MissingFieldReason",
+            "type": "string"
+          },
+          "UnsupportedAcknowledgment": {
+            "additionalProperties": false,
+            "description": "Explicit user consent to defer a known session request.",
+            "properties": {
+              "request_id": {
+                "maxLength": 100,
+                "minLength": 1,
+                "title": "Request Id",
+                "type": "string"
+              },
+              "evidence": {
+                "maxLength": 10000,
+                "minLength": 1,
+                "title": "Evidence",
+                "type": "string"
+              }
+            },
+            "required": [
+              "request_id",
+              "evidence"
+            ],
+            "title": "UnsupportedAcknowledgment",
+            "type": "object"
+          },
+          "UnsupportedRequest": {
+            "additionalProperties": false,
+            "description": "An out-of-scope request without an invented canonical field path.",
+            "properties": {
+              "user_text": {
+                "maxLength": 10000,
+                "minLength": 1,
+                "title": "User Text",
+                "type": "string"
+              },
+              "explanation": {
+                "maxLength": 500,
+                "minLength": 1,
+                "title": "Explanation",
+                "type": "string"
+              }
+            },
+            "required": [
+              "user_text",
+              "explanation"
+            ],
+            "title": "UnsupportedRequest",
+            "type": "object"
+          },
+          "_Operation": {
+            "additionalProperties": false,
+            "properties": {
+              "op": {
+                "enum": [
+                  "set",
+                  "add",
+                  "remove"
+                ],
+                "title": "Op",
+                "type": "string"
+              },
+              "field_path": {
+                "title": "Field Path",
+                "type": "string"
+              },
+              "value": {
+                "title": "Value"
+              },
+              "evidence": {
+                "maxLength": 10000,
+                "minLength": 1,
+                "title": "Evidence",
+                "type": "string"
+              }
+            },
+            "required": [
+              "op",
+              "field_path",
+              "value",
+              "evidence"
+            ],
+            "title": "_Operation",
+            "type": "object"
+          }
+        },
+        "additionalProperties": false,
+        "properties": {
+          "operations": {
+            "items": {
+              "$ref": "#/$defs/_Operation"
+            },
+            "maxItems": 100,
+            "title": "Operations",
+            "type": "array"
+          },
+          "missing_fields": {
+            "items": {
+              "$ref": "#/$defs/MissingField"
+            },
+            "maxItems": 100,
+            "title": "Missing Fields",
+            "type": "array"
+          },
+          "unsupported_requests": {
+            "items": {
+              "$ref": "#/$defs/UnsupportedRequest"
+            },
+            "maxItems": 100,
+            "title": "Unsupported Requests",
+            "type": "array"
+          },
+          "acknowledged_unsupported": {
+            "items": {
+              "$ref": "#/$defs/UnsupportedAcknowledgment"
+            },
+            "maxItems": 100,
+            "title": "Acknowledged Unsupported",
+            "type": "array"
+          }
+        },
+        "required": [
+          "operations",
+          "missing_fields",
+          "unsupported_requests"
+        ],
+        "title": "_Response",
+        "type": "object"
+      },
+      "conversation_context": {
+        "pending_questions": [
+          {
+            "field_path": "start_date",
+            "question": "What is your exact start date, including the year?",
+            "source_message": null
+          },
+          {
+            "field_path": "end_date",
+            "question": "What is your exact end date, including the year?",
+            "source_message": null
+          },
+          {
+            "field_path": "travelers.traveler_a.origin",
+            "question": "Where is Traveler A leaving from?",
+            "source_message": null
+          }
+        ],
+        "unsupported_requests": []
+      }
+    },
+    "model_output": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.display_name",
+          "value": "Alex",
+          "evidence": "My name is Alex"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.origin",
+          "value": "Boston",
+          "evidence": "I'm leaving from Boston"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_b.display_name",
+          "value": "Jamie",
+          "evidence": "My companion Jamie"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_b.origin",
+          "value": "New York",
+          "evidence": "My companion Jamie leaves from New York"
+        },
+        {
+          "op": "set",
+          "field_path": "start_date",
+          "value": "2099-06-10",
+          "evidence": "We travel June 10 to June 14, 2099"
+        },
+        {
+          "op": "set",
+          "field_path": "end_date",
+          "value": "2099-06-14",
+          "evidence": "We travel June 10 to June 14, 2099"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.budget_usd",
+          "value": 800,
+          "evidence": "My maximum round-trip airfare budget is $800 USD"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_b.budget_usd",
+          "value": 500,
+          "evidence": "Jamie's is $500 USD"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.max_travel_time_hours",
+          "value": 10,
+          "evidence": "Each of us can travel at most 10 hours one way including layovers"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_b.max_travel_time_hours",
+          "value": 10,
+          "evidence": "Each of us can travel at most 10 hours one way including layovers"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "normalized": {
+      "draft": {
+        "travelers": [
+          {
+            "traveler_id": "traveler_a",
+            "display_name": "Alex",
+            "origin": "Boston",
+            "budget_usd": 800.0,
+            "max_travel_time_hours": 10.0
+          },
+          {
+            "traveler_id": "traveler_b",
+            "display_name": "Jamie",
+            "origin": "New York",
+            "budget_usd": 500.0,
+            "max_travel_time_hours": 10.0
+          }
+        ],
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14"
+      },
+      "status": "ready_for_review",
+      "missing_fields": [],
+      "unsupported_requests": []
+    },
+    "api_response": {
+      "session_id": "5acbffd5-f677-4ba2-9094-847750436020",
+      "state": "review",
+      "assistant_message": "Travel dates: 2099-06-10 to 2099-06-14.\nAlex: Boston (boston_ma); airfare budget $800.0 USD; maximum one-way time 10.0 hours including layovers. Preferences: none provided.\nJamie: New York (new_york_ny); airfare budget $500.0 USD; maximum one-way time 10.0 hours including layovers. Preferences: none provided.\nConfirm this trip request to find destinations.",
+      "trip_request_draft": {
+        "travelers": [
+          {
+            "traveler_id": "traveler_a",
+            "display_name": "Alex",
+            "origin": "Boston",
+            "origin_id": "boston_ma",
+            "budget_usd": 800.0,
+            "max_travel_time_hours": 10.0,
+            "preferences": {
+              "temperature_range": null,
+              "interest_tags": []
+            }
+          },
+          {
+            "traveler_id": "traveler_b",
+            "display_name": "Jamie",
+            "origin": "New York",
+            "origin_id": "new_york_ny",
+            "budget_usd": 500.0,
+            "max_travel_time_hours": 10.0,
+            "preferences": {
+              "temperature_range": null,
+              "interest_tags": []
+            }
+          }
+        ],
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14"
+      },
+      "missing_fields": [],
+      "pending_questions": [],
+      "unsupported_requests": [],
+      "deferred_requests": [],
+      "recommendations": []
+    },
+    "http_status": 200
+  },
+  {
+    "input": {
+      "user_message": "Change my departure date to June 11; I have not specified the year.",
+      "current_draft": {
+        "travelers": [
+          {
+            "traveler_id": "traveler_a",
+            "display_name": "Alex",
+            "origin": "Boston",
+            "origin_id": "boston_ma",
+            "budget_usd": 800.0,
+            "max_travel_time_hours": 10.0,
+            "preferences": {
+              "temperature_range": null,
+              "interest_tags": []
+            }
+          },
+          {
+            "traveler_id": "traveler_b",
+            "display_name": "Jamie",
+            "origin": "New York",
+            "origin_id": "new_york_ny",
+            "budget_usd": 500.0,
+            "max_travel_time_hours": 10.0,
+            "preferences": {
+              "temperature_range": null,
+              "interest_tags": []
+            }
+          }
+        ],
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14"
+      },
+      "reference_date": "2026-10-03",
+      "timezone": "America/Los_Angeles",
+      "next_weekdays": {
+        "monday": "2026-10-05",
+        "tuesday": "2026-10-06",
+        "wednesday": "2026-10-07",
+        "thursday": "2026-10-08",
+        "friday": "2026-10-09",
+        "saturday": "2026-10-10",
+        "sunday": "2026-10-04"
+      },
+      "allowed_field_paths": [
+        "end_date",
+        "start_date",
+        "travelers.traveler_a.budget_usd",
+        "travelers.traveler_a.display_name",
+        "travelers.traveler_a.max_travel_time_hours",
+        "travelers.traveler_a.origin",
+        "travelers.traveler_a.preferences.interest_tags",
+        "travelers.traveler_a.preferences.temperature_range",
+        "travelers.traveler_b.budget_usd",
+        "travelers.traveler_b.display_name",
+        "travelers.traveler_b.max_travel_time_hours",
+        "travelers.traveler_b.origin",
+        "travelers.traveler_b.preferences.interest_tags",
+        "travelers.traveler_b.preferences.temperature_range"
+      ],
+      "response_schema": {
+        "$defs": {
+          "MissingField": {
+            "additionalProperties": false,
+            "description": "One unresolved canonical field and the question needed to resolve it.",
+            "properties": {
+              "field_path": {
+                "maxLength": 200,
+                "minLength": 1,
+                "title": "Field Path",
+                "type": "string"
+              },
+              "reason": {
+                "$ref": "#/$defs/MissingFieldReason"
+              },
+              "clarification_question": {
+                "maxLength": 500,
+                "minLength": 1,
+                "title": "Clarification Question",
+                "type": "string"
+              }
+            },
+            "required": [
+              "field_path",
+              "reason",
+              "clarification_question"
+            ],
+            "title": "MissingField",
+            "type": "object"
+          },
+          "MissingFieldReason": {
+            "description": "Why the system cannot safely complete one canonical field.",
+            "enum": [
+              "missing",
+              "ambiguous",
+              "invalid",
+              "unsupported"
+            ],
+            "title": "MissingFieldReason",
+            "type": "string"
+          },
+          "UnsupportedAcknowledgment": {
+            "additionalProperties": false,
+            "description": "Explicit user consent to defer a known session request.",
+            "properties": {
+              "request_id": {
+                "maxLength": 100,
+                "minLength": 1,
+                "title": "Request Id",
+                "type": "string"
+              },
+              "evidence": {
+                "maxLength": 10000,
+                "minLength": 1,
+                "title": "Evidence",
+                "type": "string"
+              }
+            },
+            "required": [
+              "request_id",
+              "evidence"
+            ],
+            "title": "UnsupportedAcknowledgment",
+            "type": "object"
+          },
+          "UnsupportedRequest": {
+            "additionalProperties": false,
+            "description": "An out-of-scope request without an invented canonical field path.",
+            "properties": {
+              "user_text": {
+                "maxLength": 10000,
+                "minLength": 1,
+                "title": "User Text",
+                "type": "string"
+              },
+              "explanation": {
+                "maxLength": 500,
+                "minLength": 1,
+                "title": "Explanation",
+                "type": "string"
+              }
+            },
+            "required": [
+              "user_text",
+              "explanation"
+            ],
+            "title": "UnsupportedRequest",
+            "type": "object"
+          },
+          "_Operation": {
+            "additionalProperties": false,
+            "properties": {
+              "op": {
+                "enum": [
+                  "set",
+                  "add",
+                  "remove"
+                ],
+                "title": "Op",
+                "type": "string"
+              },
+              "field_path": {
+                "title": "Field Path",
+                "type": "string"
+              },
+              "value": {
+                "title": "Value"
+              },
+              "evidence": {
+                "maxLength": 10000,
+                "minLength": 1,
+                "title": "Evidence",
+                "type": "string"
+              }
+            },
+            "required": [
+              "op",
+              "field_path",
+              "value",
+              "evidence"
+            ],
+            "title": "_Operation",
+            "type": "object"
+          }
+        },
+        "additionalProperties": false,
+        "properties": {
+          "operations": {
+            "items": {
+              "$ref": "#/$defs/_Operation"
+            },
+            "maxItems": 100,
+            "title": "Operations",
+            "type": "array"
+          },
+          "missing_fields": {
+            "items": {
+              "$ref": "#/$defs/MissingField"
+            },
+            "maxItems": 100,
+            "title": "Missing Fields",
+            "type": "array"
+          },
+          "unsupported_requests": {
+            "items": {
+              "$ref": "#/$defs/UnsupportedRequest"
+            },
+            "maxItems": 100,
+            "title": "Unsupported Requests",
+            "type": "array"
+          },
+          "acknowledged_unsupported": {
+            "items": {
+              "$ref": "#/$defs/UnsupportedAcknowledgment"
+            },
+            "maxItems": 100,
+            "title": "Acknowledged Unsupported",
+            "type": "array"
+          }
+        },
+        "required": [
+          "operations",
+          "missing_fields",
+          "unsupported_requests"
+        ],
+        "title": "_Response",
+        "type": "object"
+      }
+    },
+    "model_output": {
+      "operations": [],
+      "missing_fields": [
+        {
+          "field_path": "start_date",
+          "reason": "ambiguous",
+          "clarification_question": "What year is your June 11 departure date?"
+        }
+      ],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "normalized": {
+      "draft": {
+        "travelers": [
+          {
+            "traveler_id": "traveler_a"
+          },
+          {
+            "traveler_id": "traveler_b"
+          }
+        ]
+      },
+      "status": "needs_clarification",
+      "missing_fields": [
+        {
+          "field_path": "start_date",
+          "reason": "ambiguous",
+          "clarification_question": "What year is your June 11 departure date?"
+        }
+      ],
+      "unsupported_requests": []
+    },
+    "api_response": {
+      "session_id": "5acbffd5-f677-4ba2-9094-847750436020",
+      "state": "collecting",
+      "assistant_message": "What year is your June 11 departure date?",
+      "trip_request_draft": {
+        "travelers": [
+          {
+            "traveler_id": "traveler_a",
+            "display_name": "Alex",
+            "origin": "Boston",
+            "origin_id": "boston_ma",
+            "budget_usd": 800.0,
+            "max_travel_time_hours": 10.0,
+            "preferences": {
+              "temperature_range": null,
+              "interest_tags": []
+            }
+          },
+          {
+            "traveler_id": "traveler_b",
+            "display_name": "Jamie",
+            "origin": "New York",
+            "origin_id": "new_york_ny",
+            "budget_usd": 500.0,
+            "max_travel_time_hours": 10.0,
+            "preferences": {
+              "temperature_range": null,
+              "interest_tags": []
+            }
+          }
+        ],
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14"
+      },
+      "missing_fields": [
+        "start_date"
+      ],
+      "pending_questions": [
+        {
+          "field_path": "start_date",
+          "question": "What year is your June 11 departure date?",
+          "source_message": "Change my departure date to June 11; I have not specified the year."
+        }
+      ],
+      "unsupported_requests": [],
+      "deferred_requests": [],
+      "recommendations": []
+    },
+    "http_status": 200
+  },
+  {
+    "input": {
+      "user_message": "2099",
+      "current_draft": {
+        "travelers": [
+          {
+            "traveler_id": "traveler_a",
+            "display_name": "Alex",
+            "origin": "Boston",
+            "origin_id": "boston_ma",
+            "budget_usd": 800.0,
+            "max_travel_time_hours": 10.0,
+            "preferences": {
+              "temperature_range": null,
+              "interest_tags": []
+            }
+          },
+          {
+            "traveler_id": "traveler_b",
+            "display_name": "Jamie",
+            "origin": "New York",
+            "origin_id": "new_york_ny",
+            "budget_usd": 500.0,
+            "max_travel_time_hours": 10.0,
+            "preferences": {
+              "temperature_range": null,
+              "interest_tags": []
+            }
+          }
+        ],
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14"
+      },
+      "reference_date": "2026-10-03",
+      "timezone": "America/Los_Angeles",
+      "next_weekdays": {
+        "monday": "2026-10-05",
+        "tuesday": "2026-10-06",
+        "wednesday": "2026-10-07",
+        "thursday": "2026-10-08",
+        "friday": "2026-10-09",
+        "saturday": "2026-10-10",
+        "sunday": "2026-10-04"
+      },
+      "allowed_field_paths": [
+        "end_date",
+        "start_date",
+        "travelers.traveler_a.budget_usd",
+        "travelers.traveler_a.display_name",
+        "travelers.traveler_a.max_travel_time_hours",
+        "travelers.traveler_a.origin",
+        "travelers.traveler_a.preferences.interest_tags",
+        "travelers.traveler_a.preferences.temperature_range",
+        "travelers.traveler_b.budget_usd",
+        "travelers.traveler_b.display_name",
+        "travelers.traveler_b.max_travel_time_hours",
+        "travelers.traveler_b.origin",
+        "travelers.traveler_b.preferences.interest_tags",
+        "travelers.traveler_b.preferences.temperature_range"
+      ],
+      "response_schema": {
+        "$defs": {
+          "MissingField": {
+            "additionalProperties": false,
+            "description": "One unresolved canonical field and the question needed to resolve it.",
+            "properties": {
+              "field_path": {
+                "maxLength": 200,
+                "minLength": 1,
+                "title": "Field Path",
+                "type": "string"
+              },
+              "reason": {
+                "$ref": "#/$defs/MissingFieldReason"
+              },
+              "clarification_question": {
+                "maxLength": 500,
+                "minLength": 1,
+                "title": "Clarification Question",
+                "type": "string"
+              }
+            },
+            "required": [
+              "field_path",
+              "reason",
+              "clarification_question"
+            ],
+            "title": "MissingField",
+            "type": "object"
+          },
+          "MissingFieldReason": {
+            "description": "Why the system cannot safely complete one canonical field.",
+            "enum": [
+              "missing",
+              "ambiguous",
+              "invalid",
+              "unsupported"
+            ],
+            "title": "MissingFieldReason",
+            "type": "string"
+          },
+          "UnsupportedAcknowledgment": {
+            "additionalProperties": false,
+            "description": "Explicit user consent to defer a known session request.",
+            "properties": {
+              "request_id": {
+                "maxLength": 100,
+                "minLength": 1,
+                "title": "Request Id",
+                "type": "string"
+              },
+              "evidence": {
+                "maxLength": 10000,
+                "minLength": 1,
+                "title": "Evidence",
+                "type": "string"
+              }
+            },
+            "required": [
+              "request_id",
+              "evidence"
+            ],
+            "title": "UnsupportedAcknowledgment",
+            "type": "object"
+          },
+          "UnsupportedRequest": {
+            "additionalProperties": false,
+            "description": "An out-of-scope request without an invented canonical field path.",
+            "properties": {
+              "user_text": {
+                "maxLength": 10000,
+                "minLength": 1,
+                "title": "User Text",
+                "type": "string"
+              },
+              "explanation": {
+                "maxLength": 500,
+                "minLength": 1,
+                "title": "Explanation",
+                "type": "string"
+              }
+            },
+            "required": [
+              "user_text",
+              "explanation"
+            ],
+            "title": "UnsupportedRequest",
+            "type": "object"
+          },
+          "_Operation": {
+            "additionalProperties": false,
+            "properties": {
+              "op": {
+                "enum": [
+                  "set",
+                  "add",
+                  "remove"
+                ],
+                "title": "Op",
+                "type": "string"
+              },
+              "field_path": {
+                "title": "Field Path",
+                "type": "string"
+              },
+              "value": {
+                "title": "Value"
+              },
+              "evidence": {
+                "maxLength": 10000,
+                "minLength": 1,
+                "title": "Evidence",
+                "type": "string"
+              }
+            },
+            "required": [
+              "op",
+              "field_path",
+              "value",
+              "evidence"
+            ],
+            "title": "_Operation",
+            "type": "object"
+          }
+        },
+        "additionalProperties": false,
+        "properties": {
+          "operations": {
+            "items": {
+              "$ref": "#/$defs/_Operation"
+            },
+            "maxItems": 100,
+            "title": "Operations",
+            "type": "array"
+          },
+          "missing_fields": {
+            "items": {
+              "$ref": "#/$defs/MissingField"
+            },
+            "maxItems": 100,
+            "title": "Missing Fields",
+            "type": "array"
+          },
+          "unsupported_requests": {
+            "items": {
+              "$ref": "#/$defs/UnsupportedRequest"
+            },
+            "maxItems": 100,
+            "title": "Unsupported Requests",
+            "type": "array"
+          },
+          "acknowledged_unsupported": {
+            "items": {
+              "$ref": "#/$defs/UnsupportedAcknowledgment"
+            },
+            "maxItems": 100,
+            "title": "Acknowledged Unsupported",
+            "type": "array"
+          }
+        },
+        "required": [
+          "operations",
+          "missing_fields",
+          "unsupported_requests"
+        ],
+        "title": "_Response",
+        "type": "object"
+      },
+      "conversation_context": {
+        "pending_questions": [
+          {
+            "field_path": "start_date",
+            "question": "What year is your June 11 departure date?",
+            "source_message": "Change my departure date to June 11; I have not specified the year."
+          }
+        ],
+        "unsupported_requests": []
+      }
+    },
+    "model_output": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "start_date",
+          "value": "2099-06-11",
+          "evidence": "2099"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "normalized": {
+      "draft": {
+        "travelers": [
+          {
+            "traveler_id": "traveler_a"
+          },
+          {
+            "traveler_id": "traveler_b"
+          }
+        ],
+        "start_date": "2099-06-11"
+      },
+      "status": "ready_for_review",
+      "missing_fields": [],
+      "unsupported_requests": []
+    },
+    "api_response": {
+      "session_id": "5acbffd5-f677-4ba2-9094-847750436020",
+      "state": "review",
+      "assistant_message": "Travel dates: 2099-06-11 to 2099-06-14.\nAlex: Boston (boston_ma); airfare budget $800.0 USD; maximum one-way time 10.0 hours including layovers. Preferences: none provided.\nJamie: New York (new_york_ny); airfare budget $500.0 USD; maximum one-way time 10.0 hours including layovers. Preferences: none provided.\nConfirm this trip request to find destinations.",
+      "trip_request_draft": {
+        "travelers": [
+          {
+            "traveler_id": "traveler_a",
+            "display_name": "Alex",
+            "origin": "Boston",
+            "origin_id": "boston_ma",
+            "budget_usd": 800.0,
+            "max_travel_time_hours": 10.0,
+            "preferences": {
+              "temperature_range": null,
+              "interest_tags": []
+            }
+          },
+          {
+            "traveler_id": "traveler_b",
+            "display_name": "Jamie",
+            "origin": "New York",
+            "origin_id": "new_york_ny",
+            "budget_usd": 500.0,
+            "max_travel_time_hours": 10.0,
+            "preferences": {
+              "temperature_range": null,
+              "interest_tags": []
+            }
+          }
+        ],
+        "start_date": "2099-06-11",
+        "end_date": "2099-06-14"
+      },
+      "missing_fields": [],
+      "pending_questions": [],
+      "unsupported_requests": [],
+      "deferred_requests": [],
+      "recommendations": []
+    },
+    "http_status": 200
+  }
+]

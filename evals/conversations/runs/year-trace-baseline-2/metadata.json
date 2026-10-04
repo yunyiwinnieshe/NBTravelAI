@@ -1,0 +1,15 @@
+{
+  "recorded_at_utc": "2026-10-04T03:33:59.496485+00:00",
+  "git_commit": "7a229117d7451052e80472a2de44f0d4c951e75b",
+  "provider": "deepseek",
+  "model": "deepseek-flash",
+  "prompt_source": "HEAD prompt restored in diagnostic process",
+  "prompt_sha256": "b8bd39362736d7d635bd4d47a3ff69ade5b1872fa2031b2ec74707d04e184bbb",
+  "dataset_sha256": "468b27a027e30539c4f02b94e262dca566ca0d560c2589b18644c4054a8b11cf",
+  "provider_io_timeout_seconds": 20,
+  "total_timeout_seconds": 30,
+  "max_retries": 1,
+  "scope": "synthetic session API conversation; deterministic fixture recommendations",
+  "runner": "FastAPI TestClient with real DeepSeek",
+  "repetitions": 1
+}

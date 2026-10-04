@@ -1,0 +1,3127 @@
+{
+  "info": {
+    "name": "Planning conversations",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Generated from evals/conversations/cases.v1.json. Each folder is independent; run its requests in order. Requires DeepSeek configured on the backend."
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8012"
+    },
+    {
+      "key": "session_id",
+      "value": ""
+    },
+    {
+      "key": "previous_draft",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "01_complete",
+      "description": "Complete details reach review; text does not confirm; structured confirmation returns recommendations.",
+      "item": [
+        {
+          "name": "Create session",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.unset(\"session_id\"); pm.collectionVariables.unset(\"previous_draft\");"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"review\", \"fields\": {\"start_date\": \"2099-06-10\", \"end_date\": \"2099-06-14\", \"travelers.traveler_a.display_name\": \"Alex\", \"travelers.traveler_b.display_name\": \"Jamie\", \"travelers.traveler_a.origin_id\": \"boston_ma\", \"travelers.traveler_b.origin_id\": \"new_york_ny\", \"travelers.traveler_a.budget_usd\": 800, \"travelers.traveler_b.budget_usd\": 500, \"travelers.traveler_a.max_travel_time_hours\": 10, \"travelers.traveler_b.max_travel_time_hours\": 10}};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"initial_message\": \"My name is Alex and I'm leaving from Boston. My companion Jamie leaves from New York. We travel June 10 to June 14, 2099. My maximum round-trip airfare budget is $800 USD and Jamie's is $500 USD. Each of us can travel at most 10 hours one way including layovers.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Text is not confirmation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"review\", \"preserve_except\": []};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions/{{session_id}}/messages",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Yes, that looks right. Please confirm.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Confirm reviewed trip",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"results\"};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions/{{session_id}}/messages",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"confirm\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "02_missing_budget",
+      "description": "Only Alex budget is missing; do not assign Jamie budget to Alex.",
+      "item": [
+        {
+          "name": "Create session",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.unset(\"session_id\"); pm.collectionVariables.unset(\"previous_draft\");"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"collecting\", \"fields\": {\"travelers.traveler_a.budget_usd\": null, \"travelers.traveler_b.budget_usd\": 500}, \"missing\": [\"travelers.traveler_a.budget_usd\"]};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"initial_message\": \"My name is Alex and I'm leaving from Boston. My companion Jamie leaves from New York. We travel June 10 to June 14, 2099. Jamie's maximum round-trip airfare budget is $500 USD. Each of us can travel at most 10 hours one way including layovers.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "03_missing_multiple",
+      "description": "Ask up to three field questions and block premature confirmation.",
+      "item": [
+        {
+          "name": "Create session",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.unset(\"session_id\"); pm.collectionVariables.unset(\"previous_draft\");"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"collecting\", \"fields\": {\"start_date\": null, \"end_date\": null, \"travelers.traveler_a.budget_usd\": null, \"travelers.traveler_b.budget_usd\": null}, \"missing\": [\"start_date\", \"end_date\", \"travelers.traveler_a.budget_usd\"]};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"initial_message\": \"My name is Alex and I leave from Boston. Jamie leaves from New York.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Reject premature confirmation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 422};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions/{{session_id}}/messages",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"confirm\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "04_short_answer",
+      "description": "A bare number answers the single pending budget question.",
+      "item": [
+        {
+          "name": "Create session",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.unset(\"session_id\"); pm.collectionVariables.unset(\"previous_draft\");"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"collecting\", \"missing\": [\"travelers.traveler_a.budget_usd\"]};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"initial_message\": \"My name is Alex and I'm leaving from Boston. My companion Jamie leaves from New York. We travel June 10 to June 14, 2099. Jamie's maximum round-trip airfare budget is $500 USD. Each of us can travel at most 10 hours one way including layovers.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Answer pending budget",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"review\", \"fields\": {\"travelers.traveler_a.budget_usd\": 800}, \"preserve_except\": [\"travelers.traveler_a.budget_usd\"]};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions/{{session_id}}/messages",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"800\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "05_correction",
+      "description": "Change only Alex budget and preserve unrelated fields; confirmation is still required.",
+      "item": [
+        {
+          "name": "Create session",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.unset(\"session_id\"); pm.collectionVariables.unset(\"previous_draft\");"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"review\", \"fields\": {\"start_date\": \"2099-06-10\", \"end_date\": \"2099-06-14\", \"travelers.traveler_a.display_name\": \"Alex\", \"travelers.traveler_b.display_name\": \"Jamie\", \"travelers.traveler_a.origin_id\": \"boston_ma\", \"travelers.traveler_b.origin_id\": \"new_york_ny\", \"travelers.traveler_a.budget_usd\": 800, \"travelers.traveler_b.budget_usd\": 500, \"travelers.traveler_a.max_travel_time_hours\": 10, \"travelers.traveler_b.max_travel_time_hours\": 10}};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"initial_message\": \"My name is Alex and I'm leaving from Boston. My companion Jamie leaves from New York. We travel June 10 to June 14, 2099. My maximum round-trip airfare budget is $800 USD and Jamie's is $500 USD. Each of us can travel at most 10 hours one way including layovers.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Correct Alex budget",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"review\", \"fields\": {\"travelers.traveler_a.budget_usd\": 600}, \"preserve_except\": [\"travelers.traveler_a.budget_usd\"]};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions/{{session_id}}/messages",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Change only Alex's maximum round-trip airfare budget to $600 USD.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Confirm reviewed trip",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"results\"};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions/{{session_id}}/messages",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"confirm\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "06_add_interest",
+      "description": "Adding hiking preserves the existing museums interest.",
+      "item": [
+        {
+          "name": "Create session",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.unset(\"session_id\"); pm.collectionVariables.unset(\"previous_draft\");"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"review\", \"fields\": {\"start_date\": \"2099-06-10\", \"end_date\": \"2099-06-14\", \"travelers.traveler_a.display_name\": \"Alex\", \"travelers.traveler_b.display_name\": \"Jamie\", \"travelers.traveler_a.origin_id\": \"boston_ma\", \"travelers.traveler_b.origin_id\": \"new_york_ny\", \"travelers.traveler_a.budget_usd\": 800, \"travelers.traveler_b.budget_usd\": 500, \"travelers.traveler_a.max_travel_time_hours\": 10, \"travelers.traveler_b.max_travel_time_hours\": 10}};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"initial_message\": \"My name is Alex and I'm leaving from Boston. My companion Jamie leaves from New York. We travel June 10 to June 14, 2099. My maximum round-trip airfare budget is $800 USD and Jamie's is $500 USD. Each of us can travel at most 10 hours one way including layovers.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Set museums",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"review\", \"fields\": {\"travelers.traveler_a.preferences.interest_tags\": [\"museums\"]}, \"preserve_except\": [\"travelers.traveler_a.preferences.interest_tags\"]};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions/{{session_id}}/messages",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"I like museums.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Add hiking",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"review\", \"fields\": {\"travelers.traveler_a.preferences.interest_tags\": [\"museums\", \"outdoor_activities\"]}, \"preserve_except\": [\"travelers.traveler_a.preferences.interest_tags\"]};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions/{{session_id}}/messages",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"I also like hiking.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "07_replace_clear",
+      "description": "Replace interests explicitly, then clear them without losing required fields.",
+      "item": [
+        {
+          "name": "Create session",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.unset(\"session_id\"); pm.collectionVariables.unset(\"previous_draft\");"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"review\", \"fields\": {\"start_date\": \"2099-06-10\", \"end_date\": \"2099-06-14\", \"travelers.traveler_a.display_name\": \"Alex\", \"travelers.traveler_b.display_name\": \"Jamie\", \"travelers.traveler_a.origin_id\": \"boston_ma\", \"travelers.traveler_b.origin_id\": \"new_york_ny\", \"travelers.traveler_a.budget_usd\": 800, \"travelers.traveler_b.budget_usd\": 500, \"travelers.traveler_a.max_travel_time_hours\": 10, \"travelers.traveler_b.max_travel_time_hours\": 10}};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"initial_message\": \"My name is Alex and I'm leaving from Boston. My companion Jamie leaves from New York. We travel June 10 to June 14, 2099. My maximum round-trip airfare budget is $800 USD and Jamie's is $500 USD. Each of us can travel at most 10 hours one way including layovers.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Set museums",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"review\", \"fields\": {\"travelers.traveler_a.preferences.interest_tags\": [\"museums\"]}, \"preserve_except\": [\"travelers.traveler_a.preferences.interest_tags\"]};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions/{{session_id}}/messages",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"I like museums.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Replace interests",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"review\", \"fields\": {\"travelers.traveler_a.preferences.interest_tags\": [\"beach\"]}, \"preserve_except\": [\"travelers.traveler_a.preferences.interest_tags\"]};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions/{{session_id}}/messages",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Actually, I only want beaches instead of museums.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Clear interests",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"review\", \"fields\": {\"travelers.traveler_a.preferences.interest_tags\": []}, \"preserve_except\": [\"travelers.traveler_a.preferences.interest_tags\"]};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions/{{session_id}}/messages",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Remove all my interest preferences. I do not have any activity preferences anymore.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "08_ambiguous_owner",
+      "description": "Do not assign a budget to either traveler when ownership is explicitly unspecified.",
+      "item": [
+        {
+          "name": "Create session",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.unset(\"session_id\"); pm.collectionVariables.unset(\"previous_draft\");"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"review\", \"fields\": {\"start_date\": \"2099-06-10\", \"end_date\": \"2099-06-14\", \"travelers.traveler_a.display_name\": \"Alex\", \"travelers.traveler_b.display_name\": \"Jamie\", \"travelers.traveler_a.origin_id\": \"boston_ma\", \"travelers.traveler_b.origin_id\": \"new_york_ny\", \"travelers.traveler_a.budget_usd\": 800, \"travelers.traveler_b.budget_usd\": 500, \"travelers.traveler_a.max_travel_time_hours\": 10, \"travelers.traveler_b.max_travel_time_hours\": 10}};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"initial_message\": \"My name is Alex and I'm leaving from Boston. My companion Jamie leaves from New York. We travel June 10 to June 14, 2099. My maximum round-trip airfare budget is $800 USD and Jamie's is $500 USD. Each of us can travel at most 10 hours one way including layovers.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Ambiguous budget",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"collecting\", \"preserve_except\": [], \"missing_any\": [\"travelers.traveler_a.budget_usd\", \"travelers.traveler_b.budget_usd\"]};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions/{{session_id}}/messages",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"One of us has a $650 USD round-trip airfare budget, but I have not said which traveler.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "09_missing_year",
+      "description": "A date correction without a year asks for it, then a short year resolves the correction.",
+      "item": [
+        {
+          "name": "Create session",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.unset(\"session_id\"); pm.collectionVariables.unset(\"previous_draft\");"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"review\", \"fields\": {\"start_date\": \"2099-06-10\", \"end_date\": \"2099-06-14\", \"travelers.traveler_a.display_name\": \"Alex\", \"travelers.traveler_b.display_name\": \"Jamie\", \"travelers.traveler_a.origin_id\": \"boston_ma\", \"travelers.traveler_b.origin_id\": \"new_york_ny\", \"travelers.traveler_a.budget_usd\": 800, \"travelers.traveler_b.budget_usd\": 500, \"travelers.traveler_a.max_travel_time_hours\": 10, \"travelers.traveler_b.max_travel_time_hours\": 10}};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"initial_message\": \"My name is Alex and I'm leaving from Boston. My companion Jamie leaves from New York. We travel June 10 to June 14, 2099. My maximum round-trip airfare budget is $800 USD and Jamie's is $500 USD. Each of us can travel at most 10 hours one way including layovers.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Date without year",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"collecting\", \"missing\": [\"start_date\"], \"preserve_except\": []};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions/{{session_id}}/messages",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Change my departure date to June 11; I have not specified the year.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Supply year",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"review\", \"fields\": {\"start_date\": \"2099-06-11\", \"end_date\": \"2099-06-14\"}, \"preserve_except\": [\"start_date\"]};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions/{{session_id}}/messages",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"2099\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "10_unsupported",
+      "description": "Save valid budget changes while explaining the unsupported hotel request; do not forget it on a later message.",
+      "item": [
+        {
+          "name": "Create session",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.unset(\"session_id\"); pm.collectionVariables.unset(\"previous_draft\");"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"review\", \"fields\": {\"start_date\": \"2099-06-10\", \"end_date\": \"2099-06-14\", \"travelers.traveler_a.display_name\": \"Alex\", \"travelers.traveler_b.display_name\": \"Jamie\", \"travelers.traveler_a.origin_id\": \"boston_ma\", \"travelers.traveler_b.origin_id\": \"new_york_ny\", \"travelers.traveler_a.budget_usd\": 800, \"travelers.traveler_b.budget_usd\": 500, \"travelers.traveler_a.max_travel_time_hours\": 10, \"travelers.traveler_b.max_travel_time_hours\": 10}};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"initial_message\": \"My name is Alex and I'm leaving from Boston. My companion Jamie leaves from New York. We travel June 10 to June 14, 2099. My maximum round-trip airfare budget is $800 USD and Jamie's is $500 USD. Each of us can travel at most 10 hours one way including layovers.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Budget and hotel",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"collecting\", \"fields\": {\"travelers.traveler_a.budget_usd\": 600}, \"preserve_except\": [\"travelers.traveler_a.budget_usd\"], \"unsupported\": true};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions/{{session_id}}/messages",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"My round-trip airfare budget is $600 USD, and I want a hotel with a pool.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Unrelated confirmation of origin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"collecting\", \"preserve_except\": [], \"unsupported\": true};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions/{{session_id}}/messages",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Jamie is still leaving from New York.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Reject unresolved confirmation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 422};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions/{{session_id}}/messages",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"confirm\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "11_acknowledge",
+      "description": "Explicitly excluding an unsupported request returns to review, never directly to results.",
+      "item": [
+        {
+          "name": "Create session",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.unset(\"session_id\"); pm.collectionVariables.unset(\"previous_draft\");"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"review\", \"fields\": {\"start_date\": \"2099-06-10\", \"end_date\": \"2099-06-14\", \"travelers.traveler_a.display_name\": \"Alex\", \"travelers.traveler_b.display_name\": \"Jamie\", \"travelers.traveler_a.origin_id\": \"boston_ma\", \"travelers.traveler_b.origin_id\": \"new_york_ny\", \"travelers.traveler_a.budget_usd\": 800, \"travelers.traveler_b.budget_usd\": 500, \"travelers.traveler_a.max_travel_time_hours\": 10, \"travelers.traveler_b.max_travel_time_hours\": 10}};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"initial_message\": \"My name is Alex and I'm leaving from Boston. My companion Jamie leaves from New York. We travel June 10 to June 14, 2099. My maximum round-trip airfare budget is $800 USD and Jamie's is $500 USD. Each of us can travel at most 10 hours one way including layovers.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Ask for hotel",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"collecting\", \"unsupported\": true, \"preserve_except\": []};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions/{{session_id}}/messages",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"I want a hotel with a pool.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Agree to exclude hotel",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"review\", \"unsupported\": false, \"deferred\": true, \"preserve_except\": []};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions/{{session_id}}/messages",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Yes, continue without the hotel request.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Confirm reviewed trip",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"results\"};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions/{{session_id}}/messages",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"confirm\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "12_no_match",
+      "description": "A valid trip with one-dollar budgets returns no_match only after confirmation.",
+      "item": [
+        {
+          "name": "Create session",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.unset(\"session_id\"); pm.collectionVariables.unset(\"previous_draft\");"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"review\", \"fields\": {\"start_date\": \"2099-06-10\", \"end_date\": \"2099-06-14\", \"travelers.traveler_a.display_name\": \"Alex\", \"travelers.traveler_b.display_name\": \"Jamie\", \"travelers.traveler_a.origin_id\": \"boston_ma\", \"travelers.traveler_b.origin_id\": \"new_york_ny\", \"travelers.traveler_a.budget_usd\": 800, \"travelers.traveler_b.budget_usd\": 500, \"travelers.traveler_a.max_travel_time_hours\": 10, \"travelers.traveler_b.max_travel_time_hours\": 10}};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"initial_message\": \"My name is Alex and I'm leaving from Boston. My companion Jamie leaves from New York. We travel June 10 to June 14, 2099. My maximum round-trip airfare budget is $800 USD and Jamie's is $500 USD. Each of us can travel at most 10 hours one way including layovers.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Lower both budgets",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"review\", \"fields\": {\"travelers.traveler_a.budget_usd\": 1, \"travelers.traveler_b.budget_usd\": 1}, \"preserve_except\": [\"travelers.traveler_a.budget_usd\", \"travelers.traveler_b.budget_usd\"]};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions/{{session_id}}/messages",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"We each now have a maximum round-trip airfare budget of $1 USD.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Confirm reviewed trip",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = {\"http_status\": 200, \"state\": \"no_match\"};",
+                  "const body = pm.response.json();",
+                  "if (pm.environment.get(\"record_responses\") === \"true\") {",
+                  "    console.log(\"EVAL_RESPONSE \" + JSON.stringify({",
+                  "        request: pm.info.requestName, status: pm.response.code, body",
+                  "    }));",
+                  "}",
+                  "pm.test(\"HTTP status\", () => pm.expect(pm.response.code).to.eql(expected.http_status));",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Conversation state\", () => pm.expect(body.state).to.eql(expected.state));",
+                  "    pm.test(\"Assistant text is present\", () => pm.expect(body.assistant_message).to.be.a(\"string\").and.not.empty);",
+                  "    const draft = body.trip_request_draft;",
+                  "    pm.test(\"Stable traveler IDs\", () => pm.expect(draft.travelers.map(t => t.traveler_id).sort()).to.eql([\"traveler_a\", \"traveler_b\"]));",
+                  "    const normalized = {...draft, travelers: Object.fromEntries(draft.travelers.map(t => [t.traveler_id, t]))};",
+                  "    const get = (obj, path) => path.split(\".\").reduce((v, key) => v == null ? undefined : v[key], obj);",
+                  "    for (const [path, value] of Object.entries(expected.fields || {})) {",
+                  "        pm.test(\"Expected \" + path, () => {",
+                  "            const actual = get(normalized, path);",
+                  "            pm.expect(Array.isArray(actual) ? [...actual].sort() : actual).to.eql(Array.isArray(value) ? [...value].sort() : value);",
+                  "        });",
+                  "    }",
+                  "    for (const path of expected.missing || []) {",
+                  "        pm.test(\"Clarify \" + path, () => pm.expect(body.missing_fields).to.include(path));",
+                  "    }",
+                  "    if (expected.missing_any) {",
+                  "        pm.test(\"Clarify ambiguous ownership\", () => pm.expect(expected.missing_any.some(p => body.missing_fields.includes(p))).to.eql(true));",
+                  "    }",
+                  "    if (expected.unsupported !== undefined) {",
+                  "        pm.test(\"Unsupported notice state\", () => pm.expect(body.unsupported_requests.length > 0).to.eql(expected.unsupported));",
+                  "    }",
+                  "    if (expected.deferred) {",
+                  "        pm.test(\"Excluded request recorded\", () => pm.expect(body.deferred_requests.length).to.be.above(0));",
+                  "    }",
+                  "    pm.test(\"Question batch limit\", () => pm.expect(body.pending_questions.length).to.be.at.most(body.unsupported_requests.length ? 2 : 3));",
+                  "    pm.test(\"Recommendation gate\", () => {",
+                  "        if (expected.state === \"results\") pm.expect(body.recommendations.length).to.be.above(0);",
+                  "        else pm.expect(body.recommendations).to.eql([]);",
+                  "    });",
+                  "    if (expected.preserve_except) {",
+                  "        pm.test(\"Unrelated draft fields preserved\", () => {",
+                  "            const before = JSON.parse(pm.collectionVariables.get(\"previous_draft\"));",
+                  "            const after = JSON.parse(JSON.stringify(normalized));",
+                  "            const remove = (obj, path) => {",
+                  "                const keys = path.split(\".\"); const last = keys.pop();",
+                  "                const parent = keys.reduce((v, k) => v == null ? undefined : v[k], obj);",
+                  "                if (parent) delete parent[last];",
+                  "            };",
+                  "            expected.preserve_except.forEach(path => { remove(before, path); remove(after, path); });",
+                  "            pm.expect(after).to.eql(before);",
+                  "        });",
+                  "    }",
+                  "    pm.collectionVariables.set(\"previous_draft\", JSON.stringify(normalized));",
+                  "    pm.collectionVariables.set(\"session_id\", body.session_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/trip-sessions/{{session_id}}/messages",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"confirm\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

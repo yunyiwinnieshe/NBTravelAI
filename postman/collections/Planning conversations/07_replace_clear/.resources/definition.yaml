@@ -1,0 +1,6 @@
+{
+  "$kind": "collection",
+  "name": "07_replace_clear",
+  "description": "Replace interests explicitly, then clear them without losing required fields.",
+  "order": 7000
+}

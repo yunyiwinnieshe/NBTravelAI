@@ -1,0 +1,6 @@
+{
+  "$kind": "collection",
+  "name": "10_unsupported",
+  "description": "Save valid budget changes while explaining the unsupported hotel request; do not forget it on a later message.",
+  "order": 10000
+}

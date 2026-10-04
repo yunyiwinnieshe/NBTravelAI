@@ -1,0 +1,25 @@
+[
+  {
+    "id": "conversation-year-followup-001",
+    "case_id": "09_missing_year",
+    "status": "mitigated_passed_verification",
+    "observed_runs": [
+      "live-v1",
+      "year-diagnostic-v1"
+    ],
+    "expected": "After June 11 without a year, answering 2099 updates start_date to 2099-06-11 and returns review.",
+    "actual": "HTTP 200, start_date remains 2099-06-10, state stays collecting and repeats the year question.",
+    "impact": "User cannot complete this correction using a bare-year reply in the observed runs. Existing valid draft remains intact.",
+    "root_cause": "Original API failures did not capture model output. Three later instrumented original-prompt runs passed: correct model operations survived normalization and cleared the session issue. Prompt ambiguity is the suspected contributor, not a proven sole cause.",
+    "next_step": "Retain this regression case in future evaluations; the limited sample does not establish a statistical reliability improvement.",
+    "fix": "Explicitly allow unambiguous pending-question answers to supply context-dependent edits; combine the pending proposed month/day with the new year rather than the old saved date. The old missing-year statement is superseded by the current answer. Keep current-message evidence and clarify ambiguous targets.",
+    "verification": {
+      "targeted_run": "year-fix-v1",
+      "targeted_passed": 3,
+      "full_run": "live-v2",
+      "full_cases_passed": 12,
+      "full_assertions_passed": 330,
+      "offline_tests_passed": 354
+    }
+  }
+]
