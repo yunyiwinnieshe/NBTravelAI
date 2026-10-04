@@ -1,6 +1,6 @@
-"""Fixture-backed conversational planning sessions."""
+"""Transactional conversational planning sessions with configured extraction."""
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import date
 from decimal import Decimal, InvalidOperation
 from threading import RLock
@@ -14,8 +14,11 @@ from travel_ai.schemas.preference_extraction import (
 from travel_ai.schemas.sessions import (
     ConversationState,
     ConversationTurnResponse,
+    ExtractionContext,
+    PendingQuestion,
     TravelerPreferencesDraft,
     TripRequestDraft,
+    UnsupportedRequestNotice,
 )
 from travel_ai.schemas.trip import TravelerRequest, TripRequest
 from travel_ai.services.preference_extraction import PreferenceExtractor
@@ -44,6 +47,9 @@ class _TripSession:
     missing_fields: list[str] = field(default_factory=list)
     issues: dict[str, str] = field(default_factory=dict)
     confirmed_result: ConversationTurnResponse | None = None
+    unsupported: dict[str, UnsupportedRequestNotice] = field(default_factory=dict)
+    deferred: list[str] = field(default_factory=list)
+    question_context: dict[str, str] = field(default_factory=dict)
     lock: RLock = field(default_factory=RLock)
 
 
@@ -84,6 +90,9 @@ class TripSessionService:
         self.origin_resolver = origin_resolver or FixtureOriginResolver()
         self._sessions: dict[str, _TripSession] = {}
 
+    def close(self) -> None:
+        self.extractor.close()
+
     def create_session(self, initial_message: str | None) -> ConversationTurnResponse:
         """Create a session and optionally process its first fixture message."""
         session_id = str(uuid4())
@@ -100,7 +109,12 @@ class TripSessionService:
         self._sessions[session_id] = session
         self._refresh_state(session)
         if initial_message is not None:
-            return self.add_message(session_id, initial_message)
+            try:
+                return self.add_message(session_id, initial_message)
+            except Exception:
+                # No inaccessible partial session is retained on failed creation.
+                self._sessions.pop(session_id, None)
+                raise
         return self._response(session_id, session)
 
     def add_message(
@@ -111,10 +125,106 @@ class TripSessionService:
         """Apply one extractor result to the session's saved draft."""
         session = self._get_session(session_id)
         with session.lock:
-            result = self.extractor.extract(
-                message, session.draft.model_copy(deep=True)
+            context = ExtractionContext(
+                pending_questions=self._pending_questions(session),
+                unsupported_requests=list(session.unsupported.values()),
             )
-            self._apply_extraction(session, result)
+            result = self.extractor.extract(
+                message,
+                session.draft.model_copy(deep=True),
+                context=context.model_copy(deep=True),
+            )
+            candidate = self._copy_session(session)
+            self._apply_extraction(candidate, result)
+            for path, question in candidate.issues.items():
+                if path not in session.issues or question != session.issues[path]:
+                    candidate.question_context[path] = message
+            candidate.question_context = {
+                path: source
+                for path, source in candidate.question_context.items()
+                if path in candidate.missing_fields
+            }
+            for acknowledgment in result.acknowledged_unsupported:
+                if (
+                    acknowledgment.evidence not in message
+                    or acknowledgment.request_id not in session.unsupported
+                ):
+                    raise ValueError("acknowledgment must quote the current message")
+                self._defer_request(candidate, acknowledgment.request_id)
+            if result.acknowledged_unsupported:
+                candidate.confirmed_result = None
+                self._refresh_state(candidate)
+            self._commit_session(session, candidate)
+            if session.confirmed_result is not None:
+                return session.confirmed_result.model_copy(deep=True)
+            return self._response(session_id, session)
+
+    @staticmethod
+    def _copy_session(session: _TripSession) -> _TripSession:
+        return replace(
+            session,
+            draft=session.draft.model_copy(deep=True),
+            issues=dict(session.issues),
+            missing_fields=list(session.missing_fields),
+            missing_questions=list(session.missing_questions),
+            unsupported={
+                key: value.model_copy(deep=True)
+                for key, value in session.unsupported.items()
+            },
+            deferred=list(session.deferred),
+            question_context=dict(session.question_context),
+        )
+
+    @staticmethod
+    def _commit_session(session: _TripSession, candidate: _TripSession) -> None:
+        # Preserve the original object/lock for callers already waiting on it.
+        for name in (
+            "draft",
+            "state",
+            "issues",
+            "missing_fields",
+            "missing_questions",
+            "unsupported",
+            "deferred",
+            "confirmed_result",
+            "question_context",
+        ):
+            setattr(session, name, getattr(candidate, name))
+
+    @staticmethod
+    def _pending_questions(session: _TripSession) -> list[PendingQuestion]:
+        count = 2 if session.unsupported else 3
+        return [
+            PendingQuestion(
+                field_path=path,
+                question=question,
+                source_message=session.question_context.get(path),
+            )
+            for path, question in zip(
+                session.missing_fields[:count],
+                session.missing_questions[:count],
+                strict=True,
+            )
+        ]
+
+    @staticmethod
+    def _defer_request(session: _TripSession, request_id: str) -> None:
+        notice = session.unsupported.pop(request_id, None)
+        if notice is None:
+            raise ValueError("unsupported request is not pending in this session")
+        session.deferred.append(notice.user_text)
+        if notice.field_path:
+            session.issues.pop(notice.field_path, None)
+
+    def defer_unsupported(self, session_id: str) -> ConversationTurnResponse:
+        """Explicitly continue without the currently displayed unsupported requests."""
+        session = self._get_session(session_id)
+        with session.lock:
+            if session.unsupported:
+                for request_id in list(session.unsupported):
+                    self._defer_request(session, request_id)
+                session.confirmed_result = None
+                self._refresh_state(session)
             if session.confirmed_result is not None:
                 return session.confirmed_result.model_copy(deep=True)
             return self._response(session_id, session)
@@ -156,6 +266,7 @@ class TripSessionService:
             ),
             trip_request_draft=session.draft.model_copy(deep=True),
             recommendations=response.recommendations,
+            deferred_requests=list(session.deferred),
         )
         return session.confirmed_result.model_copy(deep=True)
 
@@ -176,11 +287,53 @@ class TripSessionService:
         if sorted(returned_ids) != sorted(expected_ids):
             raise ValueError("extraction must preserve the two assigned traveler IDs")
         previous = session.draft.model_copy(deep=True)
+        for unsupported in result.unsupported_requests:
+            if not any(
+                n.user_text.casefold() == unsupported.user_text.casefold()
+                for n in session.unsupported.values()
+            ):
+                request_id = str(uuid4())
+                session.unsupported[request_id] = UnsupportedRequestNotice(
+                    request_id=request_id,
+                    user_text=unsupported.user_text,
+                    explanation=unsupported.explanation,
+                )
+        for issue in result.missing_fields:
+            if issue.reason == "unsupported" and not any(
+                n.field_path == issue.field_path for n in session.unsupported.values()
+            ):
+                request_id = str(uuid4())
+                session.unsupported[request_id] = UnsupportedRequestNotice(
+                    request_id=request_id,
+                    user_text=issue.clarification_question,
+                    explanation=issue.clarification_question,
+                    field_path=issue.field_path,
+                )
         updates = result.draft.model_dump(exclude_unset=True)
+        provided_paths = {key for key in ("start_date", "end_date") if key in updates}
+        for traveler_update in updates.get("travelers", []):
+            provided_paths.update(
+                f"travelers.{traveler_update['traveler_id']}.{key}"
+                for key in traveler_update
+                if key != "traveler_id"
+            )
         reported = {
             item.field_path: item.clarification_question
             for item in result.missing_fields
             if item.reason != "missing"
+            or (
+                item.field_path not in provided_paths
+                and item.field_path
+                in {
+                    "start_date",
+                    "end_date",
+                    *(
+                        f"travelers.{tid}.{name}"
+                        for tid in expected_ids
+                        for name in ("origin", "budget_usd", "max_travel_time_hours")
+                    ),
+                }
+            )
         }
         for key in ("start_date", "end_date"):
             if key in updates and key not in reported:
@@ -200,10 +353,24 @@ class TripSessionService:
                     continue
                 if key == "preferences":
                     valid_preferences = {
-                        k: v for k, v in value.items() if f"{path}.{k}" not in reported
+                        k: v
+                        for k, v in value.items()
+                        if not any(
+                            p == f"{path}.{k}" or p.startswith(f"{path}.{k}.")
+                            for p in reported
+                        )
                     }
                     for preference_key in valid_preferences:
-                        session.issues.pop(f"{path}.{preference_key}", None)
+                        changed_path = f"{path}.{preference_key}"
+                        session.issues = {
+                            p: q
+                            for p, q in session.issues.items()
+                            if p != changed_path
+                            and not p.startswith(changed_path + ".")
+                        }
+                        for request_id, notice in list(session.unsupported.items()):
+                            if notice.field_path == changed_path:
+                                self._defer_request(session, request_id)
                     traveler.preferences = traveler.preferences.model_validate(
                         {**traveler.preferences.model_dump(), **valid_preferences}
                     )
@@ -216,7 +383,7 @@ class TripSessionService:
                 }
         session.issues.update(reported)
         self._validate_updates(session, previous)
-        if session.draft != previous or session.issues:
+        if session.draft != previous or session.issues or session.unsupported:
             session.confirmed_result = None
         if session.confirmed_result is None:
             self._refresh_state(session)
@@ -271,11 +438,17 @@ class TripSessionService:
 
     def _refresh_state(self, session: _TripSession) -> None:
         """Determine readiness independently of the extractor's status claim."""
-        questions = dict(session.issues)
+        unsupported_paths = {n.field_path for n in session.unsupported.values()}
+        questions = {
+            p: q for p, q in session.issues.items() if p not in unsupported_paths
+        }
         draft = session.draft
         for key in ("start_date", "end_date"):
             if getattr(draft, key) is None:
-                questions.setdefault(key, f"What is your {key.replace('_', ' ')}?")
+                questions.setdefault(
+                    key,
+                    f"What is your exact {key.replace('_', ' ')}, including the year?",
+                )
         for traveler in draft.travelers:
             for key, question in (
                 ("origin", f"Where is {traveler.display_label} leaving from?"),
@@ -306,7 +479,9 @@ class TripSessionService:
         session.missing_fields = ordered
         session.missing_questions = [questions[p] for p in ordered]
         session.state = (
-            ConversationState.COLLECTING if questions else ConversationState.REVIEW
+            ConversationState.COLLECTING
+            if questions or session.unsupported
+            else ConversationState.REVIEW
         )
 
     def _response(
@@ -334,16 +509,33 @@ class TripSessionService:
                     f"USD; maximum one-way time {traveler.max_travel_time_hours} "
                     f"hours including layovers. Preferences: {description}."
                 )
+            if session.deferred:
+                lines.append("Not included, as agreed: " + "; ".join(session.deferred))
             lines.append("Confirm this trip request to find destinations.")
             assistant_message = "\n".join(lines)
         else:
-            assistant_message = session.missing_questions[0]
+            questions = [q.question for q in self._pending_questions(session)]
+            assistant_message = "\n".join(questions)
+            if session.unsupported:
+                limitations = "\n".join(
+                    n.explanation for n in session.unsupported.values()
+                )
+                assistant_message = (
+                    limitations
+                    + "\nCan we continue without these unsupported requests?"
+                    + ("\n" + assistant_message if assistant_message else "")
+                )
         return ConversationTurnResponse(
             session_id=session_id,
             state=session.state,
             assistant_message=assistant_message,
             trip_request_draft=session.draft.model_copy(deep=True),
             missing_fields=session.missing_fields,
+            pending_questions=self._pending_questions(session),
+            unsupported_requests=[
+                n.model_copy(deep=True) for n in session.unsupported.values()
+            ],
+            deferred_requests=list(session.deferred),
         )
 
     def _build_trip_request(self, draft: TripRequestDraft) -> TripRequest:

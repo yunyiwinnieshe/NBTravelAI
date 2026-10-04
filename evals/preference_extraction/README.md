@@ -126,3 +126,9 @@ The approach follows the distinction between capability and regression evals in
 [Anthropic's evaluation guide](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)
 and dataset-based experiments described in
 [LangSmith's evaluation documentation](https://docs.langchain.com/langsmith/evaluation-types).
+
+## Planning-session HTTP smoke test
+
+The adapter evaluation above is separate from the full API walkthrough. See
+[session testing](../../docs/deepseek-planning-sessions.md) for the opt-in live
+script and its saved nine-step report.

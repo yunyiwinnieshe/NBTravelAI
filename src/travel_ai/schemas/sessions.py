@@ -61,6 +61,30 @@ class TripRequestDraft(BaseModel):
     end_date: date | None = None
 
 
+class PendingQuestion(BaseModel):
+    """The question actually shown, including its canonical target."""
+
+    field_path: str
+    question: str
+    source_message: str | None = None
+
+
+class UnsupportedRequestNotice(BaseModel):
+    """A session-owned request that must be explicitly deferred."""
+
+    request_id: str
+    user_text: str
+    explanation: str
+    field_path: str | None = None
+
+
+class ExtractionContext(BaseModel):
+    """Trusted application context for interpreting short conversational replies."""
+
+    pending_questions: list[PendingQuestion] = Field(default_factory=list)
+    unsupported_requests: list[UnsupportedRequestNotice] = Field(default_factory=list)
+
+
 class CreateTripSessionRequest(BaseModel):
     """Optional first user message when starting a planning session."""
 
@@ -75,7 +99,7 @@ class TripSessionMessageRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     message: str | None = Field(default=None, min_length=1, max_length=10_000)
-    action: Literal["confirm"] | None = None
+    action: Literal["confirm", "continue_without_unsupported"] | None = None
 
     @model_validator(mode="after")
     def validate_action(self) -> "TripSessionMessageRequest":
@@ -93,4 +117,7 @@ class ConversationTurnResponse(BaseModel):
     assistant_message: str
     trip_request_draft: TripRequestDraft | None = None
     missing_fields: list[str] = Field(default_factory=list)
+    pending_questions: list[PendingQuestion] = Field(default_factory=list)
+    unsupported_requests: list[UnsupportedRequestNotice] = Field(default_factory=list)
+    deferred_requests: list[str] = Field(default_factory=list)
     recommendations: list[DestinationRecommendation] = Field(default_factory=list)

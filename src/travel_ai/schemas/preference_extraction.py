@@ -42,6 +42,14 @@ class UnsupportedRequest(BaseModel):
     explanation: str = Field(min_length=1, max_length=500)
 
 
+class UnsupportedAcknowledgment(BaseModel):
+    """Explicit user consent to defer a known session request."""
+
+    model_config = ConfigDict(extra="forbid")
+    request_id: str = Field(min_length=1, max_length=100)
+    evidence: str = Field(min_length=1, max_length=10_000)
+
+
 class PreferenceExtractionResult(BaseModel):
     """Structured result from one extraction attempt; not a confirmed request."""
 
@@ -51,6 +59,9 @@ class PreferenceExtractionResult(BaseModel):
     status: PreferenceExtractionStatus
     missing_fields: list[MissingField] = Field(default_factory=list)
     unsupported_requests: list[UnsupportedRequest] = Field(default_factory=list)
+    acknowledged_unsupported: list[UnsupportedAcknowledgment] = Field(
+        default_factory=list
+    )
 
     @model_validator(mode="after")
     def validate_status_and_missing_fields(self) -> "PreferenceExtractionResult":

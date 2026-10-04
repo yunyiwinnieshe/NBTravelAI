@@ -1,8 +1,8 @@
 # Travel AI - API Outline
 
-**Status:** `GET /health` and fixture-backed `POST /recommendations` are
-implemented. Conversation endpoints remain explicit `501` stubs until session
-storage and the LLM workflow are added. Live recommendation integration is pending.
+**Status:** Health, recommendations, and in-memory conversation endpoints are
+implemented. Conversation extraction supports fixture or DeepSeek configuration;
+recommendations remain deterministic. See [session wiring](deepseek-planning-sessions.md).
 
 ## Design principle
 
@@ -101,15 +101,17 @@ excluded from the confirmed ranking request. See the
 
 ### `POST /trip-sessions/{session_id}/messages`
 
-Accepts exactly one of `{"message": "..."}` or `{"action": "confirm"}`.
-Ordinary text never confirms a trip. The fixture-backed implementation:
+Accepts exactly one message or action: `{"message": "..."}`,
+`{"action": "confirm"}`, or `{"action": "continue_without_unsupported"}`.
+The last action acknowledges all current unsupported notices without confirming.
+Ordinary text never confirms a trip. The implementation:
 
 1. Loads the session's existing preference draft.
 2. Uses the preference-extraction service when language interpretation is
    needed.
 3. Merges valid mentioned fields, preserving other saved values and stable IDs.
    Resolves origins and validates dates and distinct origins before review.
-4. Asks one focused question (hard constraints first), or shows a complete
+4. Asks up to three questions (hard constraints first), or shows a complete
    normalized summary, including omitted preferences, for review.
 5. Confirmation runs recommendations once for the unchanged reviewed request.
    Repeated confirmation returns the stored result. Edits require new review
