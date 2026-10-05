@@ -109,3 +109,14 @@ Verification with unchanged case expectations:
 The historical failure is marked mitigated with passing verification, not erased.
 The old prompt also passed later reruns, so these small samples do not prove a
 statistical improvement or guarantee all future model responses will succeed.
+
+## Offline-first runner
+
+The [evaluation runner](../evaluation-runner.md) now defaults to
+`cases.v2.json`: the 12 original cases plus 18 new scenarios for invalid
+corrections, companion ownership, unsupported requests, confirmation, no-match
+recovery, and prompt injection. `offline-responses.v2.json` contains separately
+authored mock model outputs. Cases `24`, `29`, and `30` have provisional labels
+for Ivy to review. The v1 file remains the source for the existing Postman
+walkthrough and historical live results. Real DeepSeek runner calls require
+`--live` and an explicit `--max-calls`.

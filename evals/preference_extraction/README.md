@@ -43,7 +43,7 @@ From the repository root:
 
 ```sh
 .venv/bin/python -m travel_ai.scripts.evaluate_extraction \
-  --live --repeats 2 \
+  --live --max-calls 56 --repeats 2 \
   --output evals/preference_extraction/runs/candidate-v1.json \
   --compare evals/preference_extraction/runs/baseline-v1.json
 ```
@@ -132,3 +132,7 @@ and dataset-based experiments described in
 The adapter evaluation above is separate from the full API walkthrough. See
 [session testing](../../docs/deepseek-planning-sessions.md) for the opt-in live
 script and its saved nine-step report.
+
+The adapter runner now requires `--max-calls` as well as `--live`. Requests are
+limited at the HTTP transport boundary. For one-command offline session evaluation
+and matching JSON/Markdown reports, see [the session runner](../evaluation-runner.md).

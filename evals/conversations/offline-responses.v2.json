@@ -1,0 +1,762 @@
+{
+  "version": "2.1",
+  "reference_date": "2026-10-03",
+  "description": "Independently authored mock model outputs for the 30-case conversation dataset. Control-only messages are intercepted before model calls.",
+  "responses": {
+    "complete": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "start_date",
+          "value": "2099-06-10",
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "end_date",
+          "value": "2099-06-14",
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.display_name",
+          "value": "Alex",
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_b.display_name",
+          "value": "Jamie",
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.origin",
+          "value": "Boston",
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_b.origin",
+          "value": "New York",
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.budget_usd",
+          "value": 800,
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_b.budget_usd",
+          "value": 500,
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.max_travel_time_hours",
+          "value": 10,
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_b.max_travel_time_hours",
+          "value": 10,
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "missing_budget": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "start_date",
+          "value": "2099-06-10",
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "end_date",
+          "value": "2099-06-14",
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.display_name",
+          "value": "Alex",
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_b.display_name",
+          "value": "Jamie",
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.origin",
+          "value": "Boston",
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_b.origin",
+          "value": "New York",
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_b.budget_usd",
+          "value": 500,
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.max_travel_time_hours",
+          "value": 10,
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_b.max_travel_time_hours",
+          "value": 10,
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "origins_only": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.display_name",
+          "value": "Alex",
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_b.display_name",
+          "value": "Jamie",
+          "evidence": "Jamie leaves from New York."
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.origin",
+          "value": "Boston",
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_b.origin",
+          "value": "New York",
+          "evidence": "Jamie leaves from New York."
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "empty": {
+      "operations": [],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "budget800": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.budget_usd",
+          "value": 800,
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "budget600": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.budget_usd",
+          "value": 600,
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "museums": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.preferences.interest_tags",
+          "value": [
+            "museums"
+          ],
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "hiking": {
+      "operations": [
+        {
+          "op": "add",
+          "field_path": "travelers.traveler_a.preferences.interest_tags",
+          "value": [
+            "outdoor_activities"
+          ],
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "beach": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.preferences.interest_tags",
+          "value": [
+            "beach"
+          ],
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "clear_interests": {
+      "operations": [
+        {
+          "op": "remove",
+          "field_path": "travelers.traveler_a.preferences.interest_tags",
+          "value": null,
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "ambiguous_owner": {
+      "operations": [],
+      "missing_fields": [
+        {
+          "field_path": "travelers.traveler_a.budget_usd",
+          "reason": "ambiguous",
+          "clarification_question": "Which traveler has the $650 airfare budget?"
+        }
+      ],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "missing_year": {
+      "operations": [],
+      "missing_fields": [
+        {
+          "field_path": "start_date",
+          "reason": "ambiguous",
+          "clarification_question": "What year is your June 11 departure?"
+        }
+      ],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "answer_year": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "start_date",
+          "value": "2099-06-11",
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "budget_hotel": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.budget_usd",
+          "value": 600,
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [
+        {
+          "user_text": "$message",
+          "explanation": "Hotel amenities are not supported. Can we continue without that request?"
+        }
+      ],
+      "acknowledged_unsupported": []
+    },
+    "hotel": {
+      "operations": [],
+      "missing_fields": [],
+      "unsupported_requests": [
+        {
+          "user_text": "$message",
+          "explanation": "Hotel amenities are not supported. Can we continue without that request?"
+        }
+      ],
+      "acknowledged_unsupported": []
+    },
+    "ack_hotel": {
+      "operations": [],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": [
+        {
+          "request_id": "$pending_notice_id",
+          "evidence": "$message"
+        }
+      ]
+    },
+    "tiny_budgets": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.budget_usd",
+          "value": 1,
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_b.budget_usd",
+          "value": 1,
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "restaurant": {
+      "operations": [],
+      "missing_fields": [],
+      "unsupported_requests": [
+        {
+          "user_text": "$message",
+          "explanation": "Restaurant reservations are not supported. Can we continue without this request?"
+        }
+      ],
+      "acknowledged_unsupported": []
+    },
+    "nonstop": {
+      "operations": [],
+      "missing_fields": [],
+      "unsupported_requests": [
+        {
+          "user_text": "$message",
+          "explanation": "A nonstop-only flight filter is not supported. Can we continue without this request?"
+        }
+      ],
+      "acknowledged_unsupported": []
+    },
+    "bad_a_budget": {
+      "operations": [],
+      "missing_fields": [
+        {
+          "field_path": "travelers.traveler_a.budget_usd",
+          "reason": "invalid",
+          "clarification_question": "What is Alex’s valid airfare budget in USD?"
+        }
+      ],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "bad_b_budget": {
+      "operations": [],
+      "missing_fields": [
+        {
+          "field_path": "travelers.traveler_b.budget_usd",
+          "reason": "invalid",
+          "clarification_question": "What is Jamie’s valid airfare budget in USD?"
+        }
+      ],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "past_start": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "start_date",
+          "value": "2020-06-10",
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "short_trip": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "start_date",
+          "value": "2099-06-10",
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "end_date",
+          "value": "2099-06-11",
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "same_origin": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_b.origin",
+          "value": "Boston",
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "b_budget700": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_b.budget_usd",
+          "value": 700,
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "a_budget700": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.budget_usd",
+          "value": 700,
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "both_time8": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.max_travel_time_hours",
+          "value": 8,
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_b.max_travel_time_hours",
+          "value": 8,
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "a_temp": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.preferences.temperature_range",
+          "value": {
+            "minimum_celsius": 18,
+            "maximum_celsius": 26
+          },
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "clear_temp": {
+      "operations": [
+        {
+          "op": "remove",
+          "field_path": "travelers.traveler_a.preferences.temperature_range",
+          "value": null,
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "ambiguous_temp": {
+      "operations": [],
+      "missing_fields": [
+        {
+          "field_path": "travelers.traveler_a.preferences.temperature_range",
+          "reason": "ambiguous",
+          "clarification_question": "What temperature range in Celsius do you prefer?"
+        }
+      ],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "b_interest": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_b.preferences.interest_tags",
+          "value": [
+            "food"
+          ],
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "a_interest": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.preferences.interest_tags",
+          "value": [
+            "nature"
+          ],
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "budget2": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.budget_usd",
+          "value": 2,
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_b.budget_usd",
+          "value": 2,
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "a_budget900": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.budget_usd",
+          "value": 900,
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "both_budget600": {
+      "operations": [
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_a.budget_usd",
+          "value": 600,
+          "evidence": "$message"
+        },
+        {
+          "op": "set",
+          "field_path": "travelers.traveler_b.budget_usd",
+          "value": 600,
+          "evidence": "$message"
+        }
+      ],
+      "missing_fields": [],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    },
+    "ambiguous_bare": {
+      "operations": [],
+      "missing_fields": [
+        {
+          "field_path": "travelers.traveler_a.budget_usd",
+          "reason": "ambiguous",
+          "clarification_question": "Whose airfare budget is $700?"
+        }
+      ],
+      "unsupported_requests": [],
+      "acknowledged_unsupported": []
+    }
+  },
+  "cases": {
+    "01_complete": [
+      "complete",
+      "empty",
+      null
+    ],
+    "02_missing_budget": [
+      "missing_budget"
+    ],
+    "03_missing_multiple": [
+      "origins_only",
+      null
+    ],
+    "04_short_answer": [
+      "missing_budget",
+      "budget800"
+    ],
+    "05_correction": [
+      "complete",
+      "budget600",
+      null
+    ],
+    "06_add_interest": [
+      "complete",
+      "museums",
+      "hiking"
+    ],
+    "07_replace_clear": [
+      "complete",
+      "museums",
+      "beach",
+      "clear_interests"
+    ],
+    "08_ambiguous_owner": [
+      "complete",
+      "ambiguous_owner"
+    ],
+    "09_missing_year": [
+      "complete",
+      "missing_year",
+      "answer_year"
+    ],
+    "10_unsupported": [
+      "complete",
+      "budget_hotel",
+      "empty",
+      null
+    ],
+    "11_acknowledge": [
+      "complete",
+      "hotel",
+      "ack_hotel",
+      null
+    ],
+    "12_no_match": [
+      "complete",
+      "tiny_budgets",
+      null
+    ],
+    "13_restaurant": [
+      "complete",
+      "restaurant",
+      null
+    ],
+    "14_nonstop": [
+      "complete",
+      "nonstop"
+    ],
+    "15_negative_budget": [
+      "complete",
+      "bad_a_budget"
+    ],
+    "16_zero_budget": [
+      "complete",
+      "bad_b_budget"
+    ],
+    "17_past_date": [
+      "complete",
+      "past_start"
+    ],
+    "18_two_day_trip": [
+      "complete",
+      "short_trip"
+    ],
+    "19_same_origin": [
+      "complete",
+      "same_origin"
+    ],
+    "20_companion_budget": [
+      "complete",
+      "b_budget700"
+    ],
+    "21_speaker_by_name": [
+      "complete",
+      "a_budget700"
+    ],
+    "22_shared_time": [
+      "complete",
+      "both_time8"
+    ],
+    "23_clear_temperature": [
+      "complete",
+      "a_temp",
+      "clear_temp"
+    ],
+    "24_ambiguous_temperature": [
+      "complete",
+      "ambiguous_temp"
+    ],
+    "25_companion_interest": [
+      "complete",
+      "b_interest"
+    ],
+    "26_repeat_confirm": [
+      "complete",
+      null,
+      null
+    ],
+    "27_edit_after_results": [
+      "complete",
+      null,
+      "a_budget900",
+      null
+    ],
+    "28_recover_no_match": [
+      "complete",
+      "budget2",
+      null,
+      "both_budget600",
+      null
+    ],
+    "29_injection_override": [
+      "complete",
+      null
+    ],
+    "30_injection_confirm": [
+      "complete",
+      null
+    ]
+  }
+}

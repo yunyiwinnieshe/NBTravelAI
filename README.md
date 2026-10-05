@@ -107,3 +107,13 @@ See the [Postman walkthrough](docs/postman-conversation-walkthrough.md) for the
 12-case collection, local execution, and desktop import. The
 [evaluation results](evals/conversations/README.md) record the live baseline
 and the date-clarification failure with its post-fix verification.
+
+Run the session evaluations offline with one command:
+
+```sh
+.venv/bin/python -m travel_ai.scripts.evaluate_sessions
+```
+
+See [evaluation runner configuration and report formats](evals/evaluation-runner.md)
+for explicit live mode, call limits, and version metadata. Offline passes measure
+mocked adapter/session behavior, not model accuracy.

@@ -1,0 +1,977 @@
+{
+  "version": "1.0",
+  "description": "20 synthetic deterministic recommendation cases; exact eligibility labels, with subjective preference ranking marked provisional for Ivy.",
+  "reference_date": "2026-10-03",
+  "cases": [
+    {
+      "id": "01_baseline",
+      "category": "eligible",
+      "description": "Both travelers can reach three cities on the fixed snapshot.",
+      "request": {
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "food"
+              ]
+            }
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "beach"
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl",
+          "seattle_wa"
+        ],
+        "eligible_count": 3,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "washington_dc"
+        ]
+      }
+    },
+    {
+      "id": "02_a_budget_one",
+      "category": "budget",
+      "description": "Alex budget of $1 excludes every city.",
+      "request": {
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 1,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "food"
+              ]
+            }
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "beach"
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ]
+      }
+    },
+    {
+      "id": "03_b_budget_one",
+      "category": "budget",
+      "description": "Jamie budget of $1 excludes every city.",
+      "request": {
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "food"
+              ]
+            }
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 1,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "beach"
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ]
+      }
+    },
+    {
+      "id": "04_both_budget_one",
+      "category": "budget",
+      "description": "Both budgets of $1 yield no match.",
+      "request": {
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 1,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "food"
+              ]
+            }
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 1,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "beach"
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ]
+      }
+    },
+    {
+      "id": "05_july_snapshot_gap",
+      "category": "coverage",
+      "description": "Valid July dates have no fixture offers.",
+      "request": {
+        "start_date": "2099-07-10",
+        "end_date": "2099-07-14",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "food"
+              ]
+            }
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "beach"
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ]
+      }
+    },
+    {
+      "id": "06_a_one_hour",
+      "category": "travel_time",
+      "description": "Alex one-hour limit excludes every city.",
+      "request": {
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 60,
+            "preferences": {
+              "interest_tags": [
+                "food"
+              ]
+            }
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "beach"
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ]
+      }
+    },
+    {
+      "id": "07_b_one_hour",
+      "category": "travel_time",
+      "description": "Jamie one-hour limit excludes every city.",
+      "request": {
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "food"
+              ]
+            }
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 60,
+            "preferences": {
+              "interest_tags": [
+                "beach"
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ]
+      }
+    },
+    {
+      "id": "08_both_budget_300",
+      "category": "budget",
+      "description": "Both $300 budgets permit two destinations.",
+      "request": {
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 300,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "food"
+              ]
+            }
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 300,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "beach"
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl"
+        ],
+        "eligible_count": 2,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ]
+      }
+    },
+    {
+      "id": "09_both_budget_400",
+      "category": "budget",
+      "description": "Both $400 budgets permit three destinations.",
+      "request": {
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 400,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "food"
+              ]
+            }
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 400,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "beach"
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl",
+          "seattle_wa"
+        ],
+        "eligible_count": 3,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "washington_dc"
+        ]
+      }
+    },
+    {
+      "id": "10_both_budget_800",
+      "category": "budget",
+      "description": "Raising budgets does not invent new fixture offers.",
+      "request": {
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 800,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "food"
+              ]
+            }
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 800,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "beach"
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl",
+          "seattle_wa"
+        ],
+        "eligible_count": 3,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "washington_dc"
+        ]
+      }
+    },
+    {
+      "id": "11_a_600_b_200",
+      "category": "budget",
+      "description": "Companion $200 budget is binding.",
+      "request": {
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 600,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "food"
+              ]
+            }
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 200,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "beach"
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ]
+      }
+    },
+    {
+      "id": "12_a_200_b_600",
+      "category": "budget",
+      "description": "Speaker $200 budget is binding.",
+      "request": {
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 200,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "food"
+              ]
+            }
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 600,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "beach"
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ]
+      }
+    },
+    {
+      "id": "13_no_interests",
+      "category": "preferences",
+      "description": "Empty interests preserve eligible destinations; ranking quality awaits review.",
+      "request": {
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": []
+            }
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": []
+            }
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl",
+          "seattle_wa"
+        ],
+        "eligible_count": 3,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "washington_dc"
+        ]
+      },
+      "label_status": "provisional",
+      "reviewer": "Ivy"
+    },
+    {
+      "id": "14_museum_nature",
+      "category": "preferences",
+      "description": "Different interests preserve hard eligibility; subjective ranking awaits review.",
+      "request": {
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "museums"
+              ]
+            }
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "nature"
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl",
+          "seattle_wa"
+        ],
+        "eligible_count": 3,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "washington_dc"
+        ]
+      },
+      "label_status": "provisional",
+      "reviewer": "Ivy"
+    },
+    {
+      "id": "15_temperature",
+      "category": "preferences",
+      "description": "Temperature preference does not bypass flight constraints.",
+      "request": {
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "food"
+              ],
+              "temperature_range": {
+                "minimum_celsius": 18,
+                "maximum_celsius": 27
+              }
+            }
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "beach"
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl",
+          "seattle_wa"
+        ],
+        "eligible_count": 3,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "washington_dc"
+        ]
+      },
+      "label_status": "provisional",
+      "reviewer": "Ivy"
+    },
+    {
+      "id": "16_reversed_order",
+      "category": "identity",
+      "description": "Reversing traveler order preserves destination eligibility.",
+      "request": {
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14",
+        "travelers": [
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "beach"
+              ]
+            }
+          },
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "food"
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl",
+          "seattle_wa"
+        ],
+        "eligible_count": 3,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "washington_dc"
+        ]
+      }
+    },
+    {
+      "id": "17_two_day_trip",
+      "category": "validation",
+      "description": "V1 rejects a two-day trip.",
+      "request": {
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-11",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "food"
+              ]
+            }
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "beach"
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "validation_error",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": []
+      }
+    },
+    {
+      "id": "18_negative_budget",
+      "category": "validation",
+      "description": "V1 rejects a negative budget.",
+      "request": {
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": -1,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "food"
+              ]
+            }
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "beach"
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "validation_error",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": []
+      }
+    },
+    {
+      "id": "19_same_origin",
+      "category": "validation",
+      "description": "V1 requires two distinct origins.",
+      "request": {
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "food"
+              ]
+            }
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "boston_ma",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "beach"
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "validation_error",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": []
+      }
+    },
+    {
+      "id": "20_past_date",
+      "category": "validation",
+      "description": "V1 rejects a date before the fixed reference date.",
+      "request": {
+        "start_date": "2020-06-10",
+        "end_date": "2020-06-14",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "food"
+              ]
+            }
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {
+              "interest_tags": [
+                "beach"
+              ]
+            }
+          }
+        ]
+      },
+      "expected": {
+        "outcome": "validation_error",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": []
+      }
+    }
+  ]
+}
