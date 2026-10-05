@@ -1,0 +1,150 @@
+[
+  {
+    "request": "Create session",
+    "status": 200,
+    "body": {
+      "session_id": "67da0950-9e55-4908-8d3e-c8e1d65c4ec2",
+      "state": "review",
+      "assistant_message": "Travel dates: 2099-06-10 to 2099-06-14.\\nAlex: Boston (boston_ma); airfare budget $800.0 USD; maximum one-way time 10.0 hours including layovers. Preferences: none provided.\\nJamie: New York (new_york_ny); airfare budget $500.0 USD; maximum one-way time 10.0 hours including layovers. Preferences: none provided.\\nConfirm this trip request to find destinations.",
+      "trip_request_draft": {
+        "travelers": [
+          {
+            "traveler_id": "traveler_a",
+            "display_name": "Alex",
+            "origin": "Boston",
+            "origin_id": "boston_ma",
+            "budget_usd": 800,
+            "max_travel_time_hours": 10,
+            "preferences": {
+              "temperature_range": null,
+              "interest_tags": []
+            }
+          },
+          {
+            "traveler_id": "traveler_b",
+            "display_name": "Jamie",
+            "origin": "New York",
+            "origin_id": "new_york_ny",
+            "budget_usd": 500,
+            "max_travel_time_hours": 10,
+            "preferences": {
+              "temperature_range": null,
+              "interest_tags": []
+            }
+          }
+        ],
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14"
+      },
+      "missing_fields": [],
+      "pending_questions": [],
+      "unsupported_requests": [],
+      "deferred_requests": [],
+      "recommendations": []
+    }
+  },
+  {
+    "request": "Date without year",
+    "status": 200,
+    "body": {
+      "session_id": "67da0950-9e55-4908-8d3e-c8e1d65c4ec2",
+      "state": "collecting",
+      "assistant_message": "What year is your June 11 departure date in?",
+      "trip_request_draft": {
+        "travelers": [
+          {
+            "traveler_id": "traveler_a",
+            "display_name": "Alex",
+            "origin": "Boston",
+            "origin_id": "boston_ma",
+            "budget_usd": 800,
+            "max_travel_time_hours": 10,
+            "preferences": {
+              "temperature_range": null,
+              "interest_tags": []
+            }
+          },
+          {
+            "traveler_id": "traveler_b",
+            "display_name": "Jamie",
+            "origin": "New York",
+            "origin_id": "new_york_ny",
+            "budget_usd": 500,
+            "max_travel_time_hours": 10,
+            "preferences": {
+              "temperature_range": null,
+              "interest_tags": []
+            }
+          }
+        ],
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14"
+      },
+      "missing_fields": [
+        "start_date"
+      ],
+      "pending_questions": [
+        {
+          "field_path": "start_date",
+          "question": "What year is your June 11 departure date in?",
+          "source_message": "Change my departure date to June 11; I have not specified the year."
+        }
+      ],
+      "unsupported_requests": [],
+      "deferred_requests": [],
+      "recommendations": []
+    }
+  },
+  {
+    "request": "Supply year",
+    "status": 200,
+    "body": {
+      "session_id": "67da0950-9e55-4908-8d3e-c8e1d65c4ec2",
+      "state": "collecting",
+      "assistant_message": "What year is your June 11 departure date in?",
+      "trip_request_draft": {
+        "travelers": [
+          {
+            "traveler_id": "traveler_a",
+            "display_name": "Alex",
+            "origin": "Boston",
+            "origin_id": "boston_ma",
+            "budget_usd": 800,
+            "max_travel_time_hours": 10,
+            "preferences": {
+              "temperature_range": null,
+              "interest_tags": []
+            }
+          },
+          {
+            "traveler_id": "traveler_b",
+            "display_name": "Jamie",
+            "origin": "New York",
+            "origin_id": "new_york_ny",
+            "budget_usd": 500,
+            "max_travel_time_hours": 10,
+            "preferences": {
+              "temperature_range": null,
+              "interest_tags": []
+            }
+          }
+        ],
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14"
+      },
+      "missing_fields": [
+        "start_date"
+      ],
+      "pending_questions": [
+        {
+          "field_path": "start_date",
+          "question": "What year is your June 11 departure date in?",
+          "source_message": "Change my departure date to June 11; I have not specified the year."
+        }
+      ],
+      "unsupported_requests": [],
+      "deferred_requests": [],
+      "recommendations": []
+    }
+  }
+]

@@ -1,0 +1,6 @@
+{
+  "$kind": "collection",
+  "name": "09_missing_year",
+  "description": "A date correction without a year asks for it, then a short year resolves the correction.",
+  "order": 9000
+}

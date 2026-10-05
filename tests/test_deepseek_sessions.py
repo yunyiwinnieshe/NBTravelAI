@@ -481,7 +481,13 @@ def test_short_year_reply_retains_original_date_question_context(live_api):
     )
     result = client.post(url, json={"message": "2099"}).json()
     assert result["state"] == "review"
-    assert result["trip_request_draft"]["start_date"] == "2099-06-11"
+    assert result["trip_request_draft"] == {
+        **question["trip_request_draft"],
+        "start_date": "2099-06-11",
+    }
+    assert result["missing_fields"] == []
+    assert result["pending_questions"] == []
+    assert result["recommendations"] == []
     assert (
         calls[-1]["conversation_context"]["pending_questions"][0]["source_message"]
         == "Change departure to June 11."
@@ -522,3 +528,72 @@ def test_exception_during_merge_does_not_partially_commit(live_api):
         )
     assert response.status_code == 422
     assert snapshot(service, sid) == before
+
+
+@pytest.mark.parametrize("proposed_date", [None, "2020-06-11", "2099-06-15"])
+def test_year_reply_does_not_clear_issue_without_valid_update(live_api, proposed_date):
+    client, service, script, _ = live_api
+    sid = start_complete(live_api)["session_id"]
+    url = f"/trip-sessions/{sid}/messages"
+    script["handler"] = lambda request, context: reply(
+        issues=[
+            {
+                "field_path": "start_date",
+                "reason": "ambiguous",
+                "clarification_question": "What year is your June 11 departure?",
+            }
+        ]
+    )
+    question = client.post(url, json={"message": "Change departure to June 11."}).json()
+    answer = "2020" if proposed_date == "2020-06-11" else "2099"
+    script["handler"] = lambda request, context: reply(
+        [] if proposed_date is None else [op("start_date", proposed_date, answer)]
+    )
+    result = client.post(url, json={"message": answer}).json()
+    assert result["state"] == "collecting"
+    assert result["trip_request_draft"] == question["trip_request_draft"]
+    assert "start_date" in result["missing_fields"]
+    assert result["recommendations"] == []
+
+
+def test_year_reply_with_two_pending_dates_requires_clarification(live_api):
+    client, service, script, calls = live_api
+    sid = start_complete(live_api)["session_id"]
+    url = f"/trip-sessions/{sid}/messages"
+    issues = [
+        {
+            "field_path": field,
+            "reason": "ambiguous",
+            "clarification_question": f"What year is the {field}?",
+        }
+        for field in ("start_date", "end_date")
+    ]
+    script["handler"] = lambda request, context: reply(issues=issues)
+    question = client.post(
+        url,
+        json={
+            "message": (
+                "Departure June 11 and return June 14; the years are unspecified."
+            )
+        },
+    ).json()
+    result = client.post(url, json={"message": "2099 for one of those dates."}).json()
+    assert result["state"] == "collecting"
+    assert result["trip_request_draft"] == question["trip_request_draft"]
+    assert set(result["missing_fields"]) == {"start_date", "end_date"}
+    assert len(calls[-1]["conversation_context"]["pending_questions"]) == 2
+
+
+def test_bare_year_without_pending_question_preserves_reviewed_dates(live_api):
+    client, service, script, calls = live_api
+    before = start_complete(live_api)
+    script["handler"] = lambda request, context: reply()
+    result = client.post(
+        f"/trip-sessions/{before['session_id']}/messages",
+        json={"message": "2099"},
+    ).json()
+    assert "conversation_context" not in calls[-1]
+    assert result["trip_request_draft"] == before["trip_request_draft"]
+    assert result["state"] == "review"
+    assert result["missing_fields"] == []
+    assert result["recommendations"] == []

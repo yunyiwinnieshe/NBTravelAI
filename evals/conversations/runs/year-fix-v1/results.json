@@ -1,0 +1,85 @@
+{
+  "cases_passed": 3,
+  "cases_total": 3,
+  "requests": 9,
+  "assertions_passed": 99,
+  "assertions_failed": 0,
+  "exit_code": 0,
+  "cases": [
+    {
+      "id": "09_missing_year",
+      "repetition": 1,
+      "passed": true,
+      "steps": [
+        {
+          "name": "Create session",
+          "passed": true,
+          "assertions_passed": 16,
+          "failed_assertions": []
+        },
+        {
+          "name": "Date without year",
+          "passed": true,
+          "assertions_passed": 8,
+          "failed_assertions": []
+        },
+        {
+          "name": "Supply year",
+          "passed": true,
+          "assertions_passed": 9,
+          "failed_assertions": []
+        }
+      ]
+    },
+    {
+      "id": "09_missing_year",
+      "repetition": 2,
+      "passed": true,
+      "steps": [
+        {
+          "name": "Create session",
+          "passed": true,
+          "assertions_passed": 16,
+          "failed_assertions": []
+        },
+        {
+          "name": "Date without year",
+          "passed": true,
+          "assertions_passed": 8,
+          "failed_assertions": []
+        },
+        {
+          "name": "Supply year",
+          "passed": true,
+          "assertions_passed": 9,
+          "failed_assertions": []
+        }
+      ]
+    },
+    {
+      "id": "09_missing_year",
+      "repetition": 3,
+      "passed": true,
+      "steps": [
+        {
+          "name": "Create session",
+          "passed": true,
+          "assertions_passed": 16,
+          "failed_assertions": []
+        },
+        {
+          "name": "Date without year",
+          "passed": true,
+          "assertions_passed": 8,
+          "failed_assertions": []
+        },
+        {
+          "name": "Supply year",
+          "passed": true,
+          "assertions_passed": 9,
+          "failed_assertions": []
+        }
+      ]
+    }
+  ]
+}

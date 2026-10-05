@@ -1,0 +1,499 @@
+
+Root 103014b4c74abb32c2b34979
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.16 KB, 3.3 s]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.display_name
+  Pass  Expected travelers.traveler_b.display_name
+  Pass  Expected travelers.traveler_a.origin_id
+  Pass  Expected travelers.traveler_b.origin_id
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Expected travelers.traveler_a.max_travel_time_hours
+  Pass  Expected travelers.traveler_b.max_travel_time_hours
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root da2b31d3944473deb6065685
+
+  POST http://127.0.0.1:8012/trip-sessions/d129a0e6-2d12-4871-848f-97c2fc86280f/messages [200 OK, 1.16 KB, 712 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 0f911522b71dd81bdb29ff86
+
+  POST http://127.0.0.1:8012/trip-sessions/d129a0e6-2d12-4871-848f-97c2fc86280f/messages [200 OK, 13.41 KB, 25 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root 5f1b5d08c4ad4a8529afd298
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.27 KB, 2.1 s]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Clarify travelers.traveler_a.budget_usd
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root 9710257532b3685280bf59d8
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.69 KB, 1376 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Clarify start_date
+  Pass  Clarify end_date
+  Pass  Clarify travelers.traveler_a.budget_usd
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root 854cfd02850d8762a3c229c5
+
+  POST http://127.0.0.1:8012/trip-sessions/2ab2a753-9f3f-4b6c-b1a8-876e56e1a6ce/messages [422 Unprocessable Entity, 210 B, 5 ms]
+  Pass  HTTP status
+
+Root 59e2e8a97d7fce625308ac3b
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.27 KB, 1680 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Clarify travelers.traveler_a.budget_usd
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root 89b76ab165fdf68847bb2fae
+
+  POST http://127.0.0.1:8012/trip-sessions/47374b04-b6ca-4c8a-98ad-254a04c43ed3/messages [200 OK, 1.16 KB, 1035 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 9f163db3808dbdf39088b9d2
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.16 KB, 1821 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.display_name
+  Pass  Expected travelers.traveler_b.display_name
+  Pass  Expected travelers.traveler_a.origin_id
+  Pass  Expected travelers.traveler_b.origin_id
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Expected travelers.traveler_a.max_travel_time_hours
+  Pass  Expected travelers.traveler_b.max_travel_time_hours
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root a033f237bd496661d61296ba
+
+  POST http://127.0.0.1:8012/trip-sessions/50ae712e-2777-455f-bcdc-3f89d5429472/messages [200 OK, 1.16 KB, 767 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 955f743c1bf75d878cb553e0
+
+  POST http://127.0.0.1:8012/trip-sessions/50ae712e-2777-455f-bcdc-3f89d5429472/messages [200 OK, 13.41 KB, 16 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root dfdc4e510a2db1efa423d2b2
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.16 KB, 1995 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.display_name
+  Pass  Expected travelers.traveler_b.display_name
+  Pass  Expected travelers.traveler_a.origin_id
+  Pass  Expected travelers.traveler_b.origin_id
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Expected travelers.traveler_a.max_travel_time_hours
+  Pass  Expected travelers.traveler_b.max_travel_time_hours
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root cf35f8d7c901a7583769b7b6
+
+  POST http://127.0.0.1:8012/trip-sessions/03662f1e-f1e8-4979-b6d6-bed1a0bb173f/messages [200 OK, 1.18 KB, 841 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected travelers.traveler_a.preferences.interest_tags
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 1004ae9a3dac74d3d13e7605
+
+  POST http://127.0.0.1:8012/trip-sessions/03662f1e-f1e8-4979-b6d6-bed1a0bb173f/messages [200 OK, 1.23 KB, 1079 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected travelers.traveler_a.preferences.interest_tags
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 6391f3ad54de49d87b5aebce
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.16 KB, 1989 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.display_name
+  Pass  Expected travelers.traveler_b.display_name
+  Pass  Expected travelers.traveler_a.origin_id
+  Pass  Expected travelers.traveler_b.origin_id
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Expected travelers.traveler_a.max_travel_time_hours
+  Pass  Expected travelers.traveler_b.max_travel_time_hours
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root f573f5a275fbb3d7b18f1c4c
+
+  POST http://127.0.0.1:8012/trip-sessions/3f275ae8-a012-471e-94f1-d5f405bd7196/messages [200 OK, 1.18 KB, 1056 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected travelers.traveler_a.preferences.interest_tags
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 90a81684a30fc4d0aa9a4138
+
+  POST http://127.0.0.1:8012/trip-sessions/3f275ae8-a012-471e-94f1-d5f405bd7196/messages [200 OK, 1.18 KB, 964 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected travelers.traveler_a.preferences.interest_tags
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 69415f08feeda66ce4e39e9b
+
+  POST http://127.0.0.1:8012/trip-sessions/3f275ae8-a012-471e-94f1-d5f405bd7196/messages [200 OK, 1.16 KB, 1169 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected travelers.traveler_a.preferences.interest_tags
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 8e59139527e61a0f45bc6837
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.16 KB, 1701 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.display_name
+  Pass  Expected travelers.traveler_b.display_name
+  Pass  Expected travelers.traveler_a.origin_id
+  Pass  Expected travelers.traveler_b.origin_id
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Expected travelers.traveler_a.max_travel_time_hours
+  Pass  Expected travelers.traveler_b.max_travel_time_hours
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root 8c9adeaad986c9dbf97ba5be
+
+  POST http://127.0.0.1:8012/trip-sessions/c8233f12-c6b7-41c8-bd09-5757e050ef66/messages [200 OK, 1.27 KB, 901 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Clarify ambiguous ownership
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 99c306ae7088bc22d43c6c6c
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.16 KB, 1686 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.display_name
+  Pass  Expected travelers.traveler_b.display_name
+  Pass  Expected travelers.traveler_a.origin_id
+  Pass  Expected travelers.traveler_b.origin_id
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Expected travelers.traveler_a.max_travel_time_hours
+  Pass  Expected travelers.traveler_b.max_travel_time_hours
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root 5d823d0d7adc0cf3cd0c21e0
+
+  POST http://127.0.0.1:8012/trip-sessions/7459841d-75ab-4ef8-9eb3-9887c1978e61/messages [200 OK, 1.03 KB, 1122 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Clarify start_date
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 5a624adb7a1cc5edf8dc196e
+
+  POST http://127.0.0.1:8012/trip-sessions/7459841d-75ab-4ef8-9eb3-9887c1978e61/messages [200 OK, 1.03 KB, 814 ms]
+  Pass  HTTP status
+  1. Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  2. Expected start_date
+  Pass  Expected end_date
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 03fbfc2b0576c9326594e768
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.16 KB, 2.1 s]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.display_name
+  Pass  Expected travelers.traveler_b.display_name
+  Pass  Expected travelers.traveler_a.origin_id
+  Pass  Expected travelers.traveler_b.origin_id
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Expected travelers.traveler_a.max_travel_time_hours
+  Pass  Expected travelers.traveler_b.max_travel_time_hours
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root 96c3a09f35aba38e33354589
+
+  POST http://127.0.0.1:8012/trip-sessions/6acf6149-edcd-4fec-9d0b-c1fb5efc76f4/messages [200 OK, 1.15 KB, 1254 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Unsupported notice state
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 0ad7d87c55e87a83f6022890
+
+  POST http://127.0.0.1:8012/trip-sessions/6acf6149-edcd-4fec-9d0b-c1fb5efc76f4/messages [200 OK, 1.15 KB, 1451 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Unsupported notice state
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root a642c83d6fe5ca3725bd8ed6
+
+  POST http://127.0.0.1:8012/trip-sessions/6acf6149-edcd-4fec-9d0b-c1fb5efc76f4/messages [422 Unprocessable Entity, 210 B, 1 ms]
+  Pass  HTTP status
+
+Root d4258e80d603a9eec134432a
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.16 KB, 1901 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.display_name
+  Pass  Expected travelers.traveler_b.display_name
+  Pass  Expected travelers.traveler_a.origin_id
+  Pass  Expected travelers.traveler_b.origin_id
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Expected travelers.traveler_a.max_travel_time_hours
+  Pass  Expected travelers.traveler_b.max_travel_time_hours
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root bb1a061cfb26d31e4901271a
+
+  POST http://127.0.0.1:8012/trip-sessions/b809125e-2037-4d29-a8a4-3c3d69060179/messages [200 OK, 1.31 KB, 811 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Unsupported notice state
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root ea9f8b6459f4df3aa35fa915
+
+  POST http://127.0.0.1:8012/trip-sessions/b809125e-2037-4d29-a8a4-3c3d69060179/messages [200 OK, 1.24 KB, 1274 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Unsupported notice state
+  Pass  Excluded request recorded
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 09564a7bdc0465979ddb5bdb
+
+  POST http://127.0.0.1:8012/trip-sessions/b809125e-2037-4d29-a8a4-3c3d69060179/messages [200 OK, 13.43 KB, 9 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root 81ba2e67a1ba3fce9bc44bf1
+
+  POST http://127.0.0.1:8012/trip-sessions [200 OK, 1.16 KB, 2 s]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected start_date
+  Pass  Expected end_date
+  Pass  Expected travelers.traveler_a.display_name
+  Pass  Expected travelers.traveler_b.display_name
+  Pass  Expected travelers.traveler_a.origin_id
+  Pass  Expected travelers.traveler_b.origin_id
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Expected travelers.traveler_a.max_travel_time_hours
+  Pass  Expected travelers.traveler_b.max_travel_time_hours
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+Root b35c74ae705933ad12945548
+
+  POST http://127.0.0.1:8012/trip-sessions/d522ea8d-9adc-42f0-b21a-2d80a543df91/messages [200 OK, 1.15 KB, 1131 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Expected travelers.traveler_a.budget_usd
+  Pass  Expected travelers.traveler_b.budget_usd
+  Pass  Question batch limit
+  Pass  Recommendation gate
+  Pass  Unrelated draft fields preserved
+
+Root 304e402f016dd0ca3fc4d471
+
+  POST http://127.0.0.1:8012/trip-sessions/d522ea8d-9adc-42f0-b21a-2d80a543df91/messages [200 OK, 954 B, 4 ms]
+  Pass  HTTP status
+  Pass  Conversation state
+  Pass  Assistant text is present
+  Pass  Stable traveler IDs
+  Pass  Question batch limit
+  Pass  Recommendation gate
+
+------------------------------------------------------------------------
+|                         |             executed |              failed |
+--------------------------+----------------------+----------------------
+|              iterations |                    1 |                   0 |
+--------------------------+----------------------+----------------------
+|                requests |                   34 |                   0 |
+--------------------------+----------------------+----------------------
+|            test-scripts |                   34 |                   0 |
+--------------------------+----------------------+----------------------
+|      prerequest-scripts |                   12 |                   0 |
+--------------------------+----------------------+----------------------
+|              assertions |                  330 |                   2 |
+------------------------------------------------------------------------
+| total run duration: 41.2 s                                           |
+------------------------------------------------------------------------
+| total data received: 70.79 KB (approx)                               |
+------------------------------------------------------------------------
+| average response time: 1184 ms [min: 1 ms, max: 3.3 s, s.d.: 760 ms] |
+------------------------------------------------------------------------
+
+  #  failure         detail                                             
+                                                                        
+ 1.  AssertionError  Conversation state                                 
+                     expected 'collecting' to deeply equal 'review'     
+                     at assertion:1 in test-script                      
+                     inside "Supply year"                               
+                                                                        
+ 2.  AssertionError  Expected start_date                                
+                     expected '2099-06-10' to deeply equal '2099-06-11' 
+                     at assertion:4 in test-script                      
+                     inside "Supply year"                               
+

@@ -15,6 +15,7 @@ from typing import Any
 
 import httpx
 
+from travel_ai.evaluation.transports import LimitedTransport
 from travel_ai.schemas.sessions import TripRequestDraft
 from travel_ai.services import deepseek_preference_extraction as adapter
 from travel_ai.services.preference_extraction import PreferenceExtractor
@@ -216,6 +217,7 @@ def _git(*args: str) -> str:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--live", action="store_true")
+    parser.add_argument("--max-calls", type=int, default=0)
     parser.add_argument(
         "--dataset",
         type=Path,
@@ -250,6 +252,9 @@ def main() -> int:
         parser.error("--repeats must be between 1 and 10")
     dataset_bytes = args.dataset.read_bytes()
     dataset = json.loads(dataset_bytes)
+    planned = args.repeats * sum(len(s["turns"]) for s in dataset["scenarios"])
+    if args.max_calls < planned:
+        parser.error(f"--max-calls must cover the planned {planned} provider calls")
     settings = adapter.DeepSeekSettings.from_environment()
     trace = {}
 
@@ -270,6 +275,8 @@ def main() -> int:
     package = Path(adapter.__file__).parents[1]
     source_paths = [Path(adapter.__file__), *sorted((package / "schemas").glob("*.py"))]
     metadata = {
+        "mode": "live",
+        "max_live_calls": args.max_calls,
         "started_at_utc": datetime.now(UTC).isoformat(),
         "reference_date": dataset["reference_date"],
         "dataset_version": dataset["version"],
@@ -293,7 +300,10 @@ def main() -> int:
         "dependencies": {name: version(name) for name in ("httpx", "pydantic")},
         "scope": "Adapter + test-only draft merge; no HTTP API/session/UI integration",
     }
-    with httpx.Client(event_hooks={"response": [capture]}) as client:
+    transport = LimitedTransport(httpx.HTTPTransport(retries=0), args.max_calls)
+    with httpx.Client(
+        transport=transport, event_hooks={"response": [capture]}, trust_env=False
+    ) as client:
         with adapter.DeepSeekPreferenceExtractor(
             settings,
             http_client=client,
@@ -303,6 +313,7 @@ def main() -> int:
                 extractor, dataset, repeats=args.repeats, provider_trace=trace
             )
     report = {"metadata": metadata, "summary": summarize(records), "records": records}
+    metadata["live_calls"] = transport.calls
     metadata["finished_at_utc"] = datetime.now(UTC).isoformat()
     if args.compare:
         report["comparison"] = compare_reports(

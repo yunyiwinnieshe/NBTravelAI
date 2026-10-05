@@ -1,0 +1,6 @@
+{
+  "$kind": "collection",
+  "name": "03_missing_multiple",
+  "description": "Ask up to three field questions and block premature confirmation.",
+  "order": 3000
+}

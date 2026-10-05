@@ -1,0 +1,6 @@
+{
+  "$kind": "collection",
+  "name": "12_no_match",
+  "description": "A valid trip with one-dollar budgets returns no_match only after confirmation.",
+  "order": 12000
+}

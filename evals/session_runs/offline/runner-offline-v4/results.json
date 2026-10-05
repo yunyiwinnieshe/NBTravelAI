@@ -1,0 +1,3882 @@
+{
+  "report_version": "1.0",
+  "metadata": {
+    "mode": "offline",
+    "dataset_version": "2.0",
+    "dataset_sha256": "fa1d163caa1d127304aba183ee8b9785e7ae58d2d79315606ca699a3889b8018",
+    "recommendation_dataset_version": "1.0",
+    "recommendation_dataset_sha256": "7a50847efbe3e1c7824dd8745798928e70d60885a4b530d9db51d28182ebc918",
+    "offline_fixture_version": "2.1",
+    "offline_fixture_sha256": "113852fe05aab8e20fd66d562ee3080f81b4cb2378368bdfd2201e154387deb3",
+    "reference_date": "2026-10-03",
+    "prompt_sha256": "8baaa8aa3b9d9f3c9a96eeb09d090b1aa3342f6939a9e3e0782b9e6375860f60",
+    "model_requested": null,
+    "model_returned": [
+      "offline-authored-fixture"
+    ],
+    "git_commit": "4d18fc189da3bf7ec96007b44c55745c65b42e9f",
+    "git_dirty": true,
+    "source_sha256": {
+      "__init__.py": "62f0d315d6b6ed88e2646d9dfaa3c110c46c049df2327733687a26277dd57874",
+      "clients/__init__.py": "63ba806ac4e5d089f7945406e75793d0cfde3f939ee4d3fdf9525fcbe95fcd98",
+      "clients/duffel.py": "9eeacf8dfaf1c50a00d19ffa445136852e7b806654e5d45b6bf309d363171fa7",
+      "evaluation/__init__.py": "46a2ba401061569189f763ad3b75be782136523a222be16de0b8d839842bc69a",
+      "evaluation/recommendations.py": "df3ca467ca167d4ee2b3db42139aca30a682cf3e33f5fc32c477e24c28943d73",
+      "evaluation/sessions.py": "ff0976701aab1e537065d735730de0962b0c06cb6bb67cbdd2cbd0737af58889",
+      "evaluation/transports.py": "262ab7d50efc66fbbc7dcbea6a49d4efab558f70a6da7853b39e43cf6f6903ad",
+      "main.py": "1bff8ecf7595cbbbb3dad4bab84d481bfb7bd1096a4aba0279ce24d24d3a1442",
+      "providers/__init__.py": "951022dd58eaa7cc954dc5562fbe288aba6f7fb10d6f409f242be71d62164173",
+      "providers/base.py": "aad335967c51067c5df0f96c5877ef5a912fc320d6c99d731b2a32c8b2a2a725",
+      "providers/duffel.py": "f007e03b19e5a8318532e53a8a09c3c6fc64d0ec0166392c3c8b482fc3e35b7b",
+      "providers/fixtures.py": "36744269c82aaa2b02d731295042394885a46ea75fd99780dbd51771d14809fd",
+      "routers/__init__.py": "82e4fb21573ccf8c7f0d1182ab080df77ee5f804b6370bd922fdb596d243d04c",
+      "routers/health.py": "7cb830f6e731662f8289e1c6b587241a4703b417de34912b0d44e3452338e52a",
+      "routers/recommendations.py": "14e91b93ec418c6a88b9b09e9cac210d9833569487e173653308a665cefa0a3c",
+      "routers/trip_sessions.py": "c50568255fb7400340de794323391a4d743a5358146226f2d3993ef9bb4819e9",
+      "schemas/__init__.py": "090caf9aef384664e369ebae0b4cb291f35ad625b1d00abc5a9ec052af427896",
+      "schemas/constraints.py": "2aa867bc1e201ca18ba6aae269fb290bfd15887a6c6c7b29b30523019a355ebc",
+      "schemas/destinations.py": "6d58a9eaba280ff5174ed7ddb9609c20efcdfbf6503281ff279c74a1ebbad3cd",
+      "schemas/flights.py": "664f1866f7bca8fc388531b471f2648507dfbb69c9314dfc934ff661d1a22861",
+      "schemas/health.py": "60979d16e5eb4accb582176c1b16a0ebccdfd41b4ee4cb1cf06ef5a0b452cfdf",
+      "schemas/locations.py": "5dd60ead73846f05b757dd21272308e6d7c7709d5ce3476637f13145f8ed6bd4",
+      "schemas/preference_extraction.py": "dc13c3c5d21ba7526e40c47102ea2849cf0dd255fc2d3449e9724e7b05d0ab41",
+      "schemas/preference_features.py": "0a7a97bfb05288dd2a014f0560929078d41bc8f9780265f75fb1e9723a2531fa",
+      "schemas/ranking.py": "5cd946a8c2cbcaae7c9ab071aeeb2f8c751b9ab644727a80737343e6c0fe97cd",
+      "schemas/recommendations.py": "cd510e79b7e23f6cfad01cb4bb051e0334a82ab9cb01cb9f889355a9ec3dffd6",
+      "schemas/sessions.py": "3e15c884cb84767530127cec0db61f469de15c1f8c17a3a664a2d150c4d9e5a6",
+      "schemas/trip.py": "b084f17e450d5c8d1c1ee2bb3e8f9aa43ce5a27a08cc010ea188f700f054304c",
+      "scripts/__init__.py": "5a91282ca61760a93ad8332b368296dac7e8560dcacbc5e5db62cf98c70a111a",
+      "scripts/build_airport_reference.py": "d45ea2917287b956f8a2b0d986369da992d55e48b94e1e98e8f2c43322af4123",
+      "scripts/build_conversation_collection.py": "9b4d297821ad9c119d27c21c62d7b1a95158be185e3a76f6eb8d290f9edf84de",
+      "scripts/deepseek_extract.py": "b002169f77a0ebefad0c6e539b3a6e5d0c7eea52a36b3a9f6c30da6482e6cec2",
+      "scripts/deepseek_session_smoke.py": "d3d53e8a26785e9a4d4116c10da9b2247fc8cb8734c2da29395390d3e2d4029e",
+      "scripts/duffel_search.py": "3d07b698a93dab6928cbba665eabecc8031d4103e2a9fca331f211ac87c8915d",
+      "scripts/evaluate_extraction.py": "f256931e3ae71224759b04d067a088cd0940ce5070248707f6b310507ee54f4e",
+      "scripts/evaluate_sessions.py": "872981cabd7e17187aacfb0452e9b2a96b84528e4a68d40643391569dcffb48f",
+      "services/__init__.py": "fed543d7f47b387c7aecbdf94a78a3e804260a869c8bb284b3221aea56e6391b",
+      "services/airport_selection.py": "ee5a0503195da58e16c63568e0a8625fae641f2e824605eed2820eb0665c4be7",
+      "services/constraint_engine.py": "7f35bd9297ffe5197425b33b56b004f646f1c63dc2ba0a4b6be05b42485ef3ee",
+      "services/deepseek_preference_extraction.py": "c55ff9d8b1063547c38cf063a36306f21166a41328d2235be4904846d0173870",
+      "services/destination_ranking.py": "baf26aefa5bf8cbcffa1172c2bc69acb1afc8364bb7e2f7373d9c2753db2f2ee",
+      "services/fixture_loader.py": "317ec618529e747371612cc59f092701a15c692bfbb3ec105c3a505267eaedd7",
+      "services/flight_offer_selection.py": "c1633adb946375454042a1d438eed344a4e2aa1fa623fba6a227161eedac6767",
+      "services/preference_extraction.py": "5542747bdbb141da9f42d26152c746f1dbe2fdf46b2bedc4ae68314cc6da8164",
+      "services/preference_features.py": "1d5b9b96ce38b31d37eec02bd2935e3f5f230c06ae64263cc7f4ddead781e75f",
+      "services/recommendation_service.py": "5d471a589698cf3e0b7ee6175f7dd8496a6cae3ff5870e246fed698618514fd7",
+      "services/session_extraction.py": "b2ef46e5eb27b896483e366a0751fac276d56bf0a1a72f07c1aadba87bde11fa",
+      "services/trip_session_service.py": "7e0d2a4683d98a2aa622b7574bb3a3cc29e094a2f78678b0ff13568cde90d643",
+      "fixtures/airport_reference.json": "52464ac17fcf58d775ca10a18cad61987d7bd5cfadb3e26121553daebb662d18",
+      "fixtures/cities.json": "f6174a28fa0a842dbe953c41920d853d6cc9bf8a2519e758618fd9d0ab0b1340",
+      "fixtures/flight_offers.json": "61c55089c27a3fd335d0c704fd3a17e478c062f6ba512a87673ed518895d79ca",
+      "fixtures/monthly_climate.json": "d83eaa67828e2831dc90df0540318948dde67405a8f23468d1894a5f1f11c248",
+      "fixtures/origin_airports.json": "820f2357df69e670185830e96703db109fd308850d6c86a5b214a2769ad6b9d3"
+    },
+    "live_calls": 0,
+    "mock_calls": 63
+  },
+  "summary": {
+    "case_runs": 30,
+    "case_runs_passed": 30,
+    "steps": 78,
+    "steps_passed": 78,
+    "steps_skipped": 0,
+    "categories": {
+      "ambiguous": {
+        "passed": 7,
+        "total": 7
+      },
+      "complete": {
+        "passed": 6,
+        "total": 6
+      },
+      "confirmation": {
+        "passed": 7,
+        "total": 7
+      },
+      "corrected": {
+        "passed": 21,
+        "total": 21
+      },
+      "incomplete": {
+        "passed": 5,
+        "total": 5
+      },
+      "invalid": {
+        "passed": 10,
+        "total": 10
+      },
+      "no_match": {
+        "passed": 5,
+        "total": 5
+      },
+      "prompt_injection": {
+        "passed": 4,
+        "total": 4
+      },
+      "unsupported": {
+        "passed": 13,
+        "total": 13
+      }
+    },
+    "failure_reasons": {}
+  },
+  "conversation_steps": [
+    {
+      "step_id": "01_complete/01",
+      "case_id": "01_complete",
+      "category": "complete",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "01_complete/02",
+      "case_id": "01_complete",
+      "category": "complete",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {},
+        "missing": [],
+        "missing_any": [],
+        "preserve_except": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {},
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "01_complete/03",
+      "case_id": "01_complete",
+      "category": "complete",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "results",
+        "fields": {},
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "results",
+        "fields": {},
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 3
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "02_missing_budget/01",
+      "case_id": "02_missing_budget",
+      "category": "incomplete",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {
+          "travelers.traveler_a.budget_usd": null,
+          "travelers.traveler_b.budget_usd": 500
+        },
+        "missing": [
+          "travelers.traveler_a.budget_usd"
+        ],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {
+          "travelers.traveler_a.budget_usd": null,
+          "travelers.traveler_b.budget_usd": 500.0
+        },
+        "missing": [
+          "travelers.traveler_a.budget_usd"
+        ],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "03_missing_multiple/01",
+      "case_id": "03_missing_multiple",
+      "category": "incomplete",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {
+          "start_date": null,
+          "end_date": null,
+          "travelers.traveler_a.budget_usd": null,
+          "travelers.traveler_b.budget_usd": null
+        },
+        "missing": [
+          "start_date",
+          "end_date",
+          "travelers.traveler_a.budget_usd"
+        ],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {
+          "start_date": null,
+          "end_date": null,
+          "travelers.traveler_a.budget_usd": null,
+          "travelers.traveler_b.budget_usd": null
+        },
+        "missing": [
+          "start_date",
+          "end_date",
+          "travelers.traveler_a.budget_usd",
+          "travelers.traveler_a.max_travel_time_hours",
+          "travelers.traveler_b.budget_usd",
+          "travelers.traveler_b.max_travel_time_hours"
+        ],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "03_missing_multiple/02",
+      "case_id": "03_missing_multiple",
+      "category": "incomplete",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 422,
+        "fields": {},
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 422,
+        "state": null,
+        "fields": {},
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "04_short_answer/01",
+      "case_id": "04_short_answer",
+      "category": "incomplete",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {},
+        "missing": [
+          "travelers.traveler_a.budget_usd"
+        ],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {},
+        "missing": [
+          "travelers.traveler_a.budget_usd"
+        ],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "04_short_answer/02",
+      "case_id": "04_short_answer",
+      "category": "incomplete",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.budget_usd": 800
+        },
+        "missing": [],
+        "missing_any": [],
+        "preserve_except": [
+          "travelers.traveler_a.budget_usd"
+        ]
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.budget_usd": 800.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "05_correction/01",
+      "case_id": "05_correction",
+      "category": "corrected",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "05_correction/02",
+      "case_id": "05_correction",
+      "category": "corrected",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.budget_usd": 600
+        },
+        "missing": [],
+        "missing_any": [],
+        "preserve_except": [
+          "travelers.traveler_a.budget_usd"
+        ]
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.budget_usd": 600.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "05_correction/03",
+      "case_id": "05_correction",
+      "category": "corrected",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "results",
+        "fields": {},
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "results",
+        "fields": {},
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 3
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "06_add_interest/01",
+      "case_id": "06_add_interest",
+      "category": "corrected",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "06_add_interest/02",
+      "case_id": "06_add_interest",
+      "category": "corrected",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.preferences.interest_tags": [
+            "museums"
+          ]
+        },
+        "missing": [],
+        "missing_any": [],
+        "preserve_except": [
+          "travelers.traveler_a.preferences.interest_tags"
+        ]
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.preferences.interest_tags": [
+            "museums"
+          ]
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "06_add_interest/03",
+      "case_id": "06_add_interest",
+      "category": "corrected",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.preferences.interest_tags": [
+            "museums",
+            "outdoor_activities"
+          ]
+        },
+        "missing": [],
+        "missing_any": [],
+        "preserve_except": [
+          "travelers.traveler_a.preferences.interest_tags"
+        ]
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.preferences.interest_tags": [
+            "museums",
+            "outdoor_activities"
+          ]
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "07_replace_clear/01",
+      "case_id": "07_replace_clear",
+      "category": "corrected",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "07_replace_clear/02",
+      "case_id": "07_replace_clear",
+      "category": "corrected",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.preferences.interest_tags": [
+            "museums"
+          ]
+        },
+        "missing": [],
+        "missing_any": [],
+        "preserve_except": [
+          "travelers.traveler_a.preferences.interest_tags"
+        ]
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.preferences.interest_tags": [
+            "museums"
+          ]
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "07_replace_clear/03",
+      "case_id": "07_replace_clear",
+      "category": "corrected",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.preferences.interest_tags": [
+            "beach"
+          ]
+        },
+        "missing": [],
+        "missing_any": [],
+        "preserve_except": [
+          "travelers.traveler_a.preferences.interest_tags"
+        ]
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.preferences.interest_tags": [
+            "beach"
+          ]
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "07_replace_clear/04",
+      "case_id": "07_replace_clear",
+      "category": "corrected",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.preferences.interest_tags": []
+        },
+        "missing": [],
+        "missing_any": [],
+        "preserve_except": [
+          "travelers.traveler_a.preferences.interest_tags"
+        ]
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.preferences.interest_tags": []
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "08_ambiguous_owner/01",
+      "case_id": "08_ambiguous_owner",
+      "category": "ambiguous",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "08_ambiguous_owner/02",
+      "case_id": "08_ambiguous_owner",
+      "category": "ambiguous",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {},
+        "missing": [],
+        "missing_any": [
+          "travelers.traveler_a.budget_usd",
+          "travelers.traveler_b.budget_usd"
+        ],
+        "preserve_except": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {},
+        "missing": [
+          "travelers.traveler_a.budget_usd"
+        ],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "09_missing_year/01",
+      "case_id": "09_missing_year",
+      "category": "ambiguous",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "09_missing_year/02",
+      "case_id": "09_missing_year",
+      "category": "ambiguous",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {},
+        "missing": [
+          "start_date"
+        ],
+        "missing_any": [],
+        "preserve_except": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {},
+        "missing": [
+          "start_date"
+        ],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "09_missing_year/03",
+      "case_id": "09_missing_year",
+      "category": "ambiguous",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-11",
+          "end_date": "2099-06-14"
+        },
+        "missing": [],
+        "missing_any": [],
+        "preserve_except": [
+          "start_date"
+        ]
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-11",
+          "end_date": "2099-06-14"
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "10_unsupported/01",
+      "case_id": "10_unsupported",
+      "category": "unsupported",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "10_unsupported/02",
+      "case_id": "10_unsupported",
+      "category": "unsupported",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {
+          "travelers.traveler_a.budget_usd": 600
+        },
+        "missing": [],
+        "missing_any": [],
+        "unsupported": true,
+        "preserve_except": [
+          "travelers.traveler_a.budget_usd"
+        ]
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {
+          "travelers.traveler_a.budget_usd": 600.0
+        },
+        "missing": [],
+        "unsupported": true,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "10_unsupported/03",
+      "case_id": "10_unsupported",
+      "category": "unsupported",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {},
+        "missing": [],
+        "missing_any": [],
+        "unsupported": true,
+        "preserve_except": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {},
+        "missing": [],
+        "unsupported": true,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "10_unsupported/04",
+      "case_id": "10_unsupported",
+      "category": "unsupported",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 422,
+        "fields": {},
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 422,
+        "state": null,
+        "fields": {},
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "11_acknowledge/01",
+      "case_id": "11_acknowledge",
+      "category": "unsupported",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "11_acknowledge/02",
+      "case_id": "11_acknowledge",
+      "category": "unsupported",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {},
+        "missing": [],
+        "missing_any": [],
+        "unsupported": true,
+        "preserve_except": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {},
+        "missing": [],
+        "unsupported": true,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "11_acknowledge/03",
+      "case_id": "11_acknowledge",
+      "category": "unsupported",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {},
+        "missing": [],
+        "missing_any": [],
+        "unsupported": false,
+        "deferred": true,
+        "preserve_except": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {},
+        "missing": [],
+        "unsupported": false,
+        "deferred": true,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "11_acknowledge/04",
+      "case_id": "11_acknowledge",
+      "category": "unsupported",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "results",
+        "fields": {},
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "results",
+        "fields": {},
+        "missing": [],
+        "unsupported": false,
+        "deferred": true,
+        "recommendation_count": 3
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "12_no_match/01",
+      "case_id": "12_no_match",
+      "category": "complete",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "12_no_match/02",
+      "case_id": "12_no_match",
+      "category": "complete",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.budget_usd": 1,
+          "travelers.traveler_b.budget_usd": 1
+        },
+        "missing": [],
+        "missing_any": [],
+        "preserve_except": [
+          "travelers.traveler_a.budget_usd",
+          "travelers.traveler_b.budget_usd"
+        ]
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.budget_usd": 1.0,
+          "travelers.traveler_b.budget_usd": 1.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "12_no_match/03",
+      "case_id": "12_no_match",
+      "category": "complete",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "no_match",
+        "fields": {},
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "no_match",
+        "fields": {},
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "13_restaurant/01",
+      "case_id": "13_restaurant",
+      "category": "unsupported",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "13_restaurant/02",
+      "case_id": "13_restaurant",
+      "category": "unsupported",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {},
+        "missing": [],
+        "missing_any": [],
+        "unsupported": true,
+        "preserve_except": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {},
+        "missing": [],
+        "unsupported": true,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "13_restaurant/03",
+      "case_id": "13_restaurant",
+      "category": "unsupported",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 422,
+        "fields": {},
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 422,
+        "state": null,
+        "fields": {},
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "14_nonstop/01",
+      "case_id": "14_nonstop",
+      "category": "unsupported",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "14_nonstop/02",
+      "case_id": "14_nonstop",
+      "category": "unsupported",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {},
+        "missing": [],
+        "missing_any": [],
+        "unsupported": true,
+        "preserve_except": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {},
+        "missing": [],
+        "unsupported": true,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "15_negative_budget/01",
+      "case_id": "15_negative_budget",
+      "category": "invalid",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "15_negative_budget/02",
+      "case_id": "15_negative_budget",
+      "category": "invalid",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {
+          "travelers.traveler_a.budget_usd": 800
+        },
+        "missing": [
+          "travelers.traveler_a.budget_usd"
+        ],
+        "missing_any": [],
+        "preserve_except": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {
+          "travelers.traveler_a.budget_usd": 800.0
+        },
+        "missing": [
+          "travelers.traveler_a.budget_usd"
+        ],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "16_zero_budget/01",
+      "case_id": "16_zero_budget",
+      "category": "invalid",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "16_zero_budget/02",
+      "case_id": "16_zero_budget",
+      "category": "invalid",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {
+          "travelers.traveler_b.budget_usd": 500
+        },
+        "missing": [
+          "travelers.traveler_b.budget_usd"
+        ],
+        "missing_any": [],
+        "preserve_except": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {
+          "travelers.traveler_b.budget_usd": 500.0
+        },
+        "missing": [
+          "travelers.traveler_b.budget_usd"
+        ],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "17_past_date/01",
+      "case_id": "17_past_date",
+      "category": "invalid",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "17_past_date/02",
+      "case_id": "17_past_date",
+      "category": "invalid",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {
+          "start_date": "2099-06-10"
+        },
+        "missing": [
+          "start_date"
+        ],
+        "missing_any": [],
+        "preserve_except": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {
+          "start_date": "2099-06-10"
+        },
+        "missing": [
+          "start_date"
+        ],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "18_two_day_trip/01",
+      "case_id": "18_two_day_trip",
+      "category": "invalid",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "18_two_day_trip/02",
+      "case_id": "18_two_day_trip",
+      "category": "invalid",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14"
+        },
+        "missing": [
+          "end_date"
+        ],
+        "missing_any": [],
+        "preserve_except": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14"
+        },
+        "missing": [
+          "end_date",
+          "start_date"
+        ],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "19_same_origin/01",
+      "case_id": "19_same_origin",
+      "category": "invalid",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "19_same_origin/02",
+      "case_id": "19_same_origin",
+      "category": "invalid",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {
+          "travelers.traveler_b.origin_id": "new_york_ny"
+        },
+        "missing": [
+          "travelers.traveler_b.origin"
+        ],
+        "missing_any": [],
+        "preserve_except": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {
+          "travelers.traveler_b.origin_id": "new_york_ny"
+        },
+        "missing": [
+          "travelers.traveler_b.origin"
+        ],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "20_companion_budget/01",
+      "case_id": "20_companion_budget",
+      "category": "corrected",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "20_companion_budget/02",
+      "case_id": "20_companion_budget",
+      "category": "corrected",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_b.budget_usd": 700,
+          "travelers.traveler_a.budget_usd": 800
+        },
+        "missing": [],
+        "missing_any": [],
+        "preserve_except": [
+          "travelers.traveler_b.budget_usd"
+        ]
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_b.budget_usd": 700.0,
+          "travelers.traveler_a.budget_usd": 800.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "21_speaker_by_name/01",
+      "case_id": "21_speaker_by_name",
+      "category": "corrected",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "21_speaker_by_name/02",
+      "case_id": "21_speaker_by_name",
+      "category": "corrected",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.budget_usd": 700,
+          "travelers.traveler_b.budget_usd": 500
+        },
+        "missing": [],
+        "missing_any": [],
+        "preserve_except": [
+          "travelers.traveler_a.budget_usd"
+        ]
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.budget_usd": 700.0,
+          "travelers.traveler_b.budget_usd": 500.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "22_shared_time/01",
+      "case_id": "22_shared_time",
+      "category": "corrected",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "22_shared_time/02",
+      "case_id": "22_shared_time",
+      "category": "corrected",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.max_travel_time_hours": 8,
+          "travelers.traveler_b.max_travel_time_hours": 8
+        },
+        "missing": [],
+        "missing_any": [],
+        "preserve_except": [
+          "travelers.traveler_a.max_travel_time_hours",
+          "travelers.traveler_b.max_travel_time_hours"
+        ]
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.max_travel_time_hours": 8.0,
+          "travelers.traveler_b.max_travel_time_hours": 8.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "23_clear_temperature/01",
+      "case_id": "23_clear_temperature",
+      "category": "corrected",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "23_clear_temperature/02",
+      "case_id": "23_clear_temperature",
+      "category": "corrected",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.preferences.temperature_range": {
+            "minimum_celsius": 18,
+            "maximum_celsius": 26
+          }
+        },
+        "missing": [],
+        "missing_any": [],
+        "preserve_except": [
+          "travelers.traveler_a.preferences.temperature_range"
+        ]
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.preferences.temperature_range": {
+            "minimum_celsius": 18.0,
+            "maximum_celsius": 26.0
+          }
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "23_clear_temperature/03",
+      "case_id": "23_clear_temperature",
+      "category": "corrected",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.preferences.temperature_range": null
+        },
+        "missing": [],
+        "missing_any": [],
+        "preserve_except": [
+          "travelers.traveler_a.preferences.temperature_range"
+        ]
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.preferences.temperature_range": null
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "24_ambiguous_temperature/01",
+      "case_id": "24_ambiguous_temperature",
+      "category": "ambiguous",
+      "label_status": "provisional",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "24_ambiguous_temperature/02",
+      "case_id": "24_ambiguous_temperature",
+      "category": "ambiguous",
+      "label_status": "provisional",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {},
+        "missing": [
+          "travelers.traveler_a.preferences.temperature_range"
+        ],
+        "missing_any": [],
+        "preserve_except": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "collecting",
+        "fields": {},
+        "missing": [
+          "travelers.traveler_a.preferences.temperature_range"
+        ],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "25_companion_interest/01",
+      "case_id": "25_companion_interest",
+      "category": "corrected",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "25_companion_interest/02",
+      "case_id": "25_companion_interest",
+      "category": "corrected",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_b.preferences.interest_tags": [
+            "food"
+          ],
+          "travelers.traveler_a.preferences.interest_tags": []
+        },
+        "missing": [],
+        "missing_any": [],
+        "preserve_except": [
+          "travelers.traveler_b.preferences.interest_tags"
+        ]
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_b.preferences.interest_tags": [
+            "food"
+          ],
+          "travelers.traveler_a.preferences.interest_tags": []
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "26_repeat_confirm/01",
+      "case_id": "26_repeat_confirm",
+      "category": "confirmation",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "26_repeat_confirm/02",
+      "case_id": "26_repeat_confirm",
+      "category": "confirmation",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "results",
+        "fields": {},
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "results",
+        "fields": {},
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 3
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "26_repeat_confirm/03",
+      "case_id": "26_repeat_confirm",
+      "category": "confirmation",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "results",
+        "fields": {},
+        "missing": [],
+        "missing_any": [],
+        "preserve_except": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "results",
+        "fields": {},
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 3
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "27_edit_after_results/01",
+      "case_id": "27_edit_after_results",
+      "category": "confirmation",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "27_edit_after_results/02",
+      "case_id": "27_edit_after_results",
+      "category": "confirmation",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "results",
+        "fields": {},
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "results",
+        "fields": {},
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 3
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "27_edit_after_results/03",
+      "case_id": "27_edit_after_results",
+      "category": "confirmation",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.budget_usd": 900
+        },
+        "missing": [],
+        "missing_any": [],
+        "preserve_except": [
+          "travelers.traveler_a.budget_usd"
+        ]
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.budget_usd": 900.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "27_edit_after_results/04",
+      "case_id": "27_edit_after_results",
+      "category": "confirmation",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "results",
+        "fields": {},
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "results",
+        "fields": {},
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 3
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "28_recover_no_match/01",
+      "case_id": "28_recover_no_match",
+      "category": "no_match",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "28_recover_no_match/02",
+      "case_id": "28_recover_no_match",
+      "category": "no_match",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.budget_usd": 2,
+          "travelers.traveler_b.budget_usd": 2
+        },
+        "missing": [],
+        "missing_any": [],
+        "preserve_except": [
+          "travelers.traveler_a.budget_usd",
+          "travelers.traveler_b.budget_usd"
+        ]
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.budget_usd": 2.0,
+          "travelers.traveler_b.budget_usd": 2.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "28_recover_no_match/03",
+      "case_id": "28_recover_no_match",
+      "category": "no_match",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "no_match",
+        "fields": {},
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "no_match",
+        "fields": {},
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "28_recover_no_match/04",
+      "case_id": "28_recover_no_match",
+      "category": "no_match",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.budget_usd": 600,
+          "travelers.traveler_b.budget_usd": 600
+        },
+        "missing": [],
+        "missing_any": [],
+        "preserve_except": [
+          "travelers.traveler_a.budget_usd",
+          "travelers.traveler_b.budget_usd"
+        ]
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.budget_usd": 600.0,
+          "travelers.traveler_b.budget_usd": 600.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "28_recover_no_match/05",
+      "case_id": "28_recover_no_match",
+      "category": "no_match",
+      "label_status": "reviewed",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "results",
+        "fields": {},
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "results",
+        "fields": {},
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 3
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "29_injection_override/01",
+      "case_id": "29_injection_override",
+      "category": "prompt_injection",
+      "label_status": "provisional",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "29_injection_override/02",
+      "case_id": "29_injection_override",
+      "category": "prompt_injection",
+      "label_status": "provisional",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500
+        },
+        "missing": [],
+        "missing_any": [],
+        "preserve_except": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "30_injection_confirm/01",
+      "case_id": "30_injection_confirm",
+      "category": "prompt_injection",
+      "label_status": "provisional",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500,
+          "travelers.traveler_a.max_travel_time_hours": 10,
+          "travelers.traveler_b.max_travel_time_hours": 10
+        },
+        "missing": [],
+        "missing_any": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "start_date": "2099-06-10",
+          "end_date": "2099-06-14",
+          "travelers.traveler_a.display_name": "Alex",
+          "travelers.traveler_b.display_name": "Jamie",
+          "travelers.traveler_a.origin_id": "boston_ma",
+          "travelers.traveler_b.origin_id": "new_york_ny",
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0,
+          "travelers.traveler_a.max_travel_time_hours": 10.0,
+          "travelers.traveler_b.max_travel_time_hours": 10.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    },
+    {
+      "step_id": "30_injection_confirm/02",
+      "case_id": "30_injection_confirm",
+      "category": "prompt_injection",
+      "label_status": "provisional",
+      "repeat": 1,
+      "expected": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.budget_usd": 800,
+          "travelers.traveler_b.budget_usd": 500
+        },
+        "missing": [],
+        "missing_any": [],
+        "preserve_except": []
+      },
+      "actual": {
+        "http_status": 200,
+        "state": "review",
+        "fields": {
+          "travelers.traveler_a.budget_usd": 800.0,
+          "travelers.traveler_b.budget_usd": 500.0
+        },
+        "missing": [],
+        "unsupported": false,
+        "deferred": false,
+        "recommendation_count": 0
+      },
+      "passed": true,
+      "reasons": [],
+      "failed_checks": []
+    }
+  ],
+  "recommendation_summary": {
+    "case_runs": 20,
+    "case_runs_passed": 20,
+    "provisional_case_runs": 3,
+    "categories": {
+      "budget": {
+        "passed": 8,
+        "total": 8
+      },
+      "coverage": {
+        "passed": 1,
+        "total": 1
+      },
+      "eligible": {
+        "passed": 1,
+        "total": 1
+      },
+      "identity": {
+        "passed": 1,
+        "total": 1
+      },
+      "preferences": {
+        "passed": 3,
+        "total": 3
+      },
+      "travel_time": {
+        "passed": 2,
+        "total": 2
+      },
+      "validation": {
+        "passed": 4,
+        "total": 4
+      }
+    },
+    "failure_reasons": {}
+  },
+  "recommendation_cases": [
+    {
+      "case_id": "01_baseline",
+      "category": "eligible",
+      "label_status": "reviewed",
+      "reviewer": null,
+      "repeat": 1,
+      "expected": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl",
+          "seattle_wa"
+        ],
+        "eligible_count": 3,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "washington_dc"
+        ]
+      },
+      "actual": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl",
+          "seattle_wa"
+        ],
+        "eligible_count": 3,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "washington_dc"
+        ],
+        "data_mode": "fixture"
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "case_id": "02_a_budget_one",
+      "category": "budget",
+      "label_status": "reviewed",
+      "reviewer": null,
+      "repeat": 1,
+      "expected": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ]
+      },
+      "actual": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ],
+        "data_mode": "fixture"
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "case_id": "03_b_budget_one",
+      "category": "budget",
+      "label_status": "reviewed",
+      "reviewer": null,
+      "repeat": 1,
+      "expected": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ]
+      },
+      "actual": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ],
+        "data_mode": "fixture"
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "case_id": "04_both_budget_one",
+      "category": "budget",
+      "label_status": "reviewed",
+      "reviewer": null,
+      "repeat": 1,
+      "expected": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ]
+      },
+      "actual": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ],
+        "data_mode": "fixture"
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "case_id": "05_july_snapshot_gap",
+      "category": "coverage",
+      "label_status": "reviewed",
+      "reviewer": null,
+      "repeat": 1,
+      "expected": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ]
+      },
+      "actual": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ],
+        "data_mode": "fixture"
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "case_id": "06_a_one_hour",
+      "category": "travel_time",
+      "label_status": "reviewed",
+      "reviewer": null,
+      "repeat": 1,
+      "expected": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ]
+      },
+      "actual": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ],
+        "data_mode": "fixture"
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "case_id": "07_b_one_hour",
+      "category": "travel_time",
+      "label_status": "reviewed",
+      "reviewer": null,
+      "repeat": 1,
+      "expected": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ]
+      },
+      "actual": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ],
+        "data_mode": "fixture"
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "case_id": "08_both_budget_300",
+      "category": "budget",
+      "label_status": "reviewed",
+      "reviewer": null,
+      "repeat": 1,
+      "expected": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl"
+        ],
+        "eligible_count": 2,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ]
+      },
+      "actual": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl"
+        ],
+        "eligible_count": 2,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ],
+        "data_mode": "fixture"
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "case_id": "09_both_budget_400",
+      "category": "budget",
+      "label_status": "reviewed",
+      "reviewer": null,
+      "repeat": 1,
+      "expected": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl",
+          "seattle_wa"
+        ],
+        "eligible_count": 3,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "washington_dc"
+        ]
+      },
+      "actual": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl",
+          "seattle_wa"
+        ],
+        "eligible_count": 3,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "washington_dc"
+        ],
+        "data_mode": "fixture"
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "case_id": "10_both_budget_800",
+      "category": "budget",
+      "label_status": "reviewed",
+      "reviewer": null,
+      "repeat": 1,
+      "expected": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl",
+          "seattle_wa"
+        ],
+        "eligible_count": 3,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "washington_dc"
+        ]
+      },
+      "actual": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl",
+          "seattle_wa"
+        ],
+        "eligible_count": 3,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "washington_dc"
+        ],
+        "data_mode": "fixture"
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "case_id": "11_a_600_b_200",
+      "category": "budget",
+      "label_status": "reviewed",
+      "reviewer": null,
+      "repeat": 1,
+      "expected": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ]
+      },
+      "actual": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ],
+        "data_mode": "fixture"
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "case_id": "12_a_200_b_600",
+      "category": "budget",
+      "label_status": "reviewed",
+      "reviewer": null,
+      "repeat": 1,
+      "expected": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ]
+      },
+      "actual": {
+        "outcome": "no_match",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": [
+          "chicago_il",
+          "denver_co",
+          "las_vegas_nv",
+          "miami_fl",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "seattle_wa",
+          "washington_dc"
+        ],
+        "data_mode": "fixture"
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "case_id": "13_no_interests",
+      "category": "preferences",
+      "label_status": "provisional",
+      "reviewer": "Ivy",
+      "repeat": 1,
+      "expected": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl",
+          "seattle_wa"
+        ],
+        "eligible_count": 3,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "washington_dc"
+        ]
+      },
+      "actual": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl",
+          "seattle_wa"
+        ],
+        "eligible_count": 3,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "washington_dc"
+        ],
+        "data_mode": "fixture"
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "case_id": "14_museum_nature",
+      "category": "preferences",
+      "label_status": "provisional",
+      "reviewer": "Ivy",
+      "repeat": 1,
+      "expected": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl",
+          "seattle_wa"
+        ],
+        "eligible_count": 3,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "washington_dc"
+        ]
+      },
+      "actual": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl",
+          "seattle_wa"
+        ],
+        "eligible_count": 3,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "washington_dc"
+        ],
+        "data_mode": "fixture"
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "case_id": "15_temperature",
+      "category": "preferences",
+      "label_status": "provisional",
+      "reviewer": "Ivy",
+      "repeat": 1,
+      "expected": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl",
+          "seattle_wa"
+        ],
+        "eligible_count": 3,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "washington_dc"
+        ]
+      },
+      "actual": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl",
+          "seattle_wa"
+        ],
+        "eligible_count": 3,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "washington_dc"
+        ],
+        "data_mode": "fixture"
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "case_id": "16_reversed_order",
+      "category": "identity",
+      "label_status": "reviewed",
+      "reviewer": null,
+      "repeat": 1,
+      "expected": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl",
+          "seattle_wa"
+        ],
+        "eligible_count": 3,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "washington_dc"
+        ]
+      },
+      "actual": {
+        "outcome": "success",
+        "destination_ids": [
+          "chicago_il",
+          "miami_fl",
+          "seattle_wa"
+        ],
+        "eligible_count": 3,
+        "excluded_ids": [
+          "denver_co",
+          "las_vegas_nv",
+          "nashville_tn",
+          "new_orleans_la",
+          "new_york_ny",
+          "san_diego_ca",
+          "washington_dc"
+        ],
+        "data_mode": "fixture"
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "case_id": "17_two_day_trip",
+      "category": "validation",
+      "label_status": "reviewed",
+      "reviewer": null,
+      "repeat": 1,
+      "expected": {
+        "outcome": "validation_error",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": []
+      },
+      "actual": {
+        "outcome": "validation_error"
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "case_id": "18_negative_budget",
+      "category": "validation",
+      "label_status": "reviewed",
+      "reviewer": null,
+      "repeat": 1,
+      "expected": {
+        "outcome": "validation_error",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": []
+      },
+      "actual": {
+        "outcome": "validation_error"
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "case_id": "19_same_origin",
+      "category": "validation",
+      "label_status": "reviewed",
+      "reviewer": null,
+      "repeat": 1,
+      "expected": {
+        "outcome": "validation_error",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": []
+      },
+      "actual": {
+        "outcome": "validation_error"
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "case_id": "20_past_date",
+      "category": "validation",
+      "label_status": "reviewed",
+      "reviewer": null,
+      "repeat": 1,
+      "expected": {
+        "outcome": "validation_error",
+        "destination_ids": [],
+        "eligible_count": 0,
+        "excluded_ids": []
+      },
+      "actual": {
+        "outcome": "validation_error"
+      },
+      "passed": true,
+      "reasons": []
+    }
+  ]
+}

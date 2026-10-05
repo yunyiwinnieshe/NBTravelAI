@@ -1,0 +1,289 @@
+{
+  "cases_passed": 11,
+  "cases_total": 12,
+  "requests": 34,
+  "assertions_passed": 328,
+  "assertions_failed": 2,
+  "exit_code": 1,
+  "cases": [
+    {
+      "id": "01_complete",
+      "passed": true,
+      "steps": [
+        {
+          "name": "Create session",
+          "passed": true,
+          "assertions_passed": 16,
+          "failed_assertions": []
+        },
+        {
+          "name": "Text is not confirmation",
+          "passed": true,
+          "assertions_passed": 7,
+          "failed_assertions": []
+        },
+        {
+          "name": "Confirm reviewed trip",
+          "passed": true,
+          "assertions_passed": 6,
+          "failed_assertions": []
+        }
+      ]
+    },
+    {
+      "id": "02_missing_budget",
+      "passed": true,
+      "steps": [
+        {
+          "name": "Create session",
+          "passed": true,
+          "assertions_passed": 9,
+          "failed_assertions": []
+        }
+      ]
+    },
+    {
+      "id": "03_missing_multiple",
+      "passed": true,
+      "steps": [
+        {
+          "name": "Create session",
+          "passed": true,
+          "assertions_passed": 13,
+          "failed_assertions": []
+        },
+        {
+          "name": "Reject premature confirmation",
+          "passed": true,
+          "assertions_passed": 1,
+          "failed_assertions": []
+        }
+      ]
+    },
+    {
+      "id": "04_short_answer",
+      "passed": true,
+      "steps": [
+        {
+          "name": "Create session",
+          "passed": true,
+          "assertions_passed": 7,
+          "failed_assertions": []
+        },
+        {
+          "name": "Answer pending budget",
+          "passed": true,
+          "assertions_passed": 8,
+          "failed_assertions": []
+        }
+      ]
+    },
+    {
+      "id": "05_correction",
+      "passed": true,
+      "steps": [
+        {
+          "name": "Create session",
+          "passed": true,
+          "assertions_passed": 16,
+          "failed_assertions": []
+        },
+        {
+          "name": "Correct Alex budget",
+          "passed": true,
+          "assertions_passed": 8,
+          "failed_assertions": []
+        },
+        {
+          "name": "Confirm reviewed trip",
+          "passed": true,
+          "assertions_passed": 6,
+          "failed_assertions": []
+        }
+      ]
+    },
+    {
+      "id": "06_add_interest",
+      "passed": true,
+      "steps": [
+        {
+          "name": "Create session",
+          "passed": true,
+          "assertions_passed": 16,
+          "failed_assertions": []
+        },
+        {
+          "name": "Set museums",
+          "passed": true,
+          "assertions_passed": 8,
+          "failed_assertions": []
+        },
+        {
+          "name": "Add hiking",
+          "passed": true,
+          "assertions_passed": 8,
+          "failed_assertions": []
+        }
+      ]
+    },
+    {
+      "id": "07_replace_clear",
+      "passed": true,
+      "steps": [
+        {
+          "name": "Create session",
+          "passed": true,
+          "assertions_passed": 16,
+          "failed_assertions": []
+        },
+        {
+          "name": "Set museums",
+          "passed": true,
+          "assertions_passed": 8,
+          "failed_assertions": []
+        },
+        {
+          "name": "Replace interests",
+          "passed": true,
+          "assertions_passed": 8,
+          "failed_assertions": []
+        },
+        {
+          "name": "Clear interests",
+          "passed": true,
+          "assertions_passed": 8,
+          "failed_assertions": []
+        }
+      ]
+    },
+    {
+      "id": "08_ambiguous_owner",
+      "passed": true,
+      "steps": [
+        {
+          "name": "Create session",
+          "passed": true,
+          "assertions_passed": 16,
+          "failed_assertions": []
+        },
+        {
+          "name": "Ambiguous budget",
+          "passed": true,
+          "assertions_passed": 8,
+          "failed_assertions": []
+        }
+      ]
+    },
+    {
+      "id": "09_missing_year",
+      "passed": false,
+      "steps": [
+        {
+          "name": "Create session",
+          "passed": true,
+          "assertions_passed": 16,
+          "failed_assertions": []
+        },
+        {
+          "name": "Date without year",
+          "passed": true,
+          "assertions_passed": 8,
+          "failed_assertions": []
+        },
+        {
+          "name": "Supply year",
+          "passed": false,
+          "assertions_passed": 7,
+          "failed_assertions": [
+            "Conversation state",
+            "Expected start_date"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "10_unsupported",
+      "passed": true,
+      "steps": [
+        {
+          "name": "Create session",
+          "passed": true,
+          "assertions_passed": 16,
+          "failed_assertions": []
+        },
+        {
+          "name": "Budget and hotel",
+          "passed": true,
+          "assertions_passed": 9,
+          "failed_assertions": []
+        },
+        {
+          "name": "Unrelated confirmation of origin",
+          "passed": true,
+          "assertions_passed": 8,
+          "failed_assertions": []
+        },
+        {
+          "name": "Reject unresolved confirmation",
+          "passed": true,
+          "assertions_passed": 1,
+          "failed_assertions": []
+        }
+      ]
+    },
+    {
+      "id": "11_acknowledge",
+      "passed": true,
+      "steps": [
+        {
+          "name": "Create session",
+          "passed": true,
+          "assertions_passed": 16,
+          "failed_assertions": []
+        },
+        {
+          "name": "Ask for hotel",
+          "passed": true,
+          "assertions_passed": 8,
+          "failed_assertions": []
+        },
+        {
+          "name": "Agree to exclude hotel",
+          "passed": true,
+          "assertions_passed": 9,
+          "failed_assertions": []
+        },
+        {
+          "name": "Confirm reviewed trip",
+          "passed": true,
+          "assertions_passed": 6,
+          "failed_assertions": []
+        }
+      ]
+    },
+    {
+      "id": "12_no_match",
+      "passed": true,
+      "steps": [
+        {
+          "name": "Create session",
+          "passed": true,
+          "assertions_passed": 16,
+          "failed_assertions": []
+        },
+        {
+          "name": "Lower both budgets",
+          "passed": true,
+          "assertions_passed": 9,
+          "failed_assertions": []
+        },
+        {
+          "name": "Confirm reviewed trip",
+          "passed": true,
+          "assertions_passed": 6,
+          "failed_assertions": []
+        }
+      ]
+    }
+  ]
+}

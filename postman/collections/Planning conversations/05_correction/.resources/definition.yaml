@@ -1,0 +1,6 @@
+{
+  "$kind": "collection",
+  "name": "05_correction",
+  "description": "Change only Alex budget and preserve unrelated fields; confirmation is still required.",
+  "order": 5000
+}

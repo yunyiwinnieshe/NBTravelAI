@@ -1,5 +1,6 @@
 """Transactional conversational planning sessions with configured extraction."""
 
+import re
 from dataclasses import dataclass, field, replace
 from datetime import date
 from decimal import Decimal, InvalidOperation
@@ -35,6 +36,28 @@ class TripSessionNotReadyError(ValueError):
 
 class FixtureOriginResolutionError(ValueError):
     """A fixture conversation named an origin outside the supported mapping."""
+
+
+def is_non_trip_control_message(message: str) -> bool:
+    """Recognize explicit, control-only messages before sending them to a model.
+
+    This is a narrow backstop, not a general prompt-injection classifier. Ordinary
+    corrections such as "ignore my previous budget" still reach extraction.
+    """
+    role_spoof = re.match(r"^\s*(?:system|developer|assistant)\s*:", message, re.I)
+    control_verb = re.search(
+        r"\b(?:call|confirm|reveal|override|ignore)\b", message, re.I
+    )
+    trip_detail = re.search(
+        r"\b(?:budget|airfare|travel time|departure|depart|return date|origin|"
+        r"flight|hotel|temperature|interest|beach|museum)\b",
+        message,
+        re.I,
+    )
+    explicit_override = re.match(
+        r"^\s*ignore all previous instructions\b", message, re.I
+    ) and re.search(r"\b(?:system override|not my trip request)\b", message, re.I)
+    return bool((role_spoof and control_verb and not trip_detail) or explicit_override)
 
 
 @dataclass
@@ -125,6 +148,18 @@ class TripSessionService:
         """Apply one extractor result to the session's saved draft."""
         session = self._get_session(session_id)
         with session.lock:
+            if is_non_trip_control_message(message):
+                response = (
+                    session.confirmed_result.model_copy(deep=True)
+                    if session.confirmed_result is not None
+                    else self._response(session_id, session)
+                )
+                response.assistant_message = (
+                    "I can't follow instructions to change system behavior or reveal "
+                    "credentials. Your saved trip details are unchanged.\n"
+                    + response.assistant_message
+                )
+                return response
             context = ExtractionContext(
                 pending_questions=self._pending_questions(session),
                 unsupported_requests=list(session.unsupported.values()),

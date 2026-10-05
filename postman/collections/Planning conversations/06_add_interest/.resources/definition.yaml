@@ -1,0 +1,6 @@
+{
+  "$kind": "collection",
+  "name": "06_add_interest",
+  "description": "Adding hiking preserves the existing museums interest.",
+  "order": 6000
+}

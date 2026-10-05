@@ -1,0 +1,22 @@
+{
+  "git_commit": "7a229117d7451052e80472a2de44f0d4c951e75b",
+  "implementation_worktree_changes": false,
+  "evaluation_files_uncommitted": true,
+  "postman_cli": "1.69.0",
+  "provider": "deepseek",
+  "model": "deepseek-flash",
+  "provider_io_timeout_seconds": 20,
+  "total_timeout_seconds": 30,
+  "max_retries": 1,
+  "recommendations": "deterministic fixture",
+  "case_count": 12,
+  "repetitions": 1,
+  "sha256": {
+    "evals/conversations/cases.v1.json": "468b27a027e30539c4f02b94e262dca566ca0d560c2589b18644c4054a8b11cf",
+    "src/travel_ai/services/deepseek_preference_extraction.py": "21bd4783880bf4e3cc03162139618dd4afb90c8f0f12bd3dcd789d6913449363",
+    "src/travel_ai/services/trip_session_service.py": "f6feeb1db4e24cd598fbbbb32118aabb134a0bf4d412d058a3d770ff3e92599e"
+  },
+  "prepared_at_utc": "2026-10-04T03:08:32.848233+00:00",
+  "recorded_at_utc": "2026-10-04T03:12:55.809352+00:00",
+  "report_export": "Postman --output required CLI login; retained local CLI transcript instead."
+}

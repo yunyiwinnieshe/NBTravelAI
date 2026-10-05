@@ -1,0 +1,6 @@
+{
+  "$kind": "collection",
+  "name": "11_acknowledge",
+  "description": "Explicitly excluding an unsupported request returns to review, never directly to results.",
+  "order": 11000
+}
