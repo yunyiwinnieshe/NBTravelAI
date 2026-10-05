@@ -1,8 +1,9 @@
-# Travel AI
+# NbTravelAI
 
-Travel AI is a portfolio-focused Applied AI project by Winnie and Ivy. It
-helps two people who live in different places choose a fair destination for a
-trip together, balancing cost, travel time, and preferences.
+**NbTravelAI** means **No Boundaries, No Bias Travel AI**. It is a
+portfolio-focused Applied AI project by Winnie and Ivy that helps two people
+who live in different places choose a fair destination for a trip together,
+balancing cost, travel time, and preferences.
 
 The first version returns three eligible destinations with transparent score
 breakdowns and tradeoffs. A later version will generate and verify a detailed
