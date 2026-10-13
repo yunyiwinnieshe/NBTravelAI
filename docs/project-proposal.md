@@ -104,7 +104,10 @@ After the travelers select a recommended destination, they can request a
 daily itinerary. The LLM drafts a structured schedule from retrieved activity
 data, while deterministic checks validate timing, budget, travel plausibility,
 availability assumptions, and evidence. If verification fails, the system
-returns precise issues and allows a limited correction attempt.
+returns precise issues and allows a limited correction attempt. This bounded
+draft → verify → revise design is the v2 **agent loop**. A provider-neutral
+implementation and illustrative activity lookup now exist; live itinerary
+generation and verified current hours remain future integration work.
 
 ## 4. Non-goals
 

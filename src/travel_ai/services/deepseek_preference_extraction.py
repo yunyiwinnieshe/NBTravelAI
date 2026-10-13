@@ -7,6 +7,7 @@ import re
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
+from time import perf_counter
 from typing import Any, Literal
 from zoneinfo import ZoneInfo
 
@@ -22,6 +23,7 @@ from travel_ai.schemas.preference_extraction import (
 )
 from travel_ai.schemas.sessions import ExtractionContext, TripRequestDraft
 from travel_ai.schemas.trip import TripPreferences
+from travel_ai.services.ai_tracing import fingerprint, record_call
 from travel_ai.services.preference_extraction import PreferenceExtractor
 
 
@@ -295,49 +297,73 @@ class DeepSeekPreferenceExtractor(PreferenceExtractor):
         return result
 
     def _request(self, payload: dict[str, Any]) -> _Response:
+        started = perf_counter()
+        input_fingerprint = fingerprint(payload)
+        status = "error"
+        output_fingerprint = None
+        prompt_tokens = None
+        completion_tokens = None
         try:
-            response = self._client.post(
-                "https://api.deepseek.com/chat/completions",
-                headers={"Authorization": f"Bearer {self._settings.api_key}"},
-                timeout=self._settings.timeout_seconds,
-                json={
-                    "model": self._settings.model,
-                    "thinking": {"type": "disabled"},
-                    "response_format": {"type": "json_object"},
-                    "temperature": 0,
-                    "stream": False,
-                    "max_tokens": 4096,
-                    "messages": [
-                        {"role": "system", "content": _SYSTEM_PROMPT},
-                        {"role": "user", "content": json.dumps(payload)},
-                    ],
-                },
+            try:
+                response = self._client.post(
+                    "https://api.deepseek.com/chat/completions",
+                    headers={"Authorization": f"Bearer {self._settings.api_key}"},
+                    timeout=self._settings.timeout_seconds,
+                    json={
+                        "model": self._settings.model,
+                        "thinking": {"type": "disabled"},
+                        "response_format": {"type": "json_object"},
+                        "temperature": 0,
+                        "stream": False,
+                        "max_tokens": 4096,
+                        "messages": [
+                            {"role": "system", "content": _SYSTEM_PROMPT},
+                            {"role": "user", "content": json.dumps(payload)},
+                        ],
+                    },
+                )
+            except httpx.RequestError:
+                raise DeepSeekUnavailableError(
+                    "Couldn't process your message. Please try again."
+                ) from None
+            if response.status_code in (401, 403):
+                raise DeepSeekConfigurationError(
+                    "DeepSeek authentication failed; check DEEPSEEK_API_KEY"
+                )
+            if response.status_code == 429 or response.status_code >= 500:
+                raise DeepSeekUnavailableError(
+                    "DeepSeek is temporarily unavailable. Please try again."
+                )
+            if not response.is_success:
+                raise DeepSeekConfigurationError("DeepSeek rejected the request")
+            try:
+                body = response.json()
+                choices = body["choices"]
+                if len(choices) != 1 or choices[0]["finish_reason"] != "stop":
+                    raise ValueError("incomplete response")
+                content = choices[0]["message"]["content"]
+                parsed = _Response.model_validate_json(content)
+                usage = body.get("usage", {})
+                prompt_tokens = usage.get("prompt_tokens")
+                completion_tokens = usage.get("completion_tokens")
+                output_fingerprint = fingerprint(content)
+                status = "ok"
+                return parsed
+            except (ValueError, KeyError, IndexError, TypeError):
+                raise DeepSeekResponseError(
+                    "Couldn't interpret the response. Please try again."
+                ) from None
+        finally:
+            record_call(
+                model=self._settings.model,
+                operation="preference_extraction",
+                input_fingerprint=input_fingerprint,
+                output_fingerprint=output_fingerprint,
+                started=started,
+                status=status,
+                prompt_tokens=prompt_tokens,
+                completion_tokens=completion_tokens,
             )
-        except httpx.RequestError:
-            raise DeepSeekUnavailableError(
-                "Couldn't process your message. Please try again."
-            ) from None
-        if response.status_code in (401, 403):
-            raise DeepSeekConfigurationError(
-                "DeepSeek authentication failed; check DEEPSEEK_API_KEY"
-            )
-        if response.status_code == 429 or response.status_code >= 500:
-            raise DeepSeekUnavailableError(
-                "DeepSeek is temporarily unavailable. Please try again."
-            )
-        if not response.is_success:
-            raise DeepSeekConfigurationError("DeepSeek rejected the request")
-        try:
-            body = response.json()
-            choices = body["choices"]
-            if len(choices) != 1 or choices[0]["finish_reason"] != "stop":
-                raise ValueError("incomplete response")
-            content = choices[0]["message"]["content"]
-            return _Response.model_validate_json(content)
-        except (ValueError, KeyError, IndexError, TypeError):
-            raise DeepSeekResponseError(
-                "Couldn't interpret the response. Please try again."
-            ) from None
 
     @staticmethod
     def _normalize(

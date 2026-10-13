@@ -1,0 +1,6 @@
+[
+  {"activity_id":"nyc_met","city_id":"new_york_ny","name":"The Met Fifth Avenue","neighborhood":"Upper East Side","tags":["museums","art"],"open_weekdays":[0,1,2,3,4,5,6],"duration_minutes":120,"price_usd":30,"source_url":"https://www.metmuseum.org/visit/plan-your-visit/met-fifth-avenue","fixture_only":true},
+  {"activity_id":"nyc_central_park","city_id":"new_york_ny","name":"Central Park","neighborhood":"Manhattan","tags":["nature","kid_friendly"],"open_weekdays":[0,1,2,3,4,5,6],"duration_minutes":90,"price_usd":0,"source_url":"https://www.centralparknyc.org/","fixture_only":true},
+  {"activity_id":"sd_balboa","city_id":"san_diego_ca","name":"Balboa Park","neighborhood":"Balboa Park","tags":["nature","museums","kid_friendly"],"open_weekdays":[0,1,2,3,4,5,6],"duration_minutes":120,"price_usd":0,"source_url":"https://balboapark.org/","fixture_only":true},
+  {"activity_id":"sea_museum_of_flight","city_id":"seattle_wa","name":"The Museum of Flight","neighborhood":"Tukwila","tags":["museums","kid_friendly"],"open_weekdays":[0,1,2,3,4,5,6],"duration_minutes":120,"price_usd":30,"source_url":"https://www.museumofflight.org/","fixture_only":true}
+]
