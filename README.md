@@ -9,6 +9,14 @@ The first version returns three eligible destinations with transparent score
 breakdowns and tradeoffs. A later version will generate and verify a detailed
 itinerary for a destination the travelers select.
 
+## At a glance
+
+- **Live model evaluation:** [30/30 cases and 78/78 steps passed](evals/session_runs/live/live-control-guard-v3/summary.md) in a saved DeepSeek run. The [offline suite](evals/session_runs/offline/runner-offline-v4/summary.md) also passed 78/78 steps with mocked responses.
+- **Try it:** Run the [local API](#run-the-api-locally) and open its interactive `/docs` page. A public demo URL is not currently configured.
+- **Architecture:** Natural language → validated preferences → fixture or provider flight data → deterministic constraints and ranking → explainable recommendations. The v2 prototype adds activity retrieval → itinerary draft → deterministic verifier → bounded revision loop.
+
+The v2 **agent loop** is implemented as a provider-neutral draft/revise callback in `run_itinerary_agent_loop`; a live itinerary model and current activity provider are not yet connected. The current catalog is illustrative fixture data, including opening-day assumptions.
+
 ## Project documents
 
 - [Design decisions](docs/design-decisions.md) - accepted architecture decisions,
@@ -99,8 +107,29 @@ curl -X POST http://127.0.0.1:8000/recommendations \
 The response contains up to three ranked cities, flight options and category
 labels for both travelers, pair-price comparisons, and exclusion reasons.
 Dates without fixture flights return `no_match`; unsupported origins return 422.
-The endpoint defaults to fixtures and makes no external API calls. Live provider
-integration and conversational trip sessions remain follow-up work.
+The endpoint defaults to fixtures and makes no external API calls. Conversational
+trip sessions can use fixture extraction or the configured DeepSeek adapter.
+
+## Activity lookup and itinerary prototype
+
+`POST /activities/search` filters illustrative activity fixtures by city, weekday,
+tag, neighborhood, and maximum price. Each response carries `fixture_only: true`
+and a venue source URL. Fixture hours and prices are **not live availability**;
+check them before using the activity in a real trip. Retrieval cases and the
+bounded draft → verify → revise agent loop are covered in
+`tests/test_activity_itinerary.py`. The verifier rejects unknown activities,
+duplicates, and activity-budget overruns, and stops after at most three attempts.
+`POST /itineraries/preview` exposes a fixture-only planner using that loop; it
+returns activity IDs and verification status, not a timed daily schedule.
+
+## Local AI-call tracing
+
+Set `ENABLE_LOCAL_AI_DASHBOARD=1` before starting the API, then open
+`/observability/dashboard` for the local dashboard or
+`GET /observability/ai-calls` for its data: recent calls, latency, token counts, and
+failure status. This process-local view keeps the last 500 calls and is disabled
+by default. It records input/output fingerprints instead of raw traveler text.
+Estimated cost is `null` until a verified pricing configuration is added.
 
 ## Conversation evaluation and Postman
 

@@ -5,7 +5,13 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from travel_ai.routers import health, recommendations, trip_sessions
+from travel_ai.routers import (
+    activities,
+    health,
+    observability,
+    recommendations,
+    trip_sessions,
+)
 from travel_ai.services.deepseek_preference_extraction import (
     DeepSeekConfigurationError,
     DeepSeekExtractionError,
@@ -69,6 +75,8 @@ def create_app() -> FastAPI:
     app.include_router(health.router)
     app.include_router(recommendations.router)
     app.include_router(trip_sessions.router)
+    app.include_router(activities.router)
+    app.include_router(observability.router)
 
     return app
 
