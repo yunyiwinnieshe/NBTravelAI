@@ -1,5 +1,9 @@
 # Offline-first evaluation runner
 
+The consolidated [Week 7 evaluation report](week-7-first-evaluation-report.md)
+links the saved live and offline results, classifies failures, and tracks the
+remaining ranking-label review.
+
 From the repository root, run:
 
 ```sh
