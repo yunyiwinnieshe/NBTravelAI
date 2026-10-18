@@ -313,6 +313,10 @@ Provider integration is optional and must not delay the evaluated core demo.
 **Deferred to V2:** Itinerary generation/verifier and lodging. These are no
 longer Week 8 acceptance criteria.
 
+Persistent planning sessions are also deferred to V2. V1 keeps sessions in
+process memory; a backend restart loses them, and the demo should run with one
+worker. Do not promise trip resumption across restarts in V1.
+
 ## Week 9 - V1 evaluation closure and grounded explanations (carried forward)
 
 **Goal:** Close the carried Week 6–8 quality work before building the demo.
@@ -368,7 +372,8 @@ browser, including clarification, confirmation, and result comparison.
 - Add basic rate limiting and spending limits; test failures and a clean
   browser session against the deployed commit.
 - Confirm the public demo URL, source labels, evaluation version, and limits in
-  the README.
+  the README. State that planning sessions reset on restart and keep the demo
+  on one backend worker until shared session storage exists.
 
 **Exit criterion:** A new user can finish the core workflow in the deployed
 demo, and the documented commit matches what is running.
@@ -405,6 +410,15 @@ stable and the portfolio evidence is complete.
 **Exit criterion:** Either the core project is strengthened with buffer time,
 or the learned ranker is reproducible, evaluated fairly, and adopted only if
 it demonstrably improves the baseline.
+
+## V2 backlog — persistent planning sessions
+
+Choose storage, session ownership/access, retention, and deletion rules before
+offering resumption to real users. Persist drafts, clarification and issue state,
+reviewed revisions, and confirmed results. Use atomic writes and conflict
+detection across workers. Verify restart recovery, failed writes, concurrent
+updates, and repeated confirmation with offline integration tests. Do not store
+provider credentials or conversation content beyond the agreed retention need.
 
 ## Priority if the schedule slips
 
