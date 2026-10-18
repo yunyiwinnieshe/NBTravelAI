@@ -1,10 +1,12 @@
 """FastAPI application entry point."""
 
+import sqlite3
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
+from travel_ai.clients.duffel import DuffelConfigurationError, DuffelError
 from travel_ai.routers import (
     activities,
     health,
@@ -68,6 +70,38 @@ def create_app() -> FastAPI:
                         )
                     ),
                     "retryable": not configuration,
+                }
+            },
+        )
+
+    @app.exception_handler(DuffelError)
+    async def duffel_error(request: Request, error: DuffelError):
+        return JSONResponse(
+            status_code=503,
+            content={
+                "detail": {
+                    "code": "origin_resolution_unavailable",
+                    "message": (
+                        "We couldn't verify the departure location. "
+                        "Your saved trip is unchanged. Please try again."
+                    ),
+                    "retryable": not isinstance(error, DuffelConfigurationError),
+                }
+            },
+        )
+
+    @app.exception_handler(sqlite3.Error)
+    async def origin_storage_error(request: Request, error: sqlite3.Error):
+        return JSONResponse(
+            status_code=503,
+            content={
+                "detail": {
+                    "code": "origin_storage_unavailable",
+                    "message": (
+                        "We couldn't save the departure location. "
+                        "Your saved trip is unchanged. Please try again."
+                    ),
+                    "retryable": True,
                 }
             },
         )

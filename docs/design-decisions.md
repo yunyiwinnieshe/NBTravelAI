@@ -2,7 +2,8 @@
 
 ## 2026-09-16 — Internal IDs for confirmed origin locations
 
-**Status:** Accepted design; live resolver and persistence implementation deferred.
+**Status:** Implemented for opt-in planning-session origin resolution. Planning
+session persistence remains V2.
 
 ### Decision
 
@@ -34,16 +35,15 @@ be two distinct origins.
 
 - Keep deterministic fixture IDs such as `boston_ma` and `new_york_ny` and the
   existing fixture airport mappings for offline tests.
-- Implement ID generation together with live location resolution, persistence,
-  lookup, and reuse. Do not replace fixture keys with random IDs in isolation.
+- The opt-in resolver generates and persists location IDs in SQLite with a
+  unique Duffel-place/airport-choice key. Fixture IDs remain unchanged.
 - Keep the existing `origin_id` request field for now. `origin_location_id` is a
   possible future contract rename, not part of this documentation change.
 - Use `OriginAirportMapping` to describe the mapping from one origin to its
   search airports. The model, `load_origin_airport_mappings()` loader, and
   related provider variables now use mapping terminology.
-- Choose the ID format and storage/reuse strategy during implementation. The
-  generated format must satisfy the schemas, or schema changes must accompany
-  the implementation. No database, ID generator, or new endpoint is added here.
+- Generated IDs use `loc_` plus an opaque UUID hex string and satisfy the
+  existing schema. The location registry does not persist planning sessions.
 
 See [Flight search and pairing](flight-search-and-pairing.md),
 [Preference and request contract](preference-and-request-contract.md), and

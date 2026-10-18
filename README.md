@@ -41,6 +41,8 @@ The v2 **agent loop** is implemented as a provider-neutral draft/revise callback
   and four-category flight selection.
 - [Duffel test-mode provider](docs/duffel-flight-provider.md) - sandbox
   configuration, normalization boundary, manual smoke test, and failure policy.
+- [Planning origin resolution](docs/planning-origin-resolution.md) - opt-in
+  Duffel Places setup, stable location IDs, and OurAirports snapshot refresh.
 - [Recommendation response contract](docs/recommendation-response-contract.md)
   - public destination, score, recommended-pair, flight-option, exclusion, and
   metadata fields.

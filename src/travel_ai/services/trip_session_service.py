@@ -5,6 +5,7 @@ from dataclasses import dataclass, field, replace
 from datetime import date
 from decimal import Decimal, InvalidOperation
 from threading import RLock
+from typing import Protocol
 from uuid import uuid4
 
 from pydantic import ValidationError
@@ -22,8 +23,12 @@ from travel_ai.schemas.sessions import (
     UnsupportedRequestNotice,
 )
 from travel_ai.schemas.trip import TravelerRequest, TripRequest
+from travel_ai.services.live_origin_resolution import OriginResolutionError
 from travel_ai.services.preference_extraction import PreferenceExtractor
-from travel_ai.services.recommendation_service import RecommendationService
+from travel_ai.services.recommendation_service import (
+    RecommendationService,
+    UnsupportedOriginError,
+)
 
 
 class TripSessionNotFoundError(KeyError):
@@ -34,8 +39,12 @@ class TripSessionNotReadyError(ValueError):
     """A session was confirmed before it had a complete reviewable draft."""
 
 
-class FixtureOriginResolutionError(ValueError):
+class FixtureOriginResolutionError(OriginResolutionError):
     """A fixture conversation named an origin outside the supported mapping."""
+
+
+class OriginResolver(Protocol):
+    def resolve(self, origin: str) -> str: ...
 
 
 def is_non_trip_control_message(message: str) -> bool:
@@ -106,7 +115,7 @@ class TripSessionService:
         self,
         extractor: PreferenceExtractor,
         recommendation_service: RecommendationService,
-        origin_resolver: FixtureOriginResolver | None = None,
+        origin_resolver: OriginResolver | None = None,
     ) -> None:
         self.extractor = extractor
         self.recommendation_service = recommendation_service
@@ -115,6 +124,9 @@ class TripSessionService:
 
     def close(self) -> None:
         self.extractor.close()
+        close_resolver = getattr(self.origin_resolver, "close", None)
+        if close_resolver is not None:
+            close_resolver()
 
     def create_session(self, initial_message: str | None) -> ConversationTurnResponse:
         """Create a session and optionally process its first fixture message."""
@@ -282,7 +294,23 @@ class TripSessionService:
                 "complete the trip details before confirming this session"
             )
         trip_request = self._build_trip_request(session.draft)
-        response = self.recommendation_service.get_recommendations(trip_request)
+        try:
+            response = self.recommendation_service.get_recommendations(trip_request)
+        except UnsupportedOriginError:
+            session.state = ConversationState.NO_MATCH
+            session.missing_questions = []
+            session.confirmed_result = ConversationTurnResponse(
+                session_id=session_id,
+                state=session.state,
+                assistant_message=(
+                    "The departure location was resolved, but the configured "
+                    "flight provider has no coverage for it. No flight "
+                    "recommendations are available in this mode."
+                ),
+                trip_request_draft=session.draft.model_copy(deep=True),
+                deferred_requests=list(session.deferred),
+            )
+            return session.confirmed_result.model_copy(deep=True)
         session.state = (
             ConversationState.RESULTS
             if response.status == "success"
@@ -443,15 +471,20 @@ class TripSessionService:
                 "What exact dates would you like for a 3–7 day trip?"
             )
         for traveler, old in zip(draft.travelers, previous.travelers, strict=True):
+            if traveler.origin == old.origin and old.origin_id is not None:
+                traveler.origin_id = old.origin_id
+                continue
             try:
                 traveler.origin_id = (
                     self.origin_resolver.resolve(traveler.origin)
                     if traveler.origin
                     else None
                 )
-            except FixtureOriginResolutionError:
+            except OriginResolutionError as error:
                 session.issues[f"travelers.{traveler.traveler_id}.origin"] = (
-                    f"Which place does {traveler.display_label} mean? "
+                    str(error)
+                    if not isinstance(error, FixtureOriginResolutionError)
+                    else f"Which place does {traveler.display_label} mean? "
                     "Fixture mode supports Boston or New York."
                 )
                 traveler.origin, traveler.origin_id = old.origin, old.origin_id
@@ -583,7 +616,8 @@ class TripSessionService:
             travelers = [
                 TravelerRequest(
                     traveler_id=traveler.traveler_id,
-                    origin_id=self.origin_resolver.resolve(traveler.origin or ""),
+                    origin_id=traveler.origin_id
+                    or self.origin_resolver.resolve(traveler.origin or ""),
                     budget_usd=Decimal(str(traveler.budget_usd)),
                     max_one_way_travel_minutes=round(
                         (traveler.max_travel_time_hours or 0) * 60
@@ -598,7 +632,7 @@ class TripSessionService:
                 end_date=draft.end_date,
             )
         except (
-            FixtureOriginResolutionError,
+            OriginResolutionError,
             ValidationError,
             InvalidOperation,
         ) as error:

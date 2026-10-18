@@ -3,10 +3,17 @@
 import os
 from datetime import date
 from functools import lru_cache
+from pathlib import Path
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
+from travel_ai.clients.duffel import (
+    DuffelClient,
+    DuffelConfigurationError,
+    DuffelSettings,
+)
+from travel_ai.providers.duffel import DuffelAirportPlaceProvider
 from travel_ai.schemas.preference_extraction import (
     MissingField,
     MissingFieldReason,
@@ -23,6 +30,10 @@ from travel_ai.schemas.sessions import (
 from travel_ai.services.deepseek_preference_extraction import (
     DeepSeekConfigurationError,
     DeepSeekPreferenceExtractor,
+)
+from travel_ai.services.live_origin_resolution import (
+    DuffelOriginResolver,
+    SQLiteLocationStore,
 )
 from travel_ai.services.preference_extraction import FixturePreferenceExtractor
 from travel_ai.services.recommendation_service import RecommendationService
@@ -41,13 +52,30 @@ router = APIRouter(prefix="/trip-sessions", tags=["trip sessions"])
 
 @lru_cache
 def get_trip_session_service() -> TripSessionService:
-    """Choose extraction only; deterministic recommendation dependencies stay fixed."""
+    """Choose extraction and origin resolution; fixture recommendations stay fixed."""
+    origin_mode = os.getenv("ORIGIN_RESOLUTION_PROVIDER", "fixture").strip().lower()
+    origin_resolver = None
+    if origin_mode == "duffel":
+        database_path = os.getenv("ORIGIN_LOCATION_DB_PATH")
+        if not database_path or database_path == ":memory:":
+            raise DuffelConfigurationError(
+                "ORIGIN_LOCATION_DB_PATH must name a durable SQLite file"
+            )
+        origin_resolver = DuffelOriginResolver(
+            DuffelAirportPlaceProvider(DuffelClient(DuffelSettings.from_environment())),
+            SQLiteLocationStore(Path(database_path)),
+        )
+    elif origin_mode != "fixture":
+        raise DuffelConfigurationError(
+            "ORIGIN_RESOLUTION_PROVIDER must be fixture or duffel"
+        )
     provider = os.getenv("EXTRACTION_PROVIDER", "fixture").strip().lower()
     if provider == "deepseek":
         policy = SessionExtractionPolicy.from_environment()
         return TripSessionService(
             SessionPreferenceExtractor(DeepSeekPreferenceExtractor(), policy),
             RecommendationService(),
+            origin_resolver=origin_resolver,
         )
     if provider != "fixture":
         raise DeepSeekConfigurationError(
@@ -123,7 +151,7 @@ def get_trip_session_service() -> TripSessionService:
             ),
         }
     )
-    return TripSessionService(extractor, RecommendationService())
+    return TripSessionService(extractor, RecommendationService(), origin_resolver)
 
 
 @router.post(

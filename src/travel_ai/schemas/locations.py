@@ -67,6 +67,8 @@ class AirportReference(BaseModel):
     iata_code: str = Field(pattern=r"^[A-Z]{3}$")
     airport_type: AirportType
     scheduled_service: bool
+    iso_region: str | None = Field(default=None, pattern=r"^US-[A-Z]{2}$")
+    municipality: str | None = None
 
 
 class AirportReferenceDataset(BaseModel):
@@ -114,6 +116,22 @@ class ResolvedLocation(BaseModel):
     iata_city_code: str | None = Field(default=None, pattern=r"^[A-Z]{3}$")
     airports: list[ResolvedAirport] = Field(min_length=1, max_length=3)
     source: str = Field(min_length=1, max_length=50)
+
+
+class PlaceSuggestion(BaseModel):
+    """One Duffel place with its own airport group, before user confirmation."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    provider_place_id: str = Field(min_length=1, max_length=100)
+    place_type: str = Field(pattern=r"^(city|airport)$")
+    name: str = Field(min_length=1, max_length=200)
+    city_name: str | None = Field(default=None, max_length=120)
+    iata_code: str = Field(pattern=r"^[A-Z]{3}$")
+    country_code: str = Field(pattern=r"^[A-Z]{2}$")
+    latitude: float | None = Field(default=None, ge=-90, le=90)
+    longitude: float | None = Field(default=None, ge=-180, le=180)
+    airports: list[AirportCandidate] = Field(default_factory=list)
 
 
 class OriginAirportMapping(BaseModel):

@@ -1,4 +1,4 @@
-"""Generate the V1 U.S. commercial-airport reference from OurAirports CSV."""
+"""Generate the versioned U.S. commercial-airport reference from OurAirports CSV."""
 
 import argparse
 import csv
@@ -21,6 +21,8 @@ def build_reference(input_path: Path, source_date: date) -> dict[str, object]:
                 "iata_code": row["iata_code"],
                 "airport_type": row["type"],
                 "scheduled_service": True,
+                "iso_region": row["iso_region"],
+                "municipality": row["municipality"] or None,
             }
             for row in csv.DictReader(input_file)
             if row["iso_country"] == "US"
@@ -30,7 +32,7 @@ def build_reference(input_path: Path, source_date: date) -> dict[str, object]:
         ]
     rows.sort(key=lambda row: str(row["iata_code"]))
     return {
-        "schema_version": "v1",
+        "schema_version": "v2",
         "source": "OurAirports",
         "source_url": SOURCE_URL,
         "source_date": source_date.isoformat(),
