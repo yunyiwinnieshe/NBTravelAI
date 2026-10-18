@@ -1,2518 +1,3522 @@
 {
-  "schema_version": "v1",
+  "schema_version": "v2",
   "source": "OurAirports",
   "source_url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
-  "source_date": "2026-09-13",
+  "source_date": "2026-10-18",
   "airports": [
     {
       "iata_code": "ABE",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-PA",
+      "municipality": "Allentown/Bethlehem"
     },
     {
       "iata_code": "ABI",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "Abilene"
     },
     {
       "iata_code": "ABL",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Ambler"
     },
     {
       "iata_code": "ABQ",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NM",
+      "municipality": "Albuquerque"
     },
     {
       "iata_code": "ABR",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-SD",
+      "municipality": "Aberdeen"
     },
     {
       "iata_code": "ABY",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-GA",
+      "municipality": "Albany"
     },
     {
       "iata_code": "ACK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MA",
+      "municipality": "Nantucket"
     },
     {
       "iata_code": "ACT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "Waco"
     },
     {
       "iata_code": "ACV",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Arcata/Eureka"
     },
     {
       "iata_code": "ACY",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NJ",
+      "municipality": "Atlantic City"
     },
     {
       "iata_code": "ADK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Adak"
     },
     {
       "iata_code": "ADQ",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Kodiak"
     },
     {
       "iata_code": "AEX",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-LA",
+      "municipality": "Alexandria"
     },
     {
       "iata_code": "AGS",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-GA",
+      "municipality": "Augusta"
     },
     {
       "iata_code": "AIA",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NE",
+      "municipality": "Alliance"
     },
     {
       "iata_code": "AIN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Wainwright"
     },
     {
       "iata_code": "AKN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "King Salmon"
     },
     {
       "iata_code": "AKP",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Anaktuvuk Pass"
     },
     {
       "iata_code": "ALB",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NY",
+      "municipality": "Albany"
     },
     {
       "iata_code": "ALO",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IA",
+      "municipality": "Waterloo"
     },
     {
       "iata_code": "ALS",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CO",
+      "municipality": "Alamosa"
     },
     {
       "iata_code": "ALW",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WA",
+      "municipality": "Walla Walla"
     },
     {
       "iata_code": "AMA",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "Amarillo"
     },
     {
       "iata_code": "ANC",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Anchorage"
     },
     {
       "iata_code": "ANI",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Aniak"
     },
     {
       "iata_code": "ANV",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Anvik"
     },
     {
       "iata_code": "AOO",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-PA",
+      "municipality": "Altoona"
     },
     {
       "iata_code": "APN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MI",
+      "municipality": "Alpena"
     },
     {
       "iata_code": "ARC",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Arctic Village"
     },
     {
       "iata_code": "ART",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NY",
+      "municipality": "Watertown"
     },
     {
       "iata_code": "ASE",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CO",
+      "municipality": "Aspen"
     },
     {
       "iata_code": "ATK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Atqasuk"
     },
     {
       "iata_code": "ATL",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-GA",
+      "municipality": "Atlanta"
     },
     {
       "iata_code": "ATW",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WI",
+      "municipality": "Appleton"
     },
     {
       "iata_code": "ATY",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-SD",
+      "municipality": "Watertown"
     },
     {
       "iata_code": "AUG",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-ME",
+      "municipality": "Augusta"
     },
     {
       "iata_code": "AUS",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "Austin"
     },
     {
       "iata_code": "AVL",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NC",
+      "municipality": "Asheville"
     },
     {
       "iata_code": "AVP",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-PA",
+      "municipality": "Wilkes-Barre/Scranton"
     },
     {
       "iata_code": "AZA",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AZ",
+      "municipality": "Mesa"
     },
     {
       "iata_code": "AZO",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MI",
+      "municipality": "Kalamazoo"
     },
     {
       "iata_code": "BDL",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CT",
+      "municipality": "Hartford"
     },
     {
       "iata_code": "BED",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MA",
+      "municipality": "Bedford"
     },
     {
       "iata_code": "BET",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Bethel"
     },
     {
       "iata_code": "BFD",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-PA",
+      "municipality": "Bradford"
     },
     {
       "iata_code": "BFF",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NE",
+      "municipality": "Scottsbluff"
     },
     {
       "iata_code": "BFI",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WA",
+      "municipality": "Seattle"
     },
     {
       "iata_code": "BFL",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Bakersfield"
     },
     {
       "iata_code": "BGM",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NY",
+      "municipality": "Binghamton"
     },
     {
       "iata_code": "BGR",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-ME",
+      "municipality": "Bangor"
     },
     {
       "iata_code": "BHB",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-ME",
+      "municipality": "Bar Harbor"
     },
     {
       "iata_code": "BHM",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AL",
+      "municipality": "Birmingham"
     },
     {
       "iata_code": "BIH",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Bishop"
     },
     {
       "iata_code": "BIL",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MT",
+      "municipality": "Billings"
     },
     {
       "iata_code": "BIS",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-ND",
+      "municipality": "Bismarck"
     },
     {
       "iata_code": "BJC",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CO",
+      "municipality": "Denver"
     },
     {
       "iata_code": "BKG",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MO",
+      "municipality": "Branson"
     },
     {
       "iata_code": "BKW",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WV",
+      "municipality": "Beaver"
     },
     {
       "iata_code": "BLD",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NV",
+      "municipality": "Boulder City"
     },
     {
       "iata_code": "BLI",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WA",
+      "municipality": "Bellingham"
     },
     {
       "iata_code": "BLV",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IL",
+      "municipality": "Belleville"
     },
     {
       "iata_code": "BMI",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IL",
+      "municipality": "Bloomington/Normal"
     },
     {
       "iata_code": "BNA",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TN",
+      "municipality": "Nashville"
     },
     {
       "iata_code": "BOI",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-ID",
+      "municipality": "Boise"
     },
     {
       "iata_code": "BOS",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MA",
+      "municipality": "Boston"
     },
     {
       "iata_code": "BPT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "Beaumont/Port Arthur"
     },
     {
       "iata_code": "BQK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-GA",
+      "municipality": "Brunswick"
     },
     {
       "iata_code": "BRD",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MN",
+      "municipality": "Brainerd"
     },
     {
       "iata_code": "BRL",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IA",
+      "municipality": "Burlington"
     },
     {
       "iata_code": "BRO",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "Brownsville"
     },
     {
       "iata_code": "BRW",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Utqia\u0121vik"
     },
     {
       "iata_code": "BTI",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Barter Island"
     },
     {
       "iata_code": "BTM",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MT",
+      "municipality": "Butte"
     },
     {
       "iata_code": "BTR",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-LA",
+      "municipality": "Baton Rouge"
     },
     {
       "iata_code": "BTV",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-VT",
+      "municipality": "Burlington"
     },
     {
       "iata_code": "BUF",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NY",
+      "municipality": "Buffalo"
     },
     {
       "iata_code": "BUR",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Burbank"
     },
     {
       "iata_code": "BWI",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MD",
+      "municipality": "Baltimore"
     },
     {
       "iata_code": "BZN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MT",
+      "municipality": "Bozeman"
     },
     {
       "iata_code": "CAE",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-SC",
+      "municipality": "Columbia"
     },
     {
       "iata_code": "CAK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-OH",
+      "municipality": "Akron"
     },
     {
       "iata_code": "CCR",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Concord"
     },
     {
       "iata_code": "CDB",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Cold Bay"
     },
     {
       "iata_code": "CDC",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-UT",
+      "municipality": "Cedar City"
     },
     {
       "iata_code": "CDR",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NE",
+      "municipality": "Chadron"
     },
     {
       "iata_code": "CDV",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Cordova"
     },
     {
       "iata_code": "CEC",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Crescent City"
     },
     {
       "iata_code": "CEZ",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CO",
+      "municipality": "Cortez"
     },
     {
       "iata_code": "CGI",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MO",
+      "municipality": "Cape Girardeau"
     },
     {
       "iata_code": "CHA",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TN",
+      "municipality": "Chattanooga"
     },
     {
       "iata_code": "CHO",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-VA",
+      "municipality": "Charlottesville"
     },
     {
       "iata_code": "CHS",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-SC",
+      "municipality": "Charleston"
     },
     {
       "iata_code": "CID",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IA",
+      "municipality": "Cedar Rapids"
     },
     {
       "iata_code": "CIU",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MI",
+      "municipality": "Kincheloe"
     },
     {
       "iata_code": "CKB",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WV",
+      "municipality": "Bridgeport"
     },
     {
       "iata_code": "CLD",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Carlsbad"
     },
     {
       "iata_code": "CLE",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-OH",
+      "municipality": "Cleveland"
     },
     {
       "iata_code": "CLL",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "College Station"
     },
     {
       "iata_code": "CLT",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NC",
+      "municipality": "Charlotte"
     },
     {
       "iata_code": "CMH",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-OH",
+      "municipality": "Columbus"
     },
     {
       "iata_code": "CMI",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IL",
+      "municipality": "Savoy"
     },
     {
       "iata_code": "CMX",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MI",
+      "municipality": "Hancock"
     },
     {
       "iata_code": "CNM",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NM",
+      "municipality": "Carlsbad"
     },
     {
       "iata_code": "CNY",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-UT",
+      "municipality": "Moab"
     },
     {
       "iata_code": "COD",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WY",
+      "municipality": "Cody"
     },
     {
       "iata_code": "COS",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CO",
+      "municipality": "Colorado Springs"
     },
     {
       "iata_code": "COU",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MO",
+      "municipality": "Columbia"
     },
     {
       "iata_code": "CPR",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WY",
+      "municipality": "Casper"
     },
     {
       "iata_code": "CRP",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "Corpus Christi"
     },
     {
       "iata_code": "CRW",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WV",
+      "municipality": "Charleston"
     },
     {
       "iata_code": "CSG",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-GA",
+      "municipality": "Columbus"
     },
     {
       "iata_code": "CVG",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-KY",
+      "municipality": "Cincinnati / Covington"
     },
     {
       "iata_code": "CVN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NM",
+      "municipality": "Clovis"
     },
     {
       "iata_code": "CWA",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WI",
+      "municipality": "Mosinee"
     },
     {
       "iata_code": "CYS",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WY",
+      "municipality": "Cheyenne"
     },
     {
       "iata_code": "DAB",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "Daytona Beach"
     },
     {
       "iata_code": "DAL",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "Dallas"
     },
     {
       "iata_code": "DAY",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-OH",
+      "municipality": "Dayton"
     },
     {
       "iata_code": "DBQ",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IA",
+      "municipality": "Dubuque"
     },
     {
       "iata_code": "DCA",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-DC",
+      "municipality": "Washington"
     },
     {
       "iata_code": "DDC",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-KS",
+      "municipality": "Dodge City"
     },
     {
       "iata_code": "DEC",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IL",
+      "municipality": "Decatur"
     },
     {
       "iata_code": "DEN",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CO",
+      "municipality": "Denver"
     },
     {
       "iata_code": "DFW",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "Dallas-Fort Worth"
     },
     {
       "iata_code": "DHN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AL",
+      "municipality": "Dothan"
     },
     {
       "iata_code": "DIK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-ND",
+      "municipality": "Dickinson"
     },
     {
       "iata_code": "DJT",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "West Palm Beach"
     },
     {
       "iata_code": "DLG",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Dillingham"
     },
     {
       "iata_code": "DLH",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MN",
+      "municipality": "Duluth"
     },
     {
       "iata_code": "DOV",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-DE",
+      "municipality": "Dover"
     },
     {
       "iata_code": "DRG",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Deering"
     },
     {
       "iata_code": "DRO",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CO",
+      "municipality": "Durango"
     },
     {
       "iata_code": "DSI",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "Destin"
     },
     {
       "iata_code": "DSM",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IA",
+      "municipality": "Des Moines"
     },
     {
       "iata_code": "DTW",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MI",
+      "municipality": "Detroit"
     },
     {
       "iata_code": "DUJ",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-PA",
+      "municipality": "Dubois"
     },
     {
       "iata_code": "DUT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Unalaska"
     },
     {
       "iata_code": "DVL",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-ND",
+      "municipality": "Devils Lake"
     },
     {
       "iata_code": "EAR",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NE",
+      "municipality": "Kearney"
     },
     {
       "iata_code": "EAT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WA",
+      "municipality": "Wenatchee"
     },
     {
       "iata_code": "EAU",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WI",
+      "municipality": "Eau Claire"
     },
     {
       "iata_code": "ECP",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "Panama City Beach"
     },
     {
       "iata_code": "EGE",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CO",
+      "municipality": "Eagle"
     },
     {
       "iata_code": "EGX",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Egegik"
     },
     {
       "iata_code": "EKO",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NV",
+      "municipality": "Elko"
     },
     {
       "iata_code": "ELD",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AR",
+      "municipality": "El Dorado"
     },
     {
       "iata_code": "ELM",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NY",
+      "municipality": "Elmira/Corning"
     },
     {
       "iata_code": "ELP",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "El Paso"
     },
     {
       "iata_code": "EMK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Emmonak"
     },
     {
       "iata_code": "ENA",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Kenai"
     },
     {
       "iata_code": "ERI",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-PA",
+      "municipality": "Erie"
     },
     {
       "iata_code": "ESC",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MI",
+      "municipality": "Escanaba"
     },
     {
       "iata_code": "ESD",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WA",
+      "municipality": "Eastsound"
     },
     {
       "iata_code": "EUG",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-OR",
+      "municipality": "Eugene"
     },
     {
       "iata_code": "EVV",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IN",
+      "municipality": "Evansville"
     },
     {
       "iata_code": "EWB",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MA",
+      "municipality": "New Bedford"
     },
     {
       "iata_code": "EWN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NC",
+      "municipality": "New Bern"
     },
     {
       "iata_code": "EWR",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NJ",
+      "municipality": "Newark"
     },
     {
       "iata_code": "EYW",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "Key West"
     },
     {
       "iata_code": "FAI",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Fairbanks"
     },
     {
       "iata_code": "FAR",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-ND",
+      "municipality": "Fargo"
     },
     {
       "iata_code": "FAT",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Fresno"
     },
     {
       "iata_code": "FAY",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NC",
+      "municipality": "Fayetteville"
     },
     {
       "iata_code": "FCA",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MT",
+      "municipality": "Kalispell"
     },
     {
       "iata_code": "FLG",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AZ",
+      "municipality": "Flagstaff"
     },
     {
       "iata_code": "FLL",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "Fort Lauderdale"
     },
     {
       "iata_code": "FLO",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-SC",
+      "municipality": "Florence"
     },
     {
       "iata_code": "FNT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MI",
+      "municipality": "Flint"
     },
     {
       "iata_code": "FOD",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IA",
+      "municipality": "Fort Dodge"
     },
     {
       "iata_code": "FRD",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WA",
+      "municipality": "Friday Harbor"
     },
     {
       "iata_code": "FSD",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-SD",
+      "municipality": "Sioux Falls"
     },
     {
       "iata_code": "FSM",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AR",
+      "municipality": "Fort Smith"
     },
     {
       "iata_code": "FTW",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "Fort Worth"
     },
     {
       "iata_code": "FWA",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IN",
+      "municipality": "Fort Wayne"
     },
     {
       "iata_code": "FYU",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Fort Yukon"
     },
     {
       "iata_code": "GAL",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Galena"
     },
     {
       "iata_code": "GAM",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Gambell"
     },
     {
       "iata_code": "GCC",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WY",
+      "municipality": "Gillette"
     },
     {
       "iata_code": "GCK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-KS",
+      "municipality": "Garden City"
     },
     {
       "iata_code": "GCN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AZ",
+      "municipality": "Grand Canyon - Tusayan"
     },
     {
       "iata_code": "GDV",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MT",
+      "municipality": "Glendive"
     },
     {
       "iata_code": "GEG",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WA",
+      "municipality": "Spokane"
     },
     {
       "iata_code": "GFK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-ND",
+      "municipality": "Grand Forks"
     },
     {
       "iata_code": "GGG",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "Longview"
     },
     {
       "iata_code": "GGW",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MT",
+      "municipality": "Glasgow"
     },
     {
       "iata_code": "GJT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CO",
+      "municipality": "Grand Junction"
     },
     {
       "iata_code": "GKN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Gulkana"
     },
     {
       "iata_code": "GLH",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MS",
+      "municipality": "Greenville"
     },
     {
       "iata_code": "GNV",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "Gainesville"
     },
     {
       "iata_code": "GPT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MS",
+      "municipality": "Gulfport"
     },
     {
       "iata_code": "GRB",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WI",
+      "municipality": "Green Bay"
     },
     {
       "iata_code": "GRI",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NE",
+      "municipality": "Grand Island"
     },
     {
       "iata_code": "GRK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "Fort Cavazos"
     },
     {
       "iata_code": "GRR",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MI",
+      "municipality": "Grand Rapids"
     },
     {
       "iata_code": "GSO",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NC",
+      "municipality": "Greensboro"
     },
     {
       "iata_code": "GSP",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-SC",
+      "municipality": "Greenville/Greer/Spartanburg"
     },
     {
       "iata_code": "GST",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Gustavus"
     },
     {
       "iata_code": "GTF",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MT",
+      "municipality": "Great Falls"
     },
     {
       "iata_code": "GTR",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MS",
+      "municipality": "Columbus/W Point/Starkville"
     },
     {
       "iata_code": "GUC",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CO",
+      "municipality": "Gunnison"
     },
     {
       "iata_code": "GUP",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NM",
+      "municipality": "Gallup"
     },
     {
       "iata_code": "GYY",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IN",
+      "municipality": "Gary"
     },
     {
       "iata_code": "HCR",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Holy Cross"
     },
     {
       "iata_code": "HDN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CO",
+      "municipality": "Hayden"
     },
     {
       "iata_code": "HGR",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MD",
+      "municipality": "Hagerstown"
     },
     {
       "iata_code": "HHH",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-SC",
+      "municipality": "Hilton Head Island"
     },
     {
       "iata_code": "HHR",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Hawthorne"
     },
     {
       "iata_code": "HIB",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MN",
+      "municipality": "Hibbing"
     },
     {
       "iata_code": "HII",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AZ",
+      "municipality": "Lake Havasu City"
     },
     {
       "iata_code": "HLN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MT",
+      "municipality": "Helena"
     },
     {
       "iata_code": "HNL",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-HI",
+      "municipality": "Honolulu, Oahu"
     },
     {
       "iata_code": "HNM",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-HI",
+      "municipality": "Hana"
     },
     {
       "iata_code": "HNS",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Haines"
     },
     {
       "iata_code": "HOB",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NM",
+      "municipality": "Hobbs"
     },
     {
       "iata_code": "HOM",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Homer"
     },
     {
       "iata_code": "HOT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AR",
+      "municipality": "Hot Springs"
     },
     {
       "iata_code": "HOU",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "Houston"
     },
     {
       "iata_code": "HPN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NY",
+      "municipality": "White Plains"
     },
     {
       "iata_code": "HRL",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "Harlingen"
     },
     {
       "iata_code": "HRO",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AR",
+      "municipality": "Harrison"
     },
     {
       "iata_code": "HSL",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Huslia"
     },
     {
       "iata_code": "HSV",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AL",
+      "municipality": "Huntsville"
     },
     {
       "iata_code": "HTS",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WV",
+      "municipality": "Huntington"
     },
     {
       "iata_code": "HVN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CT",
+      "municipality": "New Haven"
     },
     {
       "iata_code": "HVR",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MT",
+      "municipality": "Havre"
     },
     {
       "iata_code": "HYA",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MA",
+      "municipality": "Hyannis"
     },
     {
       "iata_code": "HYS",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-KS",
+      "municipality": "Hays"
     },
     {
       "iata_code": "IAD",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-VA",
+      "municipality": "Dulles"
     },
     {
       "iata_code": "IAG",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NY",
+      "municipality": "Niagara Falls"
     },
     {
       "iata_code": "IAH",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "Houston"
     },
     {
       "iata_code": "IAN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Kiana"
     },
     {
       "iata_code": "ICT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-KS",
+      "municipality": "Wichita"
     },
     {
       "iata_code": "IDA",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-ID",
+      "municipality": "Idaho Falls"
     },
     {
       "iata_code": "ILG",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-DE",
+      "municipality": "Wilmington"
     },
     {
       "iata_code": "ILI",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Iliamna"
     },
     {
       "iata_code": "ILM",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NC",
+      "municipality": "Wilmington"
     },
     {
       "iata_code": "IMT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MI",
+      "municipality": "Kingsford"
     },
     {
       "iata_code": "IND",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IN",
+      "municipality": "Indianapolis"
     },
     {
       "iata_code": "INL",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MN",
+      "municipality": "International Falls"
     },
     {
       "iata_code": "IPL",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Imperial"
     },
     {
       "iata_code": "IPT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-PA",
+      "municipality": "Williamsport"
     },
     {
       "iata_code": "IRK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MO",
+      "municipality": "Kirksville"
     },
     {
       "iata_code": "ISP",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NY",
+      "municipality": "Islip"
     },
     {
       "iata_code": "ITH",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NY",
+      "municipality": "Ithaca"
     },
     {
       "iata_code": "ITO",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-HI",
+      "municipality": "Hilo"
     },
     {
       "iata_code": "JAC",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WY",
+      "municipality": "Jackson"
     },
     {
       "iata_code": "JAN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MS",
+      "municipality": "Jackson"
     },
     {
       "iata_code": "JAX",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "Jacksonville"
     },
     {
       "iata_code": "JBR",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AR",
+      "municipality": "Jonesboro"
     },
     {
       "iata_code": "JFK",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NY",
+      "municipality": "New York"
     },
     {
       "iata_code": "JHM",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-HI",
+      "municipality": "Lahaina"
     },
     {
       "iata_code": "JLN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MO",
+      "municipality": "Joplin"
     },
     {
       "iata_code": "JMS",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-ND",
+      "municipality": "Jamestown"
     },
     {
       "iata_code": "JNU",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Juneau"
     },
     {
       "iata_code": "JST",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-PA",
+      "municipality": "Johnstown"
     },
     {
       "iata_code": "KLW",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Klawock"
     },
     {
       "iata_code": "KOA",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-HI",
+      "municipality": "Kailua-Kona"
     },
     {
       "iata_code": "KTN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Ketchikan"
     },
     {
       "iata_code": "LAF",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IN",
+      "municipality": "West Lafayette"
     },
     {
       "iata_code": "LAL",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "Lakeland"
     },
     {
       "iata_code": "LAN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MI",
+      "municipality": "Lansing"
     },
     {
       "iata_code": "LAR",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WY",
+      "municipality": "Laramie"
     },
     {
       "iata_code": "LAS",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NV",
+      "municipality": "Las Vegas"
     },
     {
       "iata_code": "LAW",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-OK",
+      "municipality": "Lawton"
     },
     {
       "iata_code": "LAX",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Los Angeles"
     },
     {
       "iata_code": "LBB",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "Lubbock"
     },
     {
       "iata_code": "LBE",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-PA",
+      "municipality": "Latrobe"
     },
     {
       "iata_code": "LBF",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NE",
+      "municipality": "North Platte"
     },
     {
       "iata_code": "LBL",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-KS",
+      "municipality": "Liberal"
     },
     {
       "iata_code": "LCH",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-LA",
+      "municipality": "Lake Charles"
     },
     {
       "iata_code": "LCK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-OH",
+      "municipality": "Columbus"
     },
     {
       "iata_code": "LEB",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NH",
+      "municipality": "Lebanon"
     },
     {
       "iata_code": "LEX",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-KY",
+      "municipality": "Lexington"
     },
     {
       "iata_code": "LFT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-LA",
+      "municipality": "Lafayette"
     },
     {
       "iata_code": "LGA",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NY",
+      "municipality": "New York"
     },
     {
       "iata_code": "LGB",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Long Beach"
     },
     {
       "iata_code": "LIH",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-HI",
+      "municipality": "Lihue, Kauai"
     },
     {
       "iata_code": "LIT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AR",
+      "municipality": "Little Rock"
     },
     {
       "iata_code": "LNK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NE",
+      "municipality": "Lincoln"
     },
     {
       "iata_code": "LNS",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-PA",
+      "municipality": "Lancaster"
     },
     {
       "iata_code": "LNY",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-HI",
+      "municipality": "Lanai City"
     },
     {
       "iata_code": "LRD",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "Laredo"
     },
     {
       "iata_code": "LRU",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NM",
+      "municipality": "Las Cruces"
     },
     {
       "iata_code": "LSE",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WI",
+      "municipality": "La Crosse"
     },
     {
       "iata_code": "LUK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-OH",
+      "municipality": "Cincinnati"
     },
     {
       "iata_code": "LUR",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Cape Lisburne"
     },
     {
       "iata_code": "LWB",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WV",
+      "municipality": "Lewisburg"
     },
     {
       "iata_code": "LWS",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-ID",
+      "municipality": "Lewiston"
     },
     {
       "iata_code": "LYH",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-VA",
+      "municipality": "Lynchburg"
     },
     {
       "iata_code": "MAF",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "Midland"
     },
     {
       "iata_code": "MBS",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MI",
+      "municipality": "Freeland"
     },
     {
       "iata_code": "MCE",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Merced"
     },
     {
       "iata_code": "MCG",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "McGrath"
     },
     {
       "iata_code": "MCI",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MO",
+      "municipality": "Kansas City"
     },
     {
       "iata_code": "MCK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NE",
+      "municipality": "McCook"
     },
     {
       "iata_code": "MCN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-GA",
+      "municipality": "Macon"
     },
     {
       "iata_code": "MCO",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "Orlando"
     },
     {
       "iata_code": "MCW",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IA",
+      "municipality": "Mason City"
     },
     {
       "iata_code": "MDT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-PA",
+      "municipality": "Harrisburg"
     },
     {
       "iata_code": "MDW",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IL",
+      "municipality": "Chicago"
     },
     {
       "iata_code": "MEI",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MS",
+      "municipality": "Meridian"
     },
     {
       "iata_code": "MEM",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TN",
+      "municipality": "Memphis"
     },
     {
       "iata_code": "MFE",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "McAllen"
     },
     {
       "iata_code": "MFR",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-OR",
+      "municipality": "Medford"
     },
     {
       "iata_code": "MGC",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IN",
+      "municipality": "Michigan City"
     },
     {
       "iata_code": "MGM",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AL",
+      "municipality": "Montgomery"
     },
     {
       "iata_code": "MGW",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WV",
+      "municipality": "Morgantown"
     },
     {
       "iata_code": "MHK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-KS",
+      "municipality": "Manhattan"
     },
     {
       "iata_code": "MHT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NH",
+      "municipality": "Manchester"
     },
     {
       "iata_code": "MIA",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "Miami"
     },
     {
       "iata_code": "MKE",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WI",
+      "municipality": "Milwaukee"
     },
     {
       "iata_code": "MKG",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MI",
+      "municipality": "Muskegon"
     },
     {
       "iata_code": "MKK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-HI",
+      "municipality": "Kaunakakai"
     },
     {
       "iata_code": "MKL",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TN",
+      "municipality": "Jackson"
     },
     {
       "iata_code": "MLB",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "Melbourne"
     },
     {
       "iata_code": "MLI",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IL",
+      "municipality": "Moline"
     },
     {
       "iata_code": "MLU",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-LA",
+      "municipality": "Monroe"
     },
     {
       "iata_code": "MMH",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Mammoth Lakes"
     },
     {
       "iata_code": "MOB",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AL",
+      "municipality": "Mobile"
     },
     {
       "iata_code": "MOT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-ND",
+      "municipality": "Minot"
     },
     {
       "iata_code": "MQT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MI",
+      "municipality": "Gwinn"
     },
     {
       "iata_code": "MRI",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Anchorage"
     },
     {
       "iata_code": "MRY",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Monterey"
     },
     {
       "iata_code": "MSL",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AL",
+      "municipality": "Muscle Shoals"
     },
     {
       "iata_code": "MSN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WI",
+      "municipality": "Madison"
     },
     {
       "iata_code": "MSO",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MT",
+      "municipality": "Missoula"
     },
     {
       "iata_code": "MSP",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MN",
+      "municipality": "Minneapolis"
     },
     {
       "iata_code": "MSS",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NY",
+      "municipality": "Massena"
     },
     {
       "iata_code": "MSY",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-LA",
+      "municipality": "New Orleans"
     },
     {
       "iata_code": "MTJ",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CO",
+      "municipality": "Montrose"
     },
     {
       "iata_code": "MUE",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-HI",
+      "municipality": "Waimea (Kamuela)"
     },
     {
       "iata_code": "MWA",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IL",
+      "municipality": "Marion"
     },
     {
       "iata_code": "MWL",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "Mineral Wells"
     },
     {
       "iata_code": "MYL",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-ID",
+      "municipality": "McCall"
     },
     {
       "iata_code": "MYR",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-SC",
+      "municipality": "Myrtle Beach"
     },
     {
       "iata_code": "MYU",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Mekoryuk"
     },
     {
       "iata_code": "NPT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-RI",
+      "municipality": "Newport"
     },
     {
       "iata_code": "NUI",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Nuiqsut"
     },
     {
       "iata_code": "OAJ",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NC",
+      "municipality": "Richlands"
     },
     {
       "iata_code": "OAK",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Oakland"
     },
     {
       "iata_code": "OCE",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MD",
+      "municipality": "Ocean City"
     },
     {
       "iata_code": "OGD",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-UT",
+      "municipality": "Ogden"
     },
     {
       "iata_code": "OGG",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-HI",
+      "municipality": "Kahului"
     },
     {
       "iata_code": "OGS",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NY",
+      "municipality": "Ogdensburg"
     },
     {
       "iata_code": "OKC",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-OK",
+      "municipality": "Oklahoma City"
     },
     {
       "iata_code": "OLF",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MT",
+      "municipality": "Wolf Point"
     },
     {
       "iata_code": "OLM",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WA",
+      "municipality": "Olympia"
     },
     {
       "iata_code": "OMA",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NE",
+      "municipality": "Omaha"
     },
     {
       "iata_code": "OME",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Nome"
     },
     {
       "iata_code": "ONT",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Ontario"
     },
     {
       "iata_code": "OPF",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "Miami"
     },
     {
       "iata_code": "ORD",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IL",
+      "municipality": "Chicago"
     },
     {
       "iata_code": "ORF",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-VA",
+      "municipality": "Norfolk"
     },
     {
       "iata_code": "ORH",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MA",
+      "municipality": "Worcester"
     },
     {
       "iata_code": "ORT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Northway"
     },
     {
       "iata_code": "OTH",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-OR",
+      "municipality": "North Bend"
     },
     {
       "iata_code": "OTZ",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Kotzebue"
     },
     {
       "iata_code": "OWB",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-KY",
+      "municipality": "Owensboro"
     },
     {
       "iata_code": "PAE",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WA",
+      "municipality": "Everett"
     },
     {
       "iata_code": "PAH",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-KY",
+      "municipality": "Paducah"
     },
     {
       "iata_code": "PBG",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NY",
+      "municipality": "Plattsburgh"
     },
     {
       "iata_code": "PDK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-GA",
+      "municipality": "Atlanta"
     },
     {
       "iata_code": "PDT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-OR",
+      "municipality": "Pendleton"
     },
     {
       "iata_code": "PDX",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-OR",
+      "municipality": "Portland"
     },
     {
       "iata_code": "PGA",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AZ",
+      "municipality": "Page"
     },
     {
       "iata_code": "PGD",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "Punta Gorda"
     },
     {
       "iata_code": "PGV",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NC",
+      "municipality": "Greenville"
     },
     {
       "iata_code": "PHF",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-VA",
+      "municipality": "Newport News"
     },
     {
       "iata_code": "PHL",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-PA",
+      "municipality": "Philadelphia"
     },
     {
       "iata_code": "PHX",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AZ",
+      "municipality": "Phoenix"
     },
     {
       "iata_code": "PIA",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IL",
+      "municipality": "Peoria"
     },
     {
       "iata_code": "PIB",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MS",
+      "municipality": "Moselle"
     },
     {
       "iata_code": "PIE",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "Pinellas Park"
     },
     {
       "iata_code": "PIH",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-ID",
+      "municipality": "Pocatello"
     },
     {
       "iata_code": "PIR",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-SD",
+      "municipality": "Pierre"
     },
     {
       "iata_code": "PIT",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-PA",
+      "municipality": "Pittsburgh"
     },
     {
       "iata_code": "PIZ",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Point Lay"
     },
     {
       "iata_code": "PKB",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WV",
+      "municipality": "Parkersburg (Williamstown)"
     },
     {
       "iata_code": "PLN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MI",
+      "municipality": "Pellston"
     },
     {
       "iata_code": "PNS",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "Pensacola"
     },
     {
       "iata_code": "PQI",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-ME",
+      "municipality": "Presque Isle"
     },
     {
       "iata_code": "PRC",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AZ",
+      "municipality": "Prescott"
     },
     {
       "iata_code": "PSC",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WA",
+      "municipality": "Pasco"
     },
     {
       "iata_code": "PSG",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Petersburg"
     },
     {
       "iata_code": "PSM",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NH",
+      "municipality": "Portsmouth"
     },
     {
       "iata_code": "PSP",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Palm Springs"
     },
     {
       "iata_code": "PTH",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Port Heiden"
     },
     {
       "iata_code": "PTU",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Platinum"
     },
     {
       "iata_code": "PUB",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CO",
+      "municipality": "Pueblo"
     },
     {
       "iata_code": "PUW",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WA",
+      "municipality": "Pullman"
     },
     {
       "iata_code": "PVD",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-RI",
+      "municipality": "Providence/Warwick"
     },
     {
       "iata_code": "PVU",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-UT",
+      "municipality": "Provo"
     },
     {
       "iata_code": "PWM",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-ME",
+      "municipality": "Portland"
     },
     {
       "iata_code": "RAP",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-SD",
+      "municipality": "Rapid City"
     },
     {
       "iata_code": "RBY",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Ruby"
     },
     {
       "iata_code": "RDD",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Redding"
     },
     {
       "iata_code": "RDM",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-OR",
+      "municipality": "Redmond"
     },
     {
       "iata_code": "RDU",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NC",
+      "municipality": "Raleigh/Durham"
     },
     {
       "iata_code": "RFD",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IL",
+      "municipality": "Chicago/Rockford"
     },
     {
       "iata_code": "RHI",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WI",
+      "municipality": "Rhinelander"
     },
     {
       "iata_code": "RIC",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-VA",
+      "municipality": "Richmond"
     },
     {
       "iata_code": "RIW",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WY",
+      "municipality": "Riverton"
     },
     {
       "iata_code": "RKD",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-ME",
+      "municipality": "Rockland"
     },
     {
       "iata_code": "RKS",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WY",
+      "municipality": "Rock Springs"
     },
     {
       "iata_code": "RNO",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NV",
+      "municipality": "Reno"
     },
     {
       "iata_code": "ROA",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-VA",
+      "municipality": "Roanoke"
     },
     {
       "iata_code": "ROC",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NY",
+      "municipality": "Rochester"
     },
     {
       "iata_code": "ROW",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NM",
+      "municipality": "Roswell"
     },
     {
       "iata_code": "RST",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MN",
+      "municipality": "Rochester"
     },
     {
       "iata_code": "RSW",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "Fort Myers"
     },
     {
       "iata_code": "RUT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-VT",
+      "municipality": "Rutland"
     },
     {
       "iata_code": "SAF",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NM",
+      "municipality": "Santa Fe"
     },
     {
       "iata_code": "SAN",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "San Diego"
     },
     {
       "iata_code": "SAT",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "San Antonio"
     },
     {
       "iata_code": "SAV",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-GA",
+      "municipality": "Savannah"
     },
     {
       "iata_code": "SBA",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Santa Barbara"
     },
     {
       "iata_code": "SBD",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "San Bernardino"
     },
     {
       "iata_code": "SBN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IN",
+      "municipality": "South Bend"
     },
     {
       "iata_code": "SBP",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "San Luis Obispo"
     },
     {
       "iata_code": "SBY",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MD",
+      "municipality": "Salisbury"
     },
     {
       "iata_code": "SCC",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Deadhorse"
     },
     {
       "iata_code": "SCE",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-PA",
+      "municipality": "State College"
     },
     {
       "iata_code": "SCK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Stockton"
     },
     {
       "iata_code": "SDF",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-KY",
+      "municipality": "Louisville"
     },
     {
       "iata_code": "SDP",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Sand Point"
     },
     {
       "iata_code": "SDY",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MT",
+      "municipality": "Sidney"
     },
     {
       "iata_code": "SEA",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WA",
+      "municipality": "Seattle"
     },
     {
       "iata_code": "SFB",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "Orlando"
     },
     {
       "iata_code": "SFO",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "San Francisco"
     },
     {
       "iata_code": "SGF",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MO",
+      "municipality": "Springfield"
     },
     {
       "iata_code": "SGU",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-UT",
+      "municipality": "St George"
     },
     {
       "iata_code": "SHD",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-VA",
+      "municipality": "Weyers Cave"
     },
     {
       "iata_code": "SHR",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WY",
+      "municipality": "Sheridan"
     },
     {
       "iata_code": "SHV",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-LA",
+      "municipality": "Shreveport"
     },
     {
       "iata_code": "SIT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Sitka"
     },
     {
       "iata_code": "SJC",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "San Jose"
     },
     {
       "iata_code": "SJT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "San Angelo"
     },
     {
       "iata_code": "SLC",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-UT",
+      "municipality": "Salt Lake City"
     },
     {
       "iata_code": "SLE",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-OR",
+      "municipality": "Salem"
     },
     {
       "iata_code": "SLK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NY",
+      "municipality": "Saranac Lake"
     },
     {
       "iata_code": "SLN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-KS",
+      "municipality": "Salina"
     },
     {
       "iata_code": "SMF",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Sacramento"
     },
     {
       "iata_code": "SMN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-ID",
+      "municipality": "Salmon"
     },
     {
       "iata_code": "SMX",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Santa Maria"
     },
     {
       "iata_code": "SNA",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Santa Ana"
     },
     {
       "iata_code": "SNP",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "St Paul Island"
     },
     {
       "iata_code": "SOW",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AZ",
+      "municipality": "Show Low"
     },
     {
       "iata_code": "SPI",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IL",
+      "municipality": "Springfield"
     },
     {
       "iata_code": "SPS",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "Wichita Falls"
     },
     {
       "iata_code": "SQL",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "San Carlos"
     },
     {
       "iata_code": "SRQ",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "Sarasota/Bradenton"
     },
     {
       "iata_code": "STC",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MN",
+      "municipality": "Saint Cloud"
     },
     {
       "iata_code": "STG",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "St George"
     },
     {
       "iata_code": "STL",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MO",
+      "municipality": "St Louis"
     },
     {
       "iata_code": "STS",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Santa Rosa"
     },
     {
       "iata_code": "SUN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-ID",
+      "municipality": "Hailey"
     },
     {
       "iata_code": "SUX",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IA",
+      "municipality": "Sioux City"
     },
     {
       "iata_code": "SVA",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Savoonga"
     },
     {
       "iata_code": "SVC",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NM",
+      "municipality": "Silver City"
     },
     {
       "iata_code": "SWF",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NY",
+      "municipality": "Newburgh"
     },
     {
       "iata_code": "SWO",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-OK",
+      "municipality": "Stillwater"
     },
     {
       "iata_code": "SYR",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NY",
+      "municipality": "Syracuse"
     },
     {
       "iata_code": "TBN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MO",
+      "municipality": "Fort Leonard Wood"
     },
     {
       "iata_code": "TEB",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NJ",
+      "municipality": "Teterboro"
     },
     {
       "iata_code": "TEX",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CO",
+      "municipality": "Telluride"
     },
     {
       "iata_code": "TIW",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WA",
+      "municipality": "Tacoma"
     },
     {
       "iata_code": "TKF",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-CA",
+      "municipality": "Truckee"
     },
     {
       "iata_code": "TLH",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "Tallahassee"
     },
     {
       "iata_code": "TOL",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-OH",
+      "municipality": "Toledo"
     },
     {
       "iata_code": "TPA",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "Tampa"
     },
     {
       "iata_code": "TRI",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TN",
+      "municipality": "Blountville"
     },
     {
       "iata_code": "TSM",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NM",
+      "municipality": "Taos"
     },
     {
       "iata_code": "TTN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NJ",
+      "municipality": "Ewing Township"
     },
     {
       "iata_code": "TUL",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-OK",
+      "municipality": "Tulsa"
     },
     {
       "iata_code": "TUP",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MS",
+      "municipality": "Tupelo"
     },
     {
       "iata_code": "TUS",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AZ",
+      "municipality": "Tucson"
     },
     {
       "iata_code": "TVC",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MI",
+      "municipality": "Traverse City"
     },
     {
       "iata_code": "TVF",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MN",
+      "municipality": "Thief River Falls"
     },
     {
       "iata_code": "TWF",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-ID",
+      "municipality": "Twin Falls"
     },
     {
       "iata_code": "TXK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AR",
+      "municipality": "Texarkana"
     },
     {
       "iata_code": "TYR",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "Tyler"
     },
     {
       "iata_code": "TYS",
       "airport_type": "large_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TN",
+      "municipality": "Knoxville/Maryville"
     },
     {
       "iata_code": "UIN",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-IL",
+      "municipality": "Quincy"
     },
     {
       "iata_code": "UNK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Unalakleet"
     },
     {
       "iata_code": "USA",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-NC",
+      "municipality": "Concord"
     },
     {
       "iata_code": "UST",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "St Augustine"
     },
     {
       "iata_code": "UTO",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Utopia Creek"
     },
     {
       "iata_code": "VCT",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-TX",
+      "municipality": "Victoria"
     },
     {
       "iata_code": "VDZ",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Valdez"
     },
     {
       "iata_code": "VEL",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-UT",
+      "municipality": "Vernal"
     },
     {
       "iata_code": "VLD",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-GA",
+      "municipality": "Valdosta"
     },
     {
       "iata_code": "VPS",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "Valparaiso"
     },
     {
       "iata_code": "VRB",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-FL",
+      "municipality": "Vero Beach"
     },
     {
       "iata_code": "WKK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Aleknagik"
     },
     {
       "iata_code": "WRG",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Wrangell"
     },
     {
       "iata_code": "WST",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-RI",
+      "municipality": "Westerly"
     },
     {
       "iata_code": "WYS",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-MT",
+      "municipality": "West Yellowstone"
     },
     {
       "iata_code": "XNA",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AR",
+      "municipality": "Fayetteville/Springdale/Rogers"
     },
     {
       "iata_code": "XWA",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-ND",
+      "municipality": "Williston"
     },
     {
       "iata_code": "YAK",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AK",
+      "municipality": "Yakutat"
     },
     {
       "iata_code": "YKM",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-WA",
+      "municipality": "Yakima"
     },
     {
       "iata_code": "YUM",
       "airport_type": "medium_airport",
-      "scheduled_service": true
+      "scheduled_service": true,
+      "iso_region": "US-AZ",
+      "municipality": "Yuma"
     }
   ]
 }

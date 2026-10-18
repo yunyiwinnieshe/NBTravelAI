@@ -96,7 +96,8 @@ Duffel Places supplies search relevance and geographic airport records, but its
 response does not include a major-airport rank, passenger count, or explicit
 scheduled-commercial-service flag. V1 therefore supplements Duffel candidates
 with a versioned reference snapshot derived from OurAirports. The selected
-fields are `iata_code`, `type`, and `scheduled_service`; the data version must be
+fields are `iata_code`, `type`, `scheduled_service`, `iso_region`, and
+`municipality`; the data version must be
 recorded because this is external reference data. The application, not the LLM,
 performs the join, filtering, distance calculation, and stable ranking.
 
@@ -104,7 +105,9 @@ performs the join, filtering, distance calculation, and stable ranking.
 public-domain OurAirports CSV. It retains U.S. airports with an IATA code and
 scheduled service whose type is `large_airport` or `medium_airport`, plus the
 source date and schema version. Refresh it quarterly and before a tagged demo
-or release using `build_airport_reference.py`.
+or release using `build_airport_reference.py`. See the
+[origin-resolution guide](planning-origin-resolution.md) for the refresh command
+and current source date.
 
 V1 accepts an explicit airport/IATA code or a city plus state. It does not
 accept arbitrary street addresses and does not require a geocoder. If Duffel

@@ -70,6 +70,12 @@ asks the user to identify the intended place. If the resolved place is not
 supported by the fixture provider, the app asks for a supported origin. It does
 not silently substitute another city.
 
+An opt-in Duffel Places mode accepts a verified US city/state or explicit
+airport, filters candidates through OurAirports, and saves an opaque location
+ID. Ambiguous or unverified origins leave the prior draft intact. A resolved
+origin outside fixture flight coverage receives a clear `no_match` after
+confirmation. See the [origin-resolution guide](planning-origin-resolution.md).
+
 The travelers cannot use the same resolved origin in V1. If both origins resolve
 to the same ID, the app remains in `collecting` and asks for two distinct
 origins.

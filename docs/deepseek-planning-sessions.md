@@ -128,8 +128,10 @@ for broader extraction cases.
 
 ## Current limits
 
-Session origins remain Boston and New York. Airport/location expansion is a
-separate ticket. Recommendations use fixture flights; the walkthrough uses
+Fixture mode session origins remain Boston and New York. Opt-in Duffel Places
+resolution accepts verified US city/state or airport input, but recommendations
+still use fixture flights; see [the setup guide](planning-origin-resolution.md).
+The walkthrough uses
 June 10–14, 2099 to match them. Other valid dates can produce `no_match`.
 Sessions and cached results live in memory and disappear on restart; multiple
 server processes do not share sessions. Persistent storage and the fuller

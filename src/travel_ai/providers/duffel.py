@@ -22,6 +22,7 @@ from travel_ai.schemas.flights import (
 from travel_ai.schemas.locations import (
     AirportCandidate,
     LocationSearchQuery,
+    PlaceSuggestion,
 )
 
 ISO_DURATION_PATTERN = re.compile(
@@ -161,6 +162,59 @@ class DuffelAirportPlaceProvider(AirportPlaceProvider):
 
     def __init__(self, client: DuffelClient) -> None:
         self._client = client
+
+    def close(self) -> None:
+        self._client.close()
+
+    def search_places(self, query: LocationSearchQuery) -> list[PlaceSuggestion]:
+        """Keep city/airport identities separate for safe origin disambiguation."""
+        response = self._client.get_place_suggestions(query=query.query)
+        try:
+            places = _DuffelPlacesEnvelope.model_validate(response).data
+        except ValidationError as error:
+            raise DuffelResponseError(
+                "Duffel place response did not match the expected schema"
+            ) from error
+
+        suggestions_by_id: dict[str, PlaceSuggestion] = {}
+        for place in places:
+            if place.iata_country_code != query.country_code or place.type not in {
+                "city",
+                "airport",
+            }:
+                continue
+            raw_airports = (
+                place.airports or []
+                if place.type == "city"
+                else [_DuffelAirportSuggestion.model_validate(place.model_dump())]
+            )
+            airports = [
+                AirportCandidate(
+                    provider_place_id=airport.id,
+                    iata_code=airport.iata_code,
+                    name=airport.name,
+                    city_name=airport.city_name,
+                    country_code=airport.iata_country_code,
+                    latitude=airport.latitude,
+                    longitude=airport.longitude,
+                    time_zone=airport.time_zone,
+                    associated_with_selected_city=place.type == "city",
+                )
+                for airport in raw_airports
+                if airport.iata_country_code == query.country_code
+            ]
+            suggestions_by_id[place.id] = PlaceSuggestion(
+                provider_place_id=place.id,
+                place_type=place.type,
+                name=place.name,
+                city_name=place.city_name,
+                iata_code=place.iata_code,
+                country_code=place.iata_country_code,
+                latitude=place.latitude,
+                longitude=place.longitude,
+                airports=airports,
+            )
+        return list(suggestions_by_id.values())
 
     def search_airports(self, query: LocationSearchQuery) -> list[AirportCandidate]:
         """Expand city results, include airport results, and deduplicate by code."""

@@ -15,10 +15,11 @@ The direct recommendation endpoint remains useful for automated evaluation,
 API testing, and a future structured form. It accepts only a complete,
 validated `TripRequest` whose origins have already been resolved to canonical
 IDs. The conversation flow owns free-text origin clarification and resolution.
-The planned live resolver will assign and persist internal location IDs after
-confirmation, reusing the record for the same place. This storage integration
-is not implemented yet. Readable origin IDs in examples remain test identifiers;
-see [the origin-ID decision](design-decisions.md).
+The opt-in Duffel Places resolver assigns and persists internal location IDs
+after an unambiguous place match, reusing the record for the same place. This
+location registry does not persist planning sessions. Readable origin IDs in
+examples remain fixture test identifiers; see the
+[origin-resolution guide](planning-origin-resolution.md).
 
 ## Implemented endpoints
 
@@ -92,7 +93,8 @@ conversations are defined in the
 Starts a travel-planning conversation. The response will create a server-owned
 `session_id` that identifies later messages from the same planning session.
 The contract accepts an optional first message. Sessions currently use in-memory
-storage and scripted fixture extraction, not a live LLM or persistent storage.
+storage and configurable fixture or DeepSeek extraction. Session storage is not
+persistent; only opt-in resolved location IDs use a durable registry.
 The server creates two draft travelers with IDs `traveler_a` and `traveler_b`.
 Each has an optional `display_name`; clients fall back to “Traveler A” and
 “Traveler B” when absent. Names are editable labels, not unique keys, and are
@@ -178,9 +180,10 @@ ranking independently testable and replaceable.
 ## Next implementation boundaries
 
 The fixture workflow connects providers, constraints, pair selection, preference
-calculation, and ranking to the finalized response. Remaining work is live origin
-resolution/storage, live provider warning/error handling, and conversation/LLM
-integration. `get_recommendation_service` is an overridable FastAPI dependency;
+calculation, and ranking to the finalized response. Planning-session origin
+resolution is opt-in; live flight searches, provider warning/error handling,
+and persistent sessions remain separate work.
+`get_recommendation_service` is an overridable FastAPI dependency;
 the default service is cached and uses fixtures without network calls.
 
 ## API integration coverage

@@ -1,7 +1,8 @@
 # Duffel Test-Mode Flight Provider
 
-**Status:** Provider and mocked tests implemented; recommendation-service
-integration remains a later task
+**Status:** Provider and mocked tests implemented; planning-session origin
+resolution is opt-in, while live flight recommendation integration remains a
+later task
 **Scope:** Place suggestions and round-trip flight searches through Duffel test
 mode only
 
@@ -94,11 +95,12 @@ token and is not executed by pytest or GitHub Actions.
 
 ## Service-integration decisions
 
-The live resolver will assign and persist a generated internal location ID after
-confirmation, retain Duffel place identity separately, and reuse the stored ID
-for the same place. `TripRequest.origin_id` will reference that record. The
-current CLI still accepts a caller-supplied `--origin-id`; automatic generation
-and storage are deferred. See [the origin-ID decision](design-decisions.md).
+The planning-session resolver now assigns and stores a generated internal
+location ID after an unambiguous city/state or airport match, retains Duffel
+place identity separately, and reuses the saved ID. The current CLI still
+accepts a caller-supplied `--origin-id`; automatic generation there is not part
+of this ticket. See the [origin-ID decision](design-decisions.md) and
+[setup guide](planning-origin-resolution.md).
 
 V1 accepts an exact airport/IATA code or a city plus state. Ambiguous Duffel
 place matches return verified choices for an LLM clarification turn; the LLM
