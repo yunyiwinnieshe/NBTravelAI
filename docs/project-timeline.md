@@ -4,9 +4,55 @@
 implement and integrate during the weekend, review each other's changes, and
 merge only when the week's acceptance criteria pass.
 
-**Schedule:** Retain the 12-week plan: core demo by Week 10, portfolio package
-in Week 11, and protected buffer in Week 12. Week numbers are project milestones,
-not newly assigned calendar dates.
+**Schedule:** The plan was revised to 14 project weeks at the Week 9 checkpoint on
+2026-10-12: V1 core quality through Week 10, demo UI in Week 11, deployed demo
+in Week 12, portfolio package in Week 13, and protected buffer in Week 14.
+These are milestone numbers, not newly assigned calendar dates. The two-week
+extension replaces the earlier Week 10 demo and Week 11 portfolio targets.
+
+## Current checkpoint — 2026-10-18
+
+The [first consolidated evaluation report](../evals/week-7-first-evaluation-report.md)
+is drafted. A fresh offline run passed 30/30 conversation cases and 20/20
+deterministic recommendation cases; the saved live DeepSeek rerun passed the
+same cases on its earlier code version. The report keeps those results separate
+and tracks the prior failures. Three subjective ranking labels and the release
+threshold still need joint review, so evaluation sign-off is not complete.
+
+The Week 7 grounded-explanation exit criterion is still open. The
+Week 9 evaluation/explanation work has carried into the next milestone, while
+request-level tracing, the demo UI, deployment, and the portfolio package remain
+ahead. The project is therefore behind the original 12-week plan. Ivy's roughly
+three-week absence reduced the time available for joint review and ranking-label
+sign-off. Prioritize evaluation sign-off and grounded explanations before
+treating Week 10 reliability work as complete; revisit the Week 11–14 targets
+if the remaining work changes.
+
+## Week 9 checkpoint — 2026-10-12
+
+Real DeepSeek extraction is connected to planning sessions. The saved live
+conversation run passed [30/30 cases and 78/78 steps](../evals/session_runs/live/live-control-guard-v3/summary.md);
+the 20 recommendation cases are deterministic, and the latest offline runner
+passed [78/78 steps](../evals/session_runs/offline/runner-offline-v4/summary.md).
+These results are version-specific; three subjective ranking labels still need
+Ivy's review. The Week 6 checklist and Week 7 explanation exit criterion have
+not been formally signed off in this document. Duffel workflow integration,
+deployment, and a public demo remain unfinished.
+
+An activity-search, itinerary-loop, and local AI-call tracing prototype is on
+the `codex/activity-itinerary-tracing` branch. Its activity hours and prices
+are illustrative fixtures; the itinerary planner is not a live LLM; tracing
+currently covers DeepSeek extraction rather than the full request path. Treat
+this as exploratory V2 work plus a first slice of Week 9 observability, not as
+completion of the V1 milestones below.
+
+**Extension decision:** Add two weeks because evaluation sign-off,
+grounded explanations, end-to-end tracing, deployment, and portfolio evidence
+remain after the original Week 8 checkpoint. Protect the V1 path: defer live
+activity sourcing, live itinerary generation, lodging, the learned ranker, and
+optional Duffel workflow integration until the deployed core demo and report
+are complete. Reassess scope at the end of Week 10; do not extend again without
+named blockers and a new decision.
 
 ## Replanned checkpoint — 2026-09-26
 
@@ -23,7 +69,8 @@ working LLM-to-fixture-recommendations flow and its evaluation. Full Duffel
 workflow integration moves to an optional Week 8 task. Itinerary generation,
 lodging, and a learned ranker are not required for the V1 release.
 
-**Extension decision:** No extension beyond Week 12 is planned now. Check the
+**Historical extension decision:** No extension beyond Week 12 was planned at
+this checkpoint. Check the
 Week 6 exit criteria together: if they are incomplete, use Week 7 for core
 integration/evaluation and defer richer explanations and optional provider work.
 At the end of Week 8, reassess against available hours. If core failures still
@@ -266,38 +313,67 @@ Provider integration is optional and must not delay the evaluated core demo.
 **Deferred to V2:** Itinerary generation/verifier and lodging. These are no
 longer Week 8 acceptance criteria.
 
-## Week 9 - Reliability, tracing, and safe fallbacks
+## Week 9 - V1 evaluation closure and grounded explanations (carried forward)
+
+**Goal:** Close the carried Week 6–8 quality work before building the demo.
+
+- Review the versioned evaluation report together, including the provisional
+  ranking labels, baseline comparison, failure taxonomy, and release threshold.
+- Resolve or explicitly bound material extraction, confirmation, constraint,
+  ranking, and unsupported-claim failures. Add regression cases for fixes.
+- Implement and evaluate grounded recommendation explanations using only
+  verified scores, costs, travel facts, preferences, and freshness metadata.
+- Keep the fixture-only activity and itinerary prototype separate from V1
+  acceptance; label its data and output accordingly.
+
+**Exit criterion:** Both contributors sign off on the V1 evaluation report and
+can reproduce the offline run. Material failures have fixes or documented
+bounds, and explanation claims have an evidence-based evaluation.
+
+## Week 10 - Reliability, tracing, and safe fallbacks
 
 **Goal:** Demonstrate production-minded operation.
 
-- Trace extraction, provider calls, constraints, ranking, explanation, and
-  response stages.
+- Extend the local extraction-call dashboard into request-level traces covering
+  provider calls, constraints, ranking, explanation, and response stages.
 - Record latency, errors, cache behavior, retries, model/provider versions,
   token usage, estimated cost, and validation results.
-- Add safe degradation: structured input when extraction fails, fixture/cache
-  fallback for live data, score-only results when explanations fail, and clear
-  no-result guidance.
+- Add safe degradation: structured input when extraction fails, score-only
+  results when explanations fail, and clear no-result guidance. If a live
+  provider is enabled, expose its source and controlled fallback explicitly.
 - Run failure-injection tests and ensure logs avoid secrets or unnecessary
   personal data.
 
 **Exit criterion:** A request can be followed through all stages and expected
 model or provider failures do not crash the service.
 
-## Week 10 - Demo UI and deployment
+## Week 11 - Demo UI
 
 **Goal:** Make the tested system easy for a recruiter to try.
 
 - Build a minimal interface for request entry, extracted-field confirmation,
   top-three comparison, scores, warnings, and destination selection.
-- Finalize a production Dockerfile, environment configuration, health checks,
-  and deployment.
-- Add basic rate limiting, spending limits, and a clean-browser test.
+- Add clear fixture/source and estimate labels in every result state.
 - Verify accessible loading, error, source, and estimate states.
 
-**Exit criterion:** A new user can complete the core workflow in the deployed
-demo and the documented commit matches what is running.
+**Exit criterion:** A new user can complete the core workflow in a local clean
+browser, including clarification, confirmation, and result comparison.
 
-## Week 11 - Portfolio package
+## Week 12 - Deployment and demo verification
+
+**Goal:** Publish the tested V1 workflow without implying fixture prices are live.
+
+- Finalize the Dockerfile, environment configuration, health checks, and
+  deployment. Keep credentials and the local tracing dashboard protected.
+- Add basic rate limiting and spending limits; test failures and a clean
+  browser session against the deployed commit.
+- Confirm the public demo URL, source labels, evaluation version, and limits in
+  the README.
+
+**Exit criterion:** A new user can finish the core workflow in the deployed
+demo, and the documented commit matches what is running.
+
+## Week 13 - Portfolio package
 
 **Goal:** Turn the implementation into a credible interview artifact.
 
@@ -311,9 +387,11 @@ demo and the documented commit matches what is running.
 **Exit criterion:** A recruiter can understand the problem and engineering
 approach quickly, while a technical interviewer can reproduce the claims.
 
-## Week 12 - Buffer or optional learned-ranker experiment
+## Week 14 - Protected buffer
 
-**Default:** Use this week as buffer if any core milestone needs work.
+Use this week to finish any V1 release or portfolio milestone that slipped.
+Do not start the optional learned-ranker experiment until the core release is
+stable and the portfolio evidence is complete.
 
 **Optional Ivy-led extension, only if the core release is stable:**
 
