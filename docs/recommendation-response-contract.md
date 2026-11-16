@@ -3,6 +3,10 @@
 **Status:** Pydantic contract and fixture-backed service/API population implemented
 **Scope:** The public success and no-match response from `POST /recommendations`
 
+The contract, restricted evidence input, generation rules, and offline evaluation
+are defined in [Grounded recommendation explanations](grounded-recommendation-explanations.md).
+Every completed public response now includes status-aligned explanations.
+
 ## Response structure
 
 ```text

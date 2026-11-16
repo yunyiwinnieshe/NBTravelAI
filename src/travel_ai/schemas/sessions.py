@@ -6,6 +6,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
+from travel_ai.schemas.generated_explanations import RecommendationExplanationSet
 from travel_ai.schemas.recommendations import DestinationRecommendation
 from travel_ai.schemas.trip import TripPreferences
 
@@ -121,3 +122,4 @@ class ConversationTurnResponse(BaseModel):
     unsupported_requests: list[UnsupportedRequestNotice] = Field(default_factory=list)
     deferred_requests: list[str] = Field(default_factory=list)
     recommendations: list[DestinationRecommendation] = Field(default_factory=list)
+    explanations: RecommendationExplanationSet | None = None

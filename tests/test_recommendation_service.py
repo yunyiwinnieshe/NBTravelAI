@@ -6,7 +6,7 @@ from decimal import Decimal
 import pytest
 
 from travel_ai.providers.fixtures import FixtureFlightOfferProvider
-from travel_ai.schemas.recommendations import RecommendationResponse
+from travel_ai.schemas.generated_explanations import ExplainedRecommendationResponse
 from travel_ai.schemas.trip import TripRequest
 from travel_ai.services.recommendation_service import RecommendationService
 
@@ -41,7 +41,7 @@ def test_workflow_returns_valid_deterministic_ranked_response() -> None:
     response = service.get_recommendations(request())
     assert response == service.get_recommendations(request())
     assert (
-        RecommendationResponse.model_validate_json(response.model_dump_json())
+        ExplainedRecommendationResponse.model_validate_json(response.model_dump_json())
         == response
     )
     assert response.status == "success"

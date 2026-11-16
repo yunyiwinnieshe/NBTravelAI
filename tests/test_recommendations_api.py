@@ -14,7 +14,7 @@ from travel_ai.main import create_app
 from travel_ai.providers.fixtures import FixtureFlightOfferProvider
 from travel_ai.routers.recommendations import get_recommendation_service
 from travel_ai.schemas.flights import FlightOffer, FlightSearchQuery
-from travel_ai.schemas.recommendations import RecommendationResponse
+from travel_ai.schemas.generated_explanations import ExplainedRecommendationResponse
 from travel_ai.services.recommendation_service import RecommendationService
 
 EVALUATED_AT = datetime(2026, 9, 19, 12, tzinfo=UTC)
@@ -83,7 +83,7 @@ def test_api_returns_exact_eligible_results(
     response = api_client.post("/recommendations", json=trip_payload(budget))
     assert response.status_code == 200
     body = response.json()
-    validated = RecommendationResponse.model_validate(body)
+    validated = ExplainedRecommendationResponse.model_validate(body)
     assert body["status"] == ("success" if expected_cities else "no_match")
     assert {
         r["destination"]["destination_id"] for r in body["recommendations"]
