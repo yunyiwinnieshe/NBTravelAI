@@ -17,9 +17,20 @@ _trace_id: ContextVar[str | None] = ContextVar("trace_id", default=None)
 
 # Stage metadata is deliberately limited to known, non-personal fields.
 _STAGE_FIELDS = {
-    "provider", "model", "version", "cache", "retry_attempt", "validation",
-    "candidate_count", "eligible_count", "rejected_count", "result_count",
-    "response_status", "http_status", "error_type", "prompt_tokens",
+    "provider",
+    "model",
+    "version",
+    "cache",
+    "retry_attempt",
+    "validation",
+    "candidate_count",
+    "eligible_count",
+    "rejected_count",
+    "result_count",
+    "response_status",
+    "http_status",
+    "error_type",
+    "prompt_tokens",
     "completion_tokens",
     "estimated_cost_usd",
     "cost_basis",
@@ -87,12 +98,14 @@ def recent_traces() -> list[dict[str, Any]]:
         trace["stages"].append(event)
     for trace in traces.values():
         calls = [
-            event for event in trace["stages"]
+            event
+            for event in trace["stages"]
             if event["stage"] == "extraction_provider"
         ]
         if calls:
             priced = [
-                event["estimated_cost_usd"] for event in calls
+                event["estimated_cost_usd"]
+                for event in calls
                 if event.get("estimated_cost_usd") is not None
             ]
             trace["estimated_known_cost_usd"] = (

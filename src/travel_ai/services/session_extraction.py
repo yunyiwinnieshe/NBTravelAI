@@ -82,7 +82,11 @@ class SessionPreferenceExtractor(PreferenceExtractor):
         try:
             future = self._pool.submit(
                 copy_context().run,
-                self._attempts, user_message, snapshot, context, deadline,
+                self._attempts,
+                user_message,
+                snapshot,
+                context,
+                deadline,
             )
         except RuntimeError:
             self._slots.release()

@@ -131,7 +131,8 @@ class RecommendationService:
         for traveler in travelers:
             try:
                 with stage(
-                    "provider", provider=type(self.origin_provider).__name__,
+                    "provider",
+                    provider=type(self.origin_provider).__name__,
                     version=getattr(self.origin_provider, "source_version", None),
                 ):
                     origins[traveler.traveler_id] = self.origin_provider.resolve(
@@ -156,7 +157,8 @@ class RecommendationService:
                     return_date=trip_request.end_date,
                 )
                 with stage(
-                    "provider", provider=type(self.flight_provider).__name__,
+                    "provider",
+                    provider=type(self.flight_provider).__name__,
                     version=getattr(self.flight_provider, "source_version", None),
                 ):
                     offers = self.flight_provider.search(query)
@@ -280,9 +282,7 @@ class RecommendationService:
             details["result_count"] = len(ranked)
         recommendations = []
         for rank, result in enumerate(ranked[:3], start=1):
-            city, pair, options = response_details_by_destination[
-                result.destination_id
-            ]
+            city, pair, options = response_details_by_destination[result.destination_id]
             recommendation = DestinationRecommendation(
                 rank=rank,
                 destination=DestinationSummary(
@@ -312,8 +312,10 @@ class RecommendationService:
             record_event("explanation", validation="not_applicable", result_count=0)
         response_status = "success" if recommendations else "no_match"
         with stage(
-            "response_validation", validation="passed",
-            response_status=response_status, result_count=len(recommendations),
+            "response_validation",
+            validation="passed",
+            response_status=response_status,
+            result_count=len(recommendations),
         ):
             return RecommendationResponse(
                 status=response_status,

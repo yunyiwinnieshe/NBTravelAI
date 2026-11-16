@@ -176,9 +176,7 @@ def test_workflow_logs_offer_rejection_reasons_without_traveler_ids(
     records = [
         r for r in caplog.records if r.message == "recommendation_offer_rejected"
     ]
-    assert [
-        (r.destination_id, r.reason_codes) for r in records
-    ] == [
+    assert [(r.destination_id, r.reason_codes) for r in records] == [
         ("denver_co", ["budget_exceeded"]),
         ("denver_co", ["max_travel_time_exceeded"]),
     ]

@@ -249,7 +249,8 @@ def test_retry_once_then_success(live_api, monkeypatch):
         f"/observability/traces/{trace_id}", auth=("local", "test-password")
     ).json()
     assert [
-        event["retry_attempt"] for event in trace["stages"]
+        event["retry_attempt"]
+        for event in trace["stages"]
         if event["stage"] == "extraction_attempt"
     ] == [1, 2]
     provider_calls = [

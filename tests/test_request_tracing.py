@@ -51,12 +51,17 @@ def test_recommendation_trace_follows_all_stages_without_personal_data(
         assert trace["trace_id"] == trace_id
         stages = [event["stage"] for event in trace["stages"]]
         assert set(stages) >= {
-            "provider", "constraints", "ranking",
-            "explanation", "response_validation", "response",
+            "provider",
+            "constraints",
+            "ranking",
+            "explanation",
+            "response_validation",
+            "response",
         }
         assert all("cache" not in s for s in trace["stages"])
         provider_versions = {
-            event["version"] for event in trace["stages"]
+            event["version"]
+            for event in trace["stages"]
             if event["stage"] == "provider"
         }
         assert len(provider_versions) == 2
@@ -76,9 +81,11 @@ def test_session_confirmation_reports_cache_hit(monkeypatch) -> None:
         with TestClient(create_app(), headers=_AUTH_HEADERS) as client:
             start = client.post(
                 "/trip-sessions",
-                json={"initial_message": (
-                    "Alice is leaving from Boston and Bob is leaving from New York."
-                )},
+                json={
+                    "initial_message": (
+                        "Alice is leaving from Boston and Bob is leaving from New York."
+                    )
+                },
             )
             session_id = start.json()["session_id"]
             extraction = client.get(
@@ -87,10 +94,12 @@ def test_session_confirmation_reports_cache_hit(monkeypatch) -> None:
             assert "extraction" in [s["stage"] for s in extraction["stages"]]
             client.post(
                 f"/trip-sessions/{session_id}/messages",
-                json={"message": (
-                    "We will travel June 10 to June 14, 2099. Alice and Bob "
-                    "each have a $500 budget and can travel up to 10 hours."
-                )},
+                json={
+                    "message": (
+                        "We will travel June 10 to June 14, 2099. Alice and Bob "
+                        "each have a $500 budget and can travel up to 10 hours."
+                    )
+                },
             )
             confirm = client.post(
                 f"/trip-sessions/{session_id}/messages",

@@ -58,7 +58,8 @@ def create_app() -> FastAPI:
         try:
             response = await call_next(request)
             record_stage(
-                "response", started,
+                "response",
+                started,
                 "error" if response.status_code >= 400 else "ok",
                 http_status=response.status_code,
             )
@@ -66,11 +67,15 @@ def create_app() -> FastAPI:
             return response
         except Exception as error:
             record_stage(
-                "response", started, "error", error_type=type(error).__name__,
+                "response",
+                started,
+                "error",
+                error_type=type(error).__name__,
                 http_status=500,
             )
             return PlainTextResponse(
-                "Internal Server Error", status_code=500,
+                "Internal Server Error",
+                status_code=500,
                 headers={"X-Trace-ID": trace_id},
             )
         finally:
