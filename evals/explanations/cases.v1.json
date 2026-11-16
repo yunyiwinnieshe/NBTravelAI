@@ -1,0 +1,138 @@
+{
+  "version": "v1.0",
+  "description": "Offline fixture cases for evidence grounding, tradeoff clarity, bounded fairness language, no-match guidance, freshness labeling, and unsafe-claim fallback.",
+  "evaluated_at": "2099-06-01T10:00:00Z",
+  "cases": [
+    {
+      "id": "ranked_three_destinations",
+      "category": "ranked_tradeoffs",
+      "description": "Explain three ranked destinations with verified cost, travel, preference, and fairness comparisons.",
+      "request": {
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {"interest_tags": ["museums"]}
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {"interest_tags": ["nature"]}
+          }
+        ]
+      },
+      "expected_status": "success"
+    },
+    {
+      "id": "budget_constrained_results",
+      "category": "ranked_tradeoffs",
+      "description": "Keep explanations grounded when budgets reduce the eligible destination set.",
+      "request": {
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 300,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {"interest_tags": ["museums"]}
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 300,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {"interest_tags": ["nature"]}
+          }
+        ]
+      },
+      "expected_status": "success"
+    },
+    {
+      "id": "empty_preferences",
+      "category": "fairness_boundary",
+      "description": "Explain ranking and fairness without inventing preference matches when no interests were requested.",
+      "request": {
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {}
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {}
+          }
+        ]
+      },
+      "expected_status": "success"
+    },
+    {
+      "id": "no_match_low_budget",
+      "category": "no_match_guidance",
+      "description": "Give bounded next steps when no fixture flight satisfies the travelers' budgets.",
+      "request": {
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 1,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {"interest_tags": ["museums"]}
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 1,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {"interest_tags": ["nature"]}
+          }
+        ]
+      },
+      "expected_status": "no_match"
+    },
+    {
+      "id": "unsafe_claim_fallback",
+      "category": "unsupported_claims",
+      "description": "Reject an unsupported safety superlative and fall back to deterministic grounded text.",
+      "request": {
+        "start_date": "2099-06-10",
+        "end_date": "2099-06-14",
+        "travelers": [
+          {
+            "traveler_id": "alex",
+            "origin_id": "boston_ma",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {"interest_tags": ["museums"]}
+          },
+          {
+            "traveler_id": "jamie",
+            "origin_id": "new_york_ny",
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "preferences": {"interest_tags": ["nature"]}
+          }
+        ]
+      },
+      "expected_status": "success",
+      "generator_mode": "unsafe_claim"
+    }
+  ]
+}
