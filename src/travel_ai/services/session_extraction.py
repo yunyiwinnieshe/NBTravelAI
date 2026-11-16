@@ -3,12 +3,14 @@
 import math
 import os
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
+from contextvars import copy_context
 from dataclasses import dataclass
 from threading import BoundedSemaphore
 from time import monotonic, sleep
 
 from travel_ai.schemas.preference_extraction import PreferenceExtractionResult
 from travel_ai.schemas.sessions import ExtractionContext, TripRequestDraft
+from travel_ai.services.ai_tracing import stage
 from travel_ai.services.deepseek_preference_extraction import (
     DeepSeekConfigurationError,
     DeepSeekUnavailableError,
@@ -79,7 +81,8 @@ class SessionPreferenceExtractor(PreferenceExtractor):
         context = context.model_copy(deep=True)
         try:
             future = self._pool.submit(
-                self._attempts, user_message, snapshot, context, deadline
+                copy_context().run,
+                self._attempts, user_message, snapshot, context, deadline,
             )
         except RuntimeError:
             self._slots.release()
@@ -101,11 +104,12 @@ class SessionPreferenceExtractor(PreferenceExtractor):
                         "Trip processing timed out. Please try again."
                     )
                 try:
-                    return self._extractor.extract(
-                        message,
-                        snapshot.model_copy(deep=True),
-                        context=context.model_copy(deep=True),
-                    )
+                    with stage("extraction_attempt", retry_attempt=attempt + 1):
+                        return self._extractor.extract(
+                            message,
+                            snapshot.model_copy(deep=True),
+                            context=context.model_copy(deep=True),
+                        )
                 except DeepSeekUnavailableError:
                     if (
                         attempt == self._policy.max_retries

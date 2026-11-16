@@ -61,6 +61,12 @@ def test_workflow_returns_valid_deterministic_ranked_response() -> None:
         e.traveler_id for e in response.exclusions if e.destination_id == "denver_co"
     } == {"alice", "bob"}
     for result in response.recommendations:
+        assert result.explanation is not None
+        assert f"ranks #{result.rank}" in result.explanation
+        assert f"${result.recommended_pair.combined_price_usd:,.2f}" in (
+            result.explanation
+        )
+        assert "fixture data" in result.explanation
         assert {g.traveler_id for g in result.flight_options_by_traveler} == {
             "alice",
             "bob",
@@ -162,7 +168,7 @@ def test_top_three_limit_preserves_total_eligible_count() -> None:
     )
 
 
-def test_workflow_logs_offer_rejection_details(
+def test_workflow_logs_offer_rejection_reasons_without_traveler_ids(
     caplog: pytest.LogCaptureFixture,
 ) -> None:
     with caplog.at_level("INFO", logger="travel_ai.services.recommendation_service"):
@@ -171,18 +177,17 @@ def test_workflow_logs_offer_rejection_details(
         r for r in caplog.records if r.message == "recommendation_offer_rejected"
     ]
     assert [
-        (r.traveler_id, r.destination_id, r.offer_id, r.reason_codes) for r in records
+        (r.destination_id, r.reason_codes) for r in records
     ] == [
-        ("alice", "denver_co", "fixture_a_denver_over_budget", ["budget_exceeded"]),
-        (
-            "bob",
-            "denver_co",
-            "fixture_b_denver_excessive_time",
-            ["max_travel_time_exceeded"],
-        ),
+        ("denver_co", ["budget_exceeded"]),
+        ("denver_co", ["max_travel_time_exceeded"]),
     ]
     assert all(
-        not hasattr(r, "trip_request") and not hasattr(r, "offers") for r in records
+        not hasattr(r, "traveler_id")
+        and not hasattr(r, "offer_id")
+        and not hasattr(r, "trip_request")
+        and not hasattr(r, "offers")
+        for r in records
     )
     assert {e.reason_code for e in response.exclusions} == {"no_eligible_flight"}
 

@@ -124,14 +124,42 @@ duplicates, and activity-budget overruns, and stops after at most three attempts
 `POST /itineraries/preview` exposes a fixture-only planner using that loop; it
 returns activity IDs and verification status, not a timed daily schedule.
 
-## Local AI-call tracing
+## Inspect a request trace locally
 
-Set `ENABLE_LOCAL_AI_DASHBOARD=1` before starting the API, then open
-`/observability/dashboard` for the local dashboard or
-`GET /observability/ai-calls` for its data: recent calls, latency, token counts, and
-failure status. This process-local view keeps the last 500 calls and is disabled
-by default. It records input/output fingerprints instead of raw traveler text.
-Estimated cost is `null` until a verified pricing configuration is added.
+Set `LOCAL_AI_DASHBOARD_PASSWORD` to a private password, then start the API with
+`ENABLE_LOCAL_AI_DASHBOARD=1 uvicorn travel_ai.main:app --reload` on your local
+machine. Make a recommendation or trip-session request and copy its `X-Trace-ID`
+response header. Open `http://127.0.0.1:8000/observability/dashboard` and sign
+in as `local` with that password, or inspect one trace directly with:
+
+```sh
+curl -u local http://127.0.0.1:8000/observability/traces/YOUR_TRACE_ID
+```
+
+`GET /observability/traces` lists recent request traces. One ID follows provider
+calls, constraint checks, ranking, explanation generation, response validation,
+and HTTP response for a recommendation request. A trip-session confirmation also
+records whether it reused a cached result. Extraction requests include provider
+calls, validation, and numbered retry attempts when applicable. Each stage has a
+latency and status; errors contain only an exception type. DeepSeek calls include
+model ID, token counts, and reported prompt-cache behavior when available.
+For `deepseek-flash`, `estimated_cost_usd` uses the published peak input/output
+rates checked on 2026-11-15, so it is a conservative estimate rather than a bill.
+Each trace sums attempts with known usage as `estimated_known_cost_usd` and counts
+attempts without usage in `unpriced_attempts`. Unknown models or missing usage
+leave the call estimate `null`. Fixture calls do not report cache status; the
+session recommendation cache reports hit or miss.
+
+Each destination also has a plain-language `explanation` built from validated
+score and flight fields. If that step fails, the scores and flight options are
+still returned with `explanation: null`, and the trace records the failure.
+
+The view is disabled by default and requires both the enable flag and password.
+Keep it local, or use HTTPS if accessed through a shared network. It keeps the
+last 2,000 stage events and 500 AI calls in process memory;
+restart clears them. It does not retain message text, trip details, credentials,
+or provider error bodies. The separate `GET /observability/ai-calls` view retains
+the existing input/output fingerprints rather than raw traveler text.
 
 ## Conversation evaluation and Postman
 

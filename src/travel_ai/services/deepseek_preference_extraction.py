@@ -7,6 +7,7 @@ import re
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
+from decimal import Decimal
 from time import perf_counter
 from typing import Any, Literal
 from zoneinfo import ZoneInfo
@@ -23,7 +24,7 @@ from travel_ai.schemas.preference_extraction import (
 )
 from travel_ai.schemas.sessions import ExtractionContext, TripRequestDraft
 from travel_ai.schemas.trip import TripPreferences
-from travel_ai.services.ai_tracing import fingerprint, record_call
+from travel_ai.services.ai_tracing import fingerprint, record_call, stage
 from travel_ai.services.preference_extraction import PreferenceExtractor
 
 
@@ -78,6 +79,38 @@ class DeepSeekSettings:
             model=os.getenv("DEEPSEEK_MODEL", "deepseek-flash"),
             timeout_seconds=timeout,
         )
+
+
+# Peak rates per 1M tokens, checked 2026-11-15. This is an upper-bound estimate,
+# not the provider's final bill; update when the published rate card changes.
+_FLASH_PEAK_COST_BASIS = "deepseek-flash-peak-2026-11-15"
+_FLASH_INPUT_MISS_RATE = Decimal("0.30")
+_FLASH_INPUT_HIT_RATE = Decimal("0.006")
+_FLASH_OUTPUT_RATE = Decimal("1.20")
+
+
+def _peak_cost_estimate(
+    model: str,
+    prompt_tokens: int | None,
+    completion_tokens: int | None,
+    cached_tokens: int | None,
+) -> float | None:
+    """Estimate USD from observed usage, treating unreported cache hits as misses."""
+    if model != "deepseek-flash" or prompt_tokens is None or completion_tokens is None:
+        return None
+    hits = cached_tokens or 0
+    if hits > prompt_tokens:
+        return None
+    cost = (
+        Decimal(prompt_tokens - hits) * _FLASH_INPUT_MISS_RATE
+        + Decimal(hits) * _FLASH_INPUT_HIT_RATE
+        + Decimal(completion_tokens) * _FLASH_OUTPUT_RATE
+    ) / Decimal(1_000_000)
+    return float(cost.quantize(Decimal("0.00000001")))
+
+
+def _token_count(value: Any) -> int | None:
+    return value if type(value) is int and value >= 0 else None
 
 
 class _Operation(BaseModel):
@@ -286,13 +319,16 @@ class DeepSeekPreferenceExtractor(PreferenceExtractor):
         if context.pending_questions or context.unsupported_requests:
             payload["conversation_context"] = context.model_dump(mode="json")
         parsed = self._request(payload)
-        known_ids = {notice.request_id for notice in context.unsupported_requests}
-        if any(
-            ack.request_id not in known_ids or ack.evidence not in user_message
-            for ack in parsed.acknowledged_unsupported
-        ):
-            raise DeepSeekResponseError("Invalid unsupported-request acknowledgment")
-        result = self._normalize(parsed, user_message, current_draft, today)
+        with stage("provider_output_validation", validation="passed"):
+            known_ids = {notice.request_id for notice in context.unsupported_requests}
+            if any(
+                ack.request_id not in known_ids or ack.evidence not in user_message
+                for ack in parsed.acknowledged_unsupported
+            ):
+                raise DeepSeekResponseError(
+                    "Invalid unsupported-request acknowledgment"
+                )
+            result = self._normalize(parsed, user_message, current_draft, today)
         result.acknowledged_unsupported = parsed.acknowledged_unsupported
         return result
 
@@ -303,6 +339,10 @@ class DeepSeekPreferenceExtractor(PreferenceExtractor):
         output_fingerprint = None
         prompt_tokens = None
         completion_tokens = None
+        cache = None
+        estimated_cost_usd = None
+        reported_version = None
+        validation_outcome = "not_run"
         try:
             try:
                 response = self._client.post(
@@ -338,24 +378,45 @@ class DeepSeekPreferenceExtractor(PreferenceExtractor):
                 raise DeepSeekConfigurationError("DeepSeek rejected the request")
             try:
                 body = response.json()
+                if not isinstance(body, dict):
+                    raise ValueError("invalid response body")
+                for field_name in ("system_fingerprint", "model"):
+                    value = body.get(field_name)
+                    if isinstance(value, str) and 0 < len(value) <= 100:
+                        reported_version = value
+                        break
+                usage = body.get("usage")
+                cached_tokens = None
+                if isinstance(usage, dict):
+                    prompt_tokens = _token_count(usage.get("prompt_tokens"))
+                    completion_tokens = _token_count(usage.get("completion_tokens"))
+                    cached_tokens = _token_count(usage.get("prompt_cache_hit_tokens"))
+                    if cached_tokens is not None:
+                        cache = "hit" if cached_tokens else "miss"
+                    estimated_cost_usd = _peak_cost_estimate(
+                        self._settings.model,
+                        prompt_tokens,
+                        completion_tokens,
+                        cached_tokens,
+                    )
                 choices = body["choices"]
                 if len(choices) != 1 or choices[0]["finish_reason"] != "stop":
                     raise ValueError("incomplete response")
                 content = choices[0]["message"]["content"]
                 parsed = _Response.model_validate_json(content)
-                usage = body.get("usage", {})
-                prompt_tokens = usage.get("prompt_tokens")
-                completion_tokens = usage.get("completion_tokens")
+                validation_outcome = "schema_passed"
                 output_fingerprint = fingerprint(content)
                 status = "ok"
                 return parsed
             except (ValueError, KeyError, IndexError, TypeError):
+                validation_outcome = "schema_failed"
                 raise DeepSeekResponseError(
                     "Couldn't interpret the response. Please try again."
                 ) from None
         finally:
             record_call(
                 model=self._settings.model,
+                reported_version=reported_version,
                 operation="preference_extraction",
                 input_fingerprint=input_fingerprint,
                 output_fingerprint=output_fingerprint,
@@ -363,6 +424,12 @@ class DeepSeekPreferenceExtractor(PreferenceExtractor):
                 status=status,
                 prompt_tokens=prompt_tokens,
                 completion_tokens=completion_tokens,
+                estimated_cost_usd=estimated_cost_usd,
+                cost_basis=(
+                    _FLASH_PEAK_COST_BASIS if estimated_cost_usd is not None else None
+                ),
+                cache=cache,
+                validation_outcome=validation_outcome,
             )
 
     @staticmethod

@@ -2,9 +2,11 @@
 
 import sqlite3
 from contextlib import asynccontextmanager
+from time import perf_counter
+from uuid import uuid4
 
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, PlainTextResponse
 
 from travel_ai.clients.duffel import DuffelConfigurationError, DuffelError
 from travel_ai.routers import (
@@ -14,6 +16,7 @@ from travel_ai.routers import (
     recommendations,
     trip_sessions,
 )
+from travel_ai.services.ai_tracing import begin_trace, end_trace, record_stage
 from travel_ai.services.deepseek_preference_extraction import (
     DeepSeekConfigurationError,
     DeepSeekExtractionError,
@@ -41,6 +44,37 @@ def create_app() -> FastAPI:
         version="0.1.0",
         description="An explainable service for fair two-traveler destination choices.",
     )
+
+    @app.middleware("http")
+    async def trace_request(request: Request, call_next):
+        if request.url.path != "/recommendations" and not request.url.path.startswith(
+            "/trip-sessions"
+        ):
+            return await call_next(request)
+        # Always generate the ID; an inbound header must not join another trace.
+        trace_id = str(uuid4())
+        token = begin_trace(trace_id)
+        started = perf_counter()
+        try:
+            response = await call_next(request)
+            record_stage(
+                "response", started,
+                "error" if response.status_code >= 400 else "ok",
+                http_status=response.status_code,
+            )
+            response.headers["X-Trace-ID"] = trace_id
+            return response
+        except Exception as error:
+            record_stage(
+                "response", started, "error", error_type=type(error).__name__,
+                http_status=500,
+            )
+            return PlainTextResponse(
+                "Internal Server Error", status_code=500,
+                headers={"X-Trace-ID": trace_id},
+            )
+        finally:
+            end_trace(token)
 
     @app.exception_handler(DeepSeekExtractionError)
     async def extraction_error(request: Request, error: DeepSeekExtractionError):

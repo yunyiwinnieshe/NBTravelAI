@@ -11,6 +11,7 @@ RecommendationResponse
 ├── recommendations: up to 3 DestinationRecommendation objects
 │   ├── rank and destination
 │   ├── score and score_breakdown
+│   ├── explanation (optional plain-language summary)
 │   ├── recommended_pair
 │   │   ├── one offer reference per traveler
 │   │   ├── combined price and compatibility metrics
@@ -24,6 +25,11 @@ RecommendationResponse
 
 The API uses a compact `FlightOption` model. Provider-only details and raw
 Duffel payloads stay inside the provider layer.
+
+Each recommendation's `explanation` is assembled from its validated score,
+selected flight pair, and price comparison. It names the largest score
+contributions and labels the flight price as fixture data. If explanation
+construction fails, it is `null` and the scores and flights remain available.
 
 ## Recommended pair and city score
 

@@ -30,8 +30,11 @@ engine stay provider-independent.
   not full schema compliance, so Pydantic validation remains mandatory.
   Strict JSON-schema tool calls exist but are beta and are not required for the
   first prototype.
-- **Cost:** $0.14 per 1 million cache-miss input tokens and $0.28 per 1
-  million output tokens at the documented standard rate.
+- **Cost:** At the published peak rate checked on 2026-11-15, `deepseek-flash`
+  costs $0.30 per 1 million cache-miss input tokens, $0.006 per 1 million
+  cache-hit input tokens, and $1.20 per 1 million output tokens. Off-peak rates
+  are lower. Local traces use peak rates for a conservative estimate; check the
+  provider page before changing this pricing snapshot.
 - **Latency:** Run in non-thinking mode for this narrow extraction task and
   measure p50/p95 latency with the shared benchmark set.
 - **Python SDK:** Its API is compatible with the OpenAI SDK by changing the
