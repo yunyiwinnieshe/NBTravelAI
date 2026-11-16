@@ -8,6 +8,7 @@ from travel_ai.evaluation.explanations import (
     evaluate_explanations,
     summarize_explanations,
 )
+from travel_ai.scripts import evaluate_explanations as evaluation_runner
 from travel_ai.scripts.evaluate_explanations import run
 
 REPOSITORY_ROOT = Path(__file__).parents[1]
@@ -54,3 +55,15 @@ def test_runner_saves_json_evidence_and_markdown_summary(tmp_path: Path) -> None
     summary = (tmp_path / "summary.md").read_text(encoding="utf-8")
     assert "Cases: 5/5 passed" in summary
     assert "does not measure human persuasiveness" in summary
+
+
+def test_source_hashes_do_not_assume_package_is_inside_checkout(
+    monkeypatch,
+    tmp_path: Path,
+) -> None:
+    monkeypatch.setattr(evaluation_runner, "REPOSITORY_ROOT", tmp_path)
+
+    hashes = evaluation_runner._source_hashes()
+
+    assert hashes["src/travel_ai/scripts/evaluate_explanations.py"]
+    assert hashes["src/travel_ai/evaluation/explanations.py"]

@@ -14,7 +14,21 @@ from travel_ai.evaluation.explanations import (
     summarize_explanations,
 )
 
-REPOSITORY_ROOT = Path(__file__).parents[3]
+PACKAGE_ROOT = Path(__file__).parents[1]
+
+
+def _repository_root() -> Path:
+    """Find checkout data even when this module is imported from site-packages."""
+    candidates = (*Path(__file__).parents, Path.cwd(), *Path.cwd().parents)
+    for candidate in candidates:
+        if (candidate / "pyproject.toml").is_file() and (
+            candidate / "evals" / "explanations"
+        ).is_dir():
+            return candidate
+    return Path.cwd()
+
+
+REPOSITORY_ROOT = _repository_root()
 DEFAULT_DATASET = REPOSITORY_ROOT / "evals" / "explanations" / "cases.v1.json"
 DEFAULT_OUTPUT = REPOSITORY_ROOT / "evals" / "explanations" / "runs" / "v1"
 
@@ -37,21 +51,29 @@ def _git_value(*args: str) -> str | None:
 
 def _source_hashes() -> dict[str, str]:
     paths = (
-        Path(__file__),
-        REPOSITORY_ROOT / "src" / "travel_ai" / "evaluation" / "explanations.py",
-        REPOSITORY_ROOT / "src" / "travel_ai" / "services" / "explanation_evidence.py",
-        REPOSITORY_ROOT
-        / "src"
-        / "travel_ai"
-        / "services"
-        / "explanation_generation.py",
-        REPOSITORY_ROOT / "src" / "travel_ai" / "schemas" / "explanations.py",
-        REPOSITORY_ROOT / "src" / "travel_ai" / "schemas" / "generated_explanations.py",
+        ("src/travel_ai/scripts/evaluate_explanations.py", Path(__file__)),
+        (
+            "src/travel_ai/evaluation/explanations.py",
+            PACKAGE_ROOT / "evaluation" / "explanations.py",
+        ),
+        (
+            "src/travel_ai/services/explanation_evidence.py",
+            PACKAGE_ROOT / "services" / "explanation_evidence.py",
+        ),
+        (
+            "src/travel_ai/services/explanation_generation.py",
+            PACKAGE_ROOT / "services" / "explanation_generation.py",
+        ),
+        (
+            "src/travel_ai/schemas/explanations.py",
+            PACKAGE_ROOT / "schemas" / "explanations.py",
+        ),
+        (
+            "src/travel_ai/schemas/generated_explanations.py",
+            PACKAGE_ROOT / "schemas" / "generated_explanations.py",
+        ),
     )
-    return {
-        path.relative_to(REPOSITORY_ROOT).as_posix(): _sha256(path.read_bytes())
-        for path in paths
-    }
+    return {label: _sha256(path.read_bytes()) for label, path in paths}
 
 
 def render_summary(report: dict[str, Any]) -> str:

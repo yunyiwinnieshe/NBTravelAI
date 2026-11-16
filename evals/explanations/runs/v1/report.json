@@ -5,8 +5,8 @@
     "evaluated_at": "2099-06-01T10:00:00+00:00",
     "evaluation": "grounded_recommendation_explanations",
     "evaluation_version": "v1",
-    "generated_at": "2026-11-16T01:48:30.365044+00:00",
-    "git_commit": "bd33ceacb0362e8b0a432a3c63069ee9f1363215",
+    "generated_at": "2026-11-16T02:58:20.624499+00:00",
+    "git_commit": "e5c32faa0c2b63bea545b6886cabcd18d8c512a1",
     "git_dirty": true,
     "measures_model_quality": false,
     "mode": "offline_fixture",
@@ -15,7 +15,7 @@
       "src/travel_ai/evaluation/explanations.py": "bb93c58c58e84bff2c4e0808857b09b7cb57b318d059001e25ec8f7995f1555c",
       "src/travel_ai/schemas/explanations.py": "367cb7c156b4c039cfbd612202fbb6496bfa304530c85249d91e6ec85de7ad24",
       "src/travel_ai/schemas/generated_explanations.py": "ded330b9194a000311069824cc702caa122879f45cedf5cbb702d7f35639cc80",
-      "src/travel_ai/scripts/evaluate_explanations.py": "5b89c784726983d92d232182d5e03e4ebc5ad69a13c53421886e6cee0e644369",
+      "src/travel_ai/scripts/evaluate_explanations.py": "e77c08d8abcc8c540b0ea6ea7dae068e1cc1424febda0c6530c3b2a92bdc38f1",
       "src/travel_ai/services/explanation_evidence.py": "9230baf941158b2e924ddd5639f49f4be02f15c7c42de990935e7e8cf806be2b",
       "src/travel_ai/services/explanation_generation.py": "50378ae60dfddad996218bbad6c47d4cfdcb83d87a69690517f1b5acd4993113"
     }
