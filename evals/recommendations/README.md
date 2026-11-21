@@ -8,10 +8,10 @@ checks that every displayed flight option respects its traveler's budget and
 one-way travel-time limit. Invalid requests must fail validation before a
 recommendation is requested.
 
-The three preference cases carry `label_status: provisional` and `reviewer:
-Ivy`. Their hard eligibility expectations are graded, but destination ranking
-quality is subjective and still needs Ivy's review. No ranking formula was
-changed to make these examples pass.
+The three preference cases carry `label_status: reviewed` and `reviewer: Ivy`.
+Ivy approved their ranking behavior because it treats preferences as soft
+signals and balances them against airfare, travel time, and fairness. No ranking
+formula was changed to make these examples pass.
 
 Run both this dataset and the 30 conversation cases with one offline command:
 
