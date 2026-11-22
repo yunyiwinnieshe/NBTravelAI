@@ -73,6 +73,81 @@ records, and provider secrets remaining absent from the database. Invalid stored
 records raise `PlanningSessionDataError`; the API returns a non-retryable 503
 without exposing the stored payload.
 
+## Operational limits
+
+### Database location and initialization
+
+- If `PLANNING_SESSION_DB_PATH` is unset, the application uses process-local
+  memory. Those sessions disappear when the process stops and are not shared
+  between server processes.
+- If it is set, the value is the SQLite database file path. A relative path is
+  resolved from the server process's working directory. The parent directory
+  must already exist and be writable. The durable adapter rejects `:memory:`.
+  This setting is independent of `ORIGIN_LOCATION_DB_PATH`.
+- Storage configuration is created when the service is first constructed and
+  cached for that process. Restart the server after changing the environment.
+- On startup, the SQLite adapter enables WAL mode and runs `CREATE TABLE IF NOT
+  EXISTS planning_sessions`. The table stores the session ID, record schema
+  version, optimistic revision, creation and update timestamps, and the full
+  validated record as JSON. It does not alter an existing table.
+
+### Schema and migrations
+
+The current durable record schema is version 1. There is no migration runner,
+automatic upgrade, or downgrade path yet. A corrupt record or an unsupported
+schema version fails safely with `PlanningSessionDataError` rather than being
+partially loaded. Before an incompatible schema change, back up the database and
+provide and test an explicit migration.
+
+### Retention and personal data
+
+There is no delete repository operation, time-to-live, scheduled cleanup, or
+archive job. SQLite records remain until an operator removes or replaces the
+database; in-memory records last only for the process lifetime.
+
+The stored record can contain traveler display names, origin text and normalized
+origin IDs, dates, budgets, travel-time limits, interests and preferences,
+pending question text, limited source-message excerpts used for clarification,
+exact unsupported or deferred request text, and the exact confirmed
+recommendation response. The confirmed response includes destinations, scores,
+prices, flight details, its fixture/live source label, and its evidence
+timestamp.
+
+Provider credentials are not intentionally stored, and restart tests scan the
+database for configured DeepSeek and Duffel secrets. However, arbitrary
+sensitive text entered by a user can be retained when it becomes clarification,
+unsupported, or deferred context. Treat the database as personal data. The
+application does not encrypt it at rest or implement access control.
+
+### Backup and recovery
+
+The application does not create backups or restore them. In WAL mode, active
+state can also exist in the database's `-wal` and `-shm` files, so copying only
+the main file while writes are active is not a reliable backup. Operators should
+use SQLite's backup mechanism, stop and checkpoint the application, or take a
+consistent snapshot of all database files. Backup frequency, encryption,
+retention, access control, and restore testing are deployment responsibilities.
+
+### Concurrency and unavailable storage
+
+- A process-local lock serializes changes to one session inside one service
+  process. Across processes, SQLite permits one writer at a time and the
+  revision check rejects stale saves instead of losing a newer update.
+- The default SQLite lock wait is one second. The service does not automatically
+  retry a stale revision or a database lock timeout. Stale HTTP updates return
+  409 so the caller can reload. SQLite storage is intended for a small,
+  single-host demo, not a high-write distributed deployment.
+- If the database directory is missing, permissions are insufficient, or the
+  file cannot be opened or initialized, application startup fails. It does not
+  silently fall back to memory.
+- A runtime SQLite failure returns a retryable 503 through the existing shared
+  storage-error handler. That handler's current error code and message are
+  origin-storage-specific even when session storage failed; separating those
+  responses is a known reliability follow-up. Corrupt or unsupported session
+  data instead returns the non-retryable `planning_session_data_invalid` 503.
+  There is no automatic repair, but a failed save leaves the previously
+  committed session unchanged.
+
 ## Conversation behavior
 
 - Valid mentioned fields update the draft; unrelated saved values and assigned
@@ -176,6 +251,6 @@ resolution accepts verified US city/state or airport input, but recommendations
 still use fixture flights; see [the setup guide](planning-origin-resolution.md).
 The walkthrough uses
 June 10–14, 2099 to match them. Other valid dates can produce `no_match`.
-Sessions and cached results live in memory and disappear on restart; multiple
-server processes do not share sessions. Persistent storage and the fuller
-Postman/evaluation-case walkthrough remain separate work.
+Without `PLANNING_SESSION_DB_PATH`, sessions and cached results still live only
+in memory. SQLite mode adds restart persistence for a small, single-host demo
+but keeps the operational limits documented above.

@@ -85,6 +85,14 @@ to enable natural-language planning sessions. The default is `fixture`. See
 [session configuration and testing](docs/deepseek-planning-sessions.md) and
 [adapter behavior](docs/deepseek-preference-extractor.md).
 
+To preserve planning sessions across restarts, set
+`PLANNING_SESSION_DB_PATH` to a writable SQLite file before starting the server;
+its parent directory must already exist. If the setting is omitted, sessions
+remain process-local and disappear on restart. The
+[session storage operational limits](docs/deepseek-planning-sessions.md#operational-limits)
+cover schema initialization, migrations, retention, personal data, backups,
+concurrency, and unavailable-storage behavior.
+
 After exporting `DEEPSEEK_API_KEY`, explicitly opt in to the synthetic live cases:
 
 ```bash
