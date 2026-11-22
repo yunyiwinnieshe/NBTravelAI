@@ -16,6 +16,9 @@ from travel_ai.services.deepseek_preference_extraction import (
     DeepSeekPreferenceExtractor,
     DeepSeekSettings,
 )
+from travel_ai.services.planning_session_repository import (
+    InMemoryPlanningSessionRepository,
+)
 from travel_ai.services.session_extraction import (
     SessionExtractionPolicy,
 )
@@ -118,7 +121,7 @@ def start_complete(live_api):
 
 
 def snapshot(service, sid):
-    session = service._sessions[sid]
+    session = service._get_session(sid)
     return (
         session.draft.model_dump(),
         dict(session.issues),
@@ -215,12 +218,14 @@ def test_provider_failures_preserve_entire_session(live_api, failure, status, at
 def test_failed_initial_message_leaves_no_orphan_session(live_api):
     client, service, script, _ = live_api
     script["handler"] = lambda request, context: httpx.Response(401)
-    before = set(service._sessions)
+    repository = service.repository
+    assert isinstance(repository, InMemoryPlanningSessionRepository)
+    before = len(repository)
     assert (
         client.post("/trip-sessions", json={"initial_message": "Hello"}).status_code
         == 503
     )
-    assert set(service._sessions) == before
+    assert len(repository) == before
 
 
 def test_retry_once_then_success(live_api):

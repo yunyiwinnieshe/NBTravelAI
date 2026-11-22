@@ -35,6 +35,11 @@ from travel_ai.services.live_origin_resolution import (
     DuffelOriginResolver,
     SQLiteLocationStore,
 )
+from travel_ai.services.planning_session_repository import (
+    InMemoryPlanningSessionRepository,
+    PlanningSessionConflictError,
+    SQLitePlanningSessionRepository,
+)
 from travel_ai.services.preference_extraction import FixturePreferenceExtractor
 from travel_ai.services.recommendation_service import RecommendationService
 from travel_ai.services.session_extraction import (
@@ -52,7 +57,13 @@ router = APIRouter(prefix="/trip-sessions", tags=["trip sessions"])
 
 @lru_cache
 def get_trip_session_service() -> TripSessionService:
-    """Choose extraction and origin resolution; fixture recommendations stay fixed."""
+    """Choose extraction, persistence, and origin resolution from configuration."""
+    session_database_path = os.getenv("PLANNING_SESSION_DB_PATH")
+    repository = (
+        SQLitePlanningSessionRepository(Path(session_database_path))
+        if session_database_path
+        else InMemoryPlanningSessionRepository()
+    )
     origin_mode = os.getenv("ORIGIN_RESOLUTION_PROVIDER", "fixture").strip().lower()
     origin_resolver = None
     if origin_mode == "duffel":
@@ -76,6 +87,7 @@ def get_trip_session_service() -> TripSessionService:
             SessionPreferenceExtractor(DeepSeekPreferenceExtractor(), policy),
             RecommendationService(),
             origin_resolver=origin_resolver,
+            repository=repository,
         )
     if provider != "fixture":
         raise DeepSeekConfigurationError(
@@ -151,7 +163,12 @@ def get_trip_session_service() -> TripSessionService:
             ),
         }
     )
-    return TripSessionService(extractor, RecommendationService(), origin_resolver)
+    return TripSessionService(
+        extractor,
+        RecommendationService(),
+        origin_resolver,
+        repository=repository,
+    )
 
 
 @router.post(
@@ -194,6 +211,11 @@ def add_trip_session_message(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="trip session was not found",
         ) from error
+    except PlanningSessionConflictError as error:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="trip session changed; reload it and try again",
+        ) from error
     except ValueError as error:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -215,6 +237,11 @@ def confirm_trip_session(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="trip session was not found",
+        ) from error
+    except PlanningSessionConflictError as error:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="trip session changed; reload it and try again",
         ) from error
     except TripSessionNotReadyError as error:
         raise HTTPException(

@@ -1,7 +1,7 @@
 """Acceptance cases for the agreed planning-session behavior (no network)."""
 
 from concurrent.futures import ThreadPoolExecutor
-from datetime import date, timedelta
+from datetime import UTC, date, datetime, timedelta
 from unittest.mock import Mock
 
 import pytest
@@ -11,6 +11,10 @@ from travel_ai.main import create_app
 from travel_ai.routers.trip_sessions import get_trip_session_service
 from travel_ai.schemas.preference_extraction import PreferenceExtractionResult
 from travel_ai.schemas.sessions import TripRequestDraft
+from travel_ai.services.planning_session_repository import (
+    PlanningSessionConflictError,
+    SQLitePlanningSessionRepository,
+)
 from travel_ai.services.preference_extraction import FixturePreferenceExtractor
 from travel_ai.services.recommendation_service import RecommendationService
 from travel_ai.services.trip_session_service import (
@@ -280,8 +284,127 @@ def test_same_origins_on_first_turn_keeps_one_valid_origin(workflow):
 def test_recommendation_failure_does_not_become_no_match_or_cached(workflow):
     service, sid, _, recommendations = workflow
     service.add_message(sid, "complete")
+    before = service._get_session(sid)
     recommendations.get_recommendations.side_effect = RuntimeError("provider failure")
     with pytest.raises(RuntimeError, match="provider failure"):
         service.confirm_session(sid)
-    assert service._sessions[sid].state == "review"
-    assert service._sessions[sid].confirmed_result is None
+    assert service._get_session(sid) == before
+
+
+def test_extraction_failure_does_not_change_saved_session(workflow, monkeypatch):
+    service, sid, _, _ = workflow
+    before = service._get_session(sid)
+    monkeypatch.setattr(
+        service.extractor,
+        "extract",
+        Mock(side_effect=RuntimeError("extraction failed")),
+    )
+
+    with pytest.raises(RuntimeError, match="extraction failed"):
+        service.add_message(sid, "complete")
+
+    assert service._get_session(sid) == before
+
+
+def test_repository_save_failure_does_not_change_saved_session(workflow, monkeypatch):
+    service, sid, _, _ = workflow
+    before = service._get_session(sid)
+    monkeypatch.setattr(
+        service.repository,
+        "save",
+        Mock(side_effect=RuntimeError("storage unavailable")),
+    )
+
+    with pytest.raises(RuntimeError, match="storage unavailable"):
+        service.add_message(sid, "complete")
+
+    assert service._get_session(sid) == before
+
+
+def test_duplicate_confirmation_does_not_create_another_revision(workflow):
+    service, sid, _, _ = workflow
+    service.add_message(sid, "complete")
+    first = service.confirm_session(sid)
+    confirmed = service._get_session(sid)
+
+    assert service.confirm_session(sid) == first
+    assert service._get_session(sid).revision == confirmed.revision
+
+
+def test_stale_revision_maps_to_http_conflict(workflow, monkeypatch):
+    service, sid, _, _ = workflow
+    before = service._get_session(sid)
+    monkeypatch.setattr(
+        service.repository,
+        "save",
+        Mock(side_effect=PlanningSessionConflictError("stale revision")),
+    )
+    app = create_app()
+    app.dependency_overrides[get_trip_session_service] = lambda: service
+
+    with TestClient(app) as client:
+        response = client.post(
+            f"/trip-sessions/{sid}/messages",
+            json={"message": "complete"},
+        )
+
+    assert response.status_code == 409
+    assert response.json()["detail"] == (
+        "trip session changed; reload it and try again"
+    )
+    assert service._get_session(sid) == before
+
+
+def test_confirmed_result_restored_exactly_after_sqlite_restart(tmp_path):
+    evidence_time = datetime(2026, 10, 18, 12, tzinfo=UTC)
+    complete = extraction(
+        {
+            "origin": "Boston",
+            "display_name": "Alice",
+            "budget_usd": 500,
+            "max_travel_time_hours": 6,
+        },
+        {
+            "origin": "New York",
+            "display_name": "Bob",
+            "budget_usd": 450,
+            "max_travel_time_hours": 5,
+        },
+        start_date="2099-06-10",
+        end_date="2099-06-14",
+    )
+    database_path = tmp_path / "planning-sessions.sqlite"
+    repository = SQLitePlanningSessionRepository(database_path)
+    recommender = Mock(wraps=RecommendationService(clock=lambda: evidence_time))
+    first_service = TripSessionService(
+        FixturePreferenceExtractor({"complete": complete}),
+        recommender,
+        repository=repository,
+    )
+    session_id = first_service.create_session(None).session_id
+    first_service.add_message(session_id, "complete")
+    confirmed = first_service.confirm_session(session_id)
+    saved_before_restart = repository.get(session_id)
+    first_service.close()
+
+    restarted_recommender = Mock()
+    restarted_recommender.get_recommendations.side_effect = AssertionError(
+        "stored confirmation must not be regenerated"
+    )
+    restarted_repository = SQLitePlanningSessionRepository(database_path)
+    restarted_service = TripSessionService(
+        FixturePreferenceExtractor({}),
+        restarted_recommender,
+        repository=restarted_repository,
+    )
+
+    restored = restarted_service.confirm_session(session_id)
+    saved_after_restore = restarted_repository.get(session_id)
+
+    assert restored.model_dump_json() == confirmed.model_dump_json()
+    assert restored.recommendation_metadata is not None
+    assert restored.recommendation_metadata.data_mode == "fixture"
+    assert restored.recommendation_metadata.evaluated_at == evidence_time
+    assert saved_after_restore == saved_before_restart
+    recommender.get_recommendations.assert_called_once()
+    restarted_recommender.get_recommendations.assert_not_called()

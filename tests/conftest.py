@@ -9,3 +9,4 @@ def offline_extraction_environment(monkeypatch):
     monkeypatch.delenv("DEEPSEEK_API_KEY", raising=False)
     monkeypatch.delenv("DEEPSEEK_MAX_RETRIES", raising=False)
     monkeypatch.delenv("DEEPSEEK_TOTAL_TIMEOUT_SECONDS", raising=False)
+    monkeypatch.delenv("PLANNING_SESSION_DB_PATH", raising=False)

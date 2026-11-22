@@ -1,7 +1,6 @@
 """Transactional conversational planning sessions with configured extraction."""
 
 import re
-from dataclasses import dataclass, field, replace
 from datetime import date
 from decimal import Decimal, InvalidOperation
 from threading import RLock
@@ -24,6 +23,11 @@ from travel_ai.schemas.sessions import (
 )
 from travel_ai.schemas.trip import TravelerRequest, TripRequest
 from travel_ai.services.live_origin_resolution import OriginResolutionError
+from travel_ai.services.planning_session_repository import (
+    InMemoryPlanningSessionRepository,
+    PlanningSessionRecord,
+    PlanningSessionRepository,
+)
 from travel_ai.services.preference_extraction import PreferenceExtractor
 from travel_ai.services.recommendation_service import (
     RecommendationService,
@@ -69,22 +73,6 @@ def is_non_trip_control_message(message: str) -> bool:
     return bool((role_spoof and control_verb and not trip_detail) or explicit_override)
 
 
-@dataclass
-class _TripSession:
-    """Mutable in-memory state for one fixture planning conversation."""
-
-    draft: TripRequestDraft
-    state: ConversationState
-    missing_questions: list[str]
-    missing_fields: list[str] = field(default_factory=list)
-    issues: dict[str, str] = field(default_factory=dict)
-    confirmed_result: ConversationTurnResponse | None = None
-    unsupported: dict[str, UnsupportedRequestNotice] = field(default_factory=dict)
-    deferred: list[str] = field(default_factory=list)
-    question_context: dict[str, str] = field(default_factory=dict)
-    lock: RLock = field(default_factory=RLock)
-
-
 class FixtureOriginResolver:
     """Resolve the limited fixture place names without generating location IDs."""
 
@@ -116,11 +104,18 @@ class TripSessionService:
         extractor: PreferenceExtractor,
         recommendation_service: RecommendationService,
         origin_resolver: OriginResolver | None = None,
+        repository: PlanningSessionRepository | None = None,
     ) -> None:
         self.extractor = extractor
         self.recommendation_service = recommendation_service
         self.origin_resolver = origin_resolver or FixtureOriginResolver()
-        self._sessions: dict[str, _TripSession] = {}
+        self.repository = (
+            repository
+            if repository is not None
+            else InMemoryPlanningSessionRepository()
+        )
+        self._session_locks: dict[str, RLock] = {}
+        self._session_locks_guard = RLock()
 
     def close(self) -> None:
         self.extractor.close()
@@ -128,10 +123,16 @@ class TripSessionService:
         if close_resolver is not None:
             close_resolver()
 
+    def _lock_for(self, session_id: str) -> RLock:
+        """Return the process-local lock for one durable session ID."""
+        with self._session_locks_guard:
+            return self._session_locks.setdefault(session_id, RLock())
+
     def create_session(self, initial_message: str | None) -> ConversationTurnResponse:
         """Create a session and optionally process its first fixture message."""
         session_id = str(uuid4())
-        session = _TripSession(
+        session = PlanningSessionRecord(
+            session_id=session_id,
             draft=TripRequestDraft(
                 travelers=[
                     TravelerPreferencesDraft(traveler_id="traveler_a"),
@@ -141,15 +142,20 @@ class TripSessionService:
             state=ConversationState.COLLECTING,
             missing_questions=["Tell me where each traveler is leaving from."],
         )
-        self._sessions[session_id] = session
         self._refresh_state(session)
+        session_lock = RLock()
         if initial_message is not None:
-            try:
-                return self.add_message(session_id, initial_message)
-            except Exception:
-                # No inaccessible partial session is retained on failed creation.
-                self._sessions.pop(session_id, None)
-                raise
+            with session_lock:
+                candidate, response = self._add_message_to_session(
+                    session_id, session, initial_message
+                )
+            self.repository.create(candidate)
+            with self._session_locks_guard:
+                self._session_locks[session_id] = session_lock
+            return response
+        self.repository.create(session)
+        with self._session_locks_guard:
+            self._session_locks[session_id] = session_lock
         return self._response(session_id, session)
 
     def add_message(
@@ -158,88 +164,77 @@ class TripSessionService:
         message: str,
     ) -> ConversationTurnResponse:
         """Apply one extractor result to the session's saved draft."""
-        session = self._get_session(session_id)
-        with session.lock:
-            if is_non_trip_control_message(message):
-                response = (
-                    session.confirmed_result.model_copy(deep=True)
-                    if session.confirmed_result is not None
-                    else self._response(session_id, session)
-                )
-                response.assistant_message = (
-                    "I can't follow instructions to change system behavior or reveal "
-                    "credentials. Your saved trip details are unchanged.\n"
-                    + response.assistant_message
-                )
-                return response
-            context = ExtractionContext(
-                pending_questions=self._pending_questions(session),
-                unsupported_requests=list(session.unsupported.values()),
+        with self._lock_for(session_id):
+            session = self._get_session(session_id)
+            candidate, response = self._add_message_to_session(
+                session_id, session, message
             )
-            result = self.extractor.extract(
-                message,
-                session.draft.model_copy(deep=True),
-                context=context.model_copy(deep=True),
-            )
-            candidate = self._copy_session(session)
-            self._apply_extraction(candidate, result)
-            for path, question in candidate.issues.items():
-                if path not in session.issues or question != session.issues[path]:
-                    candidate.question_context[path] = message
-            candidate.question_context = {
-                path: source
-                for path, source in candidate.question_context.items()
-                if path in candidate.missing_fields
-            }
-            for acknowledgment in result.acknowledged_unsupported:
-                if (
-                    acknowledgment.evidence not in message
-                    or acknowledgment.request_id not in session.unsupported
-                ):
-                    raise ValueError("acknowledgment must quote the current message")
-                self._defer_request(candidate, acknowledgment.request_id)
-            if result.acknowledged_unsupported:
-                candidate.confirmed_result = None
-                self._refresh_state(candidate)
-            self._commit_session(session, candidate)
-            if session.confirmed_result is not None:
-                return session.confirmed_result.model_copy(deep=True)
-            return self._response(session_id, session)
+            if candidate != session:
+                self.repository.save(candidate)
+            return response
 
-    @staticmethod
-    def _copy_session(session: _TripSession) -> _TripSession:
-        return replace(
-            session,
-            draft=session.draft.model_copy(deep=True),
-            issues=dict(session.issues),
-            missing_fields=list(session.missing_fields),
-            missing_questions=list(session.missing_questions),
-            unsupported={
-                key: value.model_copy(deep=True)
-                for key, value in session.unsupported.items()
-            },
-            deferred=list(session.deferred),
-            question_context=dict(session.question_context),
+    def _add_message_to_session(
+        self,
+        session_id: str,
+        session: PlanningSessionRecord,
+        message: str,
+    ) -> tuple[PlanningSessionRecord, ConversationTurnResponse]:
+        """Build a validated candidate without changing the loaded record."""
+        candidate = self._validated_copy(session)
+        if is_non_trip_control_message(message):
+            response = (
+                candidate.confirmed_result.model_copy(deep=True)
+                if candidate.confirmed_result is not None
+                else self._response(session_id, candidate)
+            )
+            response.assistant_message = (
+                "I can't follow instructions to change system behavior or reveal "
+                "credentials. Your saved trip details are unchanged.\n"
+                + response.assistant_message
+            )
+            return candidate, response
+        context = ExtractionContext(
+            pending_questions=self._pending_questions(session),
+            unsupported_requests=list(session.unsupported.values()),
         )
+        result = self.extractor.extract(
+            message,
+            session.draft.model_copy(deep=True),
+            context=context.model_copy(deep=True),
+        )
+        self._apply_extraction(candidate, result)
+        for path, question in candidate.issues.items():
+            if path not in session.issues or question != session.issues[path]:
+                candidate.question_context[path] = message
+        candidate.question_context = {
+            path: source
+            for path, source in candidate.question_context.items()
+            if path in candidate.missing_fields
+        }
+        for acknowledgment in result.acknowledged_unsupported:
+            if (
+                acknowledgment.evidence not in message
+                or acknowledgment.request_id not in session.unsupported
+            ):
+                raise ValueError("acknowledgment must quote the current message")
+            self._defer_request(candidate, acknowledgment.request_id)
+        if result.acknowledged_unsupported:
+            candidate.confirmed_result = None
+            self._refresh_state(candidate)
+        candidate = self._validated_copy(candidate)
+        if candidate.confirmed_result is not None:
+            response = candidate.confirmed_result.model_copy(deep=True)
+        else:
+            response = self._response(session_id, candidate)
+        return candidate, response
 
     @staticmethod
-    def _commit_session(session: _TripSession, candidate: _TripSession) -> None:
-        # Preserve the original object/lock for callers already waiting on it.
-        for name in (
-            "draft",
-            "state",
-            "issues",
-            "missing_fields",
-            "missing_questions",
-            "unsupported",
-            "deferred",
-            "confirmed_result",
-            "question_context",
-        ):
-            setattr(session, name, getattr(candidate, name))
+    def _validated_copy(session: PlanningSessionRecord) -> PlanningSessionRecord:
+        """Deep-copy and revalidate a record before changing or saving it."""
+        return PlanningSessionRecord.model_validate(session.model_dump())
 
     @staticmethod
-    def _pending_questions(session: _TripSession) -> list[PendingQuestion]:
+    def _pending_questions(session: PlanningSessionRecord) -> list[PendingQuestion]:
         count = 2 if session.unsupported else 3
         return [
             PendingQuestion(
@@ -255,7 +250,7 @@ class TripSessionService:
         ]
 
     @staticmethod
-    def _defer_request(session: _TripSession, request_id: str) -> None:
+    def _defer_request(session: PlanningSessionRecord, request_id: str) -> None:
         notice = session.unsupported.pop(request_id, None)
         if notice is None:
             raise ValueError("unsupported request is not pending in this session")
@@ -265,25 +260,37 @@ class TripSessionService:
 
     def defer_unsupported(self, session_id: str) -> ConversationTurnResponse:
         """Explicitly continue without the currently displayed unsupported requests."""
-        session = self._get_session(session_id)
-        with session.lock:
-            if session.unsupported:
-                for request_id in list(session.unsupported):
-                    self._defer_request(session, request_id)
-                session.confirmed_result = None
-                self._refresh_state(session)
-            if session.confirmed_result is not None:
-                return session.confirmed_result.model_copy(deep=True)
-            return self._response(session_id, session)
+        with self._lock_for(session_id):
+            session = self._get_session(session_id)
+            candidate = self._validated_copy(session)
+            if candidate.unsupported:
+                for request_id in list(candidate.unsupported):
+                    self._defer_request(candidate, request_id)
+                candidate.confirmed_result = None
+                self._refresh_state(candidate)
+                candidate = self._validated_copy(candidate)
+                self.repository.save(candidate)
+            response = (
+                candidate.confirmed_result.model_copy(deep=True)
+                if candidate.confirmed_result is not None
+                else self._response(session_id, candidate)
+            )
+            return response
 
     def confirm_session(self, session_id: str) -> ConversationTurnResponse:
         """Run recommendations only for the draft currently shown for review."""
-        session = self._get_session(session_id)
-        with session.lock:
-            return self._confirm_session(session_id, session)
+        with self._lock_for(session_id):
+            session = self._get_session(session_id)
+            if session.confirmed_result is not None:
+                return session.confirmed_result.model_copy(deep=True)
+            candidate = self._validated_copy(session)
+            response = self._confirm_session(session_id, candidate)
+            candidate = self._validated_copy(candidate)
+            self.repository.save(candidate)
+            return response
 
     def _confirm_session(
-        self, session_id: str, session: _TripSession
+        self, session_id: str, session: PlanningSessionRecord
     ) -> ConversationTurnResponse:
         """Serialize confirmation with edits and duplicate confirmations."""
         if session.confirmed_result is not None:
@@ -329,19 +336,20 @@ class TripSessionService:
             ),
             trip_request_draft=session.draft.model_copy(deep=True),
             recommendations=response.recommendations,
+            recommendation_metadata=response.metadata.model_copy(deep=True),
             deferred_requests=list(session.deferred),
         )
         return session.confirmed_result.model_copy(deep=True)
 
-    def _get_session(self, session_id: str) -> _TripSession:
-        try:
-            return self._sessions[session_id]
-        except KeyError as error:
-            raise TripSessionNotFoundError(session_id) from error
+    def _get_session(self, session_id: str) -> PlanningSessionRecord:
+        session = self.repository.get(session_id)
+        if session is None:
+            raise TripSessionNotFoundError(session_id)
+        return session
 
     def _apply_extraction(
         self,
-        session: _TripSession,
+        session: PlanningSessionRecord,
         result: PreferenceExtractionResult,
     ) -> None:
         """Merge valid mentioned fields, retaining unresolved issues across turns."""
@@ -452,7 +460,7 @@ class TripSessionService:
             self._refresh_state(session)
 
     def _validate_updates(
-        self, session: _TripSession, previous: TripRequestDraft
+        self, session: PlanningSessionRecord, previous: TripRequestDraft
     ) -> None:
         """Reject invalid dates and origins without discarding other valid updates."""
         draft = session.draft
@@ -504,7 +512,7 @@ class TripSessionService:
                     traveler.origin, traveler.origin_id = old.origin, old.origin_id
                     break
 
-    def _refresh_state(self, session: _TripSession) -> None:
+    def _refresh_state(self, session: PlanningSessionRecord) -> None:
         """Determine readiness independently of the extractor's status claim."""
         unsupported_paths = {n.field_path for n in session.unsupported.values()}
         questions = {
@@ -555,7 +563,7 @@ class TripSessionService:
     def _response(
         self,
         session_id: str,
-        session: _TripSession,
+        session: PlanningSessionRecord,
     ) -> ConversationTurnResponse:
         if session.state == ConversationState.REVIEW:
             lines = [
