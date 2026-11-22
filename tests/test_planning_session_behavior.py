@@ -280,8 +280,48 @@ def test_same_origins_on_first_turn_keeps_one_valid_origin(workflow):
 def test_recommendation_failure_does_not_become_no_match_or_cached(workflow):
     service, sid, _, recommendations = workflow
     service.add_message(sid, "complete")
+    before = service._get_session(sid)
     recommendations.get_recommendations.side_effect = RuntimeError("provider failure")
     with pytest.raises(RuntimeError, match="provider failure"):
         service.confirm_session(sid)
-    assert service._get_session(sid).state == "review"
-    assert service._get_session(sid).confirmed_result is None
+    assert service._get_session(sid) == before
+
+
+def test_extraction_failure_does_not_change_saved_session(workflow, monkeypatch):
+    service, sid, _, _ = workflow
+    before = service._get_session(sid)
+    monkeypatch.setattr(
+        service.extractor,
+        "extract",
+        Mock(side_effect=RuntimeError("extraction failed")),
+    )
+
+    with pytest.raises(RuntimeError, match="extraction failed"):
+        service.add_message(sid, "complete")
+
+    assert service._get_session(sid) == before
+
+
+def test_repository_save_failure_does_not_change_saved_session(workflow, monkeypatch):
+    service, sid, _, _ = workflow
+    before = service._get_session(sid)
+    monkeypatch.setattr(
+        service.repository,
+        "save",
+        Mock(side_effect=RuntimeError("storage unavailable")),
+    )
+
+    with pytest.raises(RuntimeError, match="storage unavailable"):
+        service.add_message(sid, "complete")
+
+    assert service._get_session(sid) == before
+
+
+def test_duplicate_confirmation_does_not_create_another_revision(workflow):
+    service, sid, _, _ = workflow
+    service.add_message(sid, "complete")
+    first = service.confirm_session(sid)
+    confirmed = service._get_session(sid)
+
+    assert service.confirm_session(sid) == first
+    assert service._get_session(sid).revision == confirmed.revision

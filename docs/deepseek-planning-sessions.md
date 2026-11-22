@@ -40,6 +40,13 @@ result. Thread locks remain process-local and are never serialized. The default
 revisions; no database adapter is configured yet, so sessions still disappear
 on restart.
 
+Session mutations use an explicit transaction-like flow: load the saved record,
+make and validate a deep candidate copy, apply the change, validate and save the
+candidate, and only then return its response. Extraction, recommendation, record
+validation, or repository-save failures therefore leave the previously saved
+record unchanged. Messages that do not change durable state and duplicate
+confirmations do not create unnecessary revisions.
+
 ## Conversation behavior
 
 - Valid mentioned fields update the draft; unrelated saved values and assigned

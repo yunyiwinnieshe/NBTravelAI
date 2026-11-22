@@ -142,10 +142,10 @@ class TripSessionService:
         session_lock = RLock()
         if initial_message is not None:
             with session_lock:
-                response = self._add_message_to_session(
+                candidate, response = self._add_message_to_session(
                     session_id, session, initial_message
                 )
-            self.repository.create(session)
+            self.repository.create(candidate)
             with self._session_locks_guard:
                 self._session_locks[session_id] = session_lock
             return response
@@ -162,8 +162,11 @@ class TripSessionService:
         """Apply one extractor result to the session's saved draft."""
         with self._lock_for(session_id):
             session = self._get_session(session_id)
-            response = self._add_message_to_session(session_id, session, message)
-            self.repository.save(session)
+            candidate, response = self._add_message_to_session(
+                session_id, session, message
+            )
+            if candidate != session:
+                self.repository.save(candidate)
             return response
 
     def _add_message_to_session(
@@ -171,20 +174,21 @@ class TripSessionService:
         session_id: str,
         session: PlanningSessionRecord,
         message: str,
-    ) -> ConversationTurnResponse:
-        """Apply a message to a loaded session without performing storage I/O."""
+    ) -> tuple[PlanningSessionRecord, ConversationTurnResponse]:
+        """Build a validated candidate without changing the loaded record."""
+        candidate = self._validated_copy(session)
         if is_non_trip_control_message(message):
             response = (
-                session.confirmed_result.model_copy(deep=True)
-                if session.confirmed_result is not None
-                else self._response(session_id, session)
+                candidate.confirmed_result.model_copy(deep=True)
+                if candidate.confirmed_result is not None
+                else self._response(session_id, candidate)
             )
             response.assistant_message = (
                 "I can't follow instructions to change system behavior or reveal "
                 "credentials. Your saved trip details are unchanged.\n"
                 + response.assistant_message
             )
-            return response
+            return candidate, response
         context = ExtractionContext(
             pending_questions=self._pending_questions(session),
             unsupported_requests=list(session.unsupported.values()),
@@ -194,7 +198,6 @@ class TripSessionService:
             session.draft.model_copy(deep=True),
             context=context.model_copy(deep=True),
         )
-        candidate = session.model_copy(deep=True)
         self._apply_extraction(candidate, result)
         for path, question in candidate.issues.items():
             if path not in session.issues or question != session.issues[path]:
@@ -214,28 +217,17 @@ class TripSessionService:
         if result.acknowledged_unsupported:
             candidate.confirmed_result = None
             self._refresh_state(candidate)
-        self._commit_session(session, candidate)
-        if session.confirmed_result is not None:
-            return session.confirmed_result.model_copy(deep=True)
-        return self._response(session_id, session)
+        candidate = self._validated_copy(candidate)
+        if candidate.confirmed_result is not None:
+            response = candidate.confirmed_result.model_copy(deep=True)
+        else:
+            response = self._response(session_id, candidate)
+        return candidate, response
 
     @staticmethod
-    def _commit_session(
-        session: PlanningSessionRecord, candidate: PlanningSessionRecord
-    ) -> None:
-        # Preserve durable identity, revision, and timestamps until repository save.
-        for name in (
-            "draft",
-            "state",
-            "issues",
-            "missing_fields",
-            "missing_questions",
-            "unsupported",
-            "deferred",
-            "confirmed_result",
-            "question_context",
-        ):
-            setattr(session, name, getattr(candidate, name))
+    def _validated_copy(session: PlanningSessionRecord) -> PlanningSessionRecord:
+        """Deep-copy and revalidate a record before changing or saving it."""
+        return PlanningSessionRecord.model_validate(session.model_dump())
 
     @staticmethod
     def _pending_questions(session: PlanningSessionRecord) -> list[PendingQuestion]:
@@ -266,25 +258,31 @@ class TripSessionService:
         """Explicitly continue without the currently displayed unsupported requests."""
         with self._lock_for(session_id):
             session = self._get_session(session_id)
-            if session.unsupported:
-                for request_id in list(session.unsupported):
-                    self._defer_request(session, request_id)
-                session.confirmed_result = None
-                self._refresh_state(session)
+            candidate = self._validated_copy(session)
+            if candidate.unsupported:
+                for request_id in list(candidate.unsupported):
+                    self._defer_request(candidate, request_id)
+                candidate.confirmed_result = None
+                self._refresh_state(candidate)
+                candidate = self._validated_copy(candidate)
+                self.repository.save(candidate)
             response = (
-                session.confirmed_result.model_copy(deep=True)
-                if session.confirmed_result is not None
-                else self._response(session_id, session)
+                candidate.confirmed_result.model_copy(deep=True)
+                if candidate.confirmed_result is not None
+                else self._response(session_id, candidate)
             )
-            self.repository.save(session)
             return response
 
     def confirm_session(self, session_id: str) -> ConversationTurnResponse:
         """Run recommendations only for the draft currently shown for review."""
         with self._lock_for(session_id):
             session = self._get_session(session_id)
-            response = self._confirm_session(session_id, session)
-            self.repository.save(session)
+            if session.confirmed_result is not None:
+                return session.confirmed_result.model_copy(deep=True)
+            candidate = self._validated_copy(session)
+            response = self._confirm_session(session_id, candidate)
+            candidate = self._validated_copy(candidate)
+            self.repository.save(candidate)
             return response
 
     def _confirm_session(
