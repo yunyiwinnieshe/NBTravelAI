@@ -3,6 +3,7 @@
 import re
 from datetime import date
 from decimal import Decimal, InvalidOperation
+from threading import RLock
 from typing import Protocol
 from uuid import uuid4
 
@@ -109,12 +110,19 @@ class TripSessionService:
         self.recommendation_service = recommendation_service
         self.origin_resolver = origin_resolver or FixtureOriginResolver()
         self.repository = repository or InMemoryPlanningSessionRepository()
+        self._session_locks: dict[str, RLock] = {}
+        self._session_locks_guard = RLock()
 
     def close(self) -> None:
         self.extractor.close()
         close_resolver = getattr(self.origin_resolver, "close", None)
         if close_resolver is not None:
             close_resolver()
+
+    def _lock_for(self, session_id: str) -> RLock:
+        """Return the process-local lock for one durable session ID."""
+        with self._session_locks_guard:
+            return self._session_locks.setdefault(session_id, RLock())
 
     def create_session(self, initial_message: str | None) -> ConversationTurnResponse:
         """Create a session and optionally process its first fixture message."""
@@ -131,14 +139,19 @@ class TripSessionService:
             missing_questions=["Tell me where each traveler is leaving from."],
         )
         self._refresh_state(session)
+        session_lock = RLock()
         if initial_message is not None:
-            with session.lock:
+            with session_lock:
                 response = self._add_message_to_session(
                     session_id, session, initial_message
                 )
             self.repository.create(session)
+            with self._session_locks_guard:
+                self._session_locks[session_id] = session_lock
             return response
         self.repository.create(session)
+        with self._session_locks_guard:
+            self._session_locks[session_id] = session_lock
         return self._response(session_id, session)
 
     def add_message(
@@ -147,8 +160,8 @@ class TripSessionService:
         message: str,
     ) -> ConversationTurnResponse:
         """Apply one extractor result to the session's saved draft."""
-        session = self._get_session(session_id)
-        with session.lock:
+        with self._lock_for(session_id):
+            session = self._get_session(session_id)
             response = self._add_message_to_session(session_id, session, message)
             self.repository.save(session)
             return response
@@ -181,7 +194,7 @@ class TripSessionService:
             session.draft.model_copy(deep=True),
             context=context.model_copy(deep=True),
         )
-        candidate = session.copy(lock=session.lock)
+        candidate = session.model_copy(deep=True)
         self._apply_extraction(candidate, result)
         for path, question in candidate.issues.items():
             if path not in session.issues or question != session.issues[path]:
@@ -210,7 +223,7 @@ class TripSessionService:
     def _commit_session(
         session: PlanningSessionRecord, candidate: PlanningSessionRecord
     ) -> None:
-        # Preserve the original object/lock for callers already waiting on it.
+        # Preserve durable identity, revision, and timestamps until repository save.
         for name in (
             "draft",
             "state",
@@ -251,8 +264,8 @@ class TripSessionService:
 
     def defer_unsupported(self, session_id: str) -> ConversationTurnResponse:
         """Explicitly continue without the currently displayed unsupported requests."""
-        session = self._get_session(session_id)
-        with session.lock:
+        with self._lock_for(session_id):
+            session = self._get_session(session_id)
             if session.unsupported:
                 for request_id in list(session.unsupported):
                     self._defer_request(session, request_id)
@@ -268,8 +281,8 @@ class TripSessionService:
 
     def confirm_session(self, session_id: str) -> ConversationTurnResponse:
         """Run recommendations only for the draft currently shown for review."""
-        session = self._get_session(session_id)
-        with session.lock:
+        with self._lock_for(session_id):
+            session = self._get_session(session_id)
             response = self._confirm_session(session_id, session)
             self.repository.save(session)
             return response

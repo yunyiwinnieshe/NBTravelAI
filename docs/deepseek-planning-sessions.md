@@ -31,9 +31,14 @@ standalone calls can omit context, while sessions supply clarification context.
 Fixture extraction accepts the same argument but uses predefined results. The API owns and closes the configured service at shutdown.
 
 Session storage is also constructor-injected through the minimal
-`PlanningSessionRepository` contract (`create`, `get`, and `save`). The default
-`InMemoryPlanningSessionRepository` preserves current behavior; no durable
-database adapter is configured yet, so sessions still disappear on restart.
+`PlanningSessionRepository` contract (`create`, `get`, and `save`). Its strict,
+JSON-serializable `PlanningSessionRecord` includes schema version, revision,
+timezone-aware UTC timestamps, the structured draft and workflow state, limited
+question/unsupported/deferred text needed to continue, and the exact confirmed
+result. Thread locks remain process-local and are never serialized. The default
+`InMemoryPlanningSessionRepository` stores defensive copies and rejects stale
+revisions; no database adapter is configured yet, so sessions still disappear
+on restart.
 
 ## Conversation behavior
 
