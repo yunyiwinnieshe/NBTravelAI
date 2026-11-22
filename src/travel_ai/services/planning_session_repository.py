@@ -1,7 +1,10 @@
 """Durable records and storage boundary for conversational planning sessions."""
 
+import sqlite3
 from collections.abc import Callable
+from contextlib import closing
 from datetime import UTC, datetime
+from pathlib import Path
 from threading import RLock
 from typing import Literal, Protocol
 
@@ -147,3 +150,139 @@ class InMemoryPlanningSessionRepository:
         """Expose the record count for focused repository tests."""
         with self._guard:
             return len(self._records)
+
+
+class SQLitePlanningSessionRepository:
+    """Durable SQLite adapter with transactional optimistic concurrency."""
+
+    _CREATE_TABLE = """
+        CREATE TABLE IF NOT EXISTS planning_sessions (
+            session_id TEXT PRIMARY KEY,
+            schema_version INTEGER NOT NULL,
+            revision INTEGER NOT NULL CHECK (revision >= 1),
+            created_at TEXT NOT NULL,
+            updated_at TEXT NOT NULL,
+            record_json TEXT NOT NULL
+        )
+    """
+
+    def __init__(
+        self,
+        database_path: str | Path,
+        *,
+        busy_timeout_seconds: float = 1.0,
+        clock: Callable[[], datetime] | None = None,
+    ) -> None:
+        if str(database_path) == ":memory:":
+            raise ValueError("planning sessions require a durable SQLite file")
+        if busy_timeout_seconds < 0:
+            raise ValueError("busy_timeout_seconds must not be negative")
+        self.database_path = Path(database_path)
+        self.busy_timeout_seconds = busy_timeout_seconds
+        self._busy_timeout_ms = round(busy_timeout_seconds * 1000)
+        self._clock = clock or _utc_now
+        self._initialize_schema()
+
+    def _connect(self) -> sqlite3.Connection:
+        connection = sqlite3.connect(
+            self.database_path,
+            timeout=self.busy_timeout_seconds,
+        )
+        connection.row_factory = sqlite3.Row
+        connection.execute(f"PRAGMA busy_timeout = {self._busy_timeout_ms}")
+        return connection
+
+    def _initialize_schema(self) -> None:
+        with closing(self._connect()) as connection:
+            connection.execute("PRAGMA journal_mode = WAL")
+            connection.execute(self._CREATE_TABLE)
+            connection.commit()
+
+    @staticmethod
+    def _validated_copy(session: PlanningSessionRecord) -> PlanningSessionRecord:
+        return PlanningSessionRecord.model_validate(session.model_dump())
+
+    def create(self, session: PlanningSessionRecord) -> None:
+        candidate = self._validated_copy(session)
+        try:
+            with closing(self._connect()) as connection:
+                connection.execute("BEGIN IMMEDIATE")
+                connection.execute(
+                    """
+                    INSERT INTO planning_sessions (
+                        session_id, schema_version, revision,
+                        created_at, updated_at, record_json
+                    ) VALUES (?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        candidate.session_id,
+                        candidate.schema_version,
+                        candidate.revision,
+                        candidate.created_at.isoformat(),
+                        candidate.updated_at.isoformat(),
+                        candidate.model_dump_json(),
+                    ),
+                )
+                connection.commit()
+        except sqlite3.IntegrityError as error:
+            raise ValueError(
+                f"planning session already exists: {candidate.session_id}"
+            ) from error
+
+    def get(self, session_id: str) -> PlanningSessionRecord | None:
+        with closing(self._connect()) as connection:
+            row = connection.execute(
+                """
+                SELECT revision, record_json
+                FROM planning_sessions
+                WHERE session_id = ?
+                """,
+                (session_id,),
+            ).fetchone()
+        if row is None:
+            return None
+        record = PlanningSessionRecord.model_validate_json(row["record_json"])
+        if record.revision != row["revision"]:
+            raise ValueError("stored planning session revision is inconsistent")
+        return record
+
+    def save(self, session: PlanningSessionRecord) -> None:
+        updated = session.model_dump()
+        updated["revision"] = session.revision + 1
+        updated["updated_at"] = self._clock()
+        candidate = PlanningSessionRecord.model_validate(updated)
+
+        with closing(self._connect()) as connection:
+            try:
+                connection.execute("BEGIN IMMEDIATE")
+                cursor = connection.execute(
+                    """
+                    UPDATE planning_sessions
+                    SET schema_version = ?, revision = ?, created_at = ?,
+                        updated_at = ?, record_json = ?
+                    WHERE session_id = ? AND revision = ?
+                    """,
+                    (
+                        candidate.schema_version,
+                        candidate.revision,
+                        candidate.created_at.isoformat(),
+                        candidate.updated_at.isoformat(),
+                        candidate.model_dump_json(),
+                        candidate.session_id,
+                        session.revision,
+                    ),
+                )
+                if cursor.rowcount != 1:
+                    exists = connection.execute(
+                        "SELECT 1 FROM planning_sessions WHERE session_id = ?",
+                        (candidate.session_id,),
+                    ).fetchone()
+                    if exists is None:
+                        raise KeyError(candidate.session_id)
+                    raise PlanningSessionConflictError(
+                        f"stale planning session revision: {candidate.session_id}"
+                    )
+                connection.commit()
+            except Exception:
+                connection.rollback()
+                raise

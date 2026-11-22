@@ -1,6 +1,8 @@
 """Contract tests for durable planning-session records and repositories."""
 
+from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime, timedelta
+from threading import Barrier
 from unittest.mock import Mock
 
 import pytest
@@ -17,6 +19,7 @@ from travel_ai.services.planning_session_repository import (
     PlanningSessionConflictError,
     PlanningSessionRecord,
     PlanningSessionRepository,
+    SQLitePlanningSessionRepository,
 )
 from travel_ai.services.trip_session_service import TripSessionService
 
@@ -166,3 +169,84 @@ def test_failed_initial_message_is_never_created() -> None:
         service.create_session("initial message")
 
     assert len(repository) == 0
+
+
+def test_sqlite_repository_survives_new_instance(tmp_path) -> None:
+    database_path = tmp_path / "planning-sessions.sqlite"
+    first = SQLitePlanningSessionRepository(
+        database_path,
+        clock=lambda: UPDATED_AT,
+    )
+    first.create(session_record())
+
+    candidate = first.get("session_1")
+    assert candidate is not None
+    candidate.missing_questions.append("What dates work?")
+    first.save(candidate)
+
+    restored = SQLitePlanningSessionRepository(database_path).get("session_1")
+    assert restored is not None
+    assert restored.revision == 2
+    assert restored.updated_at == UPDATED_AT
+    assert restored.missing_questions[-1] == "What dates work?"
+
+
+def test_sqlite_repository_rejects_duplicate_and_unknown_sessions(tmp_path) -> None:
+    repository = SQLitePlanningSessionRepository(tmp_path / "planning-sessions.sqlite")
+    record = session_record()
+    repository.create(record)
+
+    with pytest.raises(ValueError, match="already exists"):
+        repository.create(record)
+
+    with pytest.raises(KeyError) as captured:
+        repository.save(session_record("missing"))
+    assert captured.value.args == ("missing",)
+
+
+def test_sqlite_concurrent_updates_cannot_silently_overwrite(tmp_path) -> None:
+    database_path = tmp_path / "planning-sessions.sqlite"
+    first_repository = SQLitePlanningSessionRepository(database_path)
+    second_repository = SQLitePlanningSessionRepository(database_path)
+    first_repository.create(session_record())
+    first = first_repository.get("session_1")
+    second = second_repository.get("session_1")
+    assert first is not None and second is not None
+    barrier = Barrier(2)
+
+    def save(
+        repository: SQLitePlanningSessionRepository,
+        candidate: PlanningSessionRecord,
+        question: str,
+    ) -> str:
+        candidate.missing_questions = [question]
+        barrier.wait()
+        try:
+            repository.save(candidate)
+        except PlanningSessionConflictError:
+            return "conflict"
+        return "saved"
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        outcomes = [
+            pool.submit(save, first_repository, first, "First update"),
+            pool.submit(save, second_repository, second, "Second update"),
+        ]
+        results = [future.result() for future in outcomes]
+
+    assert sorted(results) == ["conflict", "saved"]
+    stored = first_repository.get("session_1")
+    assert stored is not None
+    assert stored.revision == 2
+    assert stored.missing_questions in [["First update"], ["Second update"]]
+
+
+def test_sqlite_repository_requires_file_and_bounded_timeout(tmp_path) -> None:
+    with pytest.raises(ValueError, match="durable SQLite file"):
+        SQLitePlanningSessionRepository(":memory:")
+
+    with pytest.raises(ValueError, match="must not be negative"):
+        SQLitePlanningSessionRepository(
+            tmp_path / "planning-sessions.sqlite",
+            busy_timeout_seconds=-1,
+        )

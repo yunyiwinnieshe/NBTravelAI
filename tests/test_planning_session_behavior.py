@@ -11,6 +11,9 @@ from travel_ai.main import create_app
 from travel_ai.routers.trip_sessions import get_trip_session_service
 from travel_ai.schemas.preference_extraction import PreferenceExtractionResult
 from travel_ai.schemas.sessions import TripRequestDraft
+from travel_ai.services.planning_session_repository import (
+    PlanningSessionConflictError,
+)
 from travel_ai.services.preference_extraction import FixturePreferenceExtractor
 from travel_ai.services.recommendation_service import RecommendationService
 from travel_ai.services.trip_session_service import (
@@ -325,3 +328,27 @@ def test_duplicate_confirmation_does_not_create_another_revision(workflow):
 
     assert service.confirm_session(sid) == first
     assert service._get_session(sid).revision == confirmed.revision
+
+
+def test_stale_revision_maps_to_http_conflict(workflow, monkeypatch):
+    service, sid, _, _ = workflow
+    before = service._get_session(sid)
+    monkeypatch.setattr(
+        service.repository,
+        "save",
+        Mock(side_effect=PlanningSessionConflictError("stale revision")),
+    )
+    app = create_app()
+    app.dependency_overrides[get_trip_session_service] = lambda: service
+
+    with TestClient(app) as client:
+        response = client.post(
+            f"/trip-sessions/{sid}/messages",
+            json={"message": "complete"},
+        )
+
+    assert response.status_code == 409
+    assert response.json()["detail"] == (
+        "trip session changed; reload it and try again"
+    )
+    assert service._get_session(sid) == before

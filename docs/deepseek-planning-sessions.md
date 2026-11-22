@@ -37,8 +37,8 @@ timezone-aware UTC timestamps, the structured draft and workflow state, limited
 question/unsupported/deferred text needed to continue, and the exact confirmed
 result. Thread locks remain process-local and are never serialized. The default
 `InMemoryPlanningSessionRepository` stores defensive copies and rejects stale
-revisions; no database adapter is configured yet, so sessions still disappear
-on restart.
+revisions. `SQLitePlanningSessionRepository` provides durable file storage, but
+it is not yet configured as the application default.
 
 Session mutations use an explicit transaction-like flow: load the saved record,
 make and validate a deep candidate copy, apply the change, validate and save the
@@ -46,6 +46,13 @@ candidate, and only then return its response. Extraction, recommendation, record
 validation, or repository-save failures therefore leave the previously saved
 record unchanged. Messages that do not change durable state and duplicate
 confirmations do not create unnecessary revisions.
+
+The SQLite adapter uses WAL mode, a bounded one-second lock wait by default, and
+`BEGIN IMMEDIATE` transactions. Saves update only the expected revision; if
+another process has already advanced it, the repository raises
+`PlanningSessionConflictError` rather than overwriting newer state. The HTTP
+API reports that conflict as 409 and asks the caller to reload instead of
+automatically repeating model or recommendation work.
 
 ## Conversation behavior
 

@@ -35,6 +35,9 @@ from travel_ai.services.live_origin_resolution import (
     DuffelOriginResolver,
     SQLiteLocationStore,
 )
+from travel_ai.services.planning_session_repository import (
+    PlanningSessionConflictError,
+)
 from travel_ai.services.preference_extraction import FixturePreferenceExtractor
 from travel_ai.services.recommendation_service import RecommendationService
 from travel_ai.services.session_extraction import (
@@ -194,6 +197,11 @@ def add_trip_session_message(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="trip session was not found",
         ) from error
+    except PlanningSessionConflictError as error:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="trip session changed; reload it and try again",
+        ) from error
     except ValueError as error:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -215,6 +223,11 @@ def confirm_trip_session(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="trip session was not found",
+        ) from error
+    except PlanningSessionConflictError as error:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="trip session changed; reload it and try again",
         ) from error
     except TripSessionNotReadyError as error:
         raise HTTPException(
