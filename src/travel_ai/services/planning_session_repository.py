@@ -26,6 +26,10 @@ class PlanningSessionConflictError(RuntimeError):
     """A save tried to replace a newer stored session revision."""
 
 
+class PlanningSessionDataError(RuntimeError):
+    """Stored session data is corrupt or uses an unsupported schema."""
+
+
 class PlanningSessionRecord(BaseModel):
     """Versioned, JSON-serializable state for one planning session."""
 
@@ -233,7 +237,7 @@ class SQLitePlanningSessionRepository:
         with closing(self._connect()) as connection:
             row = connection.execute(
                 """
-                SELECT revision, record_json
+                SELECT session_id, schema_version, revision, record_json
                 FROM planning_sessions
                 WHERE session_id = ?
                 """,
@@ -241,10 +245,19 @@ class SQLitePlanningSessionRepository:
             ).fetchone()
         if row is None:
             return None
-        record = PlanningSessionRecord.model_validate_json(row["record_json"])
-        if record.revision != row["revision"]:
-            raise ValueError("stored planning session revision is inconsistent")
-        return record
+        try:
+            record = PlanningSessionRecord.model_validate_json(row["record_json"])
+            if (
+                record.session_id != row["session_id"]
+                or record.schema_version != row["schema_version"]
+                or record.revision != row["revision"]
+            ):
+                raise ValueError("stored planning session metadata is inconsistent")
+            return record
+        except ValueError as error:
+            raise PlanningSessionDataError(
+                "stored planning session is invalid"
+            ) from error
 
     def save(self, session: PlanningSessionRecord) -> None:
         updated = session.model_dump()

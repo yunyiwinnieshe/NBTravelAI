@@ -6,7 +6,10 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from travel_ai.schemas.recommendations import DestinationRecommendation
+from travel_ai.schemas.recommendations import (
+    DestinationRecommendation,
+    RecommendationMetadata,
+)
 from travel_ai.schemas.trip import TripPreferences
 
 
@@ -121,3 +124,11 @@ class ConversationTurnResponse(BaseModel):
     unsupported_requests: list[UnsupportedRequestNotice] = Field(default_factory=list)
     deferred_requests: list[str] = Field(default_factory=list)
     recommendations: list[DestinationRecommendation] = Field(default_factory=list)
+    recommendation_metadata: RecommendationMetadata | None = None
+
+    @model_validator(mode="after")
+    def validate_recommendation_metadata(self) -> "ConversationTurnResponse":
+        """Keep source and evidence time with every ranked result snapshot."""
+        if self.recommendations and self.recommendation_metadata is None:
+            raise ValueError("ranked recommendations require recommendation metadata")
+        return self

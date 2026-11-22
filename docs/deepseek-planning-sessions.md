@@ -37,8 +37,9 @@ timezone-aware UTC timestamps, the structured draft and workflow state, limited
 question/unsupported/deferred text needed to continue, and the exact confirmed
 result. Thread locks remain process-local and are never serialized. The default
 `InMemoryPlanningSessionRepository` stores defensive copies and rejects stale
-revisions. `SQLitePlanningSessionRepository` provides durable file storage, but
-it is not yet configured as the application default.
+revisions. Setting `PLANNING_SESSION_DB_PATH` selects the durable
+`SQLitePlanningSessionRepository`; leaving it unset keeps the process-local
+adapter for isolated development and tests.
 
 Session mutations use an explicit transaction-like flow: load the saved record,
 make and validate a deep candidate copy, apply the change, validate and save the
@@ -53,6 +54,24 @@ another process has already advanced it, the repository raises
 `PlanningSessionConflictError` rather than overwriting newer state. The HTTP
 API reports that conflict as 409 and asks the caller to reload instead of
 automatically repeating model or recommendation work.
+
+A confirmed result is stored as the exact historical `ConversationTurnResponse`,
+not regenerated when the session is loaded again. The snapshot includes ranked
+destinations, prices, the recommendation `data_mode`
+(`fixture` or `live`), and its original `evaluated_at` evidence timestamp.
+A later session save never replaces that evidence time with `updated_at`.
+Duplicate confirmation returns the stored snapshot without another provider or
+recommendation call; editing the draft still clears it and requires a new
+confirmation.
+
+Restart acceptance tests create fresh application and service instances against
+the same temporary SQLite file. They cover incomplete drafts and questions,
+continuation through confirmation, unsupported and deferred requests, exact
+confirmed snapshots, unknown IDs, failed extraction and recommendation calls,
+duplicate confirmation, stale concurrent writes, corrupt or unsupported stored
+records, and provider secrets remaining absent from the database. Invalid stored
+records raise `PlanningSessionDataError`; the API returns a non-retryable 503
+without exposing the stored payload.
 
 ## Conversation behavior
 

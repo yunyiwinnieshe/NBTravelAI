@@ -8,8 +8,10 @@ from unittest.mock import Mock
 import pytest
 from pydantic import ValidationError
 
+from travel_ai.schemas.recommendations import RecommendationMetadata
 from travel_ai.schemas.sessions import (
     ConversationState,
+    ConversationTurnResponse,
     TravelerPreferencesDraft,
     TripRequestDraft,
     UnsupportedRequestNotice,
@@ -250,3 +252,40 @@ def test_sqlite_repository_requires_file_and_bounded_timeout(tmp_path) -> None:
             tmp_path / "planning-sessions.sqlite",
             busy_timeout_seconds=-1,
         )
+
+
+@pytest.mark.parametrize("data_mode", ["fixture", "live"])
+def test_sqlite_preserves_confirmed_source_and_evidence_time(
+    tmp_path, data_mode
+) -> None:
+    evidence_time = datetime(2026, 10, 18, 12, tzinfo=UTC)
+    confirmed = ConversationTurnResponse(
+        session_id="session_1",
+        state=ConversationState.NO_MATCH,
+        assistant_message="No matching destinations.",
+        recommendation_metadata=RecommendationMetadata(
+            evaluated_at=evidence_time,
+            candidate_pool_version="v1.0",
+            data_mode=data_mode,
+            eligible_destination_count=0,
+        ),
+    )
+    payload = session_record().model_dump()
+    payload.update(
+        state=ConversationState.NO_MATCH,
+        missing_questions=[],
+        confirmed_result=confirmed,
+    )
+    record = PlanningSessionRecord.model_validate(payload)
+    database_path = tmp_path / "planning-sessions.sqlite"
+    SQLitePlanningSessionRepository(database_path).create(record)
+
+    restored = SQLitePlanningSessionRepository(database_path).get("session_1")
+
+    assert restored is not None and restored.confirmed_result is not None
+    assert restored.confirmed_result.model_dump_json() == confirmed.model_dump_json()
+    assert restored.confirmed_result.recommendation_metadata is not None
+    assert restored.confirmed_result.recommendation_metadata.data_mode == data_mode
+    assert (
+        restored.confirmed_result.recommendation_metadata.evaluated_at == evidence_time
+    )

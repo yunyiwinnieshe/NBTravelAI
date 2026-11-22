@@ -109,7 +109,11 @@ class TripSessionService:
         self.extractor = extractor
         self.recommendation_service = recommendation_service
         self.origin_resolver = origin_resolver or FixtureOriginResolver()
-        self.repository = repository or InMemoryPlanningSessionRepository()
+        self.repository = (
+            repository
+            if repository is not None
+            else InMemoryPlanningSessionRepository()
+        )
         self._session_locks: dict[str, RLock] = {}
         self._session_locks_guard = RLock()
 
@@ -332,6 +336,7 @@ class TripSessionService:
             ),
             trip_request_draft=session.draft.model_copy(deep=True),
             recommendations=response.recommendations,
+            recommendation_metadata=response.metadata.model_copy(deep=True),
             deferred_requests=list(session.deferred),
         )
         return session.confirmed_result.model_copy(deep=True)

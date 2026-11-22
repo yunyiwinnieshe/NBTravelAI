@@ -1,7 +1,7 @@
 """Acceptance cases for the agreed planning-session behavior (no network)."""
 
 from concurrent.futures import ThreadPoolExecutor
-from datetime import date, timedelta
+from datetime import UTC, date, datetime, timedelta
 from unittest.mock import Mock
 
 import pytest
@@ -13,6 +13,7 @@ from travel_ai.schemas.preference_extraction import PreferenceExtractionResult
 from travel_ai.schemas.sessions import TripRequestDraft
 from travel_ai.services.planning_session_repository import (
     PlanningSessionConflictError,
+    SQLitePlanningSessionRepository,
 )
 from travel_ai.services.preference_extraction import FixturePreferenceExtractor
 from travel_ai.services.recommendation_service import RecommendationService
@@ -352,3 +353,58 @@ def test_stale_revision_maps_to_http_conflict(workflow, monkeypatch):
         "trip session changed; reload it and try again"
     )
     assert service._get_session(sid) == before
+
+
+def test_confirmed_result_restored_exactly_after_sqlite_restart(tmp_path):
+    evidence_time = datetime(2026, 10, 18, 12, tzinfo=UTC)
+    complete = extraction(
+        {
+            "origin": "Boston",
+            "display_name": "Alice",
+            "budget_usd": 500,
+            "max_travel_time_hours": 6,
+        },
+        {
+            "origin": "New York",
+            "display_name": "Bob",
+            "budget_usd": 450,
+            "max_travel_time_hours": 5,
+        },
+        start_date="2099-06-10",
+        end_date="2099-06-14",
+    )
+    database_path = tmp_path / "planning-sessions.sqlite"
+    repository = SQLitePlanningSessionRepository(database_path)
+    recommender = Mock(wraps=RecommendationService(clock=lambda: evidence_time))
+    first_service = TripSessionService(
+        FixturePreferenceExtractor({"complete": complete}),
+        recommender,
+        repository=repository,
+    )
+    session_id = first_service.create_session(None).session_id
+    first_service.add_message(session_id, "complete")
+    confirmed = first_service.confirm_session(session_id)
+    saved_before_restart = repository.get(session_id)
+    first_service.close()
+
+    restarted_recommender = Mock()
+    restarted_recommender.get_recommendations.side_effect = AssertionError(
+        "stored confirmation must not be regenerated"
+    )
+    restarted_repository = SQLitePlanningSessionRepository(database_path)
+    restarted_service = TripSessionService(
+        FixturePreferenceExtractor({}),
+        restarted_recommender,
+        repository=restarted_repository,
+    )
+
+    restored = restarted_service.confirm_session(session_id)
+    saved_after_restore = restarted_repository.get(session_id)
+
+    assert restored.model_dump_json() == confirmed.model_dump_json()
+    assert restored.recommendation_metadata is not None
+    assert restored.recommendation_metadata.data_mode == "fixture"
+    assert restored.recommendation_metadata.evaluated_at == evidence_time
+    assert saved_after_restore == saved_before_restart
+    recommender.get_recommendations.assert_called_once()
+    restarted_recommender.get_recommendations.assert_not_called()

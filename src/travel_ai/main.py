@@ -19,6 +19,7 @@ from travel_ai.services.deepseek_preference_extraction import (
     DeepSeekExtractionError,
     DeepSeekResponseError,
 )
+from travel_ai.services.planning_session_repository import PlanningSessionDataError
 
 
 @asynccontextmanager
@@ -86,6 +87,24 @@ def create_app() -> FastAPI:
                         "Your saved trip is unchanged. Please try again."
                     ),
                     "retryable": not isinstance(error, DuffelConfigurationError),
+                }
+            },
+        )
+
+    @app.exception_handler(PlanningSessionDataError)
+    async def planning_session_data_error(
+        request: Request, error: PlanningSessionDataError
+    ):
+        return JSONResponse(
+            status_code=503,
+            content={
+                "detail": {
+                    "code": "planning_session_data_invalid",
+                    "message": (
+                        "We couldn't load this saved trip safely. "
+                        "Please contact support."
+                    ),
+                    "retryable": False,
                 }
             },
         )
