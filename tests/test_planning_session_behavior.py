@@ -283,5 +283,5 @@ def test_recommendation_failure_does_not_become_no_match_or_cached(workflow):
     recommendations.get_recommendations.side_effect = RuntimeError("provider failure")
     with pytest.raises(RuntimeError, match="provider failure"):
         service.confirm_session(sid)
-    assert service._sessions[sid].state == "review"
-    assert service._sessions[sid].confirmed_result is None
+    assert service._get_session(sid).state == "review"
+    assert service._get_session(sid).confirmed_result is None

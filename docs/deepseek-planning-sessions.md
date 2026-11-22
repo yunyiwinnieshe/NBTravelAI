@@ -30,6 +30,11 @@ standalone adapter. All extractors expose `extract(message, draft, context=None)
 standalone calls can omit context, while sessions supply clarification context.
 Fixture extraction accepts the same argument but uses predefined results. The API owns and closes the configured service at shutdown.
 
+Session storage is also constructor-injected through the minimal
+`PlanningSessionRepository` contract (`create`, `get`, and `save`). The default
+`InMemoryPlanningSessionRepository` preserves current behavior; no durable
+database adapter is configured yet, so sessions still disappear on restart.
+
 ## Conversation behavior
 
 - Valid mentioned fields update the draft; unrelated saved values and assigned

@@ -63,5 +63,5 @@ def test_extractor_cannot_replace_assigned_ids(ids: list[str]) -> None:
     service.extractor = FixturePreferenceExtractor({"invalid": result})
     with pytest.raises(ValueError, match="preserve the two assigned traveler IDs"):
         service.add_message(session.session_id, "invalid")
-    assert service._sessions[session.session_id].draft == session.trip_request_draft
+    assert service._get_session(session.session_id).draft == session.trip_request_draft
     get_trip_session_service.cache_clear()
