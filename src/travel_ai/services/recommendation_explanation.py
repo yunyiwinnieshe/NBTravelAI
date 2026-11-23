@@ -3,7 +3,9 @@
 from travel_ai.schemas.recommendations import DestinationRecommendation
 
 
-def build_explanation(recommendation: DestinationRecommendation) -> str:
+def build_explanation(
+    recommendation: DestinationRecommendation, *, flight_source: str = "example data"
+) -> str:
     """Describe the score and a real flight-pair tradeoff without new facts."""
     breakdown = recommendation.score_breakdown
     factors = sorted(
@@ -28,7 +30,7 @@ def build_explanation(recommendation: DestinationRecommendation) -> str:
         f"with a score of {recommendation.score:.2f}. Its largest score "
         f"contributions are {factors[0][0]} and {factors[1][0]}. "
         f"The selected round-trip flights cost an estimated "
-        f"${pair.combined_price_usd:,.2f} together in fixture data, "
+        f"${pair.combined_price_usd:,.2f} together in {flight_source}, "
         f"{comparison}. Their outbound arrivals are "
         f"{pair.arrival_gap_minutes} minutes apart."
     )

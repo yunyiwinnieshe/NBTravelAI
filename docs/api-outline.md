@@ -92,8 +92,9 @@ conversations are defined in the
 
 Starts a travel-planning conversation. The response will create a server-owned
 `session_id` that identifies later messages from the same planning session.
-Requires `ALLOW_EXAMPLE_FLIGHT_RESULTS=1` for the local demo. Without it,
-session creation returns 503 until external flight search is connected.
+Requires `ALLOW_EXAMPLE_FLIGHT_RESULTS=1` for saved example flights or
+`FLIGHT_PROVIDER=duffel` for Duffel test-mode searches. Without either, session
+creation returns 503.
 The contract accepts an optional first message. Sessions currently use in-memory
 storage and configurable fixture or DeepSeek extraction. Session storage is not
 persistent; only opt-in resolved location IDs use a durable registry.
@@ -107,6 +108,7 @@ excluded from the confirmed ranking request. See the
 
 Accepts exactly one message or action: `{"message": "..."}`,
 `{"action": "confirm"}`, or `{"action": "continue_without_unsupported"}`.
+
 The last action acknowledges all current unsupported notices without confirming.
 Ordinary text never confirms a trip. The implementation:
 
@@ -168,8 +170,9 @@ Example result response:
 Accepts the complete structured draft shown in the session response. Use it to
 continue when message extraction is unavailable. The server validates the
 assigned traveler IDs and form fields, resolves origins itself, and leaves the
-saved draft untouched if validation or origin lookup fails. Session responses
-label flight prices as examples, not current quotes.
+saved draft untouched if validation or origin lookup fails. The response
+identifies the extraction and origin sources and labels flight prices as demo
+examples.
 
 ## Internal interfaces, not public HTTP endpoints
 
@@ -189,13 +192,13 @@ ranking independently testable and replaceable.
 
 ## Next implementation boundaries
 
-The fixture workflow connects providers, constraints, pair selection, preference
-calculation, and ranking to the finalized response. Planning-session origin
-resolution is opt-in; external flight searches, per-airport partial warning
-handling, and persistent sessions remain separate work. Provider-wide failures
-return a retryable 503.
+The workflow connects providers, constraints, pair selection, preference
+calculation, and ranking to the finalized response. Duffel test-mode flight
+search and planning-session origin resolution are opt-in. Per-airport partial
+warning handling and persistent sessions remain separate work. Provider-wide
+failures return a retryable 503.
 `get_recommendation_service` is an overridable FastAPI dependency;
-the default service is cached and uses fixtures without network calls.
+the default service is cached and uses saved examples only when enabled.
 
 ## API integration coverage
 

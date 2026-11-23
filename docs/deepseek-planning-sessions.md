@@ -87,11 +87,12 @@ client can submit a complete structured draft to
 `PUT /trip-sessions/{session_id}/draft` using the assigned traveler IDs. The
 server validates dates and constraints and resolves origin IDs rather than
 trusting submitted IDs. Invalid form input returns 422 without changing the
-saved draft. If the first message failed, start a session with an empty request
-body first. Local demo sessions require `ALLOW_EXAMPLE_FLIGHT_RESULTS=1`;
-otherwise creation returns 503 because external flight search is not connected.
-The session response labels example flight prices and identifies any configured
-live extraction or origin service. No example data is substituted if one fails.
+saved draft. If the first message failed, start a session with an
+empty request body first. Sessions require either
+`ALLOW_EXAMPLE_FLIGHT_RESULTS=1` for saved examples or `FLIGHT_PROVIDER=duffel`
+for Duffel test-mode flight searches. The session response's `source_notice`
+identifies the extraction, origin lookup, and flight data source in plain
+language. There is no automatic switch to example data when a provider fails.
 
 ## Tests and recorded evidence
 

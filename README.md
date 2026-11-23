@@ -51,8 +51,8 @@ The v2 **agent loop** is implemented as a provider-neutral draft/revise callback
 
 - Exactly two travelers; 3-7 day leisure trips; an initial U.S. city pool.
 - Python, FastAPI, Pydantic, pytest, Ruff, Docker, and GitHub Actions.
-- Versioned JSON examples for offline tests, plus provider interfaces for a
-  later external flight source. Example prices require explicit opt-in.
+- Versioned JSON examples for offline tests, plus opt-in Duffel test-mode
+  flight searches with no automatic example fallback.
 - LLMs handle language understanding and grounded explanations only;
   deterministic code handles facts, constraints, calculations, and ranking.
 
@@ -64,12 +64,29 @@ Use Python 3.11 or later:
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install -e ".[dev]"
-ALLOW_EXAMPLE_FLIGHT_RESULTS=1 uvicorn travel_ai.main:app --reload
+```
+
+Run with Duffel test-mode flight searches and verified departure locations:
+
+```bash
+mkdir -p instance
+export DUFFEL_ACCESS_TOKEN="your duffel_test_ token"
+export FLIGHT_PROVIDER=duffel
+export ORIGIN_RESOLUTION_PROVIDER=duffel
+export ORIGIN_LOCATION_DB_PATH=instance/locations.sqlite3
+uvicorn travel_ai.main:app --reload
 ```
 
 Open `http://127.0.0.1:8000/docs` to try the generated API documentation.
-Without the example-results setting, recommendation and session creation
-requests return 503 because external flight search is not connected yet.
+For an offline demo without Duffel, run
+`ALLOW_EXAMPLE_FLIGHT_RESULTS=1 uvicorn travel_ai.main:app --reload` instead.
+Without either mode, recommendation and session creation requests return 503.
+
+Start with `POST /trip-sessions`, then submit city/state origins such as
+`Boston, MA` and `New York, NY`. The resulting location IDs can also be used
+with `POST /recommendations`. Responses identify `data_mode: "duffel_test"`;
+test-mode schedules and prices are for demonstration, not current bookable
+quotes. Duffel errors return 503 without switching to saved example flights.
 
 Run quality checks with:
 
@@ -102,8 +119,11 @@ session with `POST /trip-sessions` and `{}` if the first message failed, or reus
 the existing session ID. Send a complete form draft to
 `PUT /trip-sessions/{session_id}/draft` with the assigned `traveler_a` and
 `traveler_b` IDs, dates, origins, budgets, and travel-time limits. The server
-resolves origin IDs itself. Session responses label flight schedules and prices
-as examples. Provider errors never silently substitute example data.
+resolves origin IDs itself. Session responses identify the extraction and origin
+sources, and label flight schedules and prices as demo examples or Duffel test
+data. Provider errors never silently substitute example data.
+The dates below match the saved examples; use future dates supported by Duffel
+when running test-mode flight searches.
 
 ```json
 {
@@ -116,7 +136,7 @@ as examples. Provider errors never silently substitute example data.
 }
 ```
 
-## Try the fixture recommendation workflow
+## Try the example recommendation workflow
 
 With the API running, send this request. It uses the versioned test flights for
 June 10–14, 2099; these are mock prices and schedules, not live availability.
@@ -131,8 +151,9 @@ The response contains up to three ranked cities, flight options and category
 labels for both travelers, pair-price comparisons, and exclusion reasons.
 Dates without fixture flights return `no_match`; unsupported origins return 422.
 `no_match` includes `guidance` on which trip constraints to adjust. A temporary
-flight data failure returns 503 instead of a false `no_match` result. With
-`ALLOW_EXAMPLE_FLIGHT_RESULTS=1`, the endpoint uses saved example flights and
+flight data failure returns 503 with a retryable error instead of a false
+`no_match` result.
+With `ALLOW_EXAMPLE_FLIGHT_RESULTS=1`, the endpoint uses example flights and
 makes no external flight-search calls. Conversational trip sessions can use
 scripted demo extraction or the configured DeepSeek adapter.
 

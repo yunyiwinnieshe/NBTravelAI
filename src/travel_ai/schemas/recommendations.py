@@ -20,6 +20,7 @@ class RecommendationDataMode(StrEnum):
     """Sources used to produce a recommendation response."""
 
     FIXTURE = "fixture"
+    DUFFEL_TEST = "duffel_test"
     LIVE = "live"
 
 

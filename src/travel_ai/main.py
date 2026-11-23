@@ -35,6 +35,9 @@ async def lifespan(app: FastAPI):
         if trip_sessions.get_trip_session_service.cache_info().currsize:
             trip_sessions.get_trip_session_service().close()
             trip_sessions.get_trip_session_service.cache_clear()
+        if recommendations.get_recommendation_service.cache_info().currsize:
+            recommendations.get_recommendation_service().close()
+            recommendations.get_recommendation_service.cache_clear()
 
 
 def create_app() -> FastAPI:

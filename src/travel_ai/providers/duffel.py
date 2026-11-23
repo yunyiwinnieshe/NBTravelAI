@@ -291,6 +291,9 @@ class DuffelFlightOfferProvider(FlightOfferProvider):
         self._clock = clock or (lambda: datetime.now(UTC))
         self._maximum_offers = maximum_offers
 
+    def close(self) -> None:
+        self._client.close()
+
     def search(self, query: FlightSearchQuery) -> list[FlightOffer]:
         """Search every explicit airport pair and return deterministic offers."""
         retrieved_at = self._clock()

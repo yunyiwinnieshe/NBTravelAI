@@ -10,6 +10,7 @@ from uuid import uuid4
 
 from pydantic import ValidationError
 
+from travel_ai.providers.duffel import DuffelFlightOfferProvider
 from travel_ai.schemas.preference_extraction import (
     PreferenceExtractionResult,
 )
@@ -134,8 +135,16 @@ class TripSessionService:
         )
         extraction_label = "DeepSeek" if extraction_source == "deepseek" else "demo"
         origin_label = "Duffel Places" if self.origin_source == "duffel" else "demo"
+        flight_notice = (
+            "Duffel test-mode flight schedules and prices are test data, "
+            "not current bookable quotes."
+            if isinstance(
+                self.recommendation_service.flight_provider, DuffelFlightOfferProvider
+            )
+            else "Demo only: flight schedules and prices are examples, not live quotes."
+        )
         self.source_notice = (
-            "Demo only: flight schedules and prices are examples, not live quotes. "
+            f"{flight_notice} "
             f"Trip messages: {extraction_label}. Locations: {origin_label}. "
             "If an external service fails, no example result is substituted."
         )

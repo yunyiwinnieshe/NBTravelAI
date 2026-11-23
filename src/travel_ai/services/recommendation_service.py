@@ -6,6 +6,7 @@ from collections.abc import Callable
 from datetime import UTC, datetime
 
 from travel_ai.providers.base import FlightOfferProvider, OriginAirportProvider
+from travel_ai.providers.duffel import DuffelFlightOfferProvider
 from travel_ai.providers.fixtures import (
     FixtureDataError,
     FixtureFlightOfferProvider,
@@ -40,6 +41,7 @@ from travel_ai.services.flight_offer_selection import (
     select_display_flight_offers,
     select_recommended_flight_pair,
 )
+from travel_ai.services.live_origin_resolution import OriginResolutionError
 from travel_ai.services.preference_features import calculate_city_preference_features
 from travel_ai.services.recommendation_explanation import build_explanation
 
@@ -59,7 +61,7 @@ class RecommendationProviderError(RuntimeError):
 
 
 NO_MATCH_GUIDANCE = (
-    "No destination in this demo meets both travelers' current constraints. "
+    "No destination meets both travelers' current constraints in this search. "
     "Adjust a budget, travel-time limit, date, or origin and try again."
 )
 
@@ -111,7 +113,7 @@ def _flight_options(
 
 
 class RecommendationService:
-    """Search, filter, pair, rank, and serialize the offline candidate pool."""
+    """Search, filter, pair, rank, and serialize the candidate pool."""
 
     def __init__(
         self,
@@ -123,7 +125,6 @@ class RecommendationService:
         allow_example_flights: bool | None = None,
     ) -> None:
         self.flight_provider = flight_provider or FixtureFlightOfferProvider()
-        self._validate_provider_mode()
         self.allow_example_flights = (
             os.getenv("ALLOW_EXAMPLE_FLIGHT_RESULTS") == "1"
             if allow_example_flights is None
@@ -137,22 +138,29 @@ class RecommendationService:
             raise ValueError("candidate pool must contain exactly one data version")
         self.candidate_pool_version = versions.pop()
 
-    def _validate_provider_mode(self) -> None:
-        """Reject unsupported providers before they can perform any search."""
-        if self.flight_provider.data_mode != "fixture":
-            raise ValueError("this workflow currently supports fixture providers only")
-
     def ensure_available(self) -> None:
         """Keep example flight results out of the public flow by default."""
-        if not self.allow_example_flights:
+        if (
+            self.flight_provider.data_mode == "fixture"
+            and not self.allow_example_flights
+        ):
             raise RecommendationProviderError(
                 "example flight results are disabled", retryable=False
             )
 
+    def close(self) -> None:
+        close_provider = getattr(self.flight_provider, "close", None)
+        if close_provider is not None:
+            close_provider()
+
     def get_recommendations(self, trip_request: TripRequest) -> RecommendationResponse:
         """Return up to three eligible cities or an explained no-match result."""
         self.ensure_available()
-        self._validate_provider_mode()
+        data_mode = (
+            "duffel_test"
+            if isinstance(self.flight_provider, DuffelFlightOfferProvider)
+            else self.flight_provider.data_mode
+        )
         evaluated_at = self.clock()
         if evaluated_at.utcoffset() is None:
             raise ValueError("recommendation clock must include a timezone")
@@ -169,7 +177,13 @@ class RecommendationService:
                         traveler.origin_id
                     ).airport_codes
             except FixtureDataError as error:
-                raise UnsupportedOriginError(str(error)) from error
+                raise UnsupportedOriginError(
+                    "This demo supports Boston or New York departure locations."
+                ) from error
+            except OriginResolutionError as error:
+                raise UnsupportedOriginError(
+                    "Departure location was not found. Please choose it again."
+                ) from error
             except Exception as error:
                 raise RecommendationProviderError(
                     "Origin airport data is temporarily unavailable"
@@ -181,6 +195,18 @@ class RecommendationService:
         for city in self.destinations.cities:
             eligible = []
             for traveler in travelers:
+                if self.flight_provider.data_mode == "live" and set(
+                    origins[traveler.traveler_id]
+                ).intersection(city.metro_airport_codes):
+                    eligible.append([])
+                    exclusions.append(
+                        DestinationExclusion(
+                            destination_id=city.city_id,
+                            traveler_id=traveler.traveler_id,
+                            reason_code="no_eligible_flight",
+                        )
+                    )
+                    continue
                 query = FlightSearchQuery(
                     traveler_id=traveler.traveler_id,
                     origin_id=traveler.origin_id,
@@ -198,12 +224,12 @@ class RecommendationService:
                     ):
                         offers = self.flight_provider.search(query)
                         if not isinstance(offers, list) or any(
-                            not isinstance(offer, FlightOffer) or not offer.is_fixture
+                            not isinstance(offer, FlightOffer)
+                            or offer.is_fixture
+                            != (self.flight_provider.data_mode == "fixture")
                             for offer in offers
                         ):
-                            raise ValueError(
-                                "fixture provider returned invalid flight offers"
-                            )
+                            raise ValueError("flight provider returned invalid offers")
                 except Exception as error:
                     raise RecommendationProviderError(
                         "Flight offer data is temporarily unavailable"
@@ -323,6 +349,11 @@ class RecommendationService:
             ranked = rank_destinations(candidates)
             details["result_count"] = len(ranked)
         recommendations = []
+        flight_source = {
+            "duffel_test": "Duffel test data",
+            "fixture": "example data",
+            "live": "provider data",
+        }[data_mode]
         for rank, result in enumerate(ranked[:3], start=1):
             city, pair, options = response_details_by_destination[result.destination_id]
             recommendation = DestinationRecommendation(
@@ -343,7 +374,9 @@ class RecommendationService:
                     recommendation = DestinationRecommendation.model_validate(
                         {
                             **recommendation.model_dump(),
-                            "explanation": build_explanation(recommendation),
+                            "explanation": build_explanation(
+                                recommendation, flight_source=flight_source
+                            ),
                         }
                     )
             except Exception:
@@ -367,7 +400,7 @@ class RecommendationService:
                 metadata=RecommendationMetadata(
                     evaluated_at=evaluated_at,
                     candidate_pool_version=self.candidate_pool_version,
-                    data_mode="fixture",
+                    data_mode=data_mode,
                     eligible_destination_count=len(ranked),
                 ),
             )
