@@ -363,4 +363,6 @@ def test_resolved_origin_without_fixture_flights_returns_cached_coverage_notice(
     assert first == second
     assert first.state == "no_match"
     assert "configured flight provider has no coverage" in first.assistant_message
+    assert "No example prices were substituted" in first.assistant_message
+    assert "Locations: Duffel Places" in first.source_notice
     assert calls == 1

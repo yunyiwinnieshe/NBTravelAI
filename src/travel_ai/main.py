@@ -22,6 +22,7 @@ from travel_ai.services.deepseek_preference_extraction import (
     DeepSeekExtractionError,
     DeepSeekResponseError,
 )
+from travel_ai.services.recommendation_service import RecommendationProviderError
 
 
 @asynccontextmanager
@@ -103,9 +104,9 @@ def create_app() -> FastAPI:
                         )
                         if configuration
                         else (
-                            "We couldn't process your message. "
-                            "Your saved trip is unchanged. "
-                            "Please try again."
+                            "DeepSeek couldn't process your message. "
+                            "No trip details were changed by this message. "
+                            "Please try again or enter your trip details directly."
                         )
                     ),
                     "retryable": not configuration,
@@ -121,10 +122,35 @@ def create_app() -> FastAPI:
                 "detail": {
                     "code": "origin_resolution_unavailable",
                     "message": (
-                        "We couldn't verify the departure location. "
-                        "Your saved trip is unchanged. Please try again."
+                        "Duffel Places couldn't verify the departure location. "
+                        "No trip details were changed by this message. "
+                        "Please try again. "
+                        "No example location was substituted."
                     ),
                     "retryable": not isinstance(error, DuffelConfigurationError),
+                }
+            },
+        )
+
+    @app.exception_handler(RecommendationProviderError)
+    async def recommendation_provider_error(
+        request: Request, error: RecommendationProviderError
+    ):
+        unavailable = not error.retryable
+        return JSONResponse(
+            status_code=503,
+            content={
+                "detail": {
+                    "code": "live_flights_unavailable"
+                    if unavailable
+                    else "recommendation_provider_unavailable",
+                    "message": (
+                        "Live flight results are not available yet."
+                        if unavailable
+                        else "Flight information is temporarily unavailable. "
+                        "Please try again. No flight prices were returned."
+                    ),
+                    "retryable": error.retryable,
                 }
             },
         )

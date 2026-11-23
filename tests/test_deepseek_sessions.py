@@ -212,6 +212,50 @@ def test_provider_failures_preserve_entire_session(live_api, failure, status, at
     assert len(calls) - count == attempts
 
 
+def test_failed_extraction_can_continue_with_structured_draft(live_api):
+    client, service, script, _ = live_api
+    first = start_complete(live_api)
+    sid = first["session_id"]
+    before = snapshot(service, sid)
+    script["handler"] = lambda request, context: httpx.Response(503)
+    failed = client.post(
+        f"/trip-sessions/{sid}/messages", json={"message": "Change my budget"}
+    )
+    assert failed.status_code == 503
+    assert "enter your trip details directly" in failed.text
+    assert snapshot(service, sid) == before
+
+    draft = first["trip_request_draft"]
+    draft["travelers"][0]["traveler_id"] = "other"
+    rejected = client.put(f"/trip-sessions/{sid}/draft", json=draft)
+    assert rejected.status_code == 422
+    assert snapshot(service, sid) == before
+
+    draft["travelers"][0]["traveler_id"] = "traveler_a"
+    draft["travelers"][0]["origin"] = "Atlantis"
+    rejected_origin = client.put(f"/trip-sessions/{sid}/draft", json=draft)
+    assert rejected_origin.status_code == 422
+    assert snapshot(service, sid) == before
+
+    draft["travelers"][0]["origin"] = "Boston"
+    draft["travelers"][0]["budget_usd"] = 700
+    draft["travelers"][0]["origin_id"] = "new_york_ny"
+    updated = client.put(f"/trip-sessions/{sid}/draft", json=draft)
+    assert updated.status_code == 200
+    body = updated.json()
+    assert body["state"] == "review"
+    assert body["trip_request_draft"]["travelers"][0]["budget_usd"] == 700
+    assert body["trip_request_draft"]["travelers"][0]["origin_id"] == "boston_ma"
+    assert "Trip messages: DeepSeek" in body["source_notice"]
+    assert "examples, not live quotes" in body["source_notice"]
+    assert (
+        client.post(
+            f"/trip-sessions/{sid}/messages", json={"action": "confirm"}
+        ).json()["state"]
+        == "results"
+    )
+
+
 def test_failed_initial_message_leaves_no_orphan_session(live_api):
     client, service, script, _ = live_api
     script["handler"] = lambda request, context: httpx.Response(401)
@@ -221,6 +265,28 @@ def test_failed_initial_message_leaves_no_orphan_session(live_api):
         == 503
     )
     assert set(service._sessions) == before
+    empty = client.post("/trip-sessions", json={}).json()
+    structured = client.put(
+        f"/trip-sessions/{empty['session_id']}/draft",
+        json={
+            "start_date": "2099-06-10",
+            "end_date": "2099-06-14",
+            "travelers": [
+                {
+                    "traveler_id": traveler_id,
+                    "origin": origin,
+                    "budget_usd": 500,
+                    "max_travel_time_hours": 10,
+                }
+                for traveler_id, origin in (
+                    ("traveler_a", "Boston"),
+                    ("traveler_b", "New York"),
+                )
+            ],
+        },
+    )
+    assert structured.status_code == 200
+    assert structured.json()["state"] == "review"
 
 
 def test_retry_once_then_success(live_api, monkeypatch):

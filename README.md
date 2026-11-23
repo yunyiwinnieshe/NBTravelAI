@@ -51,8 +51,8 @@ The v2 **agent loop** is implemented as a provider-neutral draft/revise callback
 
 - Exactly two travelers; 3-7 day leisure trips; an initial U.S. city pool.
 - Python, FastAPI, Pydantic, pytest, Ruff, Docker, and GitHub Actions.
-- Versioned JSON fixtures first, followed by provider interfaces and one live
-  provider with a fixture fallback.
+- Versioned JSON examples for offline tests, plus provider interfaces for a
+  later external flight source. Example prices require explicit opt-in.
 - LLMs handle language understanding and grounded explanations only;
   deterministic code handles facts, constraints, calculations, and ranking.
 
@@ -64,10 +64,12 @@ Use Python 3.11 or later:
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install -e ".[dev]"
-uvicorn travel_ai.main:app --reload
+ALLOW_EXAMPLE_FLIGHT_RESULTS=1 uvicorn travel_ai.main:app --reload
 ```
 
 Open `http://127.0.0.1:8000/docs` to try the generated API documentation.
+Without the example-results setting, recommendation and session creation
+requests return 503 because external flight search is not connected yet.
 
 Run quality checks with:
 
@@ -95,6 +97,25 @@ Automated extraction tests use mocked HTTP responses and make no network calls.
 For repeatable live evaluations, saved results, and comparisons after prompt or
 model changes, see the [evaluation guide](evals/preference_extraction/README.md).
 
+If message extraction fails, the saved session draft stays unchanged. Start a
+session with `POST /trip-sessions` and `{}` if the first message failed, or reuse
+the existing session ID. Send a complete form draft to
+`PUT /trip-sessions/{session_id}/draft` with the assigned `traveler_a` and
+`traveler_b` IDs, dates, origins, budgets, and travel-time limits. The server
+resolves origin IDs itself. Session responses label flight schedules and prices
+as examples. Provider errors never silently substitute example data.
+
+```json
+{
+  "start_date": "2099-06-10",
+  "end_date": "2099-06-14",
+  "travelers": [
+    {"traveler_id": "traveler_a", "origin": "Boston, MA", "budget_usd": 500, "max_travel_time_hours": 10},
+    {"traveler_id": "traveler_b", "origin": "New York, NY", "budget_usd": 500, "max_travel_time_hours": 10}
+  ]
+}
+```
+
 ## Try the fixture recommendation workflow
 
 With the API running, send this request. It uses the versioned test flights for
@@ -109,8 +130,11 @@ curl -X POST http://127.0.0.1:8000/recommendations \
 The response contains up to three ranked cities, flight options and category
 labels for both travelers, pair-price comparisons, and exclusion reasons.
 Dates without fixture flights return `no_match`; unsupported origins return 422.
-The endpoint defaults to fixtures and makes no external API calls. Conversational
-trip sessions can use fixture extraction or the configured DeepSeek adapter.
+`no_match` includes `guidance` on which trip constraints to adjust. A temporary
+flight data failure returns 503 instead of a false `no_match` result. With
+`ALLOW_EXAMPLE_FLIGHT_RESULTS=1`, the endpoint uses saved example flights and
+makes no external flight-search calls. Conversational trip sessions can use
+scripted demo extraction or the configured DeepSeek adapter.
 
 ## Activity lookup and itinerary prototype
 

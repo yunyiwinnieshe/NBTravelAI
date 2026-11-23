@@ -1,6 +1,7 @@
 """Coordinate fixture-backed, deterministic recommendations for two travelers."""
 
 import logging
+import os
 from collections.abc import Callable
 from datetime import UTC, datetime
 
@@ -46,7 +47,21 @@ logger = logging.getLogger(__name__)
 
 
 class UnsupportedOriginError(ValueError):
-    """A request origin is not present in the configured fixture mapping."""
+    """A request origin is not present in the configured airport mapping."""
+
+
+class RecommendationProviderError(RuntimeError):
+    """A configured recommendation data source failed during a request."""
+
+    def __init__(self, message: str, *, retryable: bool = True) -> None:
+        super().__init__(message)
+        self.retryable = retryable
+
+
+NO_MATCH_GUIDANCE = (
+    "No destination in this demo meets both travelers' current constraints. "
+    "Adjust a budget, travel-time limit, date, or origin and try again."
+)
 
 
 def _journey(flight_slice: FlightSlice) -> FlightJourneySummary:
@@ -104,9 +119,16 @@ class RecommendationService:
         origin_provider: OriginAirportProvider | None = None,
         destinations: DestinationFixtures | None = None,
         clock: Callable[[], datetime] | None = None,
+        *,
+        allow_example_flights: bool | None = None,
     ) -> None:
         self.flight_provider = flight_provider or FixtureFlightOfferProvider()
         self._validate_provider_mode()
+        self.allow_example_flights = (
+            os.getenv("ALLOW_EXAMPLE_FLIGHT_RESULTS") == "1"
+            if allow_example_flights is None
+            else allow_example_flights
+        )
         self.origin_provider = origin_provider or FixtureOriginAirportProvider()
         self.destinations = destinations or load_destination_fixtures()
         self.clock = clock or (lambda: datetime.now(UTC))
@@ -120,8 +142,16 @@ class RecommendationService:
         if self.flight_provider.data_mode != "fixture":
             raise ValueError("this workflow currently supports fixture providers only")
 
+    def ensure_available(self) -> None:
+        """Keep example flight results out of the public flow by default."""
+        if not self.allow_example_flights:
+            raise RecommendationProviderError(
+                "example flight results are disabled", retryable=False
+            )
+
     def get_recommendations(self, trip_request: TripRequest) -> RecommendationResponse:
         """Return up to three eligible cities or an explained no-match result."""
+        self.ensure_available()
         self._validate_provider_mode()
         evaluated_at = self.clock()
         if evaluated_at.utcoffset() is None:
@@ -140,6 +170,10 @@ class RecommendationService:
                     ).airport_codes
             except FixtureDataError as error:
                 raise UnsupportedOriginError(str(error)) from error
+            except Exception as error:
+                raise RecommendationProviderError(
+                    "Origin airport data is temporarily unavailable"
+                ) from error
 
         candidates = []
         exclusions = []
@@ -156,16 +190,24 @@ class RecommendationService:
                     departure_date=trip_request.start_date,
                     return_date=trip_request.end_date,
                 )
-                with stage(
-                    "provider",
-                    provider=type(self.flight_provider).__name__,
-                    version=getattr(self.flight_provider, "source_version", None),
-                ):
-                    offers = self.flight_provider.search(query)
-                if any(not offer.is_fixture for offer in offers):
-                    raise ValueError(
-                        "this workflow currently supports fixture offers only"
-                    )
+                try:
+                    with stage(
+                        "provider",
+                        provider=type(self.flight_provider).__name__,
+                        version=getattr(self.flight_provider, "source_version", None),
+                    ):
+                        offers = self.flight_provider.search(query)
+                        if not isinstance(offers, list) or any(
+                            not isinstance(offer, FlightOffer) or not offer.is_fixture
+                            for offer in offers
+                        ):
+                            raise ValueError(
+                                "fixture provider returned invalid flight offers"
+                            )
+                except Exception as error:
+                    raise RecommendationProviderError(
+                        "Flight offer data is temporarily unavailable"
+                    ) from error
                 with stage("constraints", candidate_count=len(offers)) as details:
                     result = evaluate_traveler_city_offers(
                         traveler,
@@ -321,6 +363,7 @@ class RecommendationService:
                 status=response_status,
                 recommendations=recommendations,
                 exclusions=exclusions,
+                guidance=NO_MATCH_GUIDANCE if not recommendations else None,
                 metadata=RecommendationMetadata(
                     evaluated_at=evaluated_at,
                     candidate_pool_version=self.candidate_pool_version,

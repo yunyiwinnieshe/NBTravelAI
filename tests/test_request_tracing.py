@@ -142,7 +142,7 @@ def test_provider_error_retains_trace_id_without_error_details(monkeypatch) -> N
     )
     with TestClient(app, headers=_AUTH_HEADERS) as client:
         response = client.post("/recommendations", json=_trip())
-        assert response.status_code == 500
+        assert response.status_code == 503
         trace = client.get(
             f"/observability/traces/{response.headers['X-Trace-ID']}"
         ).json()
@@ -150,7 +150,7 @@ def test_provider_error_retains_trace_id_without_error_details(monkeypatch) -> N
             s["stage"] == "provider" and s.get("error_type") == "RuntimeError"
             for s in trace["stages"]
         )
-        assert trace["stages"][-1]["http_status"] == 500
+        assert trace["stages"][-1]["http_status"] == 503
         assert "private provider diagnostic" not in json.dumps(trace)
         assert "private provider diagnostic" not in response.text
 

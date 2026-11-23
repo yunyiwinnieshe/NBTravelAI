@@ -82,6 +82,16 @@ API errors contain safe text and a machine-readable code in `detail`:
 - HTTP 503, `extraction_configuration`: operator intervention required.
 
 Provider response bodies and credentials are not exposed in these errors.
+For an existing session, these failures leave the saved draft untouched. The
+client can submit a complete structured draft to
+`PUT /trip-sessions/{session_id}/draft` using the assigned traveler IDs. The
+server validates dates and constraints and resolves origin IDs rather than
+trusting submitted IDs. Invalid form input returns 422 without changing the
+saved draft. If the first message failed, start a session with an empty request
+body first. Local demo sessions require `ALLOW_EXAMPLE_FLIGHT_RESULTS=1`;
+otherwise creation returns 503 because external flight search is not connected.
+The session response labels example flight prices and identifies any configured
+live extraction or origin service. No example data is substituted if one fails.
 
 ## Tests and recorded evidence
 

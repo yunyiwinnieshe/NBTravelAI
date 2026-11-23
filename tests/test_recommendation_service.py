@@ -8,7 +8,10 @@ import pytest
 from travel_ai.providers.fixtures import FixtureFlightOfferProvider
 from travel_ai.schemas.recommendations import RecommendationResponse
 from travel_ai.schemas.trip import TripRequest
-from travel_ai.services.recommendation_service import RecommendationService
+from travel_ai.services.recommendation_service import (
+    RecommendationProviderError,
+    RecommendationService,
+)
 
 
 def request() -> TripRequest:
@@ -207,7 +210,6 @@ def test_live_provider_is_rejected_before_search(return_offers: bool) -> None:
     with pytest.raises(ValueError, match="fixture providers only"):
         RecommendationService(flight_provider=provider)
     assert provider.calls == 0
-    # The guard also applies if a caller replaces a previously valid provider.
     service = RecommendationService()
     service.flight_provider = provider
     with pytest.raises(ValueError, match="fixture providers only"):
@@ -223,7 +225,7 @@ def test_fixture_provider_cannot_return_live_offers() -> None:
                 for offer in super().search(query)
             ]
 
-    with pytest.raises(ValueError, match="fixture offers only"):
+    with pytest.raises(RecommendationProviderError, match="temporarily unavailable"):
         RecommendationService(
             flight_provider=MisconfiguredProvider()
         ).get_recommendations(request())
