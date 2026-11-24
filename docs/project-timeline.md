@@ -19,10 +19,12 @@ same cases on its earlier code version. The report keeps those results separate
 and tracks the prior failures. Three subjective ranking labels and the release
 threshold still need joint review, so evaluation sign-off is not complete.
 
-The Week 7 grounded-explanation exit criterion is still open. The
-Week 9 evaluation/explanation work has carried into the next milestone, while
-request-level tracing, the demo UI, deployment, and the portfolio package remain
-ahead. The project is therefore behind the original 12-week plan. Ivy's roughly
+The Week 7 grounded-explanation exit criterion is now closed by the implemented
+[evidence contract](grounded-recommendation-explanations.md) and the saved offline
+[V1 explanation evaluation](../evals/explanations/runs/v1/summary.md), which passed
+5/5 cases and 61/61 checks. Overall Week 9 evaluation closure still depends on
+the separate contributor sign-off, while request-level tracing, the demo UI,
+deployment, and the portfolio package remain ahead. The project is therefore behind the original 12-week plan. Ivy's roughly
 three-week absence reduced the time available for joint review and ranking-label
 sign-off. Prioritize evaluation sign-off and grounded explanations before
 treating Week 10 reliability work as complete; revisit the Week 11–14 targets

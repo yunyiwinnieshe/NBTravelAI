@@ -13,7 +13,7 @@ from travel_ai.clients.duffel import (
     DuffelSettings,
 )
 from travel_ai.providers.duffel import DuffelFlightOfferProvider
-from travel_ai.schemas.recommendations import RecommendationResponse
+from travel_ai.schemas.generated_explanations import ExplainedRecommendationResponse
 from travel_ai.schemas.trip import TripRequest
 from travel_ai.services.live_origin_resolution import (
     SQLiteLocationStore,
@@ -53,11 +53,11 @@ def get_recommendation_service() -> RecommendationService:
     )
 
 
-@router.post("/recommendations", response_model=RecommendationResponse)
+@router.post("/recommendations", response_model=ExplainedRecommendationResponse)
 def create_recommendations(
     trip_request: TripRequest,
     service: Annotated[RecommendationService, Depends(get_recommendation_service)],
-) -> RecommendationResponse:
+) -> ExplainedRecommendationResponse:
     """Return recommendations from the configured flight data source."""
     try:
         return service.get_recommendations(trip_request)

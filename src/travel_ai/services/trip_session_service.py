@@ -393,10 +393,15 @@ class TripSessionService:
             assistant_message=(
                 f"Found {len(response.recommendations)} destination recommendations."
                 if session.state == ConversationState.RESULTS
-                else response.guidance or NO_MATCH_GUIDANCE
+                else (
+                    response.explanations.no_match.guidance[0]
+                    if response.explanations and response.explanations.no_match
+                    else response.guidance or NO_MATCH_GUIDANCE
+                )
             ),
             trip_request_draft=session.draft.model_copy(deep=True),
             recommendations=response.recommendations,
+            explanations=response.explanations,
             deferred_requests=list(session.deferred),
         )
         return session.confirmed_result.model_copy(deep=True)

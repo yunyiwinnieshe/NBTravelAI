@@ -251,9 +251,8 @@ def test_duffel_test_flights_reach_recommendation_and_session_results(
         assert (
             confirmed.json()["recommendations"][0]["destination"]["name"] == "Chicago"
         )
-        assert (
-            "Duffel test data" in confirmed.json()["recommendations"][0]["explanation"]
-        )
+        confirmed_explanation = confirmed.json()["explanations"]["destinations"][0]
+        assert "Duffel test data" in confirmed_explanation["freshness_note"]
         direct_payload = {
             "start_date": "2099-06-10",
             "end_date": "2099-06-14",
@@ -270,6 +269,8 @@ def test_duffel_test_flights_reach_recommendation_and_session_results(
         direct = client.post("/recommendations", json=direct_payload)
         assert direct.status_code == 200
         assert direct.json()["metadata"]["data_mode"] == "duffel_test"
+        direct_explanation = direct.json()["explanations"]["destinations"][0]
+        assert "Duffel test data" in direct_explanation["freshness_note"]
         unknown_origin = {
             **direct_payload,
             "travelers": [
@@ -285,7 +286,10 @@ def test_duffel_test_flights_reach_recommendation_and_session_results(
         assert no_match.status_code == 200
         assert no_match.json()["status"] == "no_match"
         assert no_match.json()["metadata"]["data_mode"] == "duffel_test"
-        assert "Adjust a budget" in no_match.json()["guidance"]
+        assert no_match.json()["guidance"] is None
+        no_match_explanation = no_match.json()["explanations"]["no_match"]
+        assert "Duffel test data" in no_match_explanation["freshness_note"]
+        assert no_match_explanation["guidance"]
         no_offers["enabled"] = False
         fail_search["enabled"] = True
         failed = client.post("/recommendations", json=direct_payload)
