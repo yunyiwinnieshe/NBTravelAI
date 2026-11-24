@@ -337,6 +337,7 @@ class TripSessionService:
             ),
             trip_request_draft=session.draft.model_copy(deep=True),
             recommendations=response.recommendations,
+            explanations=response.explanations,
             deferred_requests=list(session.deferred),
         )
         return session.confirmed_result.model_copy(deep=True)

@@ -339,7 +339,6 @@ class DestinationRecommendation(BaseModel):
     destination: DestinationSummary
     score: float = Field(ge=0, le=1)
     score_breakdown: ScoreBreakdown
-    explanation: str | None = Field(default=None, min_length=1, max_length=500)
     recommended_pair: RecommendedFlightPair
     flight_options_by_traveler: list[TravelerFlightOptions] = Field(
         min_length=2,

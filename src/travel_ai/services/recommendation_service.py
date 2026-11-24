@@ -11,6 +11,7 @@ from travel_ai.providers.fixtures import (
     FixtureOriginAirportProvider,
 )
 from travel_ai.schemas.flights import FlightOffer, FlightSearchQuery, FlightSlice
+from travel_ai.schemas.generated_explanations import ExplainedRecommendationResponse
 from travel_ai.schemas.ranking import DestinationRankingInput
 from travel_ai.schemas.recommendations import (
     DestinationExclusion,
@@ -26,9 +27,11 @@ from travel_ai.schemas.recommendations import (
     TravelerOfferReference,
 )
 from travel_ai.schemas.trip import TripRequest
-from travel_ai.services.ai_tracing import record_event, stage
+from travel_ai.services.ai_tracing import stage
 from travel_ai.services.constraint_engine import evaluate_traveler_city_offers
 from travel_ai.services.destination_ranking import rank_destinations
+from travel_ai.services.explanation_evidence import build_explanation_evidence
+from travel_ai.services.explanation_generation import GroundedRecommendationExplainer
 from travel_ai.services.fixture_loader import (
     DestinationFixtures,
     load_destination_fixtures,
@@ -40,7 +43,6 @@ from travel_ai.services.flight_offer_selection import (
     select_recommended_flight_pair,
 )
 from travel_ai.services.preference_features import calculate_city_preference_features
-from travel_ai.services.recommendation_explanation import build_explanation
 
 logger = logging.getLogger(__name__)
 
@@ -104,12 +106,14 @@ class RecommendationService:
         origin_provider: OriginAirportProvider | None = None,
         destinations: DestinationFixtures | None = None,
         clock: Callable[[], datetime] | None = None,
+        explainer: GroundedRecommendationExplainer | None = None,
     ) -> None:
         self.flight_provider = flight_provider or FixtureFlightOfferProvider()
         self._validate_provider_mode()
         self.origin_provider = origin_provider or FixtureOriginAirportProvider()
         self.destinations = destinations or load_destination_fixtures()
         self.clock = clock or (lambda: datetime.now(UTC))
+        self.explainer = explainer or GroundedRecommendationExplainer()
         versions = {city.data_version for city in self.destinations.cities}
         if len(versions) != 1:
             raise ValueError("candidate pool must contain exactly one data version")
@@ -120,7 +124,9 @@ class RecommendationService:
         if self.flight_provider.data_mode != "fixture":
             raise ValueError("this workflow currently supports fixture providers only")
 
-    def get_recommendations(self, trip_request: TripRequest) -> RecommendationResponse:
+    def get_recommendations(
+        self, trip_request: TripRequest
+    ) -> ExplainedRecommendationResponse:
         """Return up to three eligible cities or an explained no-match result."""
         self._validate_provider_mode()
         evaluated_at = self.clock()
@@ -283,33 +289,21 @@ class RecommendationService:
         recommendations = []
         for rank, result in enumerate(ranked[:3], start=1):
             city, pair, options = response_details_by_destination[result.destination_id]
-            recommendation = DestinationRecommendation(
-                rank=rank,
-                destination=DestinationSummary(
-                    destination_id=city.city_id,
-                    name=city.name,
-                    state_code=city.state_code,
-                    metro_airport_codes=city.metro_airport_codes,
-                ),
-                score=result.score,
-                score_breakdown=result.score_breakdown,
-                recommended_pair=pair,
-                flight_options_by_traveler=options,
+            recommendations.append(
+                DestinationRecommendation(
+                    rank=rank,
+                    destination=DestinationSummary(
+                        destination_id=city.city_id,
+                        name=city.name,
+                        state_code=city.state_code,
+                        metro_airport_codes=city.metro_airport_codes,
+                    ),
+                    score=result.score,
+                    score_breakdown=result.score_breakdown,
+                    recommended_pair=pair,
+                    flight_options_by_traveler=options,
+                )
             )
-            try:
-                with stage("explanation", validation="passed"):
-                    recommendation = DestinationRecommendation.model_validate(
-                        {
-                            **recommendation.model_dump(),
-                            "explanation": build_explanation(recommendation),
-                        }
-                    )
-            except Exception:
-                # A wording failure must not hide validated scores and flights.
-                pass
-            recommendations.append(recommendation)
-        if not recommendations:
-            record_event("explanation", validation="not_applicable", result_count=0)
         response_status = "success" if recommendations else "no_match"
         with stage(
             "response_validation",
@@ -317,7 +311,7 @@ class RecommendationService:
             response_status=response_status,
             result_count=len(recommendations),
         ):
-            return RecommendationResponse(
+            response = RecommendationResponse(
                 status=response_status,
                 recommendations=recommendations,
                 exclusions=exclusions,
@@ -328,3 +322,18 @@ class RecommendationService:
                     eligible_destination_count=len(ranked),
                 ),
             )
+        try:
+            with stage("explanation", validation="passed"):
+                evidence = build_explanation_evidence(trip_request, response)
+                explanations = self.explainer.explain(evidence)
+        except Exception as error:
+            # The validated ranking remains useful if explanation generation fails.
+            logger.warning(
+                "recommendation_explanation_failed",
+                extra={"error_type": type(error).__name__},
+            )
+            explanations = None
+        return ExplainedRecommendationResponse(
+            **response.model_dump(),
+            explanations=explanations,
+        )

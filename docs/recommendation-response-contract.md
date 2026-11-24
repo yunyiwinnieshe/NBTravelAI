@@ -3,6 +3,11 @@
 **Status:** Pydantic contract and fixture-backed service/API population implemented
 **Scope:** The public success and no-match response from `POST /recommendations`
 
+The contract, restricted evidence input, generation rules, and offline evaluation
+are defined in [Grounded recommendation explanations](grounded-recommendation-explanations.md).
+Completed responses include status-aligned explanations when generation succeeds.
+If it fails, `explanations` is `null` and the validated scores and flights remain.
+
 ## Response structure
 
 ```text
@@ -11,7 +16,6 @@ RecommendationResponse
 ├── recommendations: up to 3 DestinationRecommendation objects
 │   ├── rank and destination
 │   ├── score and score_breakdown
-│   ├── explanation (optional plain-language summary)
 │   ├── recommended_pair
 │   │   ├── one offer reference per traveler
 │   │   ├── combined price and compatibility metrics
@@ -20,16 +24,16 @@ RecommendationResponse
 │   └── flight_options_by_traveler
 │       └── 1–4 distinct category-winning FlightOption objects per traveler
 ├── exclusions
+├── explanations (grounded destination or no-match text; null on failure)
 └── metadata
 ```
 
 The API uses a compact `FlightOption` model. Provider-only details and raw
 Duffel payloads stay inside the provider layer.
 
-Each recommendation's `explanation` is assembled from its validated score,
-selected flight pair, and price comparison. It names the largest score
-contributions and labels the flight price as fixture data. If explanation
-construction fails, it is `null` and the scores and flights remain available.
+The `explanations` object is assembled from validated recommendation evidence.
+If explanation construction fails, it is `null` and the scores and flights
+remain available.
 
 ## Recommended pair and city score
 
