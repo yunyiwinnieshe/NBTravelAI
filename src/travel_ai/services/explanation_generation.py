@@ -303,11 +303,11 @@ def _signed_decimal(value: float, unit: str) -> str:
 
 
 def _freshness_note(evidence: RecommendationExplanationEvidence) -> str:
-    source = (
-        "fixture/test data"
-        if evidence.freshness.data_mode == RecommendationDataMode.FIXTURE
-        else "live provider data"
-    )
+    source = {
+        RecommendationDataMode.FIXTURE: "fixture/test data",
+        RecommendationDataMode.DUFFEL_TEST: "Duffel test data",
+        RecommendationDataMode.LIVE: "live provider data",
+    }[evidence.freshness.data_mode]
     return (
         f"Based on {source} evaluated at "
         f"{evidence.freshness.evaluated_at.isoformat()} with candidate pool "

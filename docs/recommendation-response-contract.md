@@ -114,20 +114,20 @@ rather than expanding the public response.
 When no example city qualifies, `explanations.no_match.guidance` suggests
 adjusting a budget, travel-time limit, date, or origin. If explanation
 generation fails, the top-level `guidance` supplies a simpler next step.
-A provider failure returns a retryable 503
-error instead of claiming that no destination matches.
+A provider failure returns a retryable 503 error instead of claiming that no
+destination matches.
 
-`metadata` records the evaluation timestamp, candidate-pool version, either
-`fixture` or `live` data mode, and the number of eligible destinations. `fixture`
-identifies example flight schedules and prices. These fields make test results
-and demonstrations reproducible.
+`metadata` records the evaluation timestamp, candidate-pool version, data mode,
+and the number of eligible destinations. `fixture` identifies saved examples;
+`duffel_test` identifies Duffel test-mode results. Both are demonstration data,
+not current bookable prices. These fields make test results reproducible.
 
 ## Endpoint behavior
 
-`POST /recommendations` populates this contract through the example workflow
-only when `ALLOW_EXAMPLE_FLIGHT_RESULTS=1`. Otherwise it returns 503 without
-showing example prices. External flight search is not connected yet.
+`POST /recommendations` uses saved examples only when
+`ALLOW_EXAMPLE_FLIGHT_RESULTS=1`, or Duffel test-mode offers when
+`FLIGHT_PROVIDER=duffel` with a test token. Without either, it returns 503.
 It returns HTTP 200 with `success` or `no_match`, at most three recommendations,
-and the total eligible destination count before truncation. Unsupported fixture
-origins and invalid requests return HTTP 422. Live integration remains pending;
-the current response always identifies its data mode as `fixture`.
+and the total eligible destination count before truncation. Unsupported origins
+and invalid requests return HTTP 422. Duffel failures return 503 without
+substituting saved examples.

@@ -217,7 +217,7 @@ def test_workflow_logs_offer_rejection_reasons_without_traveler_ids(
 
 
 @pytest.mark.parametrize("return_offers", [False, True])
-def test_live_provider_is_rejected_before_search(return_offers: bool) -> None:
+def test_external_provider_does_not_accept_example_offers(return_offers: bool) -> None:
     class LiveProvider(FixtureFlightOfferProvider):
         calls = 0
 
@@ -230,14 +230,17 @@ def test_live_provider_is_rejected_before_search(return_offers: bool) -> None:
             return super().search(query) if return_offers else []
 
     provider = LiveProvider()
-    with pytest.raises(ValueError, match="fixture providers only"):
-        RecommendationService(flight_provider=provider)
-    assert provider.calls == 0
-    service = RecommendationService()
-    service.flight_provider = provider
-    with pytest.raises(ValueError, match="fixture providers only"):
-        service.get_recommendations(request())
-    assert provider.calls == 0
+    service = RecommendationService(flight_provider=provider)
+    if return_offers:
+        with pytest.raises(
+            RecommendationProviderError, match="temporarily unavailable"
+        ):
+            service.get_recommendations(request())
+    else:
+        response = service.get_recommendations(request())
+        assert response.status == "no_match"
+        assert response.metadata.data_mode == "live"
+    assert provider.calls > 0
 
 
 def test_fixture_provider_cannot_return_live_offers() -> None:

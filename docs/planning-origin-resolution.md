@@ -38,9 +38,10 @@ remain in memory; their persistence is a separate V2 task.
   eligible airport produces a clarification question. The prior draft values
   stay intact. Duffel transport and storage failures also leave the previous
   session draft intact.
-- A resolved origin outside the fixture flight provider's coverage receives a
-  clear `no_match` message after explicit confirmation. This ticket does not
-  connect live flight searches or expand flight fixtures.
+- A resolved origin outside the saved-example flight provider's coverage
+  receives a clear `no_match` message after explicit confirmation. With
+  `FLIGHT_PROVIDER=duffel`, the saved airport codes feed Duffel test-mode
+  flight searches instead.
 
 The API response keeps the existing draft and `pending_questions` contract.
 The origin question has a traveler-specific field path and source message, so

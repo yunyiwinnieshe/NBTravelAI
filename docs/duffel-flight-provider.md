@@ -1,8 +1,7 @@
 # Duffel Test-Mode Flight Provider
 
-**Status:** Provider and mocked tests implemented; planning-session origin
-resolution is opt-in, while live flight recommendation integration remains a
-later task
+**Status:** Provider, mocked tests, and opt-in recommendation integration
+implemented. Set `FLIGHT_PROVIDER=duffel` to use test-mode offers.
 **Scope:** Place suggestions and round-trip flight searches through Duffel test
 mode only
 
@@ -20,7 +19,8 @@ FlightSearchQuery
 ```
 
 Neither the recommendation service nor ranking code receives raw Duffel JSON.
-The fixture provider remains the default until the service workflow is wired.
+The saved-example provider remains available for offline tests and demos; it is
+not used as a fallback when Duffel fails.
 
 `DuffelAirportPlaceProvider` uses `GET /places/suggestions` with either a text
 query or latitude, longitude, and radius. It expands airports nested under city
@@ -40,7 +40,14 @@ manual command:
 export DUFFEL_ACCESS_TOKEN="your test token"
 export DUFFEL_BASE_URL="https://api.duffel.com"
 export DUFFEL_SUPPLIER_TIMEOUT_MS="10000"
+export FLIGHT_PROVIDER=duffel
+export ORIGIN_RESOLUTION_PROVIDER=duffel
+export ORIGIN_LOCATION_DB_PATH=instance/locations.sqlite3
 ```
+
+Create the `instance` directory first. The path must name a writable SQLite
+file. Session results and direct recommendation responses label Duffel test
+data explicitly; they never describe test prices as current bookable quotes.
 
 The token must remain outside source code, committed fixtures, command output,
 screenshots, and logs. Rotate any token that has previously been shared.
@@ -106,15 +113,9 @@ V1 accepts an exact airport/IATA code or a city plus state. Ambiguous Duffel
 place matches return verified choices for an LLM clarification turn; the LLM
 does not choose a city or invent coordinates.
 
-The integrated live workflow should first use an unambiguous metropolitan city
-code and filter the actual returned airports against the approved airport
-groups. Explicit airport-pair searches are the fallback. When explicit searches
-partially fail, the service uses successful results and returns structured
-warnings; it fails the destination only if every attempt fails. Implementing
-that policy requires the workflow result contract to carry both `offers` and
-`warnings`, so the current provider continues to fail fast until that contract
-is introduced.
+The integrated workflow currently searches explicit approved airport pairs.
+Partial airport-pair failures still fail the request; structured partial-result
+warnings remain future work.
 
 Duffel test mode exercises the real HTTP integration but may return unrealistic
-prices and schedules. Travel AI therefore continues to use curated fixtures for
-deterministic ranking tests and demonstrations.
+prices and schedules. Curated examples remain for deterministic offline tests.

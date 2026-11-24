@@ -35,7 +35,7 @@ validated `RecommendationResponse`. It produces a
 - signed score, price, travel-time, preference, and fairness comparisons between
   returned destinations;
 - public destination exclusion reasons; and
-- evaluation timestamp, candidate-pool version, and fixture/live data mode.
+- evaluation timestamp, candidate-pool version, and flight data mode.
 
 Unknown fields are forbidden throughout the evidence tree. The builder fails if
 a recommended traveler or selected offer cannot be reconciled with the confirmed
@@ -72,8 +72,8 @@ ranking with `explanations: null`.
 
 Fairness wording is explicitly bounded to budget burden, travel-time burden, and
 arrival timing. No-match guidance suggests possible constraint changes without
-promising that a change will produce a result. Fixture and live freshness wording
-remain distinct.
+promising that a change will produce a result. Fixture, Duffel test, and live
+freshness wording remain distinct.
 
 ## Evidence-based evaluation
 

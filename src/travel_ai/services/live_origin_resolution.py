@@ -7,11 +7,13 @@ from contextlib import closing
 from pathlib import Path
 from uuid import uuid4
 
+from travel_ai.providers.base import OriginAirportProvider
 from travel_ai.providers.duffel import DuffelAirportPlaceProvider
 from travel_ai.providers.fixtures import load_airport_reference_dataset
 from travel_ai.schemas.locations import (
     AirportReference,
     LocationSearchQuery,
+    OriginAirportMapping,
     PlaceSuggestion,
     ResolvedLocation,
 )
@@ -255,6 +257,19 @@ class SQLiteLocationStore:
                 (location_id,),
             ).fetchone()
         return json.loads(row[0]) if row else None
+
+
+class StoredOriginAirportProvider(OriginAirportProvider):
+    """Read airports previously verified by Duffel Places from the registry."""
+
+    def __init__(self, location_store: SQLiteLocationStore) -> None:
+        self.location_store = location_store
+
+    def resolve(self, origin_id: str) -> OriginAirportMapping:
+        codes = self.location_store.get_airports(origin_id)
+        if not codes:
+            raise OriginResolutionError("departure location is not in the registry")
+        return OriginAirportMapping(origin_id=origin_id, airport_codes=codes)
 
 
 class DuffelOriginResolver:

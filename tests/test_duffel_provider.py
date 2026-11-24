@@ -2,9 +2,11 @@
 
 import json
 from datetime import UTC, date, datetime
+from pathlib import Path
 
 import httpx
 import pytest
+from fastapi.testclient import TestClient
 
 from travel_ai.clients.duffel import (
     DuffelApiError,
@@ -15,10 +17,14 @@ from travel_ai.clients.duffel import (
     DuffelResponseError,
     DuffelSettings,
 )
+from travel_ai.main import create_app
 from travel_ai.providers.duffel import (
     DuffelAirportPlaceProvider,
     DuffelFlightOfferProvider,
 )
+from travel_ai.routers import recommendations as recommendation_routes
+from travel_ai.routers import trip_sessions as session_routes
+from travel_ai.routers.trip_sessions import get_trip_session_service
 from travel_ai.schemas.flights import FlightSearchQuery
 from travel_ai.schemas.locations import LocationSearchQuery
 
@@ -132,6 +138,166 @@ def place_provider_with_handler(
         http_client=http_client,
     )
     return DuffelAirportPlaceProvider(client)
+
+
+def test_duffel_test_flights_reach_recommendation_and_session_results(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    searches = []
+    fail_search = {"enabled": False}
+    no_offers = {"enabled": False}
+
+    def handle(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/places/suggestions":
+            name = request.url.params["query"]
+            code = {"Boston": "BOS", "New York": "JFK"}[name]
+            airport = {
+                "id": f"arp_{code.lower()}_us",
+                "type": "airport",
+                "iata_code": code,
+                "name": f"{name} Airport",
+                "city_name": name,
+                "iata_country_code": "US",
+                "latitude": 42.0,
+                "longitude": -71.0,
+                "time_zone": "America/New_York",
+            }
+            return httpx.Response(
+                200,
+                json={
+                    "data": [
+                        {
+                            **airport,
+                            "id": f"cit_{code.lower()}_us",
+                            "type": "city",
+                            "name": name,
+                            "airports": [airport],
+                        }
+                    ]
+                },
+            )
+        assert request.url.path == "/air/offer_requests"
+        if fail_search["enabled"]:
+            return httpx.Response(503, json={"errors": []})
+        if no_offers["enabled"]:
+            return httpx.Response(200, json={"data": {"offers": []}})
+        outbound = json.loads(request.content)["data"]["slices"][0]
+        origin, destination = outbound["origin"], outbound["destination"]
+        assert origin != destination
+        searches.append((origin, destination))
+        if destination != "ORD" or origin not in {"BOS", "JFK"}:
+            return httpx.Response(200, json={"data": {"offers": []}})
+        offer = raw_offer(offer_id=f"off_test_{origin}")
+        offer["slices"][0]["segments"][0]["origin"]["iata_code"] = origin
+        offer["slices"][1]["segments"][0]["destination"]["iata_code"] = origin
+        return httpx.Response(200, json={"data": {"offers": [offer]}})
+
+    monkeypatch.setenv("FLIGHT_PROVIDER", "duffel")
+    monkeypatch.setenv("ORIGIN_RESOLUTION_PROVIDER", "duffel")
+    monkeypatch.setenv("ORIGIN_LOCATION_DB_PATH", str(tmp_path / "locations.sqlite3"))
+    monkeypatch.setenv("DUFFEL_ACCESS_TOKEN", "duffel_test_not_a_real_token")
+    monkeypatch.delenv("ALLOW_EXAMPLE_FLIGHT_RESULTS", raising=False)
+    http_client = httpx.Client(
+        base_url="https://api.duffel.com", transport=httpx.MockTransport(handle)
+    )
+    monkeypatch.setattr(
+        recommendation_routes,
+        "DuffelClient",
+        lambda settings: DuffelClient(settings, http_client=http_client),
+    )
+    monkeypatch.setattr(
+        session_routes,
+        "DuffelClient",
+        lambda settings: DuffelClient(settings, http_client=http_client),
+    )
+    recommendation_routes.get_recommendation_service.cache_clear()
+    get_trip_session_service.cache_clear()
+    with TestClient(create_app()) as client:
+        created = client.post("/trip-sessions", json={})
+        assert created.status_code == 200
+        assert "Duffel test-mode" in created.json()["source_notice"]
+        assert "Locations: Duffel Places" in created.json()["source_notice"]
+        session_id = created.json()["session_id"]
+        drafted = client.put(
+            f"/trip-sessions/{session_id}/draft",
+            json={
+                "start_date": "2099-06-10",
+                "end_date": "2099-06-14",
+                "travelers": [
+                    {
+                        "traveler_id": traveler_id,
+                        "origin": origin,
+                        "budget_usd": 500,
+                        "max_travel_time_hours": 10,
+                    }
+                    for traveler_id, origin in (
+                        ("traveler_a", "Boston, MA"),
+                        ("traveler_b", "New York, NY"),
+                    )
+                ],
+            },
+        )
+        assert drafted.status_code == 200
+        assert all(
+            traveler["origin_id"].startswith("loc_")
+            for traveler in drafted.json()["trip_request_draft"]["travelers"]
+        )
+        confirmed = client.post(
+            f"/trip-sessions/{session_id}/messages", json={"action": "confirm"}
+        )
+        assert confirmed.status_code == 200
+        assert confirmed.json()["state"] == "results"
+        assert (
+            confirmed.json()["recommendations"][0]["destination"]["name"] == "Chicago"
+        )
+        confirmed_explanation = confirmed.json()["explanations"]["destinations"][0]
+        assert "Duffel test data" in confirmed_explanation["freshness_note"]
+        direct_payload = {
+            "start_date": "2099-06-10",
+            "end_date": "2099-06-14",
+            "travelers": [
+                {
+                    "traveler_id": traveler["traveler_id"],
+                    "origin_id": traveler["origin_id"],
+                    "budget_usd": 500,
+                    "max_one_way_travel_minutes": 600,
+                }
+                for traveler in drafted.json()["trip_request_draft"]["travelers"]
+            ],
+        }
+        direct = client.post("/recommendations", json=direct_payload)
+        assert direct.status_code == 200
+        assert direct.json()["metadata"]["data_mode"] == "duffel_test"
+        direct_explanation = direct.json()["explanations"]["destinations"][0]
+        assert "Duffel test data" in direct_explanation["freshness_note"]
+        unknown_origin = {
+            **direct_payload,
+            "travelers": [
+                {**direct_payload["travelers"][0], "origin_id": "unknown_origin"},
+                direct_payload["travelers"][1],
+            ],
+        }
+        rejected = client.post("/recommendations", json=unknown_origin)
+        assert rejected.status_code == 422
+        assert "choose it again" in rejected.json()["detail"]
+        no_offers["enabled"] = True
+        no_match = client.post("/recommendations", json=direct_payload)
+        assert no_match.status_code == 200
+        assert no_match.json()["status"] == "no_match"
+        assert no_match.json()["metadata"]["data_mode"] == "duffel_test"
+        assert no_match.json()["guidance"] is None
+        no_match_explanation = no_match.json()["explanations"]["no_match"]
+        assert "Duffel test data" in no_match_explanation["freshness_note"]
+        assert no_match_explanation["guidance"]
+        no_offers["enabled"] = False
+        fail_search["enabled"] = True
+        failed = client.post("/recommendations", json=direct_payload)
+        assert failed.status_code == 503
+        assert failed.json()["detail"]["code"] == "recommendation_provider_unavailable"
+        assert "recommendations" not in failed.json()
+    assert ("BOS", "ORD") in searches
+    assert ("JFK", "ORD") in searches
 
 
 def test_place_search_expands_city_airports_and_deduplicates_results() -> None:

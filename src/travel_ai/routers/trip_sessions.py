@@ -14,6 +14,7 @@ from travel_ai.clients.duffel import (
     DuffelSettings,
 )
 from travel_ai.providers.duffel import DuffelAirportPlaceProvider
+from travel_ai.routers.recommendations import get_recommendation_service
 from travel_ai.schemas.preference_extraction import (
     MissingField,
     MissingFieldReason,
@@ -36,7 +37,6 @@ from travel_ai.services.live_origin_resolution import (
     SQLiteLocationStore,
 )
 from travel_ai.services.preference_extraction import FixturePreferenceExtractor
-from travel_ai.services.recommendation_service import RecommendationService
 from travel_ai.services.session_extraction import (
     SessionExtractionPolicy,
     SessionPreferenceExtractor,
@@ -52,7 +52,7 @@ router = APIRouter(prefix="/trip-sessions", tags=["trip sessions"])
 
 @lru_cache
 def get_trip_session_service() -> TripSessionService:
-    """Choose extraction and origin resolution; example flights stay fixed."""
+    """Choose extraction and origin resolution for the flight data source."""
     origin_mode = os.getenv("ORIGIN_RESOLUTION_PROVIDER", "fixture").strip().lower()
     origin_resolver = None
     if origin_mode == "duffel":
@@ -74,7 +74,7 @@ def get_trip_session_service() -> TripSessionService:
         policy = SessionExtractionPolicy.from_environment()
         return TripSessionService(
             SessionPreferenceExtractor(DeepSeekPreferenceExtractor(), policy),
-            RecommendationService(),
+            get_recommendation_service(),
             origin_resolver=origin_resolver,
             extraction_source="deepseek",
         )
@@ -152,7 +152,7 @@ def get_trip_session_service() -> TripSessionService:
             ),
         }
     )
-    return TripSessionService(extractor, RecommendationService(), origin_resolver)
+    return TripSessionService(extractor, get_recommendation_service(), origin_resolver)
 
 
 @router.post(
