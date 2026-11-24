@@ -158,18 +158,20 @@ def test_provider_error_retains_trace_id_without_error_details(monkeypatch) -> N
 def test_explanation_failure_keeps_scores_and_records_error(monkeypatch) -> None:
     _enable_dashboard(monkeypatch)
 
-    def fail_explanation(_recommendation):
+    def fail_explanation(_explainer, _evidence):
         raise RuntimeError("private explanation diagnostic")
 
-    monkeypatch.setattr(recommendation_module, "build_explanation", fail_explanation)
+    monkeypatch.setattr(
+        recommendation_module.GroundedRecommendationExplainer,
+        "explain",
+        fail_explanation,
+    )
     with TestClient(create_app(), headers=_AUTH_HEADERS) as client:
         response = client.post("/recommendations", json=_trip())
         assert response.status_code == 200
         assert response.json()["status"] == "success"
-        assert all(
-            result["explanation"] is None
-            for result in response.json()["recommendations"]
-        )
+        assert response.json()["recommendations"]
+        assert response.json()["explanations"] is None
         trace = client.get(
             f"/observability/traces/{response.headers['X-Trace-ID']}"
         ).json()

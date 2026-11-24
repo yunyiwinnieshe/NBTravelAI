@@ -130,7 +130,8 @@ curl -X POST http://127.0.0.1:8000/recommendations \
 The response contains up to three ranked cities, flight options and category
 labels for both travelers, pair-price comparisons, and exclusion reasons.
 Dates without fixture flights return `no_match`; unsupported origins return 422.
-`no_match` includes `guidance` on which trip constraints to adjust. A temporary
+`no_match` includes guidance in `explanations.no_match`; if explanation
+generation fails, the response uses the simpler `guidance` field. A temporary
 flight data failure returns 503 instead of a false `no_match` result. With
 `ALLOW_EXAMPLE_FLIGHT_RESULTS=1`, the endpoint uses saved example flights and
 makes no external flight-search calls. Conversational trip sessions can use
