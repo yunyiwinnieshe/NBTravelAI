@@ -116,6 +116,7 @@ class ConversationTurnResponse(BaseModel):
     session_id: str
     state: ConversationState
     assistant_message: str
+    source_notice: str
     trip_request_draft: TripRequestDraft | None = None
     missing_fields: list[str] = Field(default_factory=list)
     pending_questions: list[PendingQuestion] = Field(default_factory=list)

@@ -52,7 +52,7 @@ router = APIRouter(prefix="/trip-sessions", tags=["trip sessions"])
 
 @lru_cache
 def get_trip_session_service() -> TripSessionService:
-    """Choose extraction and origin resolution; fixture recommendations stay fixed."""
+    """Choose extraction and origin resolution; example flights stay fixed."""
     origin_mode = os.getenv("ORIGIN_RESOLUTION_PROVIDER", "fixture").strip().lower()
     origin_resolver = None
     if origin_mode == "duffel":
@@ -76,6 +76,7 @@ def get_trip_session_service() -> TripSessionService:
             SessionPreferenceExtractor(DeepSeekPreferenceExtractor(), policy),
             RecommendationService(),
             origin_resolver=origin_resolver,
+            extraction_source="deepseek",
         )
     if provider != "fixture":
         raise DeepSeekConfigurationError(
@@ -199,6 +200,23 @@ def add_trip_session_message(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail=str(error),
         ) from error
+
+
+@router.put("/{session_id}/draft", response_model=ConversationTurnResponse)
+def replace_trip_session_draft(
+    session_id: str,
+    draft: TripRequestDraft,
+    service: Annotated[TripSessionService, Depends(get_trip_session_service)],
+) -> ConversationTurnResponse:
+    """Replace the saved draft with validated structured form input."""
+    try:
+        return service.replace_draft(session_id, draft)
+    except TripSessionNotFoundError as error:
+        raise HTTPException(
+            status_code=404, detail="trip session was not found"
+        ) from error
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
 
 
 @router.post(

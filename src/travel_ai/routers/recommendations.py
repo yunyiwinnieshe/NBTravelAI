@@ -32,5 +32,5 @@ def create_recommendations(
     except UnsupportedOriginError as error:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail=str(error),
+            detail="This demo supports Boston or New York departure locations.",
         ) from error

@@ -74,7 +74,7 @@ def test_recommendations_rejects_unsupported_fixture_origin() -> None:
     request["travelers"][0]["origin_id"] = "unknown_city"
     response = client.post("/recommendations", json=request)
     assert response.status_code == 422
-    assert "origin ID is not configured" in response.json()["detail"]
+    assert "This demo supports Boston or New York" in response.json()["detail"]
 
 
 def test_recommendations_rejects_a_request_without_two_travelers() -> None:

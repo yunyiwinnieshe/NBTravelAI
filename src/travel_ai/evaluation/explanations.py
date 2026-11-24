@@ -295,6 +295,7 @@ def evaluate_explanations(dataset: ExplanationDataset) -> list[dict[str, Any]]:
         service = RecommendationService(
             clock=lambda value=dataset.evaluated_at: value,
             explainer=explainer,
+            allow_example_flights=True,
         )
         request = TripRequest.model_validate(case.request)
         response = service.get_recommendations(request)

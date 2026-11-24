@@ -5,7 +5,7 @@ from dataclasses import dataclass, field, replace
 from datetime import date
 from decimal import Decimal, InvalidOperation
 from threading import RLock
-from typing import Protocol
+from typing import Literal, Protocol
 from uuid import uuid4
 
 from pydantic import ValidationError
@@ -24,9 +24,13 @@ from travel_ai.schemas.sessions import (
 )
 from travel_ai.schemas.trip import TravelerRequest, TripRequest
 from travel_ai.services.ai_tracing import record_event, stage
-from travel_ai.services.live_origin_resolution import OriginResolutionError
+from travel_ai.services.live_origin_resolution import (
+    DuffelOriginResolver,
+    OriginResolutionError,
+)
 from travel_ai.services.preference_extraction import PreferenceExtractor
 from travel_ai.services.recommendation_service import (
+    NO_MATCH_GUIDANCE,
     RecommendationService,
     UnsupportedOriginError,
 )
@@ -105,7 +109,7 @@ class FixtureOriginResolver:
             return self._ORIGIN_IDS_BY_NAME[normalized_origin]
         except KeyError as error:
             raise FixtureOriginResolutionError(
-                f"'{origin}' is not a supported fixture origin"
+                f"'{origin}' is not a supported departure location in this demo"
             ) from error
 
 
@@ -117,10 +121,24 @@ class TripSessionService:
         extractor: PreferenceExtractor,
         recommendation_service: RecommendationService,
         origin_resolver: OriginResolver | None = None,
+        *,
+        extraction_source: Literal["fixture", "deepseek"] = "fixture",
     ) -> None:
         self.extractor = extractor
         self.recommendation_service = recommendation_service
         self.origin_resolver = origin_resolver or FixtureOriginResolver()
+        self.origin_source = (
+            "duffel"
+            if isinstance(self.origin_resolver, DuffelOriginResolver)
+            else "fixture"
+        )
+        extraction_label = "DeepSeek" if extraction_source == "deepseek" else "demo"
+        origin_label = "Duffel Places" if self.origin_source == "duffel" else "demo"
+        self.source_notice = (
+            "Demo only: flight schedules and prices are examples, not live quotes. "
+            f"Trip messages: {extraction_label}. Locations: {origin_label}. "
+            "If an external service fails, no example result is substituted."
+        )
         self._sessions: dict[str, _TripSession] = {}
 
     def close(self) -> None:
@@ -131,6 +149,7 @@ class TripSessionService:
 
     def create_session(self, initial_message: str | None) -> ConversationTurnResponse:
         """Create a session and optionally process its first fixture message."""
+        self.recommendation_service.ensure_available()
         session_id = str(uuid4())
         session = _TripSession(
             draft=TripRequestDraft(
@@ -210,6 +229,32 @@ class TripSessionService:
             self._commit_session(session, candidate)
             if session.confirmed_result is not None:
                 return session.confirmed_result.model_copy(deep=True)
+            return self._response(session_id, session)
+
+    def replace_draft(
+        self, session_id: str, draft: TripRequestDraft
+    ) -> ConversationTurnResponse:
+        """Apply a complete structured draft without trusting client origin IDs."""
+        session = self._get_session(session_id)
+        with session.lock:
+            previous = session.draft.model_copy(deep=True)
+            if [t.traveler_id for t in draft.travelers] != [
+                t.traveler_id for t in previous.travelers
+            ]:
+                raise ValueError("draft must preserve the two assigned traveler IDs")
+            candidate = self._copy_session(session)
+            candidate.draft = draft.model_copy(deep=True)
+            for traveler in candidate.draft.travelers:
+                traveler.origin_id = None
+            candidate.issues = {}
+            candidate.question_context = {}
+            candidate.confirmed_result = None
+            with stage("session_draft_validation", validation="passed"):
+                self._validate_updates(candidate, previous)
+                if candidate.issues:
+                    raise ValueError(next(iter(candidate.issues.values())))
+                self._refresh_state(candidate)
+            self._commit_session(session, candidate)
             return self._response(session_id, session)
 
     @staticmethod
@@ -310,10 +355,17 @@ class TripSessionService:
             session.confirmed_result = ConversationTurnResponse(
                 session_id=session_id,
                 state=session.state,
+                source_notice=self.source_notice,
                 assistant_message=(
                     "The departure location was resolved, but the configured "
                     "flight provider has no coverage for it. No flight "
                     "recommendations are available in this mode."
+                    + (
+                        " Try Boston or New York for example flight results."
+                        if self.origin_source == "fixture"
+                        else " No example prices were substituted. Use a flight "
+                        "source that covers this resolved location."
+                    )
                 ),
                 trip_request_draft=session.draft.model_copy(deep=True),
                 deferred_requests=list(session.deferred),
@@ -328,12 +380,15 @@ class TripSessionService:
         session.confirmed_result = ConversationTurnResponse(
             session_id=session_id,
             state=session.state,
+            source_notice=self.source_notice,
             assistant_message=(
                 f"Found {len(response.recommendations)} destination recommendations."
                 if session.state == ConversationState.RESULTS
-                else "No fixture destination meets both travelers' "
-                "current constraints. "
-                "Adjust a budget, travel-time limit, date, or origin and try again."
+                else (
+                    response.explanations.no_match.guidance[0]
+                    if response.explanations and response.explanations.no_match
+                    else response.guidance or NO_MATCH_GUIDANCE
+                )
             ),
             trip_request_draft=session.draft.model_copy(deep=True),
             recommendations=response.recommendations,
@@ -499,7 +554,7 @@ class TripSessionService:
                     str(error)
                     if not isinstance(error, FixtureOriginResolutionError)
                     else f"Which place does {traveler.display_label} mean? "
-                    "Fixture mode supports Boston or New York."
+                    "This demo supports Boston or New York."
                 )
                 traveler.origin, traveler.origin_id = old.origin, old.origin_id
         origins = [t.origin_id for t in draft.travelers]
@@ -611,6 +666,7 @@ class TripSessionService:
             session_id=session_id,
             state=session.state,
             assistant_message=assistant_message,
+            source_notice=self.source_notice,
             trip_request_draft=session.draft.model_copy(deep=True),
             missing_fields=session.missing_fields,
             pending_questions=self._pending_questions(session),

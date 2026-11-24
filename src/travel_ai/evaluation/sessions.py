@@ -170,7 +170,8 @@ def frozen_dates(reference: date):
 class CountingRecommendations(RecommendationService):
     def __init__(self, reference: date):
         super().__init__(
-            clock=lambda: datetime.combine(reference, datetime.min.time(), UTC)
+            clock=lambda: datetime.combine(reference, datetime.min.time(), UTC),
+            allow_example_flights=True,
         )
         self.calls = 0
 

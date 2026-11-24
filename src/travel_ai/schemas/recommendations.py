@@ -483,6 +483,7 @@ class RecommendationResponse(BaseModel):
         max_length=3,
     )
     exclusions: list[DestinationExclusion] = Field(default_factory=list)
+    guidance: str | None = Field(default=None, min_length=1, max_length=300)
     metadata: RecommendationMetadata
 
     @model_validator(mode="after")

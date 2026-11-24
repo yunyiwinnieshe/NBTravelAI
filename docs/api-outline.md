@@ -92,6 +92,8 @@ conversations are defined in the
 
 Starts a travel-planning conversation. The response will create a server-owned
 `session_id` that identifies later messages from the same planning session.
+Requires `ALLOW_EXAMPLE_FLIGHT_RESULTS=1` for the local demo. Without it,
+session creation returns 503 until external flight search is connected.
 The contract accepts an optional first message. Sessions currently use in-memory
 storage and configurable fixture or DeepSeek extraction. Session storage is not
 persistent; only opt-in resolved location IDs use a durable registry.
@@ -161,6 +163,14 @@ Example result response:
 }
 ```
 
+### `PUT /trip-sessions/{session_id}/draft`
+
+Accepts the complete structured draft shown in the session response. Use it to
+continue when message extraction is unavailable. The server validates the
+assigned traveler IDs and form fields, resolves origins itself, and leaves the
+saved draft untouched if validation or origin lookup fails. Session responses
+label flight prices as examples, not current quotes.
+
 ## Internal interfaces, not public HTTP endpoints
 
 The following are Python services or provider interfaces, not URLs the client
@@ -181,8 +191,9 @@ ranking independently testable and replaceable.
 
 The fixture workflow connects providers, constraints, pair selection, preference
 calculation, and ranking to the finalized response. Planning-session origin
-resolution is opt-in; live flight searches, provider warning/error handling,
-and persistent sessions remain separate work.
+resolution is opt-in; external flight searches, per-airport partial warning
+handling, and persistent sessions remain separate work. Provider-wide failures
+return a retryable 503.
 `get_recommendation_service` is an overridable FastAPI dependency;
 the default service is cached and uses fixtures without network calls.
 

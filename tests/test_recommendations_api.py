@@ -13,6 +13,7 @@ from travel_ai.clients.duffel import DuffelClient
 from travel_ai.main import create_app
 from travel_ai.providers.fixtures import FixtureFlightOfferProvider
 from travel_ai.routers.recommendations import get_recommendation_service
+from travel_ai.routers.trip_sessions import get_trip_session_service
 from travel_ai.schemas.flights import FlightOffer, FlightSearchQuery
 from travel_ai.schemas.generated_explanations import ExplainedRecommendationResponse
 from travel_ai.services.recommendation_service import RecommendationService
@@ -102,6 +103,10 @@ def test_api_returns_exact_eligible_results(
     assert all(e.destination_id not in expected_cities for e in validated.exclusions)
     if not expected_cities:
         assert body["exclusions"]
+        assert body["guidance"] is None
+        assert body["explanations"]["no_match"]["guidance"]
+    else:
+        assert body["guidance"] is None
 
 
 def test_api_reports_traveler_specific_exclusions(api_client: TestClient) -> None:
@@ -203,16 +208,48 @@ def test_default_api_dependency_is_offline_without_duffel_credentials(
         get_recommendation_service.cache_clear()
 
 
-def test_provider_failure_is_a_server_error_not_no_match() -> None:
+def test_public_flow_hides_example_flight_results(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("ALLOW_EXAMPLE_FLIGHT_RESULTS", raising=False)
+    get_recommendation_service.cache_clear()
+    get_trip_session_service.cache_clear()
+    try:
+        with TestClient(create_app()) as client:
+            recommendation = client.post("/recommendations", json=trip_payload())
+            session = client.post("/trip-sessions", json={})
+        for response in (recommendation, session):
+            assert response.status_code == 503
+            assert response.json()["detail"] == {
+                "code": "live_flights_unavailable",
+                "message": "Live flight results are not available yet.",
+                "retryable": False,
+            }
+            assert "recommendations" not in response.json()
+    finally:
+        get_recommendation_service.cache_clear()
+        get_trip_session_service.cache_clear()
+
+
+def test_provider_failure_is_retryable_not_no_match() -> None:
     class FailingProvider(FixtureFlightOfferProvider):
+        fail_once = True
+
         def search(self, query: FlightSearchQuery) -> list[FlightOffer]:
-            raise RuntimeError("provider failure: internal diagnostic")
+            if self.fail_once:
+                self.fail_once = False
+                raise RuntimeError("provider failure: internal diagnostic")
+            return super().search(query)
 
     app = create_app()
     service = RecommendationService(flight_provider=FailingProvider())
     app.dependency_overrides[get_recommendation_service] = lambda: service
     with TestClient(app, raise_server_exceptions=False) as client:
         response = client.post("/recommendations", json=trip_payload())
-    assert response.status_code == 500
-    assert response.text == "Internal Server Error"
+        retry = client.post("/recommendations", json=trip_payload())
+    assert response.status_code == 503
+    assert response.json()["detail"]["code"] == "recommendation_provider_unavailable"
+    assert response.json()["detail"]["retryable"] is True
     assert "internal diagnostic" not in response.text
+    assert retry.status_code == 200
+    assert retry.json()["metadata"]["data_mode"] == "fixture"
