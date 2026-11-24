@@ -90,6 +90,30 @@ def test_workflow_returns_no_match(change: str) -> None:
     assert response.exclusions
 
 
+@pytest.mark.parametrize("no_match", [False, True])
+def test_explanation_failure_preserves_ranked_result(
+    monkeypatch: pytest.MonkeyPatch, no_match: bool
+) -> None:
+    service = RecommendationService()
+    trip = request()
+    if no_match:
+        trip.travelers[0].budget_usd = Decimal("1")
+
+    def fail_explanation(_evidence: object) -> None:
+        raise RuntimeError("explanation unavailable")
+
+    monkeypatch.setattr(service.explainer, "explain", fail_explanation)
+    response = service.get_recommendations(trip)
+
+    assert response.status == ("no_match" if no_match else "success")
+    assert bool(response.recommendations) is not no_match
+    assert response.explanations is None
+    assert (
+        ExplainedRecommendationResponse.model_validate_json(response.model_dump_json())
+        == response
+    )
+
+
 def test_fixture_results_do_not_depend_on_traveler_order_or_previous_request() -> None:
     service = RecommendationService(clock=lambda: datetime(2026, 9, 19, tzinfo=UTC))
     trip = request()

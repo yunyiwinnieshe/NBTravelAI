@@ -301,8 +301,17 @@ class RecommendationService:
                 eligible_destination_count=len(ranked),
             ),
         )
-        evidence = build_explanation_evidence(trip_request, response)
+        try:
+            evidence = build_explanation_evidence(trip_request, response)
+            explanations = self.explainer.explain(evidence)
+        except Exception as error:
+            # The validated ranking remains useful if explanation generation fails.
+            logger.warning(
+                "recommendation_explanation_failed",
+                extra={"error_type": type(error).__name__},
+            )
+            explanations = None
         return ExplainedRecommendationResponse(
             **response.model_dump(),
-            explanations=self.explainer.explain(evidence),
+            explanations=explanations,
         )

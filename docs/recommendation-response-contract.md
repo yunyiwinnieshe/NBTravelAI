@@ -5,7 +5,8 @@
 
 The contract, restricted evidence input, generation rules, and offline evaluation
 are defined in [Grounded recommendation explanations](grounded-recommendation-explanations.md).
-Every completed public response now includes status-aligned explanations.
+Completed responses include status-aligned explanations when generation succeeds.
+If it fails, `explanations` is `null` and the validated scores and flights remain.
 
 ## Response structure
 

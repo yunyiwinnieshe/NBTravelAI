@@ -67,6 +67,8 @@ freshness, and exact exclusions. Claims with unknown fields, unsupported fact ty
 missing destinations, or unrecorded comparisons are rejected. A custom or future
 model-backed generator that returns unsafe claims falls back to the deterministic
 generator; renderers always read values from evidence rather than generated text.
+If evidence assembly or rendering fails, the response returns the validated
+ranking with `explanations: null`.
 
 Fairness wording is explicitly bounded to budget burden, travel-time burden, and
 arrival timing. No-match guidance suggests possible constraint changes without

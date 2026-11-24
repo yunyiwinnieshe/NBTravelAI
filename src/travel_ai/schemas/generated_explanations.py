@@ -35,9 +35,9 @@ class RecommendationExplanationSet(BaseModel):
 
 
 class ExplainedRecommendationResponse(RecommendationResponse):
-    """Recommendation response with grounded user-facing explanations."""
+    """Recommendation response with optional grounded explanations."""
 
-    explanations: RecommendationExplanationSet
+    explanations: RecommendationExplanationSet | None = None
 
 
 class DestinationFactClaim(BaseModel):
