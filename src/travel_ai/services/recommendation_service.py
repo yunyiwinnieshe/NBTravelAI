@@ -27,6 +27,7 @@ from travel_ai.schemas.recommendations import (
     TravelerOfferReference,
 )
 from travel_ai.schemas.trip import TripRequest
+from travel_ai.services.ai_tracing import stage
 from travel_ai.services.constraint_engine import evaluate_traveler_city_offers
 from travel_ai.services.destination_ranking import rank_destinations
 from travel_ai.services.explanation_evidence import build_explanation_evidence
@@ -135,9 +136,14 @@ class RecommendationService:
         origins = {}
         for traveler in travelers:
             try:
-                origins[traveler.traveler_id] = self.origin_provider.resolve(
-                    traveler.origin_id
-                ).airport_codes
+                with stage(
+                    "provider",
+                    provider=type(self.origin_provider).__name__,
+                    version=getattr(self.origin_provider, "source_version", None),
+                ):
+                    origins[traveler.traveler_id] = self.origin_provider.resolve(
+                        traveler.origin_id
+                    ).airport_codes
             except FixtureDataError as error:
                 raise UnsupportedOriginError(str(error)) from error
 
@@ -156,26 +162,32 @@ class RecommendationService:
                     departure_date=trip_request.start_date,
                     return_date=trip_request.end_date,
                 )
-                offers = self.flight_provider.search(query)
+                with stage(
+                    "provider",
+                    provider=type(self.flight_provider).__name__,
+                    version=getattr(self.flight_provider, "source_version", None),
+                ):
+                    offers = self.flight_provider.search(query)
                 if any(not offer.is_fixture for offer in offers):
                     raise ValueError(
                         "this workflow currently supports fixture offers only"
                     )
-                result = evaluate_traveler_city_offers(
-                    traveler,
-                    city,
-                    query.origin_airport_codes,
-                    trip_request.start_date,
-                    trip_request.end_date,
-                    offers,
-                )
+                with stage("constraints", candidate_count=len(offers)) as details:
+                    result = evaluate_traveler_city_offers(
+                        traveler,
+                        city,
+                        query.origin_airport_codes,
+                        trip_request.start_date,
+                        trip_request.end_date,
+                        offers,
+                    )
+                    details["eligible_count"] = len(result.eligible_offers)
+                    details["rejected_count"] = len(result.rejected_offers)
                 for rejection in result.rejected_offers:
                     logger.info(
                         "recommendation_offer_rejected",
                         extra={
-                            "traveler_id": rejection.traveler_id,
                             "destination_id": rejection.city_id,
-                            "offer_id": rejection.offer_id,
                             "reason_codes": [
                                 reason.value for reason in rejection.reason_codes
                             ],
@@ -271,7 +283,9 @@ class RecommendationService:
                 ],
             )
 
-        ranked = rank_destinations(candidates)
+        with stage("ranking", candidate_count=len(candidates)) as details:
+            ranked = rank_destinations(candidates)
+            details["result_count"] = len(ranked)
         recommendations = []
         for rank, result in enumerate(ranked[:3], start=1):
             city, pair, options = response_details_by_destination[result.destination_id]
@@ -290,20 +304,28 @@ class RecommendationService:
                     flight_options_by_traveler=options,
                 )
             )
-        response = RecommendationResponse(
-            status="success" if recommendations else "no_match",
-            recommendations=recommendations,
-            exclusions=exclusions,
-            metadata=RecommendationMetadata(
-                evaluated_at=evaluated_at,
-                candidate_pool_version=self.candidate_pool_version,
-                data_mode="fixture",
-                eligible_destination_count=len(ranked),
-            ),
-        )
+        response_status = "success" if recommendations else "no_match"
+        with stage(
+            "response_validation",
+            validation="passed",
+            response_status=response_status,
+            result_count=len(recommendations),
+        ):
+            response = RecommendationResponse(
+                status=response_status,
+                recommendations=recommendations,
+                exclusions=exclusions,
+                metadata=RecommendationMetadata(
+                    evaluated_at=evaluated_at,
+                    candidate_pool_version=self.candidate_pool_version,
+                    data_mode="fixture",
+                    eligible_destination_count=len(ranked),
+                ),
+            )
         try:
-            evidence = build_explanation_evidence(trip_request, response)
-            explanations = self.explainer.explain(evidence)
+            with stage("explanation", validation="passed"):
+                evidence = build_explanation_evidence(trip_request, response)
+                explanations = self.explainer.explain(evidence)
         except Exception as error:
             # The validated ranking remains useful if explanation generation fails.
             logger.warning(

@@ -8,6 +8,7 @@ import pytest
 
 from travel_ai.schemas.sessions import TravelerPreferencesDraft, TripRequestDraft
 from travel_ai.schemas.trip import TripPreferences
+from travel_ai.services.ai_tracing import recent_calls
 from travel_ai.services.deepseek_preference_extraction import (
     DeepSeekConfigurationError,
     DeepSeekPreferenceExtractor,
@@ -436,6 +437,23 @@ def test_malformed_provider_envelopes_are_controlled(draft, reply):
         )
         with pytest.raises(DeepSeekResponseError):
             extractor.extract(MESSAGE, draft)
+
+
+def test_usage_cost_is_recorded_even_if_model_output_is_invalid(draft):
+    response = envelope("not json")
+    response["usage"] = {"prompt_tokens": 1000, "completion_tokens": 200}
+    with httpx.Client(
+        transport=httpx.MockTransport(lambda _: httpx.Response(200, json=response))
+    ) as client:
+        extractor = DeepSeekPreferenceExtractor(
+            DeepSeekSettings(api_key="secret"), http_client=client
+        )
+        with pytest.raises(DeepSeekResponseError):
+            extractor.extract(MESSAGE, draft)
+    call = recent_calls()[0]
+    assert call["estimated_cost_usd"] == 0.00054
+    assert call["cost_basis"] == "deepseek-flash-peak-2026-11-15"
+    assert call["validation_outcome"] == "schema_failed"
 
 
 def test_environment_settings(monkeypatch):

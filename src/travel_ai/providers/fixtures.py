@@ -1,5 +1,6 @@
 """Fixture-backed implementations of provider interfaces."""
 
+import hashlib
 from pathlib import Path
 from typing import Literal
 
@@ -80,6 +81,9 @@ class FixtureFlightOfferProvider(FlightOfferProvider):
     def __init__(self, fixture_path: Path = DEFAULT_FLIGHT_OFFERS_PATH) -> None:
         self._fixture_path = fixture_path
         self._offers = self._load_offers()
+        self.source_version = hashlib.sha256(
+            TypeAdapter(list[FlightOffer]).dump_json(self._offers)
+        ).hexdigest()[:12]
 
     def _load_offers(self) -> list[FlightOffer]:
         try:
@@ -122,6 +126,9 @@ class FixtureOriginAirportProvider(OriginAirportProvider):
 
     def __init__(self, fixture_path: Path = DEFAULT_ORIGIN_AIRPORTS_PATH) -> None:
         airport_mappings = load_origin_airport_mappings(fixture_path)
+        self.source_version = hashlib.sha256(
+            TypeAdapter(list[OriginAirportMapping]).dump_json(airport_mappings)
+        ).hexdigest()[:12]
         self._airport_mappings_by_origin_id = {
             mapping.origin_id: mapping for mapping in airport_mappings
         }

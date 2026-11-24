@@ -24,11 +24,16 @@ RecommendationResponse
 │   └── flight_options_by_traveler
 │       └── 1–4 distinct category-winning FlightOption objects per traveler
 ├── exclusions
+├── explanations (grounded destination or no-match text; null on failure)
 └── metadata
 ```
 
 The API uses a compact `FlightOption` model. Provider-only details and raw
 Duffel payloads stay inside the provider layer.
+
+The `explanations` object is assembled from validated recommendation evidence.
+If explanation construction fails, it is `null` and the scores and flights
+remain available.
 
 ## Recommended pair and city score
 

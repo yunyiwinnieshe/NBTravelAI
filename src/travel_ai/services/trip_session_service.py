@@ -23,6 +23,7 @@ from travel_ai.schemas.sessions import (
     UnsupportedRequestNotice,
 )
 from travel_ai.schemas.trip import TravelerRequest, TripRequest
+from travel_ai.services.ai_tracing import record_event, stage
 from travel_ai.services.live_origin_resolution import OriginResolutionError
 from travel_ai.services.preference_extraction import PreferenceExtractor
 from travel_ai.services.recommendation_service import (
@@ -176,13 +177,15 @@ class TripSessionService:
                 pending_questions=self._pending_questions(session),
                 unsupported_requests=list(session.unsupported.values()),
             )
-            result = self.extractor.extract(
-                message,
-                session.draft.model_copy(deep=True),
-                context=context.model_copy(deep=True),
-            )
+            with stage("extraction", provider=type(self.extractor).__name__):
+                result = self.extractor.extract(
+                    message,
+                    session.draft.model_copy(deep=True),
+                    context=context.model_copy(deep=True),
+                )
             candidate = self._copy_session(session)
-            self._apply_extraction(candidate, result)
+            with stage("session_draft_validation", validation="passed"):
+                self._apply_extraction(candidate, result)
             for path, question in candidate.issues.items():
                 if path not in session.issues or question != session.issues[path]:
                     candidate.question_context[path] = message
@@ -191,14 +194,17 @@ class TripSessionService:
                 for path, source in candidate.question_context.items()
                 if path in candidate.missing_fields
             }
-            for acknowledgment in result.acknowledged_unsupported:
-                if (
-                    acknowledgment.evidence not in message
-                    or acknowledgment.request_id not in session.unsupported
-                ):
-                    raise ValueError("acknowledgment must quote the current message")
-                self._defer_request(candidate, acknowledgment.request_id)
             if result.acknowledged_unsupported:
+                with stage("unsupported_ack_validation", validation="passed"):
+                    for acknowledgment in result.acknowledged_unsupported:
+                        if (
+                            acknowledgment.evidence not in message
+                            or acknowledgment.request_id not in session.unsupported
+                        ):
+                            raise ValueError(
+                                "acknowledgment must quote the current message"
+                            )
+                        self._defer_request(candidate, acknowledgment.request_id)
                 candidate.confirmed_result = None
                 self._refresh_state(candidate)
             self._commit_session(session, candidate)
@@ -287,6 +293,7 @@ class TripSessionService:
     ) -> ConversationTurnResponse:
         """Serialize confirmation with edits and duplicate confirmations."""
         if session.confirmed_result is not None:
+            record_event("recommendation_cache", cache="hit")
             return session.confirmed_result.model_copy(deep=True)
         self._refresh_state(session)
         if session.state != ConversationState.REVIEW:
@@ -294,6 +301,7 @@ class TripSessionService:
                 "complete the trip details before confirming this session"
             )
         trip_request = self._build_trip_request(session.draft)
+        record_event("recommendation_cache", cache="miss")
         try:
             response = self.recommendation_service.get_recommendations(trip_request)
         except UnsupportedOriginError:
@@ -476,11 +484,16 @@ class TripSessionService:
                 traveler.origin_id = old.origin_id
                 continue
             try:
-                traveler.origin_id = (
-                    self.origin_resolver.resolve(traveler.origin)
-                    if traveler.origin
-                    else None
-                )
+                if traveler.origin:
+                    with stage(
+                        "origin_resolution",
+                        provider=type(self.origin_resolver).__name__,
+                    ):
+                        traveler.origin_id = self.origin_resolver.resolve(
+                            traveler.origin
+                        )
+                else:
+                    traveler.origin_id = None
             except OriginResolutionError as error:
                 session.issues[f"travelers.{traveler.traveler_id}.origin"] = (
                     str(error)

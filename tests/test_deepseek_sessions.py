@@ -223,20 +223,47 @@ def test_failed_initial_message_leaves_no_orphan_session(live_api):
     assert set(service._sessions) == before
 
 
-def test_retry_once_then_success(live_api):
+def test_retry_once_then_success(live_api, monkeypatch):
     client, service, script, calls = live_api
+    monkeypatch.setenv("ENABLE_LOCAL_AI_DASHBOARD", "1")
+    monkeypatch.setenv("LOCAL_AI_DASHBOARD_PASSWORD", "test-password")
 
     def handler(request, context):
-        return httpx.Response(503) if len(calls) == 1 else complete_reply()
+        if len(calls) == 1:
+            return httpx.Response(503)
+        response = complete_reply().json()
+        response["usage"] = {
+            "prompt_tokens": 100,
+            "completion_tokens": 20,
+            "prompt_cache_hit_tokens": 40,
+        }
+        response["system_fingerprint"] = "fp-mock-version"
+        return httpx.Response(200, json=response)
 
     script["handler"] = handler
-    assert (
-        client.post("/trip-sessions", json={"initial_message": COMPLETE}).json()[
-            "state"
-        ]
-        == "review"
-    )
+    response = client.post("/trip-sessions", json={"initial_message": COMPLETE})
+    assert response.json()["state"] == "review"
     assert len(calls) == 2
+    trace_id = response.headers["X-Trace-ID"]
+    trace = client.get(
+        f"/observability/traces/{trace_id}", auth=("local", "test-password")
+    ).json()
+    assert [
+        event["retry_attempt"]
+        for event in trace["stages"]
+        if event["stage"] == "extraction_attempt"
+    ] == [1, 2]
+    provider_calls = [
+        event for event in trace["stages"] if event["stage"] == "extraction_provider"
+    ]
+    assert len(provider_calls) == 2
+    assert "cache" not in provider_calls[0]
+    assert provider_calls[1]["cache"] == "hit"
+    assert provider_calls[1]["prompt_tokens"] == 100
+    assert provider_calls[1]["version"] == "fp-mock-version"
+    assert provider_calls[1]["estimated_cost_usd"] == 0.00004224
+    assert trace["estimated_known_cost_usd"] == 0.00004224
+    assert trace["unpriced_attempts"] == 1
 
 
 def test_short_answer_uses_only_displayed_questions(live_api):
@@ -318,8 +345,10 @@ def test_unsupported_notice_persists_until_explicit_acknowledgment(live_api, nat
     assert client.post(url, json={"action": "confirm"}).json()["state"] == "results"
 
 
-def test_invalid_acknowledgment_cannot_erase_pending_notice(live_api):
+def test_invalid_acknowledgment_cannot_erase_pending_notice(live_api, monkeypatch):
     client, service, script, _ = live_api
+    monkeypatch.setenv("ENABLE_LOCAL_AI_DASHBOARD", "1")
+    monkeypatch.setenv("LOCAL_AI_DASHBOARD_PASSWORD", "test-password")
     sid = start_complete(live_api)["session_id"]
     script["handler"] = lambda request, context: reply(
         acknowledgments=[
@@ -330,13 +359,18 @@ def test_invalid_acknowledgment_cannot_erase_pending_notice(live_api):
         ]
     )
     before = snapshot(service, sid)
-    assert (
-        client.post(
-            f"/trip-sessions/{sid}/messages", json={"message": "yes"}
-        ).status_code
-        == 502
-    )
+    response = client.post(f"/trip-sessions/{sid}/messages", json={"message": "yes"})
+    assert response.status_code == 502
     assert snapshot(service, sid) == before
+    trace = client.get(
+        f"/observability/traces/{response.headers['X-Trace-ID']}",
+        auth=("local", "test-password"),
+    ).json()
+    assert any(
+        event["stage"] == "provider_output_validation"
+        and event["validation"] == "failed"
+        for event in trace["stages"]
+    )
 
 
 def test_late_success_after_deadline_never_changes_saved_draft(live_api):
