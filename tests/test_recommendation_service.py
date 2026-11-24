@@ -6,7 +6,7 @@ from decimal import Decimal
 import pytest
 
 from travel_ai.providers.fixtures import FixtureFlightOfferProvider
-from travel_ai.schemas.recommendations import RecommendationResponse
+from travel_ai.schemas.generated_explanations import ExplainedRecommendationResponse
 from travel_ai.schemas.trip import TripRequest
 from travel_ai.services.recommendation_service import RecommendationService
 
@@ -41,7 +41,7 @@ def test_workflow_returns_valid_deterministic_ranked_response() -> None:
     response = service.get_recommendations(request())
     assert response == service.get_recommendations(request())
     assert (
-        RecommendationResponse.model_validate_json(response.model_dump_json())
+        ExplainedRecommendationResponse.model_validate_json(response.model_dump_json())
         == response
     )
     assert response.status == "success"
@@ -88,6 +88,30 @@ def test_workflow_returns_no_match(change: str) -> None:
     assert response.recommendations == []
     assert response.metadata.eligible_destination_count == 0
     assert response.exclusions
+
+
+@pytest.mark.parametrize("no_match", [False, True])
+def test_explanation_failure_preserves_ranked_result(
+    monkeypatch: pytest.MonkeyPatch, no_match: bool
+) -> None:
+    service = RecommendationService()
+    trip = request()
+    if no_match:
+        trip.travelers[0].budget_usd = Decimal("1")
+
+    def fail_explanation(_evidence: object) -> None:
+        raise RuntimeError("explanation unavailable")
+
+    monkeypatch.setattr(service.explainer, "explain", fail_explanation)
+    response = service.get_recommendations(trip)
+
+    assert response.status == ("no_match" if no_match else "success")
+    assert bool(response.recommendations) is not no_match
+    assert response.explanations is None
+    assert (
+        ExplainedRecommendationResponse.model_validate_json(response.model_dump_json())
+        == response
+    )
 
 
 def test_fixture_results_do_not_depend_on_traveler_order_or_previous_request() -> None:

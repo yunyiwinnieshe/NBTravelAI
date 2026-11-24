@@ -5,7 +5,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from travel_ai.schemas.recommendations import RecommendationResponse
+from travel_ai.schemas.generated_explanations import ExplainedRecommendationResponse
 from travel_ai.schemas.trip import TripRequest
 from travel_ai.services.recommendation_service import (
     RecommendationService,
@@ -21,11 +21,11 @@ def get_recommendation_service() -> RecommendationService:
     return RecommendationService()
 
 
-@router.post("/recommendations", response_model=RecommendationResponse)
+@router.post("/recommendations", response_model=ExplainedRecommendationResponse)
 def create_recommendations(
     trip_request: TripRequest,
     service: Annotated[RecommendationService, Depends(get_recommendation_service)],
-) -> RecommendationResponse:
+) -> ExplainedRecommendationResponse:
     """Return fixture-backed recommendations for a validated trip request."""
     try:
         return service.get_recommendations(trip_request)

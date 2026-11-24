@@ -11,6 +11,7 @@ from travel_ai.providers.fixtures import (
     FixtureOriginAirportProvider,
 )
 from travel_ai.schemas.flights import FlightOffer, FlightSearchQuery, FlightSlice
+from travel_ai.schemas.generated_explanations import ExplainedRecommendationResponse
 from travel_ai.schemas.ranking import DestinationRankingInput
 from travel_ai.schemas.recommendations import (
     DestinationExclusion,
@@ -28,6 +29,8 @@ from travel_ai.schemas.recommendations import (
 from travel_ai.schemas.trip import TripRequest
 from travel_ai.services.constraint_engine import evaluate_traveler_city_offers
 from travel_ai.services.destination_ranking import rank_destinations
+from travel_ai.services.explanation_evidence import build_explanation_evidence
+from travel_ai.services.explanation_generation import GroundedRecommendationExplainer
 from travel_ai.services.fixture_loader import (
     DestinationFixtures,
     load_destination_fixtures,
@@ -102,12 +105,14 @@ class RecommendationService:
         origin_provider: OriginAirportProvider | None = None,
         destinations: DestinationFixtures | None = None,
         clock: Callable[[], datetime] | None = None,
+        explainer: GroundedRecommendationExplainer | None = None,
     ) -> None:
         self.flight_provider = flight_provider or FixtureFlightOfferProvider()
         self._validate_provider_mode()
         self.origin_provider = origin_provider or FixtureOriginAirportProvider()
         self.destinations = destinations or load_destination_fixtures()
         self.clock = clock or (lambda: datetime.now(UTC))
+        self.explainer = explainer or GroundedRecommendationExplainer()
         versions = {city.data_version for city in self.destinations.cities}
         if len(versions) != 1:
             raise ValueError("candidate pool must contain exactly one data version")
@@ -118,7 +123,9 @@ class RecommendationService:
         if self.flight_provider.data_mode != "fixture":
             raise ValueError("this workflow currently supports fixture providers only")
 
-    def get_recommendations(self, trip_request: TripRequest) -> RecommendationResponse:
+    def get_recommendations(
+        self, trip_request: TripRequest
+    ) -> ExplainedRecommendationResponse:
         """Return up to three eligible cities or an explained no-match result."""
         self._validate_provider_mode()
         evaluated_at = self.clock()
@@ -283,7 +290,7 @@ class RecommendationService:
                     flight_options_by_traveler=options,
                 )
             )
-        return RecommendationResponse(
+        response = RecommendationResponse(
             status="success" if recommendations else "no_match",
             recommendations=recommendations,
             exclusions=exclusions,
@@ -293,4 +300,18 @@ class RecommendationService:
                 data_mode="fixture",
                 eligible_destination_count=len(ranked),
             ),
+        )
+        try:
+            evidence = build_explanation_evidence(trip_request, response)
+            explanations = self.explainer.explain(evidence)
+        except Exception as error:
+            # The validated ranking remains useful if explanation generation fails.
+            logger.warning(
+                "recommendation_explanation_failed",
+                extra={"error_type": type(error).__name__},
+            )
+            explanations = None
+        return ExplainedRecommendationResponse(
+            **response.model_dump(),
+            explanations=explanations,
         )

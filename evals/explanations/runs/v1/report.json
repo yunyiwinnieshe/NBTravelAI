@@ -1,0 +1,2219 @@
+{
+  "metadata": {
+    "dataset_sha256": "f3eefa212194658fe1054113dead5820f1a33f6b748686d1545842f5dd71ed6e",
+    "dataset_version": "v1.0",
+    "evaluated_at": "2099-06-01T10:00:00+00:00",
+    "evaluation": "grounded_recommendation_explanations",
+    "evaluation_version": "v1",
+    "generated_at": "2026-11-16T02:58:20.624499+00:00",
+    "git_commit": "e5c32faa0c2b63bea545b6886cabcd18d8c512a1",
+    "git_dirty": true,
+    "measures_model_quality": false,
+    "mode": "offline_fixture",
+    "network_calls": 0,
+    "source_sha256": {
+      "src/travel_ai/evaluation/explanations.py": "bb93c58c58e84bff2c4e0808857b09b7cb57b318d059001e25ec8f7995f1555c",
+      "src/travel_ai/schemas/explanations.py": "367cb7c156b4c039cfbd612202fbb6496bfa304530c85249d91e6ec85de7ad24",
+      "src/travel_ai/schemas/generated_explanations.py": "ded330b9194a000311069824cc702caa122879f45cedf5cbb702d7f35639cc80",
+      "src/travel_ai/scripts/evaluate_explanations.py": "e77c08d8abcc8c540b0ea6ea7dae068e1cc1424febda0c6530c3b2a92bdc38f1",
+      "src/travel_ai/services/explanation_evidence.py": "9230baf941158b2e924ddd5639f49f4be02f15c7c42de990935e7e8cf806be2b",
+      "src/travel_ai/services/explanation_generation.py": "50378ae60dfddad996218bbad6c47d4cfdcb83d87a69690517f1b5acd4993113"
+    }
+  },
+  "records": [
+    {
+      "actual": {
+        "destinations": [
+          {
+            "destination_id": "chicago_il",
+            "fairness_note": "Its travel-fairness score is 0.982. This measures balance in budget burden, travel-time burden, and arrival timing; it does not establish that the trip is fair in every respect.",
+            "freshness_note": "Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.",
+            "summary": "Chicago ranks #1 with a verified overall score of 0.628.",
+            "tradeoffs": [
+              "Compared with Seattle, this option is $291.00 less expensive in combined fare.",
+              "Compared with Seattle, this option is 780 fewer combined travel minutes.",
+              "Compared with Seattle, this option is 0.500 lower in preference-score points.",
+              "Compared with Seattle, this option is 0.013 higher in travel-fairness points."
+            ]
+          },
+          {
+            "destination_id": "seattle_wa",
+            "fairness_note": "Its travel-fairness score is 0.970. This measures balance in budget burden, travel-time burden, and arrival timing; it does not establish that the trip is fair in every respect.",
+            "freshness_note": "Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.",
+            "summary": "Seattle ranks #2 with a verified overall score of 0.566.",
+            "tradeoffs": [
+              "Compared with Chicago, this option is $291.00 more expensive in combined fare.",
+              "Compared with Chicago, this option is 780 more combined travel minutes.",
+              "Compared with Chicago, this option is 0.500 higher in preference-score points.",
+              "Compared with Chicago, this option is 0.013 lower in travel-fairness points."
+            ]
+          },
+          {
+            "destination_id": "miami_fl",
+            "fairness_note": "Its travel-fairness score is 0.974. This measures balance in budget burden, travel-time burden, and arrival timing; it does not establish that the trip is fair in every respect.",
+            "freshness_note": "Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.",
+            "summary": "Miami ranks #3 with a verified overall score of 0.515.",
+            "tradeoffs": [
+              "Compared with Chicago, this option is $11.00 more expensive in combined fare.",
+              "Compared with Chicago, this option is 110 more combined travel minutes.",
+              "Compared with Chicago, this option is 0.500 lower in preference-score points.",
+              "Compared with Chicago, this option is 0.008 lower in travel-fairness points."
+            ]
+          }
+        ],
+        "no_match": null,
+        "status": "success"
+      },
+      "case_id": "ranked_three_destinations",
+      "category": "ranked_tradeoffs",
+      "checks": [
+        {
+          "detail": "expected success; received success",
+          "name": "expected_status",
+          "passed": true
+        },
+        {
+          "detail": "response=success; explanations=success",
+          "name": "explanation_status",
+          "passed": true
+        },
+        {
+          "detail": "expected Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.; received ['Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.', 'Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.', 'Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.']",
+          "name": "freshness_and_source",
+          "passed": true
+        },
+        {
+          "detail": "prohibited terms checked: ('safest', 'most popular', 'completely fair', 'guaranteed')",
+          "name": "no_unsupported_superlatives",
+          "passed": true
+        },
+        {
+          "detail": "expected ['chicago_il', 'seattle_wa', 'miami_fl']; received ['chicago_il', 'seattle_wa', 'miami_fl']",
+          "name": "destination_alignment",
+          "passed": true
+        },
+        {
+          "detail": "Chicago ranks #1 with a verified overall score of 0.628.",
+          "name": "summary_facts:chicago_il",
+          "passed": true
+        },
+        {
+          "detail": "Its travel-fairness score is 0.982. This measures balance in budget burden, travel-time burden, and arrival timing; it does not establish that the trip is fair in every respect.",
+          "name": "bounded_fairness:chicago_il",
+          "passed": true
+        },
+        {
+          "detail": "comparison target=Seattle; ['Compared with Seattle, this option is $291.00 less expensive in combined fare.', 'Compared with Seattle, this option is 780 fewer combined travel minutes.', 'Compared with Seattle, this option is 0.500 lower in preference-score points.', 'Compared with Seattle, this option is 0.013 higher in travel-fairness points.']",
+          "name": "grounded_tradeoffs:chicago_il",
+          "passed": true
+        },
+        {
+          "detail": "Seattle ranks #2 with a verified overall score of 0.566.",
+          "name": "summary_facts:seattle_wa",
+          "passed": true
+        },
+        {
+          "detail": "Its travel-fairness score is 0.970. This measures balance in budget burden, travel-time burden, and arrival timing; it does not establish that the trip is fair in every respect.",
+          "name": "bounded_fairness:seattle_wa",
+          "passed": true
+        },
+        {
+          "detail": "comparison target=Chicago; ['Compared with Chicago, this option is $291.00 more expensive in combined fare.', 'Compared with Chicago, this option is 780 more combined travel minutes.', 'Compared with Chicago, this option is 0.500 higher in preference-score points.', 'Compared with Chicago, this option is 0.013 lower in travel-fairness points.']",
+          "name": "grounded_tradeoffs:seattle_wa",
+          "passed": true
+        },
+        {
+          "detail": "Miami ranks #3 with a verified overall score of 0.515.",
+          "name": "summary_facts:miami_fl",
+          "passed": true
+        },
+        {
+          "detail": "Its travel-fairness score is 0.974. This measures balance in budget burden, travel-time burden, and arrival timing; it does not establish that the trip is fair in every respect.",
+          "name": "bounded_fairness:miami_fl",
+          "passed": true
+        },
+        {
+          "detail": "comparison target=Chicago; ['Compared with Chicago, this option is $11.00 more expensive in combined fare.', 'Compared with Chicago, this option is 110 more combined travel minutes.', 'Compared with Chicago, this option is 0.500 lower in preference-score points.', 'Compared with Chicago, this option is 0.008 lower in travel-fairness points.']",
+          "name": "grounded_tradeoffs:miami_fl",
+          "passed": true
+        }
+      ],
+      "description": "Explain three ranked destinations with verified cost, travel, preference, and fairness comparisons.",
+      "evidence": {
+        "destinations": [
+          {
+            "comparisons": [
+              {
+                "combined_price_difference_usd": "-291.00",
+                "combined_travel_difference_minutes": -780,
+                "other_destination_id": "seattle_wa",
+                "preference_match_difference": -0.5,
+                "score_difference": 0.06188,
+                "travel_fairness_difference": 0.0126
+              },
+              {
+                "combined_price_difference_usd": "-11.00",
+                "combined_travel_difference_minutes": -110,
+                "other_destination_id": "miami_fl",
+                "preference_match_difference": 0.5,
+                "score_difference": 0.113255,
+                "travel_fairness_difference": 0.008434
+              }
+            ],
+            "destination_id": "chicago_il",
+            "destination_name": "Chicago",
+            "rank": 1,
+            "recommended_pair": {
+              "arrival_gap_minutes": 45,
+              "combined_price_usd": "639.00",
+              "combined_travel_minutes": 675,
+              "lowest_valid_combined_price_usd": "580.00",
+              "premium_percentage": 10.172413793103448,
+              "premium_usd": "59.00",
+              "return_departure_gap_minutes": 60,
+              "time_together_minutes": 6015,
+              "total_connections": 0,
+              "travelers": [
+                {
+                  "budget_usd": "500",
+                  "budget_utilization": 0.648,
+                  "offer_id": "fixture_a_chicago_nonstop",
+                  "outbound_connections": 0,
+                  "outbound_duration_minutes": 180,
+                  "return_connections": 0,
+                  "return_duration_minutes": 170,
+                  "round_trip_price_usd": "324.00",
+                  "traveler_id": "alex"
+                },
+                {
+                  "budget_usd": "500",
+                  "budget_utilization": 0.63,
+                  "offer_id": "fixture_b_chicago_nonstop",
+                  "outbound_connections": 0,
+                  "outbound_duration_minutes": 165,
+                  "return_connections": 0,
+                  "return_duration_minutes": 160,
+                  "round_trip_price_usd": "315.00",
+                  "traveler_id": "jamie"
+                }
+              ]
+            },
+            "score": 0.627855,
+            "score_breakdown": {
+              "affordability": {
+                "contribution": 0.12635,
+                "value": 0.361,
+                "weight": 0.35
+              },
+              "preference_match": {
+                "contribution": 0.1,
+                "value": 0.5,
+                "weight": 0.2
+              },
+              "travel_fairness": {
+                "contribution": 0.29463,
+                "value": 0.9821,
+                "weight": 0.3
+              },
+              "travel_fairness_details": {
+                "arrival_alignment": 1.0,
+                "budget_burden_balance": 0.982,
+                "duration_balance": 0.975
+              },
+              "travel_time": {
+                "contribution": 0.106875,
+                "value": 0.7125,
+                "weight": 0.15
+              }
+            }
+          },
+          {
+            "comparisons": [
+              {
+                "combined_price_difference_usd": "291.00",
+                "combined_travel_difference_minutes": 780,
+                "other_destination_id": "chicago_il",
+                "preference_match_difference": 0.5,
+                "score_difference": -0.06188,
+                "travel_fairness_difference": -0.0126
+              },
+              {
+                "combined_price_difference_usd": "280.00",
+                "combined_travel_difference_minutes": 670,
+                "other_destination_id": "miami_fl",
+                "preference_match_difference": 1.0,
+                "score_difference": 0.051375,
+                "travel_fairness_difference": -0.004166
+              }
+            ],
+            "destination_id": "seattle_wa",
+            "destination_name": "Seattle",
+            "rank": 2,
+            "recommended_pair": {
+              "arrival_gap_minutes": 15,
+              "combined_price_usd": "930.00",
+              "combined_travel_minutes": 1455,
+              "lowest_valid_combined_price_usd": "750.00",
+              "premium_percentage": 24.0,
+              "premium_usd": "180.00",
+              "return_departure_gap_minutes": 0,
+              "time_together_minutes": 6015,
+              "total_connections": 0,
+              "travelers": [
+                {
+                  "budget_usd": "500",
+                  "budget_utilization": 0.96,
+                  "offer_id": "fixture_a_seattle_nonstop",
+                  "outbound_connections": 0,
+                  "outbound_duration_minutes": 390,
+                  "return_connections": 0,
+                  "return_duration_minutes": 330,
+                  "round_trip_price_usd": "480.00",
+                  "traveler_id": "alex"
+                },
+                {
+                  "budget_usd": "500",
+                  "budget_utilization": 0.9,
+                  "offer_id": "fixture_b_seattle_nonstop",
+                  "outbound_connections": 0,
+                  "outbound_duration_minutes": 405,
+                  "return_connections": 0,
+                  "return_duration_minutes": 330,
+                  "round_trip_price_usd": "450.00",
+                  "traveler_id": "jamie"
+                }
+              ]
+            },
+            "score": 0.565975,
+            "score_breakdown": {
+              "affordability": {
+                "contribution": 0.0245,
+                "value": 0.07,
+                "weight": 0.35
+              },
+              "preference_match": {
+                "contribution": 0.2,
+                "value": 1.0,
+                "weight": 0.2
+              },
+              "travel_fairness": {
+                "contribution": 0.29085,
+                "value": 0.9695,
+                "weight": 0.3
+              },
+              "travel_fairness_details": {
+                "arrival_alignment": 1.0,
+                "budget_burden_balance": 0.94,
+                "duration_balance": 0.975
+              },
+              "travel_time": {
+                "contribution": 0.050625,
+                "value": 0.3375,
+                "weight": 0.15
+              }
+            }
+          },
+          {
+            "comparisons": [
+              {
+                "combined_price_difference_usd": "11.00",
+                "combined_travel_difference_minutes": 110,
+                "other_destination_id": "chicago_il",
+                "preference_match_difference": -0.5,
+                "score_difference": -0.113255,
+                "travel_fairness_difference": -0.008434
+              },
+              {
+                "combined_price_difference_usd": "-280.00",
+                "combined_travel_difference_minutes": -670,
+                "other_destination_id": "seattle_wa",
+                "preference_match_difference": -1.0,
+                "score_difference": -0.051375,
+                "travel_fairness_difference": 0.004166
+              }
+            ],
+            "destination_id": "miami_fl",
+            "destination_name": "Miami",
+            "rank": 3,
+            "recommended_pair": {
+              "arrival_gap_minutes": 45,
+              "combined_price_usd": "650.00",
+              "combined_travel_minutes": 785,
+              "lowest_valid_combined_price_usd": "500.00",
+              "premium_percentage": 30.0,
+              "premium_usd": "150.00",
+              "return_departure_gap_minutes": 30,
+              "time_together_minutes": 5990,
+              "total_connections": 0,
+              "travelers": [
+                {
+                  "budget_usd": "500",
+                  "budget_utilization": 0.68,
+                  "offer_id": "fixture_a_miami_nonstop",
+                  "outbound_connections": 0,
+                  "outbound_duration_minutes": 205,
+                  "return_connections": 0,
+                  "return_duration_minutes": 195,
+                  "round_trip_price_usd": "340.00",
+                  "traveler_id": "alex"
+                },
+                {
+                  "budget_usd": "500",
+                  "budget_utilization": 0.62,
+                  "offer_id": "fixture_b_miami_nonstop",
+                  "outbound_connections": 0,
+                  "outbound_duration_minutes": 190,
+                  "return_connections": 0,
+                  "return_duration_minutes": 195,
+                  "round_trip_price_usd": "310.00",
+                  "traveler_id": "jamie"
+                }
+              ]
+            },
+            "score": 0.5146,
+            "score_breakdown": {
+              "affordability": {
+                "contribution": 0.1225,
+                "value": 0.35,
+                "weight": 0.35
+              },
+              "preference_match": {
+                "contribution": 0.0,
+                "value": 0.0,
+                "weight": 0.2
+              },
+              "travel_fairness": {
+                "contribution": 0.2921,
+                "value": 0.973666,
+                "weight": 0.3
+              },
+              "travel_fairness_details": {
+                "arrival_alignment": 1.0,
+                "budget_burden_balance": 0.94,
+                "duration_balance": 0.983333
+              },
+              "travel_time": {
+                "contribution": 0.1,
+                "value": 0.666667,
+                "weight": 0.15
+              }
+            }
+          }
+        ],
+        "exclusions": [
+          {
+            "destination_id": "san_diego_ca",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "san_diego_ca",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "new_york_ny",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "new_york_ny",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "denver_co",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "denver_co",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "new_orleans_la",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "new_orleans_la",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "nashville_tn",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "nashville_tn",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "las_vegas_nv",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "las_vegas_nv",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "washington_dc",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "washington_dc",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          }
+        ],
+        "freshness": {
+          "candidate_pool_version": "v1",
+          "data_mode": "fixture",
+          "evaluated_at": "2099-06-01T10:00:00Z"
+        },
+        "status": "success",
+        "travelers": [
+          {
+            "budget_usd": "500",
+            "max_one_way_travel_minutes": 600,
+            "origin_id": "boston_ma",
+            "requested_preferences": {
+              "interest_tags": [
+                "museums"
+              ],
+              "temperature_range": null
+            },
+            "traveler_id": "alex"
+          },
+          {
+            "budget_usd": "500",
+            "max_one_way_travel_minutes": 600,
+            "origin_id": "new_york_ny",
+            "requested_preferences": {
+              "interest_tags": [
+                "nature"
+              ],
+              "temperature_range": null
+            },
+            "traveler_id": "jamie"
+          }
+        ],
+        "trip_end_date": "2099-06-14",
+        "trip_start_date": "2099-06-10"
+      },
+      "failure_reasons": [],
+      "generator_mode": "deterministic",
+      "passed": true,
+      "request": {
+        "end_date": "2099-06-14",
+        "start_date": "2099-06-10",
+        "travelers": [
+          {
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "origin_id": "boston_ma",
+            "preferences": {
+              "interest_tags": [
+                "museums"
+              ]
+            },
+            "traveler_id": "alex"
+          },
+          {
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "origin_id": "new_york_ny",
+            "preferences": {
+              "interest_tags": [
+                "nature"
+              ]
+            },
+            "traveler_id": "jamie"
+          }
+        ]
+      }
+    },
+    {
+      "actual": {
+        "destinations": [
+          {
+            "destination_id": "chicago_il",
+            "fairness_note": "Its travel-fairness score is 0.963. This measures balance in budget burden, travel-time burden, and arrival timing; it does not establish that the trip is fair in every respect.",
+            "freshness_note": "Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.",
+            "summary": "Chicago ranks #1 with a verified overall score of 0.463.",
+            "tradeoffs": [
+              "Compared with Miami, this option is $80.00 more expensive in combined fare.",
+              "Compared with Miami, this option is 110 more combined travel minutes.",
+              "Compared with Miami, this option is 0.500 higher in preference-score points.",
+              "Compared with Miami, this option is 0.008 lower in travel-fairness points."
+            ]
+          },
+          {
+            "destination_id": "miami_fl",
+            "fairness_note": "Its travel-fairness score is 0.972. This measures balance in budget burden, travel-time burden, and arrival timing; it does not establish that the trip is fair in every respect.",
+            "freshness_note": "Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.",
+            "summary": "Miami ranks #2 with a verified overall score of 0.420.",
+            "tradeoffs": [
+              "Compared with Chicago, this option is $80.00 less expensive in combined fare.",
+              "Compared with Chicago, this option is 110 fewer combined travel minutes.",
+              "Compared with Chicago, this option is 0.500 lower in preference-score points.",
+              "Compared with Chicago, this option is 0.008 higher in travel-fairness points."
+            ]
+          }
+        ],
+        "no_match": null,
+        "status": "success"
+      },
+      "case_id": "budget_constrained_results",
+      "category": "ranked_tradeoffs",
+      "checks": [
+        {
+          "detail": "expected success; received success",
+          "name": "expected_status",
+          "passed": true
+        },
+        {
+          "detail": "response=success; explanations=success",
+          "name": "explanation_status",
+          "passed": true
+        },
+        {
+          "detail": "expected Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.; received ['Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.', 'Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.']",
+          "name": "freshness_and_source",
+          "passed": true
+        },
+        {
+          "detail": "prohibited terms checked: ('safest', 'most popular', 'completely fair', 'guaranteed')",
+          "name": "no_unsupported_superlatives",
+          "passed": true
+        },
+        {
+          "detail": "expected ['chicago_il', 'miami_fl']; received ['chicago_il', 'miami_fl']",
+          "name": "destination_alignment",
+          "passed": true
+        },
+        {
+          "detail": "Chicago ranks #1 with a verified overall score of 0.463.",
+          "name": "summary_facts:chicago_il",
+          "passed": true
+        },
+        {
+          "detail": "Its travel-fairness score is 0.963. This measures balance in budget burden, travel-time burden, and arrival timing; it does not establish that the trip is fair in every respect.",
+          "name": "bounded_fairness:chicago_il",
+          "passed": true
+        },
+        {
+          "detail": "comparison target=Miami; ['Compared with Miami, this option is $80.00 more expensive in combined fare.', 'Compared with Miami, this option is 110 more combined travel minutes.', 'Compared with Miami, this option is 0.500 higher in preference-score points.', 'Compared with Miami, this option is 0.008 lower in travel-fairness points.']",
+          "name": "grounded_tradeoffs:chicago_il",
+          "passed": true
+        },
+        {
+          "detail": "Miami ranks #2 with a verified overall score of 0.420.",
+          "name": "summary_facts:miami_fl",
+          "passed": true
+        },
+        {
+          "detail": "Its travel-fairness score is 0.972. This measures balance in budget burden, travel-time burden, and arrival timing; it does not establish that the trip is fair in every respect.",
+          "name": "bounded_fairness:miami_fl",
+          "passed": true
+        },
+        {
+          "detail": "comparison target=Chicago; ['Compared with Chicago, this option is $80.00 less expensive in combined fare.', 'Compared with Chicago, this option is 110 fewer combined travel minutes.', 'Compared with Chicago, this option is 0.500 lower in preference-score points.', 'Compared with Chicago, this option is 0.008 higher in travel-fairness points.']",
+          "name": "grounded_tradeoffs:miami_fl",
+          "passed": true
+        }
+      ],
+      "description": "Keep explanations grounded when budgets reduce the eligible destination set.",
+      "evidence": {
+        "destinations": [
+          {
+            "comparisons": [
+              {
+                "combined_price_difference_usd": "80.00",
+                "combined_travel_difference_minutes": 110,
+                "other_destination_id": "miami_fl",
+                "preference_match_difference": 0.5,
+                "score_difference": 0.043334,
+                "travel_fairness_difference": -0.008333
+              }
+            ],
+            "destination_id": "chicago_il",
+            "destination_name": "Chicago",
+            "rank": 1,
+            "recommended_pair": {
+              "arrival_gap_minutes": 45,
+              "combined_price_usd": "580.00",
+              "combined_travel_minutes": 1380,
+              "lowest_valid_combined_price_usd": "580.00",
+              "premium_percentage": 0.0,
+              "premium_usd": "0.00",
+              "return_departure_gap_minutes": 60,
+              "time_together_minutes": 5850,
+              "total_connections": 4,
+              "travelers": [
+                {
+                  "budget_usd": "300",
+                  "budget_utilization": 1.0,
+                  "offer_id": "fixture_a_chicago_connecting",
+                  "outbound_connections": 1,
+                  "outbound_duration_minutes": 360,
+                  "return_connections": 1,
+                  "return_duration_minutes": 350,
+                  "round_trip_price_usd": "300.00",
+                  "traveler_id": "alex"
+                },
+                {
+                  "budget_usd": "300",
+                  "budget_utilization": 0.9333333333333333,
+                  "offer_id": "fixture_b_chicago_connecting",
+                  "outbound_connections": 1,
+                  "outbound_duration_minutes": 330,
+                  "return_connections": 1,
+                  "return_duration_minutes": 340,
+                  "round_trip_price_usd": "280.00",
+                  "traveler_id": "jamie"
+                }
+              ]
+            },
+            "score": 0.463167,
+            "score_breakdown": {
+              "affordability": {
+                "contribution": 0.011667,
+                "value": 0.033333,
+                "weight": 0.35
+              },
+              "preference_match": {
+                "contribution": 0.1,
+                "value": 0.5,
+                "weight": 0.2
+              },
+              "travel_fairness": {
+                "contribution": 0.289,
+                "value": 0.963333,
+                "weight": 0.3
+              },
+              "travel_fairness_details": {
+                "arrival_alignment": 1.0,
+                "budget_burden_balance": 0.933333,
+                "duration_balance": 0.966667
+              },
+              "travel_time": {
+                "contribution": 0.0625,
+                "value": 0.416667,
+                "weight": 0.15
+              }
+            }
+          },
+          {
+            "comparisons": [
+              {
+                "combined_price_difference_usd": "-80.00",
+                "combined_travel_difference_minutes": -110,
+                "other_destination_id": "chicago_il",
+                "preference_match_difference": -0.5,
+                "score_difference": -0.043334,
+                "travel_fairness_difference": 0.008333
+              }
+            ],
+            "destination_id": "miami_fl",
+            "destination_name": "Miami",
+            "rank": 2,
+            "recommended_pair": {
+              "arrival_gap_minutes": 10,
+              "combined_price_usd": "500.00",
+              "combined_travel_minutes": 1270,
+              "lowest_valid_combined_price_usd": "500.00",
+              "premium_percentage": 0.0,
+              "premium_usd": "0.00",
+              "return_departure_gap_minutes": 30,
+              "time_together_minutes": 5885,
+              "total_connections": 4,
+              "travelers": [
+                {
+                  "budget_usd": "300",
+                  "budget_utilization": 0.8666666666666667,
+                  "offer_id": "fixture_a_miami_connecting",
+                  "outbound_connections": 1,
+                  "outbound_duration_minutes": 315,
+                  "return_connections": 1,
+                  "return_duration_minutes": 310,
+                  "round_trip_price_usd": "260.00",
+                  "traveler_id": "alex"
+                },
+                {
+                  "budget_usd": "300",
+                  "budget_utilization": 0.8,
+                  "offer_id": "fixture_b_miami_connecting",
+                  "outbound_connections": 1,
+                  "outbound_duration_minutes": 325,
+                  "return_connections": 1,
+                  "return_duration_minutes": 320,
+                  "round_trip_price_usd": "240.00",
+                  "traveler_id": "jamie"
+                }
+              ]
+            },
+            "score": 0.419833,
+            "score_breakdown": {
+              "affordability": {
+                "contribution": 0.058333,
+                "value": 0.166667,
+                "weight": 0.35
+              },
+              "preference_match": {
+                "contribution": 0.0,
+                "value": 0.0,
+                "weight": 0.2
+              },
+              "travel_fairness": {
+                "contribution": 0.2915,
+                "value": 0.971666,
+                "weight": 0.3
+              },
+              "travel_fairness_details": {
+                "arrival_alignment": 1.0,
+                "budget_burden_balance": 0.933333,
+                "duration_balance": 0.983333
+              },
+              "travel_time": {
+                "contribution": 0.07,
+                "value": 0.466667,
+                "weight": 0.15
+              }
+            }
+          }
+        ],
+        "exclusions": [
+          {
+            "destination_id": "san_diego_ca",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "san_diego_ca",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "new_york_ny",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "new_york_ny",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "seattle_wa",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "seattle_wa",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "denver_co",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "denver_co",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "new_orleans_la",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "new_orleans_la",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "nashville_tn",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "nashville_tn",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "las_vegas_nv",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "las_vegas_nv",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "washington_dc",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "washington_dc",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          }
+        ],
+        "freshness": {
+          "candidate_pool_version": "v1",
+          "data_mode": "fixture",
+          "evaluated_at": "2099-06-01T10:00:00Z"
+        },
+        "status": "success",
+        "travelers": [
+          {
+            "budget_usd": "300",
+            "max_one_way_travel_minutes": 600,
+            "origin_id": "boston_ma",
+            "requested_preferences": {
+              "interest_tags": [
+                "museums"
+              ],
+              "temperature_range": null
+            },
+            "traveler_id": "alex"
+          },
+          {
+            "budget_usd": "300",
+            "max_one_way_travel_minutes": 600,
+            "origin_id": "new_york_ny",
+            "requested_preferences": {
+              "interest_tags": [
+                "nature"
+              ],
+              "temperature_range": null
+            },
+            "traveler_id": "jamie"
+          }
+        ],
+        "trip_end_date": "2099-06-14",
+        "trip_start_date": "2099-06-10"
+      },
+      "failure_reasons": [],
+      "generator_mode": "deterministic",
+      "passed": true,
+      "request": {
+        "end_date": "2099-06-14",
+        "start_date": "2099-06-10",
+        "travelers": [
+          {
+            "budget_usd": 300,
+            "max_one_way_travel_minutes": 600,
+            "origin_id": "boston_ma",
+            "preferences": {
+              "interest_tags": [
+                "museums"
+              ]
+            },
+            "traveler_id": "alex"
+          },
+          {
+            "budget_usd": 300,
+            "max_one_way_travel_minutes": 600,
+            "origin_id": "new_york_ny",
+            "preferences": {
+              "interest_tags": [
+                "nature"
+              ]
+            },
+            "traveler_id": "jamie"
+          }
+        ]
+      }
+    },
+    {
+      "actual": {
+        "destinations": [
+          {
+            "destination_id": "chicago_il",
+            "fairness_note": "Its travel-fairness score is 0.982. This measures balance in budget burden, travel-time burden, and arrival timing; it does not establish that the trip is fair in every respect.",
+            "freshness_note": "Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.",
+            "summary": "Chicago ranks #1 with a verified overall score of 0.660.",
+            "tradeoffs": [
+              "Compared with Miami, this option is $11.00 less expensive in combined fare.",
+              "Compared with Miami, this option is 110 fewer combined travel minutes.",
+              "Compared with Miami, this option is equal in preference-score points.",
+              "Compared with Miami, this option is 0.008 higher in travel-fairness points."
+            ]
+          },
+          {
+            "destination_id": "miami_fl",
+            "fairness_note": "Its travel-fairness score is 0.974. This measures balance in budget burden, travel-time burden, and arrival timing; it does not establish that the trip is fair in every respect.",
+            "freshness_note": "Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.",
+            "summary": "Miami ranks #2 with a verified overall score of 0.643.",
+            "tradeoffs": [
+              "Compared with Chicago, this option is $11.00 more expensive in combined fare.",
+              "Compared with Chicago, this option is 110 more combined travel minutes.",
+              "Compared with Chicago, this option is equal in preference-score points.",
+              "Compared with Chicago, this option is 0.008 lower in travel-fairness points."
+            ]
+          },
+          {
+            "destination_id": "seattle_wa",
+            "fairness_note": "Its travel-fairness score is 0.970. This measures balance in budget burden, travel-time burden, and arrival timing; it does not establish that the trip is fair in every respect.",
+            "freshness_note": "Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.",
+            "summary": "Seattle ranks #3 with a verified overall score of 0.457.",
+            "tradeoffs": [
+              "Compared with Chicago, this option is $291.00 more expensive in combined fare.",
+              "Compared with Chicago, this option is 780 more combined travel minutes.",
+              "Compared with Chicago, this option is equal in preference-score points.",
+              "Compared with Chicago, this option is 0.013 lower in travel-fairness points."
+            ]
+          }
+        ],
+        "no_match": null,
+        "status": "success"
+      },
+      "case_id": "empty_preferences",
+      "category": "fairness_boundary",
+      "checks": [
+        {
+          "detail": "expected success; received success",
+          "name": "expected_status",
+          "passed": true
+        },
+        {
+          "detail": "response=success; explanations=success",
+          "name": "explanation_status",
+          "passed": true
+        },
+        {
+          "detail": "expected Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.; received ['Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.', 'Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.', 'Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.']",
+          "name": "freshness_and_source",
+          "passed": true
+        },
+        {
+          "detail": "prohibited terms checked: ('safest', 'most popular', 'completely fair', 'guaranteed')",
+          "name": "no_unsupported_superlatives",
+          "passed": true
+        },
+        {
+          "detail": "expected ['chicago_il', 'miami_fl', 'seattle_wa']; received ['chicago_il', 'miami_fl', 'seattle_wa']",
+          "name": "destination_alignment",
+          "passed": true
+        },
+        {
+          "detail": "Chicago ranks #1 with a verified overall score of 0.660.",
+          "name": "summary_facts:chicago_il",
+          "passed": true
+        },
+        {
+          "detail": "Its travel-fairness score is 0.982. This measures balance in budget burden, travel-time burden, and arrival timing; it does not establish that the trip is fair in every respect.",
+          "name": "bounded_fairness:chicago_il",
+          "passed": true
+        },
+        {
+          "detail": "comparison target=Miami; ['Compared with Miami, this option is $11.00 less expensive in combined fare.', 'Compared with Miami, this option is 110 fewer combined travel minutes.', 'Compared with Miami, this option is equal in preference-score points.', 'Compared with Miami, this option is 0.008 higher in travel-fairness points.']",
+          "name": "grounded_tradeoffs:chicago_il",
+          "passed": true
+        },
+        {
+          "detail": "Miami ranks #2 with a verified overall score of 0.643.",
+          "name": "summary_facts:miami_fl",
+          "passed": true
+        },
+        {
+          "detail": "Its travel-fairness score is 0.974. This measures balance in budget burden, travel-time burden, and arrival timing; it does not establish that the trip is fair in every respect.",
+          "name": "bounded_fairness:miami_fl",
+          "passed": true
+        },
+        {
+          "detail": "comparison target=Chicago; ['Compared with Chicago, this option is $11.00 more expensive in combined fare.', 'Compared with Chicago, this option is 110 more combined travel minutes.', 'Compared with Chicago, this option is equal in preference-score points.', 'Compared with Chicago, this option is 0.008 lower in travel-fairness points.']",
+          "name": "grounded_tradeoffs:miami_fl",
+          "passed": true
+        },
+        {
+          "detail": "Seattle ranks #3 with a verified overall score of 0.457.",
+          "name": "summary_facts:seattle_wa",
+          "passed": true
+        },
+        {
+          "detail": "Its travel-fairness score is 0.970. This measures balance in budget burden, travel-time burden, and arrival timing; it does not establish that the trip is fair in every respect.",
+          "name": "bounded_fairness:seattle_wa",
+          "passed": true
+        },
+        {
+          "detail": "comparison target=Chicago; ['Compared with Chicago, this option is $291.00 more expensive in combined fare.', 'Compared with Chicago, this option is 780 more combined travel minutes.', 'Compared with Chicago, this option is equal in preference-score points.', 'Compared with Chicago, this option is 0.013 lower in travel-fairness points.']",
+          "name": "grounded_tradeoffs:seattle_wa",
+          "passed": true
+        }
+      ],
+      "description": "Explain ranking and fairness without inventing preference matches when no interests were requested.",
+      "evidence": {
+        "destinations": [
+          {
+            "comparisons": [
+              {
+                "combined_price_difference_usd": "-11.00",
+                "combined_travel_difference_minutes": -110,
+                "other_destination_id": "miami_fl",
+                "preference_match_difference": 0.0,
+                "score_difference": 0.016569,
+                "travel_fairness_difference": 0.008434
+              },
+              {
+                "combined_price_difference_usd": "-291.00",
+                "combined_travel_difference_minutes": -780,
+                "other_destination_id": "seattle_wa",
+                "preference_match_difference": 0.0,
+                "score_difference": 0.20235,
+                "travel_fairness_difference": 0.0126
+              }
+            ],
+            "destination_id": "chicago_il",
+            "destination_name": "Chicago",
+            "rank": 1,
+            "recommended_pair": {
+              "arrival_gap_minutes": 45,
+              "combined_price_usd": "639.00",
+              "combined_travel_minutes": 675,
+              "lowest_valid_combined_price_usd": "580.00",
+              "premium_percentage": 10.172413793103448,
+              "premium_usd": "59.00",
+              "return_departure_gap_minutes": 60,
+              "time_together_minutes": 6015,
+              "total_connections": 0,
+              "travelers": [
+                {
+                  "budget_usd": "500",
+                  "budget_utilization": 0.648,
+                  "offer_id": "fixture_a_chicago_nonstop",
+                  "outbound_connections": 0,
+                  "outbound_duration_minutes": 180,
+                  "return_connections": 0,
+                  "return_duration_minutes": 170,
+                  "round_trip_price_usd": "324.00",
+                  "traveler_id": "alex"
+                },
+                {
+                  "budget_usd": "500",
+                  "budget_utilization": 0.63,
+                  "offer_id": "fixture_b_chicago_nonstop",
+                  "outbound_connections": 0,
+                  "outbound_duration_minutes": 165,
+                  "return_connections": 0,
+                  "return_duration_minutes": 160,
+                  "round_trip_price_usd": "315.00",
+                  "traveler_id": "jamie"
+                }
+              ]
+            },
+            "score": 0.659819,
+            "score_breakdown": {
+              "affordability": {
+                "contribution": 0.157938,
+                "value": 0.361,
+                "weight": 0.4375
+              },
+              "preference_match": {
+                "contribution": 0.0,
+                "value": 1.0,
+                "weight": 0.0
+              },
+              "travel_fairness": {
+                "contribution": 0.368287,
+                "value": 0.9821,
+                "weight": 0.375
+              },
+              "travel_fairness_details": {
+                "arrival_alignment": 1.0,
+                "budget_burden_balance": 0.982,
+                "duration_balance": 0.975
+              },
+              "travel_time": {
+                "contribution": 0.133594,
+                "value": 0.7125,
+                "weight": 0.1875
+              }
+            }
+          },
+          {
+            "comparisons": [
+              {
+                "combined_price_difference_usd": "11.00",
+                "combined_travel_difference_minutes": 110,
+                "other_destination_id": "chicago_il",
+                "preference_match_difference": 0.0,
+                "score_difference": -0.016569,
+                "travel_fairness_difference": -0.008434
+              },
+              {
+                "combined_price_difference_usd": "-280.00",
+                "combined_travel_difference_minutes": -670,
+                "other_destination_id": "seattle_wa",
+                "preference_match_difference": 0.0,
+                "score_difference": 0.185781,
+                "travel_fairness_difference": 0.004166
+              }
+            ],
+            "destination_id": "miami_fl",
+            "destination_name": "Miami",
+            "rank": 2,
+            "recommended_pair": {
+              "arrival_gap_minutes": 45,
+              "combined_price_usd": "650.00",
+              "combined_travel_minutes": 785,
+              "lowest_valid_combined_price_usd": "500.00",
+              "premium_percentage": 30.0,
+              "premium_usd": "150.00",
+              "return_departure_gap_minutes": 30,
+              "time_together_minutes": 5990,
+              "total_connections": 0,
+              "travelers": [
+                {
+                  "budget_usd": "500",
+                  "budget_utilization": 0.68,
+                  "offer_id": "fixture_a_miami_nonstop",
+                  "outbound_connections": 0,
+                  "outbound_duration_minutes": 205,
+                  "return_connections": 0,
+                  "return_duration_minutes": 195,
+                  "round_trip_price_usd": "340.00",
+                  "traveler_id": "alex"
+                },
+                {
+                  "budget_usd": "500",
+                  "budget_utilization": 0.62,
+                  "offer_id": "fixture_b_miami_nonstop",
+                  "outbound_connections": 0,
+                  "outbound_duration_minutes": 190,
+                  "return_connections": 0,
+                  "return_duration_minutes": 195,
+                  "round_trip_price_usd": "310.00",
+                  "traveler_id": "jamie"
+                }
+              ]
+            },
+            "score": 0.64325,
+            "score_breakdown": {
+              "affordability": {
+                "contribution": 0.153125,
+                "value": 0.35,
+                "weight": 0.4375
+              },
+              "preference_match": {
+                "contribution": 0.0,
+                "value": 1.0,
+                "weight": 0.0
+              },
+              "travel_fairness": {
+                "contribution": 0.365125,
+                "value": 0.973666,
+                "weight": 0.375
+              },
+              "travel_fairness_details": {
+                "arrival_alignment": 1.0,
+                "budget_burden_balance": 0.94,
+                "duration_balance": 0.983333
+              },
+              "travel_time": {
+                "contribution": 0.125,
+                "value": 0.666667,
+                "weight": 0.1875
+              }
+            }
+          },
+          {
+            "comparisons": [
+              {
+                "combined_price_difference_usd": "291.00",
+                "combined_travel_difference_minutes": 780,
+                "other_destination_id": "chicago_il",
+                "preference_match_difference": 0.0,
+                "score_difference": -0.20235,
+                "travel_fairness_difference": -0.0126
+              },
+              {
+                "combined_price_difference_usd": "280.00",
+                "combined_travel_difference_minutes": 670,
+                "other_destination_id": "miami_fl",
+                "preference_match_difference": 0.0,
+                "score_difference": -0.185781,
+                "travel_fairness_difference": -0.004166
+              }
+            ],
+            "destination_id": "seattle_wa",
+            "destination_name": "Seattle",
+            "rank": 3,
+            "recommended_pair": {
+              "arrival_gap_minutes": 15,
+              "combined_price_usd": "930.00",
+              "combined_travel_minutes": 1455,
+              "lowest_valid_combined_price_usd": "750.00",
+              "premium_percentage": 24.0,
+              "premium_usd": "180.00",
+              "return_departure_gap_minutes": 0,
+              "time_together_minutes": 6015,
+              "total_connections": 0,
+              "travelers": [
+                {
+                  "budget_usd": "500",
+                  "budget_utilization": 0.96,
+                  "offer_id": "fixture_a_seattle_nonstop",
+                  "outbound_connections": 0,
+                  "outbound_duration_minutes": 390,
+                  "return_connections": 0,
+                  "return_duration_minutes": 330,
+                  "round_trip_price_usd": "480.00",
+                  "traveler_id": "alex"
+                },
+                {
+                  "budget_usd": "500",
+                  "budget_utilization": 0.9,
+                  "offer_id": "fixture_b_seattle_nonstop",
+                  "outbound_connections": 0,
+                  "outbound_duration_minutes": 405,
+                  "return_connections": 0,
+                  "return_duration_minutes": 330,
+                  "round_trip_price_usd": "450.00",
+                  "traveler_id": "jamie"
+                }
+              ]
+            },
+            "score": 0.457469,
+            "score_breakdown": {
+              "affordability": {
+                "contribution": 0.030625,
+                "value": 0.07,
+                "weight": 0.4375
+              },
+              "preference_match": {
+                "contribution": 0.0,
+                "value": 1.0,
+                "weight": 0.0
+              },
+              "travel_fairness": {
+                "contribution": 0.363563,
+                "value": 0.9695,
+                "weight": 0.375
+              },
+              "travel_fairness_details": {
+                "arrival_alignment": 1.0,
+                "budget_burden_balance": 0.94,
+                "duration_balance": 0.975
+              },
+              "travel_time": {
+                "contribution": 0.063281,
+                "value": 0.3375,
+                "weight": 0.1875
+              }
+            }
+          }
+        ],
+        "exclusions": [
+          {
+            "destination_id": "san_diego_ca",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "san_diego_ca",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "new_york_ny",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "new_york_ny",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "denver_co",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "denver_co",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "new_orleans_la",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "new_orleans_la",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "nashville_tn",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "nashville_tn",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "las_vegas_nv",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "las_vegas_nv",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "washington_dc",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "washington_dc",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          }
+        ],
+        "freshness": {
+          "candidate_pool_version": "v1",
+          "data_mode": "fixture",
+          "evaluated_at": "2099-06-01T10:00:00Z"
+        },
+        "status": "success",
+        "travelers": [
+          {
+            "budget_usd": "500",
+            "max_one_way_travel_minutes": 600,
+            "origin_id": "boston_ma",
+            "requested_preferences": {
+              "interest_tags": [],
+              "temperature_range": null
+            },
+            "traveler_id": "alex"
+          },
+          {
+            "budget_usd": "500",
+            "max_one_way_travel_minutes": 600,
+            "origin_id": "new_york_ny",
+            "requested_preferences": {
+              "interest_tags": [],
+              "temperature_range": null
+            },
+            "traveler_id": "jamie"
+          }
+        ],
+        "trip_end_date": "2099-06-14",
+        "trip_start_date": "2099-06-10"
+      },
+      "failure_reasons": [],
+      "generator_mode": "deterministic",
+      "passed": true,
+      "request": {
+        "end_date": "2099-06-14",
+        "start_date": "2099-06-10",
+        "travelers": [
+          {
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "origin_id": "boston_ma",
+            "preferences": {},
+            "traveler_id": "alex"
+          },
+          {
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "origin_id": "new_york_ny",
+            "preferences": {},
+            "traveler_id": "jamie"
+          }
+        ]
+      }
+    },
+    {
+      "actual": {
+        "destinations": [],
+        "no_match": {
+          "freshness_note": "Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.",
+          "guidance": [
+            "Review the affected travelers' budgets and travel-time limits, or try different dates or origins."
+          ],
+          "summary": "No candidate destination qualified under both travelers' current verified constraints."
+        },
+        "status": "no_match"
+      },
+      "case_id": "no_match_low_budget",
+      "category": "no_match_guidance",
+      "checks": [
+        {
+          "detail": "expected no_match; received no_match",
+          "name": "expected_status",
+          "passed": true
+        },
+        {
+          "detail": "response=no_match; explanations=no_match",
+          "name": "explanation_status",
+          "passed": true
+        },
+        {
+          "detail": "expected Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.; received ['Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.']",
+          "name": "freshness_and_source",
+          "passed": true
+        },
+        {
+          "detail": "prohibited terms checked: ('safest', 'most popular', 'completely fair', 'guaranteed')",
+          "name": "no_unsupported_superlatives",
+          "passed": true
+        },
+        {
+          "detail": "no-match text is required",
+          "name": "no_match_shape",
+          "passed": true
+        },
+        {
+          "detail": "review the affected travelers' budgets and travel-time limits, or try different dates or origins.",
+          "name": "eligible_flight_guidance",
+          "passed": true
+        },
+        {
+          "detail": "review the affected travelers' budgets and travel-time limits, or try different dates or origins.",
+          "name": "bounded_no_match_guidance",
+          "passed": true
+        }
+      ],
+      "description": "Give bounded next steps when no fixture flight satisfies the travelers' budgets.",
+      "evidence": {
+        "destinations": [],
+        "exclusions": [
+          {
+            "destination_id": "san_diego_ca",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "san_diego_ca",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "new_york_ny",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "new_york_ny",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "seattle_wa",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "seattle_wa",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "denver_co",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "denver_co",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "chicago_il",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "chicago_il",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "miami_fl",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "miami_fl",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "new_orleans_la",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "new_orleans_la",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "nashville_tn",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "nashville_tn",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "las_vegas_nv",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "las_vegas_nv",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "washington_dc",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "washington_dc",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          }
+        ],
+        "freshness": {
+          "candidate_pool_version": "v1",
+          "data_mode": "fixture",
+          "evaluated_at": "2099-06-01T10:00:00Z"
+        },
+        "status": "no_match",
+        "travelers": [
+          {
+            "budget_usd": "1",
+            "max_one_way_travel_minutes": 600,
+            "origin_id": "boston_ma",
+            "requested_preferences": {
+              "interest_tags": [
+                "museums"
+              ],
+              "temperature_range": null
+            },
+            "traveler_id": "alex"
+          },
+          {
+            "budget_usd": "1",
+            "max_one_way_travel_minutes": 600,
+            "origin_id": "new_york_ny",
+            "requested_preferences": {
+              "interest_tags": [
+                "nature"
+              ],
+              "temperature_range": null
+            },
+            "traveler_id": "jamie"
+          }
+        ],
+        "trip_end_date": "2099-06-14",
+        "trip_start_date": "2099-06-10"
+      },
+      "failure_reasons": [],
+      "generator_mode": "deterministic",
+      "passed": true,
+      "request": {
+        "end_date": "2099-06-14",
+        "start_date": "2099-06-10",
+        "travelers": [
+          {
+            "budget_usd": 1,
+            "max_one_way_travel_minutes": 600,
+            "origin_id": "boston_ma",
+            "preferences": {
+              "interest_tags": [
+                "museums"
+              ]
+            },
+            "traveler_id": "alex"
+          },
+          {
+            "budget_usd": 1,
+            "max_one_way_travel_minutes": 600,
+            "origin_id": "new_york_ny",
+            "preferences": {
+              "interest_tags": [
+                "nature"
+              ]
+            },
+            "traveler_id": "jamie"
+          }
+        ]
+      }
+    },
+    {
+      "actual": {
+        "destinations": [
+          {
+            "destination_id": "chicago_il",
+            "fairness_note": "Its travel-fairness score is 0.982. This measures balance in budget burden, travel-time burden, and arrival timing; it does not establish that the trip is fair in every respect.",
+            "freshness_note": "Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.",
+            "summary": "Chicago ranks #1 with a verified overall score of 0.628.",
+            "tradeoffs": [
+              "Compared with Seattle, this option is $291.00 less expensive in combined fare.",
+              "Compared with Seattle, this option is 780 fewer combined travel minutes.",
+              "Compared with Seattle, this option is 0.500 lower in preference-score points.",
+              "Compared with Seattle, this option is 0.013 higher in travel-fairness points."
+            ]
+          },
+          {
+            "destination_id": "seattle_wa",
+            "fairness_note": "Its travel-fairness score is 0.970. This measures balance in budget burden, travel-time burden, and arrival timing; it does not establish that the trip is fair in every respect.",
+            "freshness_note": "Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.",
+            "summary": "Seattle ranks #2 with a verified overall score of 0.566.",
+            "tradeoffs": [
+              "Compared with Chicago, this option is $291.00 more expensive in combined fare.",
+              "Compared with Chicago, this option is 780 more combined travel minutes.",
+              "Compared with Chicago, this option is 0.500 higher in preference-score points.",
+              "Compared with Chicago, this option is 0.013 lower in travel-fairness points."
+            ]
+          },
+          {
+            "destination_id": "miami_fl",
+            "fairness_note": "Its travel-fairness score is 0.974. This measures balance in budget burden, travel-time burden, and arrival timing; it does not establish that the trip is fair in every respect.",
+            "freshness_note": "Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.",
+            "summary": "Miami ranks #3 with a verified overall score of 0.515.",
+            "tradeoffs": [
+              "Compared with Chicago, this option is $11.00 more expensive in combined fare.",
+              "Compared with Chicago, this option is 110 more combined travel minutes.",
+              "Compared with Chicago, this option is 0.500 lower in preference-score points.",
+              "Compared with Chicago, this option is 0.008 lower in travel-fairness points."
+            ]
+          }
+        ],
+        "no_match": null,
+        "status": "success"
+      },
+      "case_id": "unsafe_claim_fallback",
+      "category": "unsupported_claims",
+      "checks": [
+        {
+          "detail": "expected success; received success",
+          "name": "expected_status",
+          "passed": true
+        },
+        {
+          "detail": "response=success; explanations=success",
+          "name": "explanation_status",
+          "passed": true
+        },
+        {
+          "detail": "expected Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.; received ['Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.', 'Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.', 'Based on fixture/test data evaluated at 2099-06-01T10:00:00+00:00 with candidate pool v1.']",
+          "name": "freshness_and_source",
+          "passed": true
+        },
+        {
+          "detail": "prohibited terms checked: ('safest', 'most popular', 'completely fair', 'guaranteed')",
+          "name": "no_unsupported_superlatives",
+          "passed": true
+        },
+        {
+          "detail": "expected ['chicago_il', 'seattle_wa', 'miami_fl']; received ['chicago_il', 'seattle_wa', 'miami_fl']",
+          "name": "destination_alignment",
+          "passed": true
+        },
+        {
+          "detail": "Chicago ranks #1 with a verified overall score of 0.628.",
+          "name": "summary_facts:chicago_il",
+          "passed": true
+        },
+        {
+          "detail": "Its travel-fairness score is 0.982. This measures balance in budget burden, travel-time burden, and arrival timing; it does not establish that the trip is fair in every respect.",
+          "name": "bounded_fairness:chicago_il",
+          "passed": true
+        },
+        {
+          "detail": "comparison target=Seattle; ['Compared with Seattle, this option is $291.00 less expensive in combined fare.', 'Compared with Seattle, this option is 780 fewer combined travel minutes.', 'Compared with Seattle, this option is 0.500 lower in preference-score points.', 'Compared with Seattle, this option is 0.013 higher in travel-fairness points.']",
+          "name": "grounded_tradeoffs:chicago_il",
+          "passed": true
+        },
+        {
+          "detail": "Seattle ranks #2 with a verified overall score of 0.566.",
+          "name": "summary_facts:seattle_wa",
+          "passed": true
+        },
+        {
+          "detail": "Its travel-fairness score is 0.970. This measures balance in budget burden, travel-time burden, and arrival timing; it does not establish that the trip is fair in every respect.",
+          "name": "bounded_fairness:seattle_wa",
+          "passed": true
+        },
+        {
+          "detail": "comparison target=Chicago; ['Compared with Chicago, this option is $291.00 more expensive in combined fare.', 'Compared with Chicago, this option is 780 more combined travel minutes.', 'Compared with Chicago, this option is 0.500 higher in preference-score points.', 'Compared with Chicago, this option is 0.013 lower in travel-fairness points.']",
+          "name": "grounded_tradeoffs:seattle_wa",
+          "passed": true
+        },
+        {
+          "detail": "Miami ranks #3 with a verified overall score of 0.515.",
+          "name": "summary_facts:miami_fl",
+          "passed": true
+        },
+        {
+          "detail": "Its travel-fairness score is 0.974. This measures balance in budget burden, travel-time burden, and arrival timing; it does not establish that the trip is fair in every respect.",
+          "name": "bounded_fairness:miami_fl",
+          "passed": true
+        },
+        {
+          "detail": "comparison target=Chicago; ['Compared with Chicago, this option is $11.00 more expensive in combined fare.', 'Compared with Chicago, this option is 110 more combined travel minutes.', 'Compared with Chicago, this option is 0.500 lower in preference-score points.', 'Compared with Chicago, this option is 0.008 lower in travel-fairness points.']",
+          "name": "grounded_tradeoffs:miami_fl",
+          "passed": true
+        },
+        {
+          "detail": "unsupported safety claim must be absent after fallback",
+          "name": "unsafe_generator_fallback",
+          "passed": true
+        }
+      ],
+      "description": "Reject an unsupported safety superlative and fall back to deterministic grounded text.",
+      "evidence": {
+        "destinations": [
+          {
+            "comparisons": [
+              {
+                "combined_price_difference_usd": "-291.00",
+                "combined_travel_difference_minutes": -780,
+                "other_destination_id": "seattle_wa",
+                "preference_match_difference": -0.5,
+                "score_difference": 0.06188,
+                "travel_fairness_difference": 0.0126
+              },
+              {
+                "combined_price_difference_usd": "-11.00",
+                "combined_travel_difference_minutes": -110,
+                "other_destination_id": "miami_fl",
+                "preference_match_difference": 0.5,
+                "score_difference": 0.113255,
+                "travel_fairness_difference": 0.008434
+              }
+            ],
+            "destination_id": "chicago_il",
+            "destination_name": "Chicago",
+            "rank": 1,
+            "recommended_pair": {
+              "arrival_gap_minutes": 45,
+              "combined_price_usd": "639.00",
+              "combined_travel_minutes": 675,
+              "lowest_valid_combined_price_usd": "580.00",
+              "premium_percentage": 10.172413793103448,
+              "premium_usd": "59.00",
+              "return_departure_gap_minutes": 60,
+              "time_together_minutes": 6015,
+              "total_connections": 0,
+              "travelers": [
+                {
+                  "budget_usd": "500",
+                  "budget_utilization": 0.648,
+                  "offer_id": "fixture_a_chicago_nonstop",
+                  "outbound_connections": 0,
+                  "outbound_duration_minutes": 180,
+                  "return_connections": 0,
+                  "return_duration_minutes": 170,
+                  "round_trip_price_usd": "324.00",
+                  "traveler_id": "alex"
+                },
+                {
+                  "budget_usd": "500",
+                  "budget_utilization": 0.63,
+                  "offer_id": "fixture_b_chicago_nonstop",
+                  "outbound_connections": 0,
+                  "outbound_duration_minutes": 165,
+                  "return_connections": 0,
+                  "return_duration_minutes": 160,
+                  "round_trip_price_usd": "315.00",
+                  "traveler_id": "jamie"
+                }
+              ]
+            },
+            "score": 0.627855,
+            "score_breakdown": {
+              "affordability": {
+                "contribution": 0.12635,
+                "value": 0.361,
+                "weight": 0.35
+              },
+              "preference_match": {
+                "contribution": 0.1,
+                "value": 0.5,
+                "weight": 0.2
+              },
+              "travel_fairness": {
+                "contribution": 0.29463,
+                "value": 0.9821,
+                "weight": 0.3
+              },
+              "travel_fairness_details": {
+                "arrival_alignment": 1.0,
+                "budget_burden_balance": 0.982,
+                "duration_balance": 0.975
+              },
+              "travel_time": {
+                "contribution": 0.106875,
+                "value": 0.7125,
+                "weight": 0.15
+              }
+            }
+          },
+          {
+            "comparisons": [
+              {
+                "combined_price_difference_usd": "291.00",
+                "combined_travel_difference_minutes": 780,
+                "other_destination_id": "chicago_il",
+                "preference_match_difference": 0.5,
+                "score_difference": -0.06188,
+                "travel_fairness_difference": -0.0126
+              },
+              {
+                "combined_price_difference_usd": "280.00",
+                "combined_travel_difference_minutes": 670,
+                "other_destination_id": "miami_fl",
+                "preference_match_difference": 1.0,
+                "score_difference": 0.051375,
+                "travel_fairness_difference": -0.004166
+              }
+            ],
+            "destination_id": "seattle_wa",
+            "destination_name": "Seattle",
+            "rank": 2,
+            "recommended_pair": {
+              "arrival_gap_minutes": 15,
+              "combined_price_usd": "930.00",
+              "combined_travel_minutes": 1455,
+              "lowest_valid_combined_price_usd": "750.00",
+              "premium_percentage": 24.0,
+              "premium_usd": "180.00",
+              "return_departure_gap_minutes": 0,
+              "time_together_minutes": 6015,
+              "total_connections": 0,
+              "travelers": [
+                {
+                  "budget_usd": "500",
+                  "budget_utilization": 0.96,
+                  "offer_id": "fixture_a_seattle_nonstop",
+                  "outbound_connections": 0,
+                  "outbound_duration_minutes": 390,
+                  "return_connections": 0,
+                  "return_duration_minutes": 330,
+                  "round_trip_price_usd": "480.00",
+                  "traveler_id": "alex"
+                },
+                {
+                  "budget_usd": "500",
+                  "budget_utilization": 0.9,
+                  "offer_id": "fixture_b_seattle_nonstop",
+                  "outbound_connections": 0,
+                  "outbound_duration_minutes": 405,
+                  "return_connections": 0,
+                  "return_duration_minutes": 330,
+                  "round_trip_price_usd": "450.00",
+                  "traveler_id": "jamie"
+                }
+              ]
+            },
+            "score": 0.565975,
+            "score_breakdown": {
+              "affordability": {
+                "contribution": 0.0245,
+                "value": 0.07,
+                "weight": 0.35
+              },
+              "preference_match": {
+                "contribution": 0.2,
+                "value": 1.0,
+                "weight": 0.2
+              },
+              "travel_fairness": {
+                "contribution": 0.29085,
+                "value": 0.9695,
+                "weight": 0.3
+              },
+              "travel_fairness_details": {
+                "arrival_alignment": 1.0,
+                "budget_burden_balance": 0.94,
+                "duration_balance": 0.975
+              },
+              "travel_time": {
+                "contribution": 0.050625,
+                "value": 0.3375,
+                "weight": 0.15
+              }
+            }
+          },
+          {
+            "comparisons": [
+              {
+                "combined_price_difference_usd": "11.00",
+                "combined_travel_difference_minutes": 110,
+                "other_destination_id": "chicago_il",
+                "preference_match_difference": -0.5,
+                "score_difference": -0.113255,
+                "travel_fairness_difference": -0.008434
+              },
+              {
+                "combined_price_difference_usd": "-280.00",
+                "combined_travel_difference_minutes": -670,
+                "other_destination_id": "seattle_wa",
+                "preference_match_difference": -1.0,
+                "score_difference": -0.051375,
+                "travel_fairness_difference": 0.004166
+              }
+            ],
+            "destination_id": "miami_fl",
+            "destination_name": "Miami",
+            "rank": 3,
+            "recommended_pair": {
+              "arrival_gap_minutes": 45,
+              "combined_price_usd": "650.00",
+              "combined_travel_minutes": 785,
+              "lowest_valid_combined_price_usd": "500.00",
+              "premium_percentage": 30.0,
+              "premium_usd": "150.00",
+              "return_departure_gap_minutes": 30,
+              "time_together_minutes": 5990,
+              "total_connections": 0,
+              "travelers": [
+                {
+                  "budget_usd": "500",
+                  "budget_utilization": 0.68,
+                  "offer_id": "fixture_a_miami_nonstop",
+                  "outbound_connections": 0,
+                  "outbound_duration_minutes": 205,
+                  "return_connections": 0,
+                  "return_duration_minutes": 195,
+                  "round_trip_price_usd": "340.00",
+                  "traveler_id": "alex"
+                },
+                {
+                  "budget_usd": "500",
+                  "budget_utilization": 0.62,
+                  "offer_id": "fixture_b_miami_nonstop",
+                  "outbound_connections": 0,
+                  "outbound_duration_minutes": 190,
+                  "return_connections": 0,
+                  "return_duration_minutes": 195,
+                  "round_trip_price_usd": "310.00",
+                  "traveler_id": "jamie"
+                }
+              ]
+            },
+            "score": 0.5146,
+            "score_breakdown": {
+              "affordability": {
+                "contribution": 0.1225,
+                "value": 0.35,
+                "weight": 0.35
+              },
+              "preference_match": {
+                "contribution": 0.0,
+                "value": 0.0,
+                "weight": 0.2
+              },
+              "travel_fairness": {
+                "contribution": 0.2921,
+                "value": 0.973666,
+                "weight": 0.3
+              },
+              "travel_fairness_details": {
+                "arrival_alignment": 1.0,
+                "budget_burden_balance": 0.94,
+                "duration_balance": 0.983333
+              },
+              "travel_time": {
+                "contribution": 0.1,
+                "value": 0.666667,
+                "weight": 0.15
+              }
+            }
+          }
+        ],
+        "exclusions": [
+          {
+            "destination_id": "san_diego_ca",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "san_diego_ca",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "new_york_ny",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "new_york_ny",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "denver_co",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "denver_co",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "new_orleans_la",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "new_orleans_la",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "nashville_tn",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "nashville_tn",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "las_vegas_nv",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "las_vegas_nv",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          },
+          {
+            "destination_id": "washington_dc",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "alex"
+          },
+          {
+            "destination_id": "washington_dc",
+            "reason_code": "no_eligible_flight",
+            "traveler_id": "jamie"
+          }
+        ],
+        "freshness": {
+          "candidate_pool_version": "v1",
+          "data_mode": "fixture",
+          "evaluated_at": "2099-06-01T10:00:00Z"
+        },
+        "status": "success",
+        "travelers": [
+          {
+            "budget_usd": "500",
+            "max_one_way_travel_minutes": 600,
+            "origin_id": "boston_ma",
+            "requested_preferences": {
+              "interest_tags": [
+                "museums"
+              ],
+              "temperature_range": null
+            },
+            "traveler_id": "alex"
+          },
+          {
+            "budget_usd": "500",
+            "max_one_way_travel_minutes": 600,
+            "origin_id": "new_york_ny",
+            "requested_preferences": {
+              "interest_tags": [
+                "nature"
+              ],
+              "temperature_range": null
+            },
+            "traveler_id": "jamie"
+          }
+        ],
+        "trip_end_date": "2099-06-14",
+        "trip_start_date": "2099-06-10"
+      },
+      "failure_reasons": [],
+      "generator_mode": "unsafe_claim",
+      "passed": true,
+      "request": {
+        "end_date": "2099-06-14",
+        "start_date": "2099-06-10",
+        "travelers": [
+          {
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "origin_id": "boston_ma",
+            "preferences": {
+              "interest_tags": [
+                "museums"
+              ]
+            },
+            "traveler_id": "alex"
+          },
+          {
+            "budget_usd": 500,
+            "max_one_way_travel_minutes": 600,
+            "origin_id": "new_york_ny",
+            "preferences": {
+              "interest_tags": [
+                "nature"
+              ]
+            },
+            "traveler_id": "jamie"
+          }
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "cases": 5,
+    "cases_passed": 5,
+    "categories": {
+      "fairness_boundary": {
+        "passed": 1,
+        "total": 1
+      },
+      "no_match_guidance": {
+        "passed": 1,
+        "total": 1
+      },
+      "ranked_tradeoffs": {
+        "passed": 2,
+        "total": 2
+      },
+      "unsupported_claims": {
+        "passed": 1,
+        "total": 1
+      }
+    },
+    "checks": 61,
+    "checks_passed": 61,
+    "failure_reasons": {}
+  }
+}
